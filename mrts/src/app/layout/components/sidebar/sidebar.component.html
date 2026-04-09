@@ -1,1 +1,44 @@
-<p>sidebar works!</p>
+<div class="w-64 bg-white shadow-lg h-full flex flex-col">
+
+  <!-- Logo -->
+  <div class="p-4 text-xl font-bold border-b">
+    MR Tracker
+  </div>
+
+  <!-- Menu -->
+  <nav class="flex-1 p-4 space-y-2">
+
+    <a routerLink="/dashboard"
+       routerLinkActive="bg-blue-500 text-white"
+       class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition">
+
+      <span class="ml-2">Dashboard</span>
+    </a>
+
+    <a routerLink="/doctors"
+       routerLinkActive="bg-blue-500 text-white"
+       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
+      <span class="ml-2">Doctors</span>
+    </a>
+
+    <a routerLink="/visits"
+       routerLinkActive="bg-blue-500 text-white"
+       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
+      <span class="ml-2">Visits</span>
+    </a>
+
+    <a routerLink="/reports"
+       routerLinkActive="bg-blue-500 text-white"
+       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
+      <span class="ml-2">Reports</span>
+    </a>
+
+    <a routerLink="/attendance"
+       routerLinkActive="bg-blue-500 text-white"
+       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
+      <span class="ml-2">Attendance</span>
+    </a>
+
+  </nav>
+
+</div>

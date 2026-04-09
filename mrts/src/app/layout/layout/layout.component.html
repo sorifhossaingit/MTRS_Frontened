@@ -1,11 +1,19 @@
-<div class="app-container">
+<div class="flex h-screen bg-gray-100">
+
+  <!-- Sidebar -->
   <app-sidebar></app-sidebar>
 
-  <div class="main-content">
+  <!-- Main -->
+  <div class="flex flex-col flex-1">
+
+    <!-- Navbar -->
     <app-navbar></app-navbar>
 
-    <div class="page-content">
+    <!-- Content -->
+    <main class="p-6 overflow-y-auto">
       <router-outlet></router-outlet>
-    </div>
+    </main>
+
   </div>
+
 </div>
