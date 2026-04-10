@@ -8,35 +8,12 @@
   <!-- Menu -->
   <nav class="flex-1 p-4 space-y-2">
 
-    <a routerLink="/dashboard"
+    <a *ngFor="let item of menuItems"
+       [routerLink]="item.route"
        routerLinkActive="bg-blue-500 text-white"
        class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition">
 
-      <span class="ml-2">Dashboard</span>
-    </a>
-
-    <a routerLink="/doctors"
-       routerLinkActive="bg-blue-500 text-white"
-       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
-      <span class="ml-2">Doctors</span>
-    </a>
-
-    <a routerLink="/visits"
-       routerLinkActive="bg-blue-500 text-white"
-       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
-      <span class="ml-2">Visits</span>
-    </a>
-
-    <a routerLink="/reports"
-       routerLinkActive="bg-blue-500 text-white"
-       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
-      <span class="ml-2">Reports</span>
-    </a>
-
-    <a routerLink="/attendance"
-       routerLinkActive="bg-blue-500 text-white"
-       class="flex items-center p-3 rounded-lg hover:bg-gray-100">
-      <span class="ml-2">Attendance</span>
+      <span class="ml-2">{{ item.label }}</span>
     </a>
 
   </nav>
