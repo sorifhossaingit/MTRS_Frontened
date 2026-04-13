@@ -37,7 +37,7 @@ const routes: Routes = [
           import('./features/doctors/doctors.module')
             .then(m => m.DoctorsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['Admin', 'Manager'] }   // 👑 role-based
+        data: { roles: ['Admin', 'Manager'] }   
       },
 
       {
@@ -47,7 +47,26 @@ const routes: Routes = [
             .then(m => m.VisitsModule),
         canActivate: [RoleGuard],
         data: { roles: ['MR'] }
+      },
+
+      {
+        path: 'reports',
+        loadChildren: () =>
+          import('./features/reports/reports.module')
+            .then(m => m.ReportsModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['Admin'] }
+      },
+
+      {
+        path: 'attendance',
+        loadChildren: () =>
+          import('./features/attendance/attendance.module')
+            .then(m => m.AttendanceModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['MR', 'Admin', 'Manager'] }
       }
+
 
     ]
   },

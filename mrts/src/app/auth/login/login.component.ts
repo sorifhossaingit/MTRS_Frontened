@@ -8,32 +8,44 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  email: string = '';
-  password: string = '';
+  email = '';
+  password = '';
 
   constructor(private router: Router) {}
 
+  ngOnInit() {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    this.router.navigate(['/dashboard']);
+  }
+}
+
   login() {
 
-    // 🔥 Replace this with API call later
-    if (this.email === 'admin@test.com') {
+    // Dummy users (for testing)
+    const users = [
+      { email: 'admin@test.com', password: '1234', role: 'Admin' },
+      { email: 'mr@test.com', password: '1234', role: 'MR' }
+    ];
 
+    const user = users.find(
+      u => u.email === this.email && u.password === this.password
+    );
+
+    if (user) {
       localStorage.setItem('token', '123');
-      localStorage.setItem('role', 'Admin');
+      localStorage.setItem('role', user.role);
 
-      this.router.navigate(['/dashboard']);
-
-    } else if (this.email === 'mr@test.com') {
-
-      localStorage.setItem('token', '123');
-      localStorage.setItem('role', 'MR');
-
-      this.router.navigate(['/visits']);
+      // redirect based on role
+      if (user.role === 'Admin') {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.router.navigate(['/visits']);
+      }
 
     } else {
-
-      alert('Invalid credentials');
-
+      alert('Invalid email or password');
     }
   }
 }

@@ -34,6 +34,6 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Attendance',
     icon: '🕒',
     route: '/attendance',
-    roles: ['MR', 'Manager']
+    roles: ['MR', 'Manager', 'Admin']
   }
 ];
