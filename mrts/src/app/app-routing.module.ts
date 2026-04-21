@@ -32,10 +32,37 @@ const routes: Routes = [
       },
 
       {
-        path: 'doctors',
+        path: 'doctor-master',
         loadChildren: () =>
           import('./features/doctors/doctors.module')
             .then(m => m.DoctorsModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['Admin', 'Manager'] }   
+      },
+
+      {
+        path: 'customer-master',
+        loadChildren: () =>
+          import('./features/customer-master/customer-master.module')
+            .then(m => m.CustomerMasterModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['Admin', 'Manager'] }   
+      },
+
+      {
+        path: 'stockist-master',
+        loadChildren: () =>
+          import('./features/stockist-master/stockist-master.module')
+            .then(m => m.StockistMasterModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['Admin', 'Stockists'] }   
+      },
+
+      {
+        path: 'product-master',
+        loadChildren: () =>
+          import('./features/product-master/product-master.module')
+            .then(m => m.ProductMasterModule),
         canActivate: [RoleGuard],
         data: { roles: ['Admin', 'Manager'] }   
       },
@@ -46,7 +73,7 @@ const routes: Routes = [
           import('./features/visits/visits.module')
             .then(m => m.VisitsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['MR'] }
+        data: { roles: ['MR' , 'Admin'] }
       },
 
       {

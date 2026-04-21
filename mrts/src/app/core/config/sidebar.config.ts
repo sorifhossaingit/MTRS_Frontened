@@ -13,16 +13,34 @@ export const MENU_ITEMS: MenuItem[] = [
     roles: ['Admin', 'Manager', 'MR']
   },
   {
-    label: 'Doctors',
+    label: 'Doctor Master',
     icon: '👨‍⚕️',
-    route: '/doctors',
+    route: '/doctor-master',
+    roles: ['Admin', 'Manager']
+  },
+  {
+    label: 'Customer Master',
+    icon: '👨‍⚕️',
+    route: '/customer-master',
+    roles: ['Admin', 'Manager']
+  },
+  {
+    label: 'Stockist Master',
+    icon: '👨‍⚕️',
+    route: '/stockist-master',
+    roles: ['Admin', 'Stockists']
+  },
+  {
+    label: 'Product Master',
+    icon: '👨‍⚕️',
+    route: '/product-master',
     roles: ['Admin', 'Manager']
   },
   {
     label: 'Visits',
     icon: '📍',
     route: '/visits',
-    roles: ['MR']
+    roles: ['MR', 'Admin']
   },
   {
     label: 'Reports',
