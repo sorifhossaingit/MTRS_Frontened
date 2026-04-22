@@ -1,21 +1,61 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MENU_ITEMS, MenuItem } from '../../../core/config/sidebar.config';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 
   menuItems: MenuItem[] = [];
-  userRole: string | null = '';
+  userRole: string = '';
+  expandedItems: Set<string> = new Set();
+  isMobileSidebarOpen = false;
+  isSmallScreen = false;
+
+  private resizeHandler = () => this.checkScreenSize();
 
   ngOnInit() {
-    this.userRole = localStorage.getItem('role');
+    this.userRole = localStorage.getItem('role') || '';
 
-    this.menuItems = MENU_ITEMS.filter((item: { roles: string | string[]; }) =>
-      item.roles.includes(this.userRole!)
+    // ✅ Safe role filtering
+    this.menuItems = MENU_ITEMS.filter(item =>
+      item.roles?.includes(this.userRole)
     );
+
+    this.checkScreenSize();
+    window.addEventListener('resize', this.resizeHandler);
+  }
+
+  ngOnDestroy() {
+    // ✅ FIX memory leak
+    window.removeEventListener('resize', this.resizeHandler);
+  }
+
+  toggleExpand(label: string) {
+    this.expandedItems.has(label)
+      ? this.expandedItems.delete(label)
+      : this.expandedItems.add(label);
+  }
+
+  isExpanded(label: string): boolean {
+    return this.expandedItems.has(label);
+  }
+
+  toggleMobileSidebar() {
+    this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
+  }
+
+  closeMobileSidebar() {
+    this.isMobileSidebarOpen = false;
+  }
+
+  private checkScreenSize() {
+    this.isSmallScreen = window.innerWidth < 1024;
+
+    if (!this.isSmallScreen) {
+      this.isMobileSidebarOpen = false;
+    }
   }
 }

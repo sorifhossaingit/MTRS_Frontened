@@ -1,8 +1,9 @@
 export interface MenuItem {
   label: string;
   icon: string;
-  route: string;
+  route?: string;
   roles: string[];
+  children?: MenuItem[];
 }
 
 export const MENU_ITEMS: MenuItem[] = [
@@ -16,7 +17,21 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Doctor Master',
     icon: '👨‍⚕️',
     route: '/doctor-master',
-    roles: ['Admin', 'Manager']
+    roles: ['Admin', 'Manager'],
+    children: [
+      {
+        label: 'Doctor Master',
+        icon: '📋',
+        route: '/doctor-master/master',
+        roles: ['Admin', 'Manager']
+      },
+      {
+        label: 'Doctor Master Dashboard',
+        icon: '📊',
+        route: '/doctor-master/dashboard',
+        roles: ['Admin', 'Manager']
+      }
+    ]
   },
   {
     label: 'Customer Master',

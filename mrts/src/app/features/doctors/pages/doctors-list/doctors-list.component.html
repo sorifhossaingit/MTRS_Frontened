@@ -1,1 +1,51 @@
-<p>doctors-list works!</p>
+<div class="doctors-list-container">
+  <div class="list-header">
+    <h2>All Doctors</h2>
+    <button class="btn-add">
+      <span class="text-lg">➕</span> Add Doctor
+    </button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" placeholder="Search doctors by name, phone..." class="search-input" />
+  </div>
+
+  <div class="table-container">
+    <table class="doctors-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Specialization</th>
+          <th>Phone</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dr. Rajesh Kumar</td>
+          <td>Cardiologist</td>
+          <td>+91-9876543210</td>
+          <td>Delhi</td>
+          <td><span class="badge active">Active</span></td>
+          <td class="actions">
+            <button class="btn-icon edit">✏️</button>
+            <button class="btn-icon delete">🗑️</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Dr. Priya Sharma</td>
+          <td>Pediatrician</td>
+          <td>+91-9876543211</td>
+          <td>Mumbai</td>
+          <td><span class="badge active">Active</span></td>
+          <td class="actions">
+            <button class="btn-icon edit">✏️</button>
+            <button class="btn-icon delete">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

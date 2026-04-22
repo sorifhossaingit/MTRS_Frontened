@@ -1,0 +1,22 @@
+<div class="doctors-container">
+  <div class="tabs-header">
+    <div class="tabs">
+      <button 
+        [class.active]="activeTab === 'master'" 
+        (click)="switchTab('master')"
+        class="tab-button">
+        <span class="text-lg mr-2">📋</span>Doctor Master
+      </button>
+      <button 
+        [class.active]="activeTab === 'dashboard'" 
+        (click)="switchTab('dashboard')"
+        class="tab-button">
+        <span class="text-lg mr-2">📊</span>Doctor Master Dashboard
+      </button>
+    </div>
+  </div>
+
+  <div class="tabs-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

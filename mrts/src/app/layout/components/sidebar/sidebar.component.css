@@ -1,4 +1,96 @@
+.sidebar-container {
+  transition: all 0.3s ease;
+}
+
+@keyframes fold {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fold {
+  animation: fold 0.3s ease-out;
+}
+
+button:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+}
+
+a:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  transform: translateX(2px);
+}
+
 a.active {
-  background-color: #3b82f6;
-  color: white;
+  background-color: rgba(37, 99, 235, 0.3);
+  color: #60a5fa;
+  border-left-color: #3b82f6;
+}
+
+/* Mobile slide animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.sidebar-container {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .sidebar-container {
+    width: 16rem; /* 64px in Tailwind */
+  }
+}
+
+@media (max-width: 1023px) {
+  .sidebar-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+}
+
+/* Smooth scrollbar for menu */
+nav {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
+}
+
+nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+nav::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.5);
+  border-radius: 3px;
+  border: transparent;
+}
+
+nav::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.7);
 }

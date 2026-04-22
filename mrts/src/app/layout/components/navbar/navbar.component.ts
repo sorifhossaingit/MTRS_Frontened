@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  @Output() toggleSidebar = new EventEmitter<void>();
+  
+  showProfileMenu = false;
 
   constructor(private router: Router) { }
 
@@ -16,4 +19,13 @@ export class NavbarComponent {
     localStorage.removeItem('role');
     this.router.navigate(['/login']);
   }
+
+  handleToggleSidebar() {
+    this.toggleSidebar.emit();
+  }
+
+  toggleProfileMenu() {
+    this.showProfileMenu = !this.showProfileMenu;
+  }
 }
+

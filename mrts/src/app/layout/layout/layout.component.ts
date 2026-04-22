@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { SidebarComponent } from '../components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-layout',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
+  @ViewChild('sidebar') sidebarComponent!: SidebarComponent;
 
+  toggleSidebar() {
+    if (this.sidebarComponent) {
+      this.sidebarComponent.toggleMobileSidebar();
+    }
+  }
 }
+
