@@ -3,6 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import {
+  LucideAngularModule,
+  MapPin,
+  Users,
+  DollarSign,
+  Clock
+} from 'lucide-angular';
 
 
 @NgModule({
@@ -11,7 +18,13 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    LucideAngularModule.pick({
+      MapPin,
+      Users,
+      DollarSign,
+      Clock
+    })
   ]
 })
 export class DashboardModule { }
