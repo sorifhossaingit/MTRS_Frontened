@@ -1,51 +1,170 @@
-<div class="doctors-list-container">
-  <div class="list-header">
-    <h2>All Doctors</h2>
-    <button class="btn-add">
-      <span class="text-lg">➕</span> Add Doctor
+<div class="p-6 bg-gray-100 min-h-screen">
+
+  <!-- 🔷 Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold flex items-center gap-3">
+      <lucide-icon [img]="UserPlus" class="text-blue-500"></lucide-icon>
+      Add Doctor
+    </h1>
+
+    <button routerLink="/doctors/list"
+      class="bg-gray-500 text-white px-4 py-2 rounded-xl flex items-center gap-2">
+      <lucide-icon [img]="ArrowLeft"></lucide-icon>
+      Back
     </button>
   </div>
 
-  <div class="search-bar">
-    <input type="text" placeholder="Search doctors by name, phone..." class="search-input" />
-  </div>
+  <form class="space-y-6">
 
-  <div class="table-container">
-    <table class="doctors-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Specialization</th>
-          <th>Phone</th>
-          <th>Location</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Dr. Rajesh Kumar</td>
-          <td>Cardiologist</td>
-          <td>+91-9876543210</td>
-          <td>Delhi</td>
-          <td><span class="badge active">Active</span></td>
-          <td class="actions">
-            <button class="btn-icon edit">✏️</button>
-            <button class="btn-icon delete">🗑️</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Dr. Priya Sharma</td>
-          <td>Pediatrician</td>
-          <td>+91-9876543211</td>
-          <td>Mumbai</td>
-          <td><span class="badge active">Active</span></td>
-          <td class="actions">
-            <button class="btn-icon edit">✏️</button>
-            <button class="btn-icon delete">🗑️</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- 🧑 Basic Info -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="section-title">
+        <lucide-icon [img]="User"></lucide-icon>
+        Basic Information
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+
+        <div class="input-group">
+          <lucide-icon [img]="User"></lucide-icon>
+          <input placeholder="Doctor Name" [(ngModel)]="doctor.name" name="name">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="GraduationCap"></lucide-icon>
+          <input placeholder="Qualification" [(ngModel)]="doctor.qualification" name="qualification">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="Stethoscope"></lucide-icon>
+          <input placeholder="Specialization" [(ngModel)]="doctor.specialization" name="specialization">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 📞 Contact -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="section-title">
+        <lucide-icon [img]="Phone"></lucide-icon>
+        Contact Details
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+
+        <div class="input-group">
+          <lucide-icon [img]="Phone"></lucide-icon>
+          <input placeholder="Mobile Number" [(ngModel)]="doctor.mobile" name="mobile">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="Mail"></lucide-icon>
+          <input placeholder="Email" [(ngModel)]="doctor.email" name="email">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 🏥 Practice -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="section-title">
+        <lucide-icon [img]="Building"></lucide-icon>
+        Practice Details
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+
+        <div class="input-group">
+          <lucide-icon [img]="Building"></lucide-icon>
+          <input placeholder="Clinic Name" [(ngModel)]="doctor.clinic" name="clinic">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="Clock"></lucide-icon>
+          <input placeholder="Visiting Hours" [(ngModel)]="doctor.visitingHours" name="visitingHours">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="Calendar"></lucide-icon>
+          <input placeholder="Weekly Off" [(ngModel)]="doctor.weeklyOff" name="weeklyOff">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 📊 Classification -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="section-title">
+        <lucide-icon [img]="BarChart3"></lucide-icon>
+        Classification
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+
+        <div class="input-group">
+          <lucide-icon [img]="Layers"></lucide-icon>
+          <select [(ngModel)]="doctor.category" name="category">
+            <option value="">Category</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="TrendingUp"></lucide-icon>
+          <input placeholder="Potential Score" [(ngModel)]="doctor.potentialScore" name="potentialScore">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="FileText"></lucide-icon>
+          <input placeholder="Prescription Behavior" [(ngModel)]="doctor.prescriptionBehavior" name="prescriptionBehavior">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 📅 Engagement -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="section-title">
+        <lucide-icon [img]="Calendar"></lucide-icon>
+        Engagement Tracking
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+
+        <div class="input-group">
+          <lucide-icon [img]="Calendar"></lucide-icon>
+          <input type="date" [(ngModel)]="doctor.lastVisit" name="lastVisit">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="CalendarCheck"></lucide-icon>
+          <input type="date" [(ngModel)]="doctor.nextVisit" name="nextVisit">
+        </div>
+
+        <div class="input-group">
+          <lucide-icon [img]="Repeat"></lucide-icon>
+          <input placeholder="Call Frequency" [(ngModel)]="doctor.callFrequency" name="callFrequency">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 🔘 Actions -->
+    <div class="flex justify-end gap-4">
+      <button routerLink="/doctors/list"
+        class="bg-gray-400 text-white px-4 py-2 rounded-xl">
+        Cancel
+      </button>
+
+      <button type="submit"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl flex items-center gap-2">
+        <lucide-icon [img]="Save"></lucide-icon>
+        Save Doctor
+      </button>
+    </div>
+
+  </form>
+
 </div>

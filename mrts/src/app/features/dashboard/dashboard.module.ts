@@ -19,7 +19,7 @@ import {
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    LucideAngularModule.pick({
+       LucideAngularModule.pick({
       MapPin,
       Users,
       DollarSign,

@@ -20,15 +20,15 @@ export const MENU_ITEMS: MenuItem[] = [
     roles: ['Admin', 'Manager'],
     children: [
       {
-        label: 'Doctor Master',
+        label: 'Doctor Dashboard',
         icon: 'clipboard-list',
-        route: '/doctor-master/master',
+        route: '/doctor-master/doctor-dashboard',
         roles: ['Admin', 'Manager']
       },
       {
-        label: 'Doctor Dashboard',
+        label: 'Add Doctor',
         icon: 'bar-chart-3',
-        route: '/doctor-master/dashboard',
+        route: '/doctor-master/add-doctor',
         roles: ['Admin', 'Manager']
       }
     ]

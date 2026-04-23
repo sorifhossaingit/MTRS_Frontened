@@ -16,7 +16,7 @@ import {
   MapPin,
   FileText,
   Clock,
-  ChevronDown
+  ChevronDown 
 } from 'lucide-angular';
 
 @NgModule({

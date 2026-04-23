@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Save, UserPlus } from 'lucide-angular';
 
 @Component({
   selector: 'app-doctors-list',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class DoctorsListComponent {
 
+  UserPlus = UserPlus;
+  Save = Save;
+
+  doctor: any = {};
 }

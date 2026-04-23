@@ -1,25 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DoctorsComponent } from './pages/doctors/doctors.component';
 import { DoctorsListComponent } from './pages/doctors-list/doctors-list.component';
 import { DoctorsDashboardComponent } from './pages/doctors-dashboard/doctors-dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DoctorsComponent,
     children: [
       {
-        path: 'master',
-        component: DoctorsListComponent
-      },
-      {
-        path: 'dashboard',
+        path: 'doctor-dashboard',
         component: DoctorsDashboardComponent
       },
       {
+        path: 'add-doctor',
+        component: DoctorsListComponent
+      },
+      {
         path: '',
-        redirectTo: 'master',
+        redirectTo: 'doctor-dashboard',
         pathMatch: 'full'
       }
     ]
