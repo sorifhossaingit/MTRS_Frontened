@@ -7,6 +7,21 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LayoutComponent } from './layout/layout.component';
 
+import {
+  LucideAngularModule,
+  LayoutDashboard,
+  Stethoscope,
+  ClipboardList,
+  BarChart3,
+  Users,
+  Building2,
+  Package,
+  MapPin,
+  FileText,
+  Clock,
+  ChevronDown
+} from 'lucide-angular';
+
 @NgModule({
   declarations: [
     SidebarComponent,
@@ -16,7 +31,22 @@ import { LayoutComponent } from './layout/layout.component';
   ],
   imports: [
     CommonModule,
-    RouterModule   
+    RouterModule,
+
+    // ✅ THIS IS THE REAL FIX
+    LucideAngularModule.pick({
+      LayoutDashboard,
+      Stethoscope,
+      ClipboardList,
+      BarChart3,
+      Users,
+      Building2,
+      Package,
+      MapPin,
+      FileText,
+      Clock,
+      ChevronDown
+    })
   ],
   exports: [
     LayoutComponent

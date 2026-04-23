@@ -19,17 +19,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userRole = localStorage.getItem('role') || '';
 
-    // ✅ Safe role filtering
-    this.menuItems = MENU_ITEMS.filter(item =>
-      item.roles?.includes(this.userRole)
-    );
+    // ✅ Filter parent + children
+    this.menuItems = MENU_ITEMS
+      .filter(item => item.roles.includes(this.userRole))
+      .map(item => ({
+        ...item,
+        children: item.children?.filter(child =>
+          child.roles.includes(this.userRole)
+        )
+      }));
 
     this.checkScreenSize();
     window.addEventListener('resize', this.resizeHandler);
   }
 
   ngOnDestroy() {
-    // ✅ FIX memory leak
     window.removeEventListener('resize', this.resizeHandler);
   }
 

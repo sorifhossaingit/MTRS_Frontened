@@ -9,25 +9,25 @@ export interface MenuItem {
 export const MENU_ITEMS: MenuItem[] = [
   {
     label: 'Dashboard',
-    icon: '📊',
+    icon: 'layout-dashboard',
     route: '/dashboard',
     roles: ['Admin', 'Manager', 'MR']
   },
   {
     label: 'Doctor Master',
-    icon: '👨‍⚕️',
+    icon: 'stethoscope',
     route: '/doctor-master',
     roles: ['Admin', 'Manager'],
     children: [
       {
         label: 'Doctor Master',
-        icon: '📋',
+        icon: 'clipboard-list',
         route: '/doctor-master/master',
         roles: ['Admin', 'Manager']
       },
       {
-        label: 'Doctor Master Dashboard',
-        icon: '📊',
+        label: 'Doctor Dashboard',
+        icon: 'bar-chart-3',
         route: '/doctor-master/dashboard',
         roles: ['Admin', 'Manager']
       }
@@ -35,37 +35,37 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     label: 'Customer Master',
-    icon: '👨‍⚕️',
+    icon: 'users',
     route: '/customer-master',
     roles: ['Admin', 'Manager']
   },
   {
     label: 'Stockist Master',
-    icon: '👨‍⚕️',
+    icon: 'building-2',
     route: '/stockist-master',
     roles: ['Admin', 'Stockists']
   },
   {
     label: 'Product Master',
-    icon: '👨‍⚕️',
+    icon: 'package',
     route: '/product-master',
     roles: ['Admin', 'Manager']
   },
   {
     label: 'Visits',
-    icon: '📍',
+    icon: 'map-pin',
     route: '/visits',
     roles: ['MR', 'Admin']
   },
   {
     label: 'Reports',
-    icon: '📑',
+    icon: 'file-text',
     route: '/reports',
     roles: ['Admin']
   },
   {
     label: 'Attendance',
-    icon: '🕒',
+    icon: 'clock',
     route: '/attendance',
     roles: ['MR', 'Manager', 'Admin']
   }
