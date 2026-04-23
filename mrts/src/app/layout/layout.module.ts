@@ -19,7 +19,14 @@ import {
   MapPin,
   FileText,
   Clock,
-  ChevronDown
+  ChevronDown,
+  Menu,
+  // Stethoscope,
+  Search,
+  Bell,
+  User,
+  Settings,
+  LogOut
 } from 'lucide-angular';
 
 @NgModule({
@@ -45,11 +52,19 @@ import {
       MapPin,
       FileText,
       Clock,
-      ChevronDown
+      ChevronDown,
+      Menu,
+      // Stethoscope,
+      Search,
+      Bell,
+      User,
+      Settings,
+      LogOut
+
     })
   ],
   exports: [
     LayoutComponent
   ]
 })
-export class LayoutModule {}
+export class LayoutModule { }
