@@ -5,11 +5,13 @@
     <h1 class="text-xl sm:text-2xl font-bold">Customer Dashboard</h1>
 
     <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-      <button class="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
-        <lucide-icon [img]="Plus"></lucide-icon>
-        Add Customer
-      </button>
-
+      <button 
+  routerLink="/customer-master/add-customer-master"
+  class="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
+  
+  <lucide-icon [img]="Plus"></lucide-icon>
+  Add Customer
+</button>
       <button class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
         <lucide-icon [img]="Upload"></lucide-icon>
         Upload Excel

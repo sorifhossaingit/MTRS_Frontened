@@ -1,0 +1,121 @@
+<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
+
+  <!-- 🔷 Header -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+    <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+      <lucide-icon [img]="UserPlus"></lucide-icon>
+      Add Customer
+    </h1>
+
+    <button routerLink="/customer-master/customer-master-dashboard"
+      class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
+      <lucide-icon [img]="ArrowLeft"></lucide-icon>
+      Back
+    </button>
+  </div>
+
+  <!-- 🔷 FORM -->
+  <form class="space-y-6">
+
+    <!-- 🟦 BASIC INFO -->
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <h2 class="font-semibold mb-4 flex items-center gap-2">
+        <lucide-icon [img]="User"></lucide-icon>
+        Basic Information
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Customer Name" class="input">
+        <select class="input">
+          <option>Customer Type</option>
+          <option>Hospital</option>
+          <option>Clinic</option>
+          <option>Pharmacy</option>
+        </select>
+
+        <input type="text" placeholder="Registration Number" class="input">
+      </div>
+    </div>
+
+    <!-- 🟩 CONTACT -->
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <h2 class="font-semibold mb-4 flex items-center gap-2">
+        <lucide-icon [img]="Phone"></lucide-icon>
+        Contact Details
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Contact Person" class="input">
+        <input type="text" placeholder="Mobile Number" class="input">
+        <input type="email" placeholder="Email" class="input">
+        <input type="text" placeholder="Landline" class="input">
+      </div>
+    </div>
+
+    <!-- 🟨 ADDRESS -->
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <h2 class="font-semibold mb-4 flex items-center gap-2">
+        <lucide-icon [img]="MapPin"></lucide-icon>
+        Address Details
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Address Line 1" class="input md:col-span-2">
+        <input type="text" placeholder="Address Line 2" class="input md:col-span-2">
+        <input type="text" placeholder="City" class="input">
+        <input type="text" placeholder="State" class="input">
+        <input type="text" placeholder="PIN Code" class="input">
+        <input type="text" placeholder="Country" class="input">
+      </div>
+    </div>
+
+    <!-- 🟪 BUSINESS -->
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <h2 class="font-semibold mb-4 flex items-center gap-2">
+        <lucide-icon [img]="FileText"></lucide-icon>
+        Business Information
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="GST Number" class="input">
+        <input type="text" placeholder="Drug License Number" class="input">
+        <input type="text" placeholder="PAN Number" class="input">
+      </div>
+    </div>
+
+    <!-- 🟫 MAPPING -->
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <h2 class="font-semibold mb-4 flex items-center gap-2">
+        <lucide-icon [img]="Users"></lucide-icon>
+        Mapping
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Assigned MR" class="input">
+        <input type="text" placeholder="Area Manager" class="input">
+        <input type="text" placeholder="Region" class="input">
+      </div>
+    </div>
+
+  </form>
+
+  <!-- 🔷 STICKY ACTION BAR -->
+  <!-- 🔷 ACTION BUTTONS -->
+<div class="bg-white p-4 rounded-2xl shadow flex flex-col sm:flex-row justify-end gap-3">
+
+  <button 
+    type="button"
+    class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
+    Cancel
+  </button>
+
+  <button 
+    type="submit"
+    class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+    <lucide-icon [img]="Save"></lucide-icon>
+    Save Customer
+  </button>
+
+</div>
+
+</div>

@@ -15,11 +15,13 @@ import {
   XCircle,
   TrendingUp
 } from 'lucide-angular';
+import { AddCustomerMasterComponent } from './pages/add-customer-master/add-customer-master.component';
 
 
 @NgModule({
   declarations: [
-    CustomerMasterDashboardComponent
+    CustomerMasterDashboardComponent,
+    AddCustomerMasterComponent
   ],
   imports: [
     CommonModule,

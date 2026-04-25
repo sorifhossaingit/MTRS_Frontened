@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CustomerMasterDashboardComponent } from './pages/customer-master-dashboard/customer-master-dashboard.component';
+import { AddCustomerMasterComponent } from './pages/add-customer-master/add-customer-master.component';
 
 const routes: Routes = [
   {
@@ -10,10 +11,10 @@ const routes: Routes = [
         path: 'customer-master-dashboard',
         component: CustomerMasterDashboardComponent
       },
-      // {
-      //   path: 'add-doctor',
-      //   component: DoctorsListComponent
-      // },
+      {
+        path: 'add-customer-master',
+        component: AddCustomerMasterComponent
+      },
       {
         path: '',
         redirectTo: 'customer-master-dashboard',

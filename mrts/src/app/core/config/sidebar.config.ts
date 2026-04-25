@@ -45,12 +45,12 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/customer-master/customer-master-dashboard',
         roles: ['Admin', 'Manager']
       },
-      // {
-      //   label: 'Add Doctor',
-      //   icon: 'bar-chart-3',
-      //   route: '/doctor-master/add-doctor',
-      //   roles: ['Admin', 'Manager']
-      // }
+      {
+        label: 'Add Customer',
+        icon: 'bar-chart-3',
+        route: '/customer-master/add-customer-master',
+        roles: ['Admin', 'Manager']
+      }
     ]
   },
   {
