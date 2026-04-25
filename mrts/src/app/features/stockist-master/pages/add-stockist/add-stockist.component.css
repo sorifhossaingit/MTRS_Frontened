@@ -1,0 +1,52 @@
+/* Section Title */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151; /* gray-700 */
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 6px;
+}
+
+/* Input Group Container */
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 12px;
+  padding: 0 12px;
+  background-color: #f9fafb; /* gray-50 */
+  transition: all 0.2s ease;
+}
+
+/* Focus Effect */
+.input-group:focus-within {
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Input + Select */
+.input-field {
+  width: 100%;
+  height: 48px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+/* Optional: better spacing for cards */
+.form-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Button hover smooth */
+.btn {
+  transition: all 0.2s ease;
+}
