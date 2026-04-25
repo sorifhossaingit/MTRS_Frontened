@@ -63,7 +63,21 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Product Master',
     icon: 'package',
     route: '/product-master',
-    roles: ['Admin', 'Manager']
+    roles: ['Admin', 'Manager'],
+    children: [
+      {
+        label: 'Product Master Dashboard',
+        icon: 'ClipboardList',
+        route: '/product-master/product-master-dashboard',
+        roles: ['Admin', 'Manager']
+      },
+      {
+        label: 'add-product-master',
+        icon: 'PackagePlus',
+        route: '/product-master/add-product-master',
+        roles: ['Admin', 'Manager']
+      }
+    ]
   },
   {
     label: 'Visits',
