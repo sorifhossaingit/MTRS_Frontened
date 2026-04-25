@@ -16,7 +16,8 @@ import {
   MapPin,
   FileText,
   Clock,
-  ChevronDown 
+  ChevronDown,
+  Trash2
 } from 'lucide-angular';
 
 @NgModule({
@@ -37,7 +38,8 @@ import {
       MapPin,
       FileText,
       Clock,
-      ChevronDown
+      ChevronDown,
+      Trash2
     })
   ],
   bootstrap: [AppComponent]

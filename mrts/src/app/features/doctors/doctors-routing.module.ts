@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'doctor-dashboard',
+        path: 'doctor-master-dashboard',
         component: DoctorsDashboardComponent
       },
       {
@@ -17,7 +17,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'doctor-dashboard',
+        redirectTo: 'doctor-master-dashboard',
         pathMatch: 'full'
       }
     ]

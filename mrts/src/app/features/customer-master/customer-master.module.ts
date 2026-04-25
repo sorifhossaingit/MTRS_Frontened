@@ -2,16 +2,39 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CustomerMasterRoutingModule } from './customer-master-routing.module';
-import { CustomerMasterComponent } from './pages/customer-master/customer-master.component';
+import { CustomerMasterDashboardComponent } from './pages/customer-master-dashboard/customer-master-dashboard.component';
+import {
+  LucideAngularModule,
+  Trash2,
+  Eye,
+  Pencil,
+  Users,
+  Plus,
+  Upload,
+  CheckCircle,
+  XCircle,
+  TrendingUp
+} from 'lucide-angular';
 
 
 @NgModule({
   declarations: [
-    CustomerMasterComponent
+    CustomerMasterDashboardComponent
   ],
   imports: [
     CommonModule,
-    CustomerMasterRoutingModule
+    CustomerMasterRoutingModule,
+    LucideAngularModule.pick({
+      Trash2,
+      Eye,
+      Pencil,
+      Users,
+      Plus,
+      Upload,
+      CheckCircle,
+      XCircle,
+      TrendingUp
+    })
   ]
 })
 export class CustomerMasterModule { }

@@ -22,7 +22,7 @@ export const MENU_ITEMS: MenuItem[] = [
       {
         label: 'Doctor Dashboard',
         icon: 'clipboard-list',
-        route: '/doctor-master/doctor-dashboard',
+        route: '/doctor-master/doctor-master-dashboard',
         roles: ['Admin', 'Manager']
       },
       {
@@ -37,7 +37,21 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Customer Master',
     icon: 'users',
     route: '/customer-master',
-    roles: ['Admin', 'Manager']
+    roles: ['Admin', 'Manager'] ,
+    children: [
+      {
+        label: 'Customer Master Dashboard',
+        icon: 'clipboard-list',
+        route: '/customer-master/customer-master-dashboard',
+        roles: ['Admin', 'Manager']
+      },
+      // {
+      //   label: 'Add Doctor',
+      //   icon: 'bar-chart-3',
+      //   route: '/doctor-master/add-doctor',
+      //   roles: ['Admin', 'Manager']
+      // }
+    ]
   },
   {
     label: 'Stockist Master',
