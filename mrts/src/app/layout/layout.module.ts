@@ -26,7 +26,8 @@ import {
   Bell,
   User,
   Settings,
-  LogOut
+  LogOut,
+  Warehouse
 } from 'lucide-angular';
 
 @NgModule({
@@ -59,7 +60,8 @@ import {
       Bell,
       User,
       Settings,
-      LogOut
+      LogOut,
+      Warehouse
 
     })
   ],

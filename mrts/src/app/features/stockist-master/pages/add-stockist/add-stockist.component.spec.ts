@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StockistMasterComponent } from './stockist-master.component';
+import { AddStockistComponent } from './add-stockist.component';
 
-describe('StockistMasterComponent', () => {
-  let component: StockistMasterComponent;
-  let fixture: ComponentFixture<StockistMasterComponent>;
+describe('AddStockistComponent', () => {
+  let component: AddStockistComponent;
+  let fixture: ComponentFixture<AddStockistComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StockistMasterComponent]
+      declarations: [AddStockistComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StockistMasterComponent);
+    fixture = TestBed.createComponent(AddStockistComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

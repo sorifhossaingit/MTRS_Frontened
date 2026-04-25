@@ -57,7 +57,21 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Stockist Master',
     icon: 'building-2',
     route: '/stockist-master',
-    roles: ['Admin', 'Stockists']
+    roles: ['Admin', 'Stockists'],
+    children: [
+      {
+        label: 'Stockist Dashboard',
+        icon: 'warehouse',
+        route: '/stockist-master/stockist-master-dashboard',
+        roles: ['Admin', 'Stockists']
+      },
+      {
+        label: 'Add Stockist',
+        icon: 'bar-chart-3',
+        route: '/stockist-master/add-stockist',
+        roles: ['Admin', 'Stockists']
+      }
+    ]
   },
   {
     label: 'Product Master',

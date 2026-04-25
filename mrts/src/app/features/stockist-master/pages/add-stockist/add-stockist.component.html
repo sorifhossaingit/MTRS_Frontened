@@ -1,0 +1,221 @@
+<div class="p-4 md:p-6 bg-gray-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto">
+
+    <!-- 🔷 Header -->
+    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
+        <lucide-icon [img]="Building2" class="text-blue-500"></lucide-icon>
+        Add Stockist
+      </h1>
+
+      <button routerLink="/stockist-master/stockist-master-dashboard"
+        class="btn bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center">
+        <lucide-icon [img]="ArrowLeft"></lucide-icon>
+        Back
+      </button>
+    </div>
+
+    <form class="space-y-8">
+
+      <!-- 🏢 Basic Info -->
+      <div class="form-card">
+        <h2 class="section-title">
+          <lucide-icon [img]="Building2"></lucide-icon>
+          Basic Information
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="input-group">
+            <lucide-icon [img]="Hash"></lucide-icon>
+            <input class="input-field" placeholder="Stockist ID" [(ngModel)]="stockist.id" name="id">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Building2"></lucide-icon>
+            <input class="input-field" placeholder="Stockist Name" [(ngModel)]="stockist.name" name="name">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Layers"></lucide-icon>
+            <select class="input-field" [(ngModel)]="stockist.firmType" name="firmType">
+              <option value="">Firm Type</option>
+              <option>Distributor</option>
+              <option>Wholesaler</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 📞 Contact -->
+      <div class="form-card">
+        <h2 class="section-title">
+          <lucide-icon [img]="Phone"></lucide-icon>
+          Contact Details
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="input-group">
+            <lucide-icon [img]="User"></lucide-icon>
+            <input class="input-field" placeholder="Contact Person" [(ngModel)]="stockist.contactPerson" name="contactPerson">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Phone"></lucide-icon>
+            <input class="input-field" placeholder="Mobile Number" [(ngModel)]="stockist.mobile" name="mobile">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Mail"></lucide-icon>
+            <input class="input-field" placeholder="Email" [(ngModel)]="stockist.email" name="email">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 📍 Address -->
+      <div class="form-card">
+        <h2 class="section-title">
+          <lucide-icon [img]="MapPin"></lucide-icon>
+          Address Details
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
+
+          <div class="input-group xl:col-span-4">
+            <lucide-icon [img]="MapPin"></lucide-icon>
+            <input class="input-field" placeholder="Full Address" [(ngModel)]="stockist.address" name="address">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Building"></lucide-icon>
+            <input class="input-field" placeholder="City" [(ngModel)]="stockist.city" name="city">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Globe"></lucide-icon>
+            <input class="input-field" placeholder="State" [(ngModel)]="stockist.state" name="state">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Hash"></lucide-icon>
+            <input class="input-field" placeholder="PIN Code" [(ngModel)]="stockist.pin" name="pin">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 📜 Licensing -->
+      <div class="form-card">
+        <h2 class="section-title">
+          <lucide-icon [img]="FileText"></lucide-icon>
+          Licensing Details
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+
+          <div class="input-group">
+            <lucide-icon [img]="FileText"></lucide-icon>
+            <input class="input-field" placeholder="Drug License Number" [(ngModel)]="stockist.drugLicense" name="drugLicense">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="FileText"></lucide-icon>
+            <input class="input-field" placeholder="GST Number" [(ngModel)]="stockist.gst" name="gst">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 💰 Financial -->
+      <div class="form-card">
+        <h2 class="section-title">
+          <lucide-icon [img]="Wallet"></lucide-icon>
+          Financial Details
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="input-group">
+            <lucide-icon [img]="BadgeIndianRupee"></lucide-icon>
+            <input class="input-field" placeholder="Credit Limit" [(ngModel)]="stockist.creditLimit" name="creditLimit">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Wallet"></lucide-icon>
+            <input class="input-field" placeholder="Outstanding Amount" [(ngModel)]="stockist.outstanding" name="outstanding">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Clock"></lucide-icon>
+            <input class="input-field" placeholder="Payment Terms" [(ngModel)]="stockist.paymentTerms" name="paymentTerms">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 🌍 Territory -->
+      <div class="form-card">
+        <h2 class="section-title">
+          <lucide-icon [img]="Map"></lucide-icon>
+          Territory Mapping
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="input-group">
+            <lucide-icon [img]="Map"></lucide-icon>
+            <input class="input-field" placeholder="Region" [(ngModel)]="stockist.region" name="region">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="User"></lucide-icon>
+            <input class="input-field" placeholder="Assigned MR" [(ngModel)]="stockist.assignedMR" name="assignedMR">
+          </div>
+
+          <div class="input-group">
+            <lucide-icon [img]="Layers"></lucide-icon>
+            <input class="input-field" placeholder="Covered Areas" [(ngModel)]="stockist.coveredAreas" name="coveredAreas">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 🔘 Status -->
+      <div class="form-card">
+        <h2 class="section-title">
+          <lucide-icon [img]="CheckCircle"></lucide-icon>
+          Status
+        </h2>
+
+        <div class="mt-6">
+          <select class="input-field border rounded-xl px-4 h-12 w-full md:w-1/3"
+            [(ngModel)]="stockist.isActive" name="isActive">
+            <option [ngValue]="true">Active</option>
+            <option [ngValue]="false">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 🔘 Actions -->
+      <div class="flex flex-col md:flex-row justify-end gap-4 pt-4">
+
+        <button class="btn bg-gray-400 hover:bg-gray-500 text-white px-6 py-2.5 rounded-xl w-full md:w-auto">
+          Cancel
+        </button>
+
+        <button type="submit"
+          class="btn bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 w-full md:w-auto">
+          <lucide-icon [img]="Save"></lucide-icon>
+          Save Stockist
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
