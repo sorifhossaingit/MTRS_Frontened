@@ -83,7 +83,16 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Visits',
     icon: 'map-pin',
     route: '/visits',
-    roles: ['MR', 'Admin']
+    roles: ['MR', 'Admin'],
+    children: [
+      {
+        label: 'Visit Master Dashboard',
+        icon: 'ClipboardList',
+        route: '/visits/visit-master-dashboard',
+        roles: ['Admin', 'Manager']
+      }
+      
+    ]
   },
   {
     label: 'Reports',

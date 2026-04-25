@@ -2,16 +2,37 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { VisitsRoutingModule } from './visits-routing.module';
-import { VisitsComponent } from './pages/visits/visits.component';
+import { MasterVisitDashboardComponent } from './pages/master-visit-dashboard/master-visit-dashboard.component';
+import {
+  MapPin,
+  Plus,
+  Map,
+  ShoppingCart,
+  DollarSign,
+  Users,
+  Eye,
+  LucideAngularModule
+} from 'lucide-angular';
+
 
 
 @NgModule({
   declarations: [
-    VisitsComponent
+    MasterVisitDashboardComponent
+ 
   ],
   imports: [
     CommonModule,
-    VisitsRoutingModule
+    VisitsRoutingModule,
+    LucideAngularModule.pick({
+      MapPin,
+      Plus,
+      Map,  
+      ShoppingCart,
+      DollarSign,
+      Users,
+      Eye
+    })
   ]
 })
 export class VisitsModule { }
