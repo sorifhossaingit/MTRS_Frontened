@@ -31,11 +31,13 @@ import {
   // Stethoscope
 } from 'lucide-angular';
 import { AddStockistComponent } from './pages/add-stockist/add-stockist.component';
+import { OrderDetailsMasterComponent } from './pages/order-details-master/order-details-master.component';
 
 @NgModule({
   declarations: [
     StockistMasterDashboardComponent,
-    AddStockistComponent
+    AddStockistComponent,
+    OrderDetailsMasterComponent
   ],
   imports: [
     CommonModule,

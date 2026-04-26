@@ -70,6 +70,12 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'UserPlus',
         route: '/stockist-master/add-stockist',
         roles: ['Admin', 'Stockists']
+      },
+      {
+        label: 'Order Details Master',
+        icon: 'Pill',
+        route: '/stockist-master/order-details-master',
+        roles: ['Admin', 'Stockists']
       }
     ]
   },
@@ -96,7 +102,7 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     label: 'Representative Master',
     icon: 'Users', // group of representatives
-    route: 'medical-representative-master',
+    route: '/medical-representative-master',
     roles: ['Admin', 'MR'],
     children: [
       {
@@ -110,9 +116,16 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'UserPlus', // add new MR
         route: '/medical-representative-master/add-medical-representative',
         roles: ['MR', 'Admin']
+      },
+      {
+        label: 'Medicine Master',
+        icon: 'Pill', // add new MR
+        route: '/medical-representative-master/medicine-master',
+        roles: ['MR', 'Admin']
       }
     ]
   },
+ 
   {
     label: 'Visits',
     icon: 'map-pin',

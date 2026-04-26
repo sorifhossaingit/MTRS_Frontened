@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MedicalRepresentativeMasterDashboardComponent } from './pages/medical-representative-master-dashboard/medical-representative-master-dashboard.component';
 import { AddMedicalRepresentativeComponent } from './pages/add-medical-representative/add-medical-representative.component';
+import { MedicineMasterComponent } from './pages/medicine-master/medicine-master.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,10 @@ const routes: Routes = [
       {
         path: 'add-medical-representative',
         component: AddMedicalRepresentativeComponent
+      },
+      {
+        path: 'medicine-master',
+        component: MedicineMasterComponent
       },
       {
         path: '',

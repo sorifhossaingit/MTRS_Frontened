@@ -15,11 +15,13 @@ import {
   LucideAngularModule
 } from 'lucide-angular';
 import { AddMedicalRepresentativeComponent } from './pages/add-medical-representative/add-medical-representative.component';
+import { MedicineMasterComponent } from './pages/medicine-master/medicine-master.component';
 
 @NgModule({
   declarations: [
     MedicalRepresentativeMasterDashboardComponent,
-    AddMedicalRepresentativeComponent
+    AddMedicalRepresentativeComponent,
+    MedicineMasterComponent
   ],
   imports: [
     CommonModule,

@@ -101,7 +101,9 @@ const routes: Routes = [
             .then(m => m.MedicalRepresentativeModule),
         canActivate: [RoleGuard],
         data: { roles: ['MR', 'Admin'] }
-      }
+      },
+
+      
 
 
     ]
