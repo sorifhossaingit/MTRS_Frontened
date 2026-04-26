@@ -92,6 +92,15 @@ const routes: Routes = [
             .then(m => m.AttendanceModule),
         canActivate: [RoleGuard],
         data: { roles: ['MR', 'Admin', 'Manager'] }
+      },
+
+      {
+        path: 'medical-representative-master',
+        loadChildren: () =>
+          import('./features/medical-representative/medical-representative.module')
+            .then(m => m.MedicalRepresentativeModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['MR', 'Admin'] }
       }
 
 

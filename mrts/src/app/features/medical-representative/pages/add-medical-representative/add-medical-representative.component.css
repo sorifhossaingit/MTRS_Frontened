@@ -1,0 +1,38 @@
+/* Reusable input style */
+.input-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 0 12px;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.input-box input {
+  width: 100%;
+  height: 48px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+.input-box:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  background: #ffffff;
+}
+
+/* Section title reuse */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 6px;
+}

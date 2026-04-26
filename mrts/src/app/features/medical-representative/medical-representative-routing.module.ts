@@ -1,0 +1,31 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { MedicalRepresentativeMasterDashboardComponent } from './pages/medical-representative-master-dashboard/medical-representative-master-dashboard.component';
+import { AddMedicalRepresentativeComponent } from './pages/add-medical-representative/add-medical-representative.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    children: [
+      {
+        path: 'medical-representative-master-dashboard',
+        component: MedicalRepresentativeMasterDashboardComponent
+      },
+      {
+        path: 'add-medical-representative',
+        component: AddMedicalRepresentativeComponent
+      },
+      {
+        path: '',
+        redirectTo: 'medical-representative-master',
+        pathMatch: 'full'
+      }
+    ]
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class MedicalRepresentativeRoutingModule { }

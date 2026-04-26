@@ -27,7 +27,7 @@ export const MENU_ITEMS: MenuItem[] = [
       },
       {
         label: 'Add Doctor',
-        icon: 'bar-chart-3',
+        icon: 'UserPlus',
         route: '/doctor-master/add-doctor',
         roles: ['Admin', 'Manager']
       }
@@ -37,7 +37,7 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Customer Master',
     icon: 'users',
     route: '/customer-master',
-    roles: ['Admin', 'Manager'] ,
+    roles: ['Admin', 'Manager'],
     children: [
       {
         label: 'Customer Master Dashboard',
@@ -47,7 +47,7 @@ export const MENU_ITEMS: MenuItem[] = [
       },
       {
         label: 'Add Customer',
-        icon: 'bar-chart-3',
+        icon: 'UserPlus',
         route: '/customer-master/add-customer-master',
         roles: ['Admin', 'Manager']
       }
@@ -67,7 +67,7 @@ export const MENU_ITEMS: MenuItem[] = [
       },
       {
         label: 'Add Stockist',
-        icon: 'bar-chart-3',
+        icon: 'UserPlus',
         route: '/stockist-master/add-stockist',
         roles: ['Admin', 'Stockists']
       }
@@ -86,10 +86,30 @@ export const MENU_ITEMS: MenuItem[] = [
         roles: ['Admin', 'Manager']
       },
       {
-        label: 'add-product-master',
-        icon: 'PackagePlus',
+        label: 'Add Product Master',
+        icon: 'UserPlus',
         route: '/product-master/add-product-master',
         roles: ['Admin', 'Manager']
+      }
+    ]
+  },
+  {
+    label: 'Representative Master',
+    icon: 'Users', // group of representatives
+    route: 'medical-representative-master',
+    roles: ['Admin', 'MR'],
+    children: [
+      {
+        label: 'Representative Master Dashboard',
+        icon: 'BarChart3', // dashboard analytics
+        route: '/medical-representative-master/medical-representative-master-dashboard',
+        roles: ['MR', 'Admin']
+      },
+      {
+        label: 'Add Representative',
+        icon: 'UserPlus', // add new MR
+        route: '/medical-representative-master/add-medical-representative',
+        roles: ['MR', 'Admin']
       }
     ]
   },
@@ -105,7 +125,7 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/visits/visit-master-dashboard',
         roles: ['Admin', 'Manager']
       }
-      
+
     ]
   },
   {

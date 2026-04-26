@@ -28,7 +28,8 @@ import {
   Settings,
   LogOut,
   PackagePlus,
-  Warehouse
+  Warehouse,
+  UserPlus
 } from 'lucide-angular';
 
 @NgModule({
@@ -63,7 +64,8 @@ import {
       Settings,
       LogOut,
       PackagePlus,
-      Warehouse
+      Warehouse,
+      UserPlus
 
     })
   ],

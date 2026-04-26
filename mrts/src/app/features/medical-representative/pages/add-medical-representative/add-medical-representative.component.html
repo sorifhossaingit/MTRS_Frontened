@@ -1,0 +1,148 @@
+<div class="p-4 md:p-6 bg-gray-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto">
+
+    <!-- 🔷 Header -->
+    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
+        <lucide-icon [img]="UserPlus" class="text-blue-500"></lucide-icon>
+        Add Medical Representative
+      </h1>
+
+      <button
+        class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center transition">
+        <lucide-icon [img]="ArrowLeft"></lucide-icon>
+        Back
+      </button>
+    </div>
+
+    <form class="space-y-8">
+
+      <!-- 🧑 Basic Info -->
+      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
+        <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700 border-b pb-2">
+          <lucide-icon [img]="User"></lucide-icon>
+          Basic Information
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+            <lucide-icon [img]="Hash"></lucide-icon>
+            <input class="w-full h-12 bg-transparent outline-none text-sm" placeholder="MR ID">
+          </div>
+
+          <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+            <lucide-icon [img]="User"></lucide-icon>
+            <input class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Full Name">
+          </div>
+
+          <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+            <lucide-icon [img]="Calendar"></lucide-icon>
+            <input type="date" class="w-full h-12 bg-transparent outline-none text-sm">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 📞 Contact -->
+      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
+        <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700 border-b pb-2">
+          <lucide-icon [img]="Phone"></lucide-icon>
+          Contact Details
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="input-box">
+            <lucide-icon [img]="Phone"></lucide-icon>
+            <input placeholder="Mobile Number">
+          </div>
+
+          <div class="input-box">
+            <lucide-icon [img]="Mail"></lucide-icon>
+            <input placeholder="Email">
+          </div>
+
+          <div class="input-box">
+            <lucide-icon [img]="MapPin"></lucide-icon>
+            <input placeholder="City">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 🏢 Work Info -->
+      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
+        <h2 class="section-title">
+          <lucide-icon [img]="Briefcase"></lucide-icon>
+          Work Details
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="input-box">
+            <lucide-icon [img]="Calendar"></lucide-icon>
+            <input type="date">
+          </div>
+
+          <div class="input-box">
+            <lucide-icon [img]="UserCheck"></lucide-icon>
+            <input placeholder="Manager Name">
+          </div>
+
+          <div class="input-box">
+            <lucide-icon [img]="Map"></lucide-icon>
+            <input placeholder="Region">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 🌍 Territory -->
+      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
+        <h2 class="section-title">
+          <lucide-icon [img]="Route"></lucide-icon>
+          Territory Mapping
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+
+          <div class="input-box">
+            <lucide-icon [img]="Map"></lucide-icon>
+            <input placeholder="Assigned Area">
+          </div>
+
+          <div class="input-box">
+            <lucide-icon [img]="Users"></lucide-icon>
+            <input placeholder="Assigned Doctors">
+          </div>
+
+          <div class="input-box">
+            <lucide-icon [img]="Building2"></lucide-icon>
+            <input placeholder="Assigned Stockists">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 🔘 Actions -->
+      <div class="flex flex-col md:flex-row justify-end gap-4">
+
+        <button
+          class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2.5 rounded-xl w-full md:w-auto transition">
+          Cancel
+        </button>
+
+        <button
+          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 w-full md:w-auto transition">
+          <lucide-icon [img]="Save"></lucide-icon>
+          Save Representative
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
