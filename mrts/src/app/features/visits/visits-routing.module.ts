@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MasterVisitDashboardComponent } from './pages/master-visit-dashboard/master-visit-dashboard.component';
+import { AddVisitComponent } from './pages/add-visit/add-visit.component';
 
 const routes: Routes = [
   {
@@ -9,6 +10,10 @@ const routes: Routes = [
       {
         path: 'visit-master-dashboard',
         component: MasterVisitDashboardComponent
+      },
+      {
+        path: 'add-visit',
+        component: AddVisitComponent
       },
       {
         path: '',

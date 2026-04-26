@@ -124,6 +124,12 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'ClipboardList',
         route: '/visits/visit-master-dashboard',
         roles: ['Admin', 'Manager']
+      },
+      {
+        label: 'Add Visit',
+        icon: 'CalendarPlus',
+        route: '/visits/add-visit',
+        roles: ['Admin', 'Manager']
       }
 
     ]

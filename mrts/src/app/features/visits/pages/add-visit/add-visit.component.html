@@ -1,0 +1,136 @@
+<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
+
+  <!-- 🔷 HEADER -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+    <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+      <lucide-icon [img]="ClipboardList"></lucide-icon>
+      Add Visit (DCR)
+    </h1>
+
+    <button routerLink="/visits/visit-master-dashboard"
+        class="btn bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center">
+        <lucide-icon [img]="ArrowLeft"></lucide-icon>
+        Back
+      </button>
+  </div>
+
+  <form class="space-y-6">
+
+    <!-- 🧑 Visit Info -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="User"></lucide-icon>
+        Visit Information
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+
+        <input class="input" type="date" [(ngModel)]="visit.date" name="date">
+
+        <select class="input" [(ngModel)]="visit.mr" name="mr">
+          <option value="">Select MR</option>
+          <option *ngFor="let m of mrList">{{m}}</option>
+        </select>
+
+        <select class="input" [(ngModel)]="visit.doctor" name="doctor">
+          <option value="">Select Doctor</option>
+          <option *ngFor="let d of doctorList">{{d}}</option>
+        </select>
+
+      </div>
+    </div>
+
+    <!-- 📍 Location -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="MapPin"></lucide-icon>
+        Location Details
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+
+        <input class="input" placeholder="City" [(ngModel)]="visit.city" name="city">
+
+        <input class="input" placeholder="Clinic / Hospital" [(ngModel)]="visit.clinic" name="clinic">
+
+        <div class="flex gap-2">
+          <input class="input w-full" placeholder="GPS Coordinates" [(ngModel)]="visit.gps" name="gps">
+          <button type="button" class="btn-primary px-3" (click)="getLocation()">
+            <lucide-icon [img]="Navigation"></lucide-icon>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 💊 Products -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="Package"></lucide-icon>
+        Products Discussed
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+
+        <input class="input" placeholder="Product Name" [(ngModel)]="visit.product" name="product">
+
+        <input class="input" type="number" placeholder="Quantity" [(ngModel)]="visit.qty" name="qty">
+
+        <input class="input" placeholder="Sample Given" [(ngModel)]="visit.sample" name="sample">
+
+      </div>
+    </div>
+
+    <!-- 💰 Order -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="ShoppingCart"></lucide-icon>
+        Order Details
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+
+        <input class="input" type="number" placeholder="Order Value" [(ngModel)]="visit.orderValue" name="orderValue">
+
+        <select class="input" [(ngModel)]="visit.status" name="status">
+          <option value="">Order Status</option>
+          <option>Booked</option>
+          <option>Pending</option>
+          <option>Not Interested</option>
+        </select>
+
+        <input class="input" type="date" [(ngModel)]="visit.deliveryDate" name="deliveryDate">
+
+      </div>
+    </div>
+
+    <!-- 📝 Remarks -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="FileText"></lucide-icon>
+        Remarks
+      </h2>
+
+      <textarea class="input h-24 resize-none"
+        placeholder="Doctor feedback..."
+        [(ngModel)]="visit.remarks"
+        name="remarks"></textarea>
+    </div>
+
+    <!-- 🔘 Actions -->
+    <div class="flex flex-col sm:flex-row justify-end gap-3">
+
+      <button type="button" class="btn-secondary">
+        Cancel
+      </button>
+
+      <button type="submit" class="btn-primary flex items-center justify-center gap-2">
+        <lucide-icon [img]="Save"></lucide-icon>
+        Save Visit
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
