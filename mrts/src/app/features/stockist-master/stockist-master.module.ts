@@ -32,12 +32,18 @@ import {
 } from 'lucide-angular';
 import { AddStockistComponent } from './pages/add-stockist/add-stockist.component';
 import { OrderDetailsMasterComponent } from './pages/order-details-master/order-details-master.component';
+import { StockistProductDashboardComponent } from './pages/stockist-product-dashboard/stockist-product-dashboard.component';
+import { OrderMasterComponent } from './pages/order-master/order-master.component';
+import { MedicineOrderMasterComponent } from './pages/medicine-order-master/medicine-order-master.component';
 
 @NgModule({
   declarations: [
     StockistMasterDashboardComponent,
     AddStockistComponent,
-    OrderDetailsMasterComponent
+    OrderDetailsMasterComponent,
+    StockistProductDashboardComponent,
+    OrderMasterComponent,
+    MedicineOrderMasterComponent
   ],
   imports: [
     CommonModule,

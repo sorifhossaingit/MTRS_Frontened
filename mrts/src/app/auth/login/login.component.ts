@@ -28,7 +28,11 @@ export class LoginComponent {
     // Dummy users (for testing)
     const users = [
       { email: 'admin@test.com', password: '1234', role: 'Admin' },
-      { email: 'mr@test.com', password: '1234', role: 'MR' }
+      { email: 'mr@test.com', password: '1234', role: 'MR' },
+      { email: 'stockist@test.com', password: '1234', role: 'Stockist' },
+      { email: 'manager@test.com', password: '1234', role: 'Manager' }
+
+
     ];
 
     const user = users.find(

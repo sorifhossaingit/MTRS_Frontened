@@ -14,6 +14,7 @@ import {
 } from 'lucide-angular';
 import { AddVisitComponent } from './pages/add-visit/add-visit.component';
 import { FormsModule } from '@angular/forms';
+import { AssignVisitComponent } from './pages/assign-visit/assign-visit.component';
 
 
 
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     MasterVisitDashboardComponent,
-    AddVisitComponent
+    AddVisitComponent,
+    AssignVisitComponent
  
   ],
   imports: [

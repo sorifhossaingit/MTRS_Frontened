@@ -16,12 +16,14 @@ import {
   LucideAngularModule
 } from 'lucide-angular';
 import { AddProductMasterComponent } from './pages/add-product-master/add-product-master.component';
+import { StockistOrderDetailsComponent } from './pages/stockist-order-details/stockist-order-details.component';
 
 
 @NgModule({
   declarations: [
     ProductMasterDashboardComponent,
-    AddProductMasterComponent
+    AddProductMasterComponent,
+    StockistOrderDetailsComponent
   ],
   imports: [
     CommonModule,

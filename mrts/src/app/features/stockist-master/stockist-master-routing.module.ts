@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { StockistMasterDashboardComponent } from './pages/stockist-master-dashboard/stockist-master-dashboard.component';
 import { AddStockistComponent } from './pages/add-stockist/add-stockist.component';
 import { OrderDetailsMasterComponent } from './pages/order-details-master/order-details-master.component';
+import { StockistProductDashboardComponent } from './pages/stockist-product-dashboard/stockist-product-dashboard.component';
+import { OrderMasterComponent } from './pages/order-master/order-master.component';
+import { MedicineOrderMasterComponent } from './pages/medicine-order-master/medicine-order-master.component';
 
 const routes: Routes = [
   {
@@ -17,8 +20,20 @@ const routes: Routes = [
         component: AddStockistComponent
       },
       {
+        path: 'stockist-product-dashboard',
+        component: StockistProductDashboardComponent
+      },
+      {
+        path: 'order-master',
+        component: OrderMasterComponent
+      },
+      {
         path: 'order-details-master',
         component: OrderDetailsMasterComponent
+      },
+      {
+        path: 'medicine-order-master',
+        component: MedicineOrderMasterComponent
       },
       {
         path: '',

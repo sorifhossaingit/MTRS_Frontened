@@ -1,0 +1,153 @@
+<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
+
+  <!-- 🔷 HEADER -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+    <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+      <lucide-icon [img]="ClipboardCheck"></lucide-icon>
+      Assign Visit (Manager)
+    </h1>
+
+    <button routerLink="/visits/visit-master-dashboard"
+      class="btn-secondary flex items-center gap-2 w-full sm:w-auto justify-center">
+      <lucide-icon [img]="ArrowLeft"></lucide-icon>
+      Back
+    </button>
+  </div>
+
+  <form class="space-y-6">
+
+    <!-- 👤 Assign Info -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="Users"></lucide-icon>
+        Assign Information
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+
+        <select class="input" [(ngModel)]="assign.mr" name="mr">
+          <option value="">Select MR</option>
+          <option *ngFor="let m of mrList">{{m}}</option>
+        </select>
+
+        <select class="input" [(ngModel)]="assign.visitType" name="visitType">
+          <option value="">Visit To</option>
+          <option value="doctor">Doctor</option>
+          <option value="hospital">Hospital</option>
+          <option value="clinic">Clinic</option>
+          <option value="institution">Institution</option>
+          <option value="shop">Medical Shop</option>
+        </select>
+
+        <input type="date" class="input" [(ngModel)]="assign.date" name="date">
+
+        <input type="time" class="input" [(ngModel)]="assign.time" name="time">
+
+        <select class="input" [(ngModel)]="assign.priority" name="priority">
+          <option value="">Priority</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+
+      </div>
+
+      <!-- 🔽 Dynamic Target -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+
+        <select *ngIf="assign.visitType === 'doctor'" class="input"
+          [(ngModel)]="assign.target" name="doctor">
+          <option value="">Select Doctor</option>
+          <option *ngFor="let d of doctorList">{{d}}</option>
+        </select>
+
+        <select *ngIf="assign.visitType === 'hospital'" class="input"
+          [(ngModel)]="assign.target" name="hospital">
+          <option value="">Select Hospital</option>
+          <option *ngFor="let h of hospitalList">{{h}}</option>
+        </select>
+
+        <select *ngIf="assign.visitType === 'clinic'" class="input"
+          [(ngModel)]="assign.target" name="clinic">
+          <option value="">Select Clinic</option>
+          <option *ngFor="let c of clinicList">{{c}}</option>
+        </select>
+
+        <select *ngIf="assign.visitType === 'institution'" class="input"
+          [(ngModel)]="assign.target" name="institution">
+          <option value="">Select Institution</option>
+          <option *ngFor="let i of instituteList">{{i}}</option>
+        </select>
+
+        <select *ngIf="assign.visitType === 'shop'" class="input"
+          [(ngModel)]="assign.target" name="shop">
+          <option value="">Select Medical Shop</option>
+          <option *ngFor="let s of shopList">{{s}}</option>
+        </select>
+
+      </div>
+    </div>
+
+    <!-- 📍 Location -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="MapPin"></lucide-icon>
+        Location Details
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+        <input class="input" placeholder="City" [(ngModel)]="assign.city" name="city">
+        <input class="input" placeholder="Area" [(ngModel)]="assign.area" name="area">
+        <input class="input" placeholder="Region" [(ngModel)]="assign.region" name="region">
+      </div>
+    </div>
+
+    <!-- 🎯 Objective -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="Target"></lucide-icon>
+        Visit Objective
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+        <select class="input" [(ngModel)]="assign.purpose" name="purpose">
+          <option value="">Purpose</option>
+          <option>New Product Introduction</option>
+          <option>Follow-up</option>
+          <option>Order Collection</option>
+        </select>
+
+        <input class="input" placeholder="Products Focus" [(ngModel)]="assign.products" name="products">
+
+        <input class="input" placeholder="Expected Outcome" [(ngModel)]="assign.outcome" name="outcome">
+      </div>
+    </div>
+
+    <!-- 📝 Instructions -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="FileText"></lucide-icon>
+        Instructions
+      </h2>
+
+      <textarea class="input h-24 resize-none"
+        placeholder="Manager instructions..."
+        [(ngModel)]="assign.instructions"
+        name="instructions"></textarea>
+    </div>
+
+    <!-- 🔘 ACTIONS -->
+    <div class="flex flex-col sm:flex-row justify-end gap-3">
+      <button type="button" class="btn-secondary">
+        Cancel
+      </button>
+
+      <button type="submit" class="btn-primary flex items-center justify-center gap-2">
+        <lucide-icon [img]="Send"></lucide-icon>
+        Assign Visit
+      </button>
+    </div>
+
+  </form>
+
+</div>

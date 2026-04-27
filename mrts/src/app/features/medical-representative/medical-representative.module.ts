@@ -16,12 +16,16 @@ import {
 } from 'lucide-angular';
 import { AddMedicalRepresentativeComponent } from './pages/add-medical-representative/add-medical-representative.component';
 import { MedicineMasterComponent } from './pages/medicine-master/medicine-master.component';
+import { MrAttendanceComponent } from './pages/mr-attendance/mr-attendance.component';
+import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.component';
 
 @NgModule({
   declarations: [
     MedicalRepresentativeMasterDashboardComponent,
     AddMedicalRepresentativeComponent,
-    MedicineMasterComponent
+    MedicineMasterComponent,
+    MrAttendanceComponent,
+    MrOrderMasterComponent
   ],
   imports: [
     CommonModule,

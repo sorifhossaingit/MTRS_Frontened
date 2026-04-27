@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MedicalRepresentativeMasterDashboardComponent } from './pages/medical-representative-master-dashboard/medical-representative-master-dashboard.component';
 import { AddMedicalRepresentativeComponent } from './pages/add-medical-representative/add-medical-representative.component';
 import { MedicineMasterComponent } from './pages/medicine-master/medicine-master.component';
+import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.component';
+import { MrAttendanceComponent } from './pages/mr-attendance/mr-attendance.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,14 @@ const routes: Routes = [
       {
         path: 'medicine-master',
         component: MedicineMasterComponent
+      },
+      {
+        path: 'mr-order-master',
+        component: MrOrderMasterComponent
+      },
+      {
+        path: 'mr-attendance',
+        component: MrAttendanceComponent
       },
       {
         path: '',

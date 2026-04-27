@@ -1,0 +1,91 @@
+<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
+
+  <!-- 🔷 HEADER -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+        <lucide-icon [img]="Package"></lucide-icon>
+        Medicine Master
+      </h1>
+      <p class="text-sm text-gray-500">ABC Pharma Pvt Ltd</p>
+    </div>
+
+    <input class="input w-full sm:w-64"
+           placeholder="Search medicine..."
+           [(ngModel)]="searchText">
+  </div>
+
+  <!-- 🔷 FILTER -->
+  <div class="card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+
+    <select class="input">
+      <option>All Category</option>
+      <option>Tablet</option>
+      <option>Capsule</option>
+      <option>Syrup</option>
+    </select>
+
+    <input type="number" class="input" placeholder="Max Price">
+
+    <button class="bg-gray-200 rounded-lg py-2">Reset</button>
+
+  </div>
+
+  <!-- 🔷 PRODUCT GRID -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+    <div *ngFor="let p of products"
+         class="card hover:shadow-lg transition flex flex-col">
+
+      <!-- IMAGE -->
+      <img [src]="p.image"
+           class="h-40 w-full object-cover rounded-lg mb-3">
+
+      <!-- DETAILS -->
+      <h3 class="font-semibold text-lg">{{p.name}}</h3>
+
+      <p class="text-xs text-gray-500">{{p.category}}</p>
+
+      <p class="text-xs mt-2">
+        <span class="font-medium">Composition:</span> {{p.composition}}
+      </p>
+
+      <p class="text-xs">
+        <span class="font-medium">Pack:</span> {{p.pack}}
+      </p>
+
+      <p class="text-sm mt-2 font-semibold">
+        ₹{{p.price}}
+      </p>
+
+      <!-- STOCK -->
+      <p class="text-xs"
+         [ngClass]="p.stock > 0 ? 'text-green-600' : 'text-red-600'">
+        {{p.stock > 0 ? 'Available: ' + p.stock : 'Out of Stock'}}
+      </p>
+
+      <!-- ORDER -->
+      <div class="mt-auto pt-4 flex items-center gap-2">
+
+        <input type="number"
+               min="1"
+               [(ngModel)]="p.qty"
+               class="input w-20"
+               placeholder="Qty">
+
+        <button
+          class="btn-primary flex-1 flex items-center justify-center gap-1"
+          [disabled]="p.stock === 0"
+          (click)="placeOrder(p)">
+          <lucide-icon [img]="ShoppingCart"></lucide-icon>
+          Order
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

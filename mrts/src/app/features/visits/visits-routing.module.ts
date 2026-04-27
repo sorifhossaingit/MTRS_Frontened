@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MasterVisitDashboardComponent } from './pages/master-visit-dashboard/master-visit-dashboard.component';
 import { AddVisitComponent } from './pages/add-visit/add-visit.component';
+import { AssignVisitComponent } from './pages/assign-visit/assign-visit.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,10 @@ const routes: Routes = [
       {
         path: 'add-visit',
         component: AddVisitComponent
+      },
+      {
+        path: 'assign-visit',
+        component: AssignVisitComponent
       },
       {
         path: '',

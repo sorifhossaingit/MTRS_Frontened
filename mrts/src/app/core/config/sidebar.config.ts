@@ -11,7 +11,7 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Dashboard',
     icon: 'layout-dashboard',
     route: '/dashboard',
-    roles: ['Admin', 'Manager', 'MR']
+    roles: ['Admin']
   },
   {
     label: 'Doctor Master',
@@ -37,19 +37,19 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Customer Master',
     icon: 'users',
     route: '/customer-master',
-    roles: ['Admin', 'Manager'],
+    roles: ['Admin'],
     children: [
       {
         label: 'Customer Master Dashboard',
         icon: 'clipboard-list',
         route: '/customer-master/customer-master-dashboard',
-        roles: ['Admin', 'Manager']
+        roles: ['Admin']
       },
       {
         label: 'Add Customer',
         icon: 'UserPlus',
         route: '/customer-master/add-customer-master',
-        roles: ['Admin', 'Manager']
+        roles: ['Admin']
       }
     ]
   },
@@ -57,25 +57,43 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Stockist Master',
     icon: 'building-2',
     route: '/stockist-master',
-    roles: ['Admin', 'Stockists'],
+    roles: ['Admin', 'Stockist'],
     children: [
       {
         label: 'Stockist Dashboard',
         icon: 'warehouse',
         route: '/stockist-master/stockist-master-dashboard',
-        roles: ['Admin', 'Stockists']
+        roles: ['Admin']
       },
       {
         label: 'Add Stockist',
         icon: 'UserPlus',
         route: '/stockist-master/add-stockist',
-        roles: ['Admin', 'Stockists']
+        roles: ['Admin']
+      },
+      {
+        label: 'Stockist Product Dashboard',
+        icon: 'Pill',
+        route: '/stockist-master/stockist-product-dashboard',
+        roles: ['Admin', 'Stockist']
+      },
+      {
+        label: 'Order Master',
+        icon: 'package',
+        route: '/stockist-master/order-master',
+        roles: ['Admin', 'Stockist']
       },
       {
         label: 'Order Details Master',
         icon: 'Pill',
         route: '/stockist-master/order-details-master',
-        roles: ['Admin', 'Stockists']
+        roles: ['Admin', 'Stockist']
+      },
+      {
+        label: 'Medicine Order Master',
+        icon: 'Pill',
+        route: '/stockist-master/medicine-order-master',
+        roles: ['Admin', 'Stockist']
       }
     ]
   },
@@ -83,19 +101,25 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Product Master',
     icon: 'package',
     route: '/product-master',
-    roles: ['Admin', 'Manager'],
+    roles: ['Admin'],
     children: [
       {
         label: 'Product Master Dashboard',
         icon: 'ClipboardList',
         route: '/product-master/product-master-dashboard',
-        roles: ['Admin', 'Manager']
+        roles: ['Admin']
       },
       {
         label: 'Add Product Master',
         icon: 'UserPlus',
         route: '/product-master/add-product-master',
-        roles: ['Admin', 'Manager']
+        roles: ['Admin']
+      },
+      {
+        label: 'Stockist Order Details',
+        icon: 'Pill',
+        route: '/product-master/stockist-order-details',
+        roles: ['Admin']
       }
     ]
   },
@@ -103,24 +127,36 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Representative Master',
     icon: 'Users', // group of representatives
     route: '/medical-representative-master',
-    roles: ['Admin', 'MR'],
+    roles: ['Admin', 'MR' , 'Manager'],
     children: [
       {
         label: 'Representative Master Dashboard',
         icon: 'BarChart3', // dashboard analytics
         route: '/medical-representative-master/medical-representative-master-dashboard',
-        roles: ['MR', 'Admin']
+        roles: ['MR', 'Admin' , 'Manager']
       },
       {
         label: 'Add Representative',
         icon: 'UserPlus', // add new MR
         route: '/medical-representative-master/add-medical-representative',
-        roles: ['MR', 'Admin']
+        roles: ['Admin' , 'Manager']
       },
       {
         label: 'Medicine Master',
         icon: 'Pill', // add new MR
         route: '/medical-representative-master/medicine-master',
+        roles: ['MR', 'Admin']
+      },
+      {
+        label: 'Representative Order Master',
+        icon: 'Pill', // add new MR
+        route: '/medical-representative-master/mr-order-master',
+        roles: ['MR', 'Admin']
+      },
+      {
+        label: 'Representative Attendance',
+        icon: 'clock', // add new MR
+        route: '/medical-representative-master/mr-attendance',
         roles: ['MR', 'Admin']
       }
     ]
@@ -130,7 +166,7 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Visits',
     icon: 'map-pin',
     route: '/visits',
-    roles: ['MR', 'Admin'],
+    roles: ['MR', 'Admin' , 'Manager'],
     children: [
       {
         label: 'Visit Master Dashboard',
@@ -142,6 +178,12 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Add Visit',
         icon: 'CalendarPlus',
         route: '/visits/add-visit',
+        roles: ['Admin', 'MR']
+      },
+      {
+        label: 'Assign Visit',
+        icon: 'CalendarPlus',
+        route: '/visits/assign-visit',
         roles: ['Admin', 'Manager']
       }
 
@@ -157,6 +199,6 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Attendance',
     icon: 'clock',
     route: '/attendance',
-    roles: ['MR', 'Manager', 'Admin']
+    roles: ['Manager', 'Admin']
   }
 ];

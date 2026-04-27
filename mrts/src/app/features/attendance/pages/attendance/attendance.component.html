@@ -6,11 +6,6 @@
       <lucide-icon [img]="CalendarCheck"></lucide-icon>
       Attendance Dashboard
     </h1>
-
-    <button class="btn-primary flex items-center gap-2">
-      <lucide-icon [img]="CheckCircle"></lucide-icon>
-      Mark Attendance
-    </button>
   </div>
 
   <!-- 🔷 KPI CARDS -->
@@ -86,7 +81,6 @@
             <th>Check In</th>
             <th>Check Out</th>
             <th>Status</th>
-            <th class="text-center">Action</th>
           </tr>
         </thead>
 
@@ -109,14 +103,6 @@
                 }">
                 {{a.status}}
               </span>
-            </td>
-
-            <td class="text-center">
-              <select class="input w-32" [(ngModel)]="a.status">
-                <option>Present</option>
-                <option>Absent</option>
-                <option>Leave</option>
-              </select>
             </td>
 
           </tr>
