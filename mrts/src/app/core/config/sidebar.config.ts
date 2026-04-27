@@ -17,19 +17,19 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Doctor Master',
     icon: 'stethoscope',
     route: '/doctor-master',
-    roles: ['Admin', 'Manager'],
+    roles: ['Admin'],
     children: [
       {
         label: 'Doctor Dashboard',
         icon: 'clipboard-list',
         route: '/doctor-master/doctor-master-dashboard',
-        roles: ['Admin', 'Manager']
+        roles: ['Admin']
       },
       {
         label: 'Add Doctor',
         icon: 'UserPlus',
         route: '/doctor-master/add-doctor',
-        roles: ['Admin', 'Manager']
+        roles: ['Admin']
       }
     ]
   },
@@ -151,13 +151,13 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Representative Order Master',
         icon: 'Pill', // add new MR
         route: '/medical-representative-master/mr-order-master',
-        roles: ['MR', 'Admin']
+        roles: ['MR', 'Admin', 'Manager']
       },
       {
         label: 'Representative Attendance',
         icon: 'clock', // add new MR
         route: '/medical-representative-master/mr-attendance',
-        roles: ['MR', 'Admin']
+        roles: ['MR']
       }
     ]
   },

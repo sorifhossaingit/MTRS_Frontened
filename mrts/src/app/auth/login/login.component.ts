@@ -25,33 +25,47 @@ export class LoginComponent {
 
   login() {
 
-    // Dummy users (for testing)
-    const users = [
-      { email: 'admin@test.com', password: '1234', role: 'Admin' },
-      { email: 'mr@test.com', password: '1234', role: 'MR' },
-      { email: 'stockist@test.com', password: '1234', role: 'Stockist' },
-      { email: 'manager@test.com', password: '1234', role: 'Manager' }
+  // Dummy users (for testing)
+  const users = [
+    { email: 'admin@test.com', password: '1234', role: 'Admin' },
+    { email: 'mr@test.com', password: '1234', role: 'MR' },
+    { email: 'stockist@test.com', password: '1234', role: 'Stockist' },
+    { email: 'manager@test.com', password: '1234', role: 'Manager' }
+  ];
 
+  const user = users.find(
+    u => u.email === this.email && u.password === this.password
+  );
 
-    ];
+  if (user) {
+    localStorage.setItem('token', '123');
+    localStorage.setItem('role', user.role);
 
-    const user = users.find(
-      u => u.email === this.email && u.password === this.password
-    );
-
-    if (user) {
-      localStorage.setItem('token', '123');
-      localStorage.setItem('role', user.role);
-
-      // redirect based on role
-      if (user.role === 'Admin') {
+    // role-based navigation
+    switch (user.role) {
+      case 'Admin':
         this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/visits']);
-      }
+        break;
 
-    } else {
-      alert('Invalid email or password');
+      case 'MR':
+        this.router.navigate(['/medical-representative-master/mr-attendance']); // or /visits
+        break;
+
+      case 'Stockist':
+        this.router.navigate(['/stockist-master/stockist-product-dashboard']);
+        break;
+
+      case 'Manager':
+        this.router.navigate(['/visits/visit-master-dashboard']);
+        break;
+
+      default:
+        this.router.navigate(['/login']);
     }
-  }
+
+   } else {
+    alert('Invalid email or password');
+   }
+ }
+
 }

@@ -55,7 +55,7 @@ const routes: Routes = [
           import('./features/stockist-master/stockist-master.module')
             .then(m => m.StockistMasterModule),
         canActivate: [RoleGuard],
-        data: { roles: ['Admin', 'Stockists'] }   
+        data: { roles: ['Admin', 'Stockist'] }   
       },
 
       {
@@ -73,7 +73,7 @@ const routes: Routes = [
           import('./features/visits/visits.module')
             .then(m => m.VisitsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['MR' , 'Admin'] }
+        data: { roles: ['MR' , 'Admin' , 'Manager'] }
       },
 
       {
@@ -91,7 +91,7 @@ const routes: Routes = [
           import('./features/attendance/attendance.module')
             .then(m => m.AttendanceModule),
         canActivate: [RoleGuard],
-        data: { roles: ['MR', 'Admin', 'Manager'] }
+        data: { roles: ['Admin', 'Manager'] }
       },
 
       {
@@ -100,7 +100,7 @@ const routes: Routes = [
           import('./features/medical-representative/medical-representative.module')
             .then(m => m.MedicalRepresentativeModule),
         canActivate: [RoleGuard],
-        data: { roles: ['MR', 'Admin'] }
+        data: { roles: ['MR', 'Admin', 'Manager'] }
       },
 
       
