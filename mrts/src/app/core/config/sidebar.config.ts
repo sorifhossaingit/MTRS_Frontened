@@ -8,6 +8,27 @@ export interface MenuItem {
 
 export const MENU_ITEMS: MenuItem[] = [
   {
+    label: 'Super Admin Master',
+    icon: 'users',
+    route: '/super-admin-master',
+    roles: ['Superadmin'],
+    children: [
+      {
+        label: 'Superadmin Dashboard',
+        icon: 'warehouse',
+        route: '/super-admin-master/super-admin-dashboard',
+        roles: ['Superadmin']
+      },
+      {
+        label: 'Add User',
+        icon: 'UserPlus',
+        route: '/super-admin-master/user-control',
+        roles: ['Superadmin']
+      },
+      
+    ]
+  },
+  {
     label: 'Dashboard',
     icon: 'layout-dashboard',
     route: '/dashboard',

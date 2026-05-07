@@ -103,7 +103,14 @@ const routes: Routes = [
         data: { roles: ['MR', 'Admin', 'Manager'] }
       },
 
-      
+      {
+        path: 'super-admin-master',
+        loadChildren: () =>
+          import('./features/super-admin-master/super-admin-master.module')
+            .then(m => m.SuperAdminMasterModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['Superadmin'] }
+      },
 
 
     ]

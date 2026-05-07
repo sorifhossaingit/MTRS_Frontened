@@ -31,7 +31,8 @@ import {
   Warehouse,
   UserPlus,
   CalendarPlus,
-  Pill
+  Pill,
+  Trash2
 } from 'lucide-angular';
 
 @NgModule({
@@ -69,7 +70,8 @@ import {
       Warehouse,
       UserPlus,
       CalendarPlus,
-      Pill
+      Pill,
+      Trash2
 
     })
   ],

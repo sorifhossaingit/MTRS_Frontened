@@ -27,6 +27,7 @@ export class LoginComponent {
 
   // Dummy users (for testing)
   const users = [
+    { email: 'superadmin@test.com', password: '1234', role: 'Superadmin' },
     { email: 'admin@test.com', password: '1234', role: 'Admin' },
     { email: 'mr@test.com', password: '1234', role: 'MR' },
     { email: 'stockist@test.com', password: '1234', role: 'Stockist' },
@@ -43,6 +44,10 @@ export class LoginComponent {
 
     // role-based navigation
     switch (user.role) {
+      case 'Superadmin':
+        this.router.navigate(['/super-admin-master/super-admin-dashboard']);
+        break;
+      
       case 'Admin':
         this.router.navigate(['/dashboard']);
         break;
