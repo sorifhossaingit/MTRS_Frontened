@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { SuperAdminMasterRoutingModule } from './super-admin-master-routing.module';
 import { SuperAdminDashboardComponent } from './pages/super-admin-dashboard/super-admin-dashboard.component';
 import { SuperAdminUserControlComponent } from './pages/super-admin-user-control/super-admin-user-control.component';
@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     SuperAdminMasterRoutingModule,
     FormsModule,
     LucideAngularModule.pick({

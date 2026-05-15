@@ -1,4 +1,4 @@
-import { Component , OnInit  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   ShieldCheck,
   UserPlus,
@@ -10,6 +10,12 @@ import {
   Pencil,
   Trash2
 } from 'lucide-angular';
+import { SuperAdminMasterService } from '../../services/super-admin-master.service';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 
 
 @Component({
@@ -20,126 +26,329 @@ import {
 export class SuperAdminDashboardComponent implements OnInit {
 
   // Icons
-   ShieldCheck = ShieldCheck;
-   UserPlus = UserPlus;
-   Building2 = Building2;
-   BadgeCheck = BadgeCheck;
-   AlertTriangle = AlertTriangle;
-   Users = Users;
-   Eye = Eye;
-   Pencil = Pencil;
-   Trash2 = Trash2;
+  ShieldCheck = ShieldCheck;
+  UserPlus = UserPlus;
+  Building2 = Building2;
+  BadgeCheck = BadgeCheck;
+  AlertTriangle = AlertTriangle;
+  Users = Users;
+  Eye = Eye;
+  Pencil = Pencil;
+  Trash2 = Trash2;
 
-  // Stats
+  constructor(
+    private superAdminService: SuperAdminMasterService,
+    private fb: FormBuilder
+  ) { }
+
+  editModal = false;
+
+  selectedAgencyId = 0;
+
+  editForm!: FormGroup;
+
+
+
+  // =========================
+  // DASHBOARD STATS
+  // =========================
+
   totalCompanies = 0;
   activeCompanies = 0;
-  expiredPlans = 0;
   totalUsers = 0;
+  activeUsers = 0;
 
-  // Search + Filter
+  // =========================
+  // TABLE DATA
+  // =========================
+
+  companies: any[] = [];
+
+  // =========================
+  // PAGINATION
+  // =========================
+
+  currentPage = 1;
+  pageSize = 10;
+  totalRecords = 0;
+
+  // =========================
+  // FILTERS
+  // =========================
+
   searchText = '';
   filterStatus = '';
 
-  // Companies
-  companies = [
-    {
-      id: 1,
-      companyName: 'Sun Pharma',
-      adminName: 'Rahul Sharma',
-      email: 'sunpharma@test.com',
-      location: 'Mumbai',
-      plan: 'Premium',
-      totalEmployees: 120,
-      expiryDate: '12 Dec 2026',
-      status: 'active'
-    },
-    {
-      id: 2,
-      companyName: 'Cipla',
-      adminName: 'Amit Verma',
-      email: 'cipla@test.com',
-      location: 'Delhi',
-      plan: 'Standard',
-      totalEmployees: 80,
-      expiryDate: '25 Aug 2026',
-      status: 'active'
-    },
-    {
-      id: 3,
-      companyName: 'Mankind Pharma',
-      adminName: 'Sourav Das',
-      email: 'mankind@test.com',
-      location: 'Kolkata',
-      plan: 'Basic',
-      totalEmployees: 40,
-      expiryDate: '10 Jan 2025',
-      status: 'expired'
-    }
-  ];
+  // =========================
+  // LOADER
+  // =========================
 
-  filteredCompanies: any[] = [];
+  loading = false;
 
   ngOnInit(): void {
-    this.filteredCompanies = this.companies;
-    this.calculateStats();
+
+    this.getDashboardSummary();
+
+    this.getAgencyList();
+
+    this.editForm = this.fb.group({
+
+      name: ['', Validators.required],
+
+      email: ['', Validators.required],
+
+      phone: ['', Validators.required],
+
+      address: [''],
+
+      gstNumber: [''],
+
+      licenseNo: [''],
+
+      state: [''],
+
+      city: [''],
+
+      isActive: [true],
+
+      allUsersStatusUpdate: [false],
+
+      adminName: [''],
+
+      adminEmail: [''],
+
+      adminMobile: ['']
+    });
   }
 
-  calculateStats() {
-    this.totalCompanies = this.companies.length;
+  // =========================
+  // DASHBOARD SUMMARY API
+  // =========================
 
-    this.activeCompanies = this.companies.filter(
-      x => x.status === 'active'
-    ).length;
+  getDashboardSummary() {
 
-    this.expiredPlans = this.companies.filter(
-      x => x.status === 'expired'
-    ).length;
+    this.superAdminService.getdashboradsummery()
+      .subscribe({
 
-    this.totalUsers = this.companies.reduce(
-      (sum, item) => sum + item.totalEmployees,
-      0
-    );
+        next: (res: any) => {
+
+          if (res.success) {
+
+            this.totalCompanies = res.data.totalAgency;
+
+            this.activeCompanies = res.data.activeAgency;
+
+            this.totalUsers = res.data.totalUsers;
+
+            this.activeUsers = res.data.activeUsers;
+          }
+        },
+
+        error: (err) => {
+          console.log(err);
+        }
+      });
   }
+
+  // =========================
+  // AGENCY LIST API
+  // =========================
+
+  getAgencyList() {
+
+    this.loading = true;
+
+    const params: any = {
+
+      pageNumber: this.currentPage,
+
+      pageSize: this.pageSize
+    };
+
+    // Search filter
+    if (this.searchText) {
+
+      params.name = this.searchText;
+    }
+
+    // Status filter
+    if (this.filterStatus !== '') {
+
+      params.isActive = this.filterStatus;
+    }
+
+    this.superAdminService.getAgency(params)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.loading = false;
+
+          if (res.success) {
+
+            this.companies = res.data.data;
+
+            this.totalRecords = res.data.totalRecords;
+          }
+        },
+
+        error: (err) => {
+
+          this.loading = false;
+
+          console.log(err);
+        }
+      });
+  }
+
+  // =========================
+  // SEARCH FILTER
+  // =========================
 
   applyFilter() {
 
-    this.filteredCompanies = this.companies.filter(company => {
+    this.currentPage = 1;
 
-      const matchesSearch =
-        company.companyName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        company.adminName.toLowerCase().includes(this.searchText.toLowerCase());
+    this.getAgencyList();
+  }
 
-      const matchesStatus =
-        this.filterStatus === '' ||
-        company.status === this.filterStatus;
+  // =========================
+  // PAGE CHANGE
+  // =========================
 
-      return matchesSearch && matchesStatus;
+  changePage(page: number) {
+
+    this.currentPage = page;
+
+    this.getAgencyList();
+  }
+
+  // =========================
+  // STATUS FILTER
+  // =========================
+
+  onStatusChange(status: string) {
+
+    this.filterStatus = status;
+
+    this.currentPage = 1;
+
+    this.getAgencyList();
+  }
+
+  // =========================
+  // ACTIONS
+  // =========================
+
+  editCompany(company: any) {
+
+    this.selectedAgencyId = company.agencyId;
+
+    this.editForm.patchValue({
+
+      name: company.companyName,
+
+      email: company.email,
+
+      phone: company.phone,
+
+      address: company.address,
+
+      gstNumber: company.gstNumber,
+
+      licenseNo: company.licenseNo,
+
+      state: company.state,
+
+      city: company.city,
+
+      isActive: company.isActive,
+
+      allUsersStatusUpdate: false,
+
+      adminName: company.adminName,
+
+      adminEmail: company.adminEmail,
+
+      adminMobile: company.adminMobile
     });
 
+    this.editModal = true;
   }
 
-  viewCompany(id: number) {
-    console.log('View Company', id);
+  closeModal() {
+
+    this.editModal = false;
   }
 
-  editCompany(id: number) {
-    console.log('Edit Company', id);
-  }
+  updateAgency() {
 
-  deleteCompany(id: number) {
+    if (this.editForm.invalid) {
 
-    const confirmDelete = confirm('Are you sure you want to delete?');
+      this.editForm.markAllAsTouched();
+      console.log("ferr")
 
-    if (confirmDelete) {
-
-      this.companies = this.companies.filter(
-        company => company.id !== id
-      );
-
-      this.applyFilter();
-      this.calculateStats();
+      return;
     }
 
+    const rid = Number(
+      localStorage.getItem('rid')
+    );
+
+    const payload = {
+
+      agencyId: this.selectedAgencyId,
+
+      ...this.editForm.value,
+
+      updatedBy: rid
+    };
+
+    console.log(payload);
+
+    this.superAdminService
+      .updateAgency(payload)
+      .subscribe({
+
+        next: (res: any) => {
+
+          if (res.success) {
+
+            alert('Agency updated successfully');
+
+            this.closeModal();
+
+            // Refresh Table
+            this.getAgencyList();
+          }
+        },
+
+        error: (err) => {
+
+          console.log(err);
+        }
+      });
   }
 
+  // =========================
+  // TOTAL PAGES
+  // =========================
+
+  get totalPages(): number {
+
+    return Math.ceil(
+      this.totalRecords / this.pageSize
+    );
+  }
+
+  // =========================
+  // PAGE ARRAY
+  // =========================
+
+  get pages(): number[] {
+
+    return Array(this.totalPages)
+      .fill(0)
+      .map((x, i) => i + 1);
+  }
 }

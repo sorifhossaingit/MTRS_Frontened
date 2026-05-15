@@ -15,7 +15,10 @@ import {
   MapPin,
   ClipboardList,
   BarChart3,
-  CalendarCheck
+  CalendarCheck,
+  EyeOff,
+  Eye
+
 } from 'lucide-angular';
 
 @NgModule({
@@ -37,7 +40,9 @@ import {
       MapPin,
       ClipboardList,
       BarChart3,
-      CalendarCheck
+      CalendarCheck,
+      EyeOff,
+      Eye
     })
   ]
 })

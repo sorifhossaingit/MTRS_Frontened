@@ -17,7 +17,33 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private resizeHandler = () => this.checkScreenSize();
 
   ngOnInit() {
-    this.userRole = localStorage.getItem('role') || '';
+    const rid = Number(localStorage.getItem('rid'));
+
+    switch (rid) {
+
+      case 1:
+        this.userRole = 'Superadmin';
+        break;
+
+      case 2:
+        this.userRole = 'Admin';
+        break;
+
+      case 3:
+        this.userRole = 'MR';
+        break;
+
+      case 4:
+        this.userRole = 'Stockist';
+        break;
+
+      case 5:
+        this.userRole = 'Manager';
+        break;
+
+      default:
+        this.userRole = '';
+    }
 
     // ✅ Filter parent + children
     this.menuItems = MENU_ITEMS

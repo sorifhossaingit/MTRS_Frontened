@@ -1,7 +1,8 @@
 <div class="min-h-screen flex font-sans bg-gradient-to-br from-gray-50 to-blue-50">
 
   <!-- 🧬 LEFT PANEL -->
-  <div class="hidden lg:flex w-1/2 relative bg-gradient-to-br from-teal-700 to-blue-800 text-white p-12 flex-col justify-between">
+  <div
+    class="hidden lg:flex w-1/2 relative bg-gradient-to-br from-teal-700 to-blue-800 text-white p-12 flex-col justify-between">
 
     <!-- subtle grid -->
     <div class="absolute inset-0 opacity-10 
@@ -15,7 +16,8 @@
         <h1 class="text-3xl font-bold">MR Tracker</h1>
       </div>
       <p class="text-teal-100 text-sm max-w-md">
-        Smart field-force automation platform designed for pharmaceutical teams to track, analyze, and optimize medical representative performance.
+        Smart field-force automation platform designed for pharmaceutical teams to track, analyze, and optimize medical
+        representative performance.
       </p>
     </div>
 
@@ -78,15 +80,10 @@
             <label class="text-sm text-gray-600">Email Address</label>
 
             <div class="relative mt-1">
-              <i-lucide name="mail" 
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400">
+              <i-lucide name="mail" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400">
               </i-lucide>
 
-              <input type="email"
-                name="email"
-                [(ngModel)]="email"
-                required
-                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg
+              <input type="email" name="email" [(ngModel)]="email" required class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg
                 focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition" />
             </div>
           </div>
@@ -94,18 +91,20 @@
           <!-- PASSWORD -->
           <div>
             <label class="text-sm text-gray-600">Password</label>
-
             <div class="relative mt-1">
-              <i-lucide name="lock" 
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400">
+              <!-- Lock Icon -->
+              <i-lucide name="lock" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5">
               </i-lucide>
-
-              <input type="password"
-                name="password"
-                [(ngModel)]="password"
-                required
-                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg
-                focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" />
+              <!-- Input -->
+              <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password" required class="w-full pl-10 pr-12 py-2.5 border border-gray-300 rounded-lg
+                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                    outline-none transition" />
+              <!-- Eye Icon -->
+              <div (click)="togglePassword()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">
+                <i-lucide [name]="showPassword ? 'eye-off' : 'eye'" class="w-5 h-5">
+                </i-lucide>
+              </div>
             </div>
           </div>
 
@@ -125,8 +124,7 @@
           </div>
 
           <!-- BUTTON -->
-          <button type="submit"
-            class="w-full py-3 rounded-lg text-white font-medium
+          <button type="submit" class="w-full py-3 rounded-lg text-white font-medium
             flex items-center justify-center gap-2
             bg-gradient-to-r from-teal-600 to-blue-600
             hover:from-teal-700 hover:to-blue-700
