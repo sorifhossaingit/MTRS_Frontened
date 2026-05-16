@@ -10,7 +10,7 @@ import { Eye, EyeOff, Lock } from 'lucide-angular';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  
+
   Eye = Eye;
   EyeOff = EyeOff;
   Lock = Lock
@@ -35,69 +35,71 @@ export class LoginComponent {
 
   ngOnInit() {
 
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-  if (token) {
+    if (token) {
 
-    // Decode token
-    const decodedToken: any = jwtDecode(token);
+      // Decode token
+      const decodedToken: any = jwtDecode(token);
 
-    // Get values
-    const rid =
-      decodedToken.rid ||
-      decodedToken.Rid;
+      // Get values
+      const rid =
+        decodedToken.rid ||
+        decodedToken.Rid;
 
-    const isSuperAdmin =
-      decodedToken.isSuperAdmin ||
-      decodedToken.IsSuperAdmin;
+      localStorage.setItem('rid', rid);
 
-    const aid = decodedToken.aid
+      const isSuperAdmin =
+        decodedToken.isSuperAdmin ||
+        decodedToken.IsSuperAdmin;
 
-    // Manual role mapping
-    let role = '';
-    let roleid = ''
+      const aid = decodedToken.aid
 
-    if (isSuperAdmin === 'True') {
+      // Manual role mapping
+      let role = '';
 
-      role = 'Superadmin';
-      roleid = '1';
 
-    } else {
+      if (isSuperAdmin === 'True') {
 
-      switch (Number(rid)) {
+        role = 'Superadmin';
 
-        case 2:
-          role = 'Admin';
-          roleid = '2';
-          break;
 
-        case 3:
-          role = 'MR';
-          roleid = '3';
-          break;
+      } else {
 
-        case 4:
-          role = 'Stockist';
-          roleid = '4';
-          break;
+        switch (rid) {
 
-        case 5:
-          role = 'Manager';
-          roleid = '5';
-          break;
+          case 'a5fabfee-5506-4e12-bfec-c898fc5af3ae':
+            role = 'Admin';
 
-        default:
-          role = '';
+            break;
+
+          case 'FD1C87B5-524A-49E5-B60C-5D7B82DDEB43':
+            role = 'MR';
+
+            break;
+
+          case '258FC58F-F4E8-4D51-9A19-7BC88F6F3D40':
+            role = 'Stockist';
+
+            break;
+
+          case '39E853C2-805C-49F8-8527-15B2A9EDE106':
+            role = 'Manager';
+
+            break;
+
+          default:
+            role = '';
+        }
       }
+
+      // Store role again
+
+      localStorage.setItem('aid', aid)
+
+      // Navigate
+      this.navigateByRole(role);
     }
-
-    // Store role again
-    localStorage.setItem('rid', roleid);
-    localStorage.setItem('aid', aid)
-
-    // Navigate
-    this.navigateByRole(role);
-  }
   }
 
   login() {
@@ -130,9 +132,12 @@ export class LoginComponent {
               decodedToken.rid ||
               decodedToken.Rid;
 
+            localStorage.setItem('rid', rid);
+
             const isSuperAdmin =
               decodedToken.isSuperAdmin ||
               decodedToken.IsSuperAdmin;
+            localStorage.setItem('is', isSuperAdmin)
 
             const aid = decodedToken.aid
 
@@ -141,35 +146,34 @@ export class LoginComponent {
             // =========================
 
             let role = '';
-            let roleid = '';
+
 
             if (isSuperAdmin === 'True') {
 
               role = 'Superadmin';
-              roleid = '1';
 
             } else {
 
-              switch (Number(rid)) {
+              switch (rid) {
 
-                case 2:
+                case 'a5fabfee-5506-4e12-bfec-c898fc5af3ae':
                   role = 'Admin';
-                  roleid = '2';
+
                   break;
 
-                case 3:
+                case 'FD1C87B5-524A-49E5-B60C-5D7B82DDEB43':
                   role = 'MR';
-                  roleid = '3';
+
                   break;
 
-                case 4:
+                case '258FC58F-F4E8-4D51-9A19-7BC88F6F3D40':
                   role = 'Stockist';
-                  roleid = '4'
+
                   break;
 
-                case 5:
+                case '39E853C2-805C-49F8-8527-15B2A9EDE106':
                   role = 'Manager';
-                  roleid = '5';
+
                   break;
 
                 default:
@@ -178,9 +182,9 @@ export class LoginComponent {
             }
 
             // Store role manually
-            localStorage.setItem('rid', roleid);
+
             localStorage.setItem('aid', aid);
-            
+
             this.navigateByRole(role);
           }
         },
