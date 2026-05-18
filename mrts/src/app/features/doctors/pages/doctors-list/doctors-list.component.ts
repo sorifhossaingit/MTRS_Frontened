@@ -1,23 +1,29 @@
 import { Component } from '@angular/core';
 import { Save, UserPlus } from 'lucide-angular';
 
+// lucide icons import
+
 import {
-  User,
-  // UserPlus,
   ArrowLeft,
+  User,
+  GraduationCap,
+  Stethoscope,
   Phone,
   Mail,
   Building,
+  Building2,
+  Hospital,
   Clock,
   Calendar,
   CalendarCheck,
-  Repeat,
-  GraduationCap,
-  Stethoscope,
   BarChart3,
   Layers,
   TrendingUp,
-  FileText
+  FileText,
+  Repeat,
+  Smile,
+  UserCheck,
+  MapPin
 } from 'lucide-angular';
 
 @Component({
@@ -44,5 +50,34 @@ export class DoctorsListComponent {
   TrendingUp = TrendingUp;
   FileText = FileText;
   Save = Save;
+  Building2 = Building2;
+  Smile = Smile;
+  UserCheck = UserCheck;
+  MapPin = MapPin;
+  Hospital = Hospital;
+
+
   doctor: any = {};
+
+
+mrList = [
+  {
+    id: 1,
+    name: 'Rahul Sharma'
+  },
+  {
+    id: 2,
+    name: 'Amit Das'
+  }
+];
+
+saveDoctor(){
+  
+}
+
+
+
+
+
+
 }

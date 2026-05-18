@@ -16,7 +16,6 @@ export class SuperAdminMasterService {
   }
 
   getAgency(params: any) {
-
     return this.http.get(
       `${this.apiUrl}/SuperAdmin/dashboard/agencylist`,
       { params }
