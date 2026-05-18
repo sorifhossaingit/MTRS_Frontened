@@ -29,22 +29,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
         case 'a5fabfee-5506-4e12-bfec-c898fc5af3ae':
           this.userRole = 'Admin';
-
           break;
 
-        case 'FD1C87B5-524A-49E5-B60C-5D7B82DDEB43':
+        case 'fd1c87b5-524a-49e5-b60c-5d7b82ddeb43':
           this.userRole = 'MR';
-
           break;
 
-        case '258FC58F-F4E8-4D51-9A19-7BC88F6F3D40':
+        case '258fc58f-f4e8-4d51-9a19-7bc88f6f3d40':
           this.userRole = 'Stockist';
-
           break;
 
-        case '39E853C2-805C-49F8-8527-15B2A9EDE106':
+        case '39e853c2-805c-49f8-8527-15b2a9ede106':
           this.userRole = 'Manager';
-
           break;
 
         default:

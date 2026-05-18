@@ -96,25 +96,25 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Stockist Product Dashboard',
         icon: 'Pill',
         route: '/stockist-master/stockist-product-dashboard',
-        roles: ['Admin', 'Stockist']
+        roles: ['Stockist']
       },
       {
         label: 'Order Master',
         icon: 'package',
         route: '/stockist-master/order-master',
-        roles: ['Admin', 'Stockist']
+        roles: ['Stockist']
       },
       {
         label: 'Order Details Master',
         icon: 'Pill',
         route: '/stockist-master/order-details-master',
-        roles: ['Admin', 'Stockist']
+        roles: ['Stockist']
       },
       {
         label: 'Medicine Order Master',
         icon: 'Pill',
         route: '/stockist-master/medicine-order-master',
-        roles: ['Admin', 'Stockist']
+        roles: ['Stockist']
       }
     ]
   },
@@ -166,7 +166,7 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Medicine Master',
         icon: 'Pill', // add new MR
         route: '/medical-representative-master/medicine-master',
-        roles: ['MR', 'Admin']
+        roles: ['MR']
       },
       {
         label: 'Representative Order Master',
