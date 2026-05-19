@@ -2,37 +2,36 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class CustomerService {
-
+export class StockistService {
+  
 private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-
-
-  getcustomerdashboarddetails(params: any) {
+  getstockistdashboarddetails(params: any) {
     return this.http.get(
       `${this.apiUrl}/Customer/dashboard/customer-dashboard`, { params });
   }
 
-  getcustomerdetails(params: any) {
+  getstockistdetails(params: any) {
     return this.http.get(
-      `${this.apiUrl}/Customer/dashboard/get-customers`, { params });
+      `${this.apiUrl}/Stockiest/get-stockiestlist`, { params });
   }
 
 
-  addcustomer(data: any) {
-    return this.http.post(`${this.apiUrl}/Customer/create-customer`, data);
+  addstockist(data: any) {
+    return this.http.post(`${this.apiUrl}/Stockiest/create-stockiest`, data);
   }
 
 
-  updatecustomerdetails(data: any) {
-    return this.http.put(`${this.apiUrl}/Customer/update-customer`, data);
+  updatestockistdetails(data: any) {
+    return this.http.put(`${this.apiUrl}/Stockiest/update-stockeist`, data);
   }
 
-
+ 
 
 }

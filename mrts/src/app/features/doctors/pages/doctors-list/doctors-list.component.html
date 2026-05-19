@@ -1,276 +1,719 @@
 <div class="p-6 bg-gray-100 min-h-screen">
 
-  <!-- 🔷 Header -->
+  <!-- ===================================================== -->
+  <!-- 🔷 HEADER -->
+  <!-- ===================================================== -->
+
   <div class="flex justify-between items-center mb-6">
+
     <h1 class="text-2xl font-bold flex items-center gap-3">
-      <lucide-icon [img]="UserPlus" class="text-blue-500"></lucide-icon>
+
+      <lucide-icon
+        [img]="UserPlus"
+        class="text-blue-500">
+      </lucide-icon>
+
       Add Doctor
+
     </h1>
 
-    <button routerLink="/doctors/list"
+    <button
+      routerLink="/doctor-master/doctor-master-dashboard"
       class="bg-gray-500 text-white px-4 py-2 rounded-xl flex items-center gap-2">
+
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
+
       Back
+
     </button>
+
   </div>
 
-  <form class="space-y-6" (ngSubmit)="saveDoctor()">
+  <!-- ===================================================== -->
+  <!-- 🔷 FORM -->
+  <!-- ===================================================== -->
 
-    <!-- 🧑 Basic Info -->
+  <form
+    [formGroup]="doctorForm"
+    (ngSubmit)="saveDoctor()"
+    class="space-y-6">
+
+    <!-- ================================================= -->
+    <!-- 🔷 BASIC INFO -->
+    <!-- ================================================= -->
+
     <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="section-title">
+
+      <h2 class="section-title flex items-center gap-2 text-lg font-semibold">
+
         <lucide-icon [img]="User"></lucide-icon>
+
         Basic Information
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
 
-        <div class="input-group">
-          <lucide-icon [img]="User"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Doctor Name"
-            [(ngModel)]="doctor.name"
-            name="name">
+        <!-- Doctor Name -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon [img]="User"></lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Doctor Name"
+              formControlName="name">
+
+          </div>
+
+          <div
+            *ngIf="f['name'].touched && f['name'].invalid">
+
+            <p
+              *ngIf="f['name'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Doctor Name is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="GraduationCap"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Qualification"
-            [(ngModel)]="doctor.qualification"
-            name="qualification">
+        <!-- Qualification -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon
+              [img]="GraduationCap">
+            </lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Qualification"
+              formControlName="qualification">
+
+          </div>
+
+          <div
+            *ngIf="f['qualification'].touched && f['qualification'].invalid">
+
+            <p
+              *ngIf="f['qualification'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Qualification is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="Stethoscope"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Specialization"
-            [(ngModel)]="doctor.specialization"
-            name="specialization">
+        <!-- Specialization -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon
+              [img]="Stethoscope">
+            </lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Specialization"
+              formControlName="specialization">
+
+          </div>
+
+          <div
+            *ngIf="f['specialization'].touched && f['specialization'].invalid">
+
+            <p
+              *ngIf="f['specialization'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Specialization is required
+
+            </p>
+
+          </div>
+
         </div>
 
       </div>
+
     </div>
 
-    <!-- 📞 Contact Details -->
+    <!-- ================================================= -->
+    <!-- 🔷 CONTACT DETAILS -->
+    <!-- ================================================= -->
+
     <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="section-title">
+
+      <h2 class="section-title flex items-center gap-2 text-lg font-semibold">
+
         <lucide-icon [img]="Phone"></lucide-icon>
+
         Contact Details
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
 
-        <div class="input-group">
-          <lucide-icon [img]="Phone"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Mobile Number"
-            [(ngModel)]="doctor.mobile"
-            name="mobile">
+        <!-- Mobile -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon [img]="Phone"></lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Mobile Number"
+              formControlName="mobile">
+
+          </div>
+
+          <div
+            *ngIf="f['mobile'].touched && f['mobile'].invalid">
+
+            <p
+              *ngIf="f['mobile'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Mobile Number is required
+
+            </p>
+
+            <p
+              *ngIf="f['mobile'].errors?.['pattern']"
+              class="text-red-500 text-sm mt-1">
+
+              Mobile Number must be 10 digits
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="Mail"></lucide-icon>
-          <input
-            type="email"
-            placeholder="Email Address"
-            [(ngModel)]="doctor.email"
-            name="email">
+        <!-- Email -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon [img]="Mail"></lucide-icon>
+
+            <input
+              type="email"
+              placeholder="Email Address"
+              formControlName="email">
+
+          </div>
+
+          <div
+            *ngIf="f['email'].touched && f['email'].invalid">
+
+            <p
+              *ngIf="f['email'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Email is required
+
+            </p>
+
+            <p
+              *ngIf="f['email'].errors?.['email']"
+              class="text-red-500 text-sm mt-1">
+
+              Invalid Email Format
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group md:col-span-1">
-          <lucide-icon [img]="MapPin"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Address"
-            [(ngModel)]="doctor.address"
-            name="address">
+        <!-- Address -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon [img]="MapPin"></lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Address"
+              formControlName="address">
+
+          </div>
+
+          <div
+            *ngIf="f['address'].touched && f['address'].invalid">
+
+            <p
+              *ngIf="f['address'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Address is required
+
+            </p>
+
+          </div>
+
         </div>
 
       </div>
+
     </div>
 
-    <!-- 🏥 Practice Details -->
+    <!-- ================================================= -->
+    <!-- 🔷 PRACTICE DETAILS -->
+    <!-- ================================================= -->
+
     <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="section-title">
+
+      <h2 class="section-title flex items-center gap-2 text-lg font-semibold">
+
         <lucide-icon [img]="Building"></lucide-icon>
+
         Practice Details
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
 
-        <div class="input-group">
-          <lucide-icon [img]="Building2"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Clinic Name"
-            [(ngModel)]="doctor.clinicName"
-            name="clinicName">
+        <!-- Clinic -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon
+              [img]="Building2">
+            </lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Clinic Name"
+              formControlName="clinicName">
+
+          </div>
+
+          <div
+            *ngIf="f['clinicName'].touched && f['clinicName'].invalid">
+
+            <p
+              *ngIf="f['clinicName'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Clinic Name is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="Hospital"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Hospital Name"
-            [(ngModel)]="doctor.hospitalName"
-            name="hospitalName">
+        <!-- Hospital -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon
+              [img]="Hospital">
+            </lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Hospital Name"
+              formControlName="hospitalName">
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="Clock"></lucide-icon>
-          <input
-            type="text"
-            placeholder="Visiting Hours"
-            [(ngModel)]="doctor.visitingHours"
-            name="visitingHours">
+        <!-- Visiting Hours -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon
+              [img]="Clock">
+            </lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Visiting Hours"
+              formControlName="visitingHours">
+
+          </div>
+
+          <div
+            *ngIf="f['visitingHours'].touched && f['visitingHours'].invalid">
+
+            <p
+              *ngIf="f['visitingHours'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Visiting Hours is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="Calendar"></lucide-icon>
-          <select
-            [(ngModel)]="doctor.weeklyOffDay"
-            name="weeklyOffDay">
+        <!-- Weekly Off -->
+        <div>
 
-            <option value="">Weekly Off Day</option>
-            <option>Sunday</option>
-            <option>Monday</option>
-            <option>Tuesday</option>
-            <option>Wednesday</option>
-            <option>Thursday</option>
-            <option>Friday</option>
-            <option>Saturday</option>
+          <div class="input-group">
 
-          </select>
+            <lucide-icon
+              [img]="Calendar">
+            </lucide-icon>
+
+            <select formControlName="weeklyOffDay">
+
+              <option value="">
+                Weekly Off Day
+              </option>
+
+              <option>Sunday</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+
+            </select>
+
+          </div>
+
+          <div
+            *ngIf="f['weeklyOffDay'].touched && f['weeklyOffDay'].invalid">
+
+            <p
+              *ngIf="f['weeklyOffDay'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Weekly Off Day is required
+
+            </p>
+
+          </div>
+
         </div>
 
       </div>
+
     </div>
 
-    <!-- 📊 Classification -->
+    <!-- ================================================= -->
+    <!-- 🔷 CLASSIFICATION -->
+    <!-- ================================================= -->
+
     <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="section-title">
-        <lucide-icon [img]="BarChart3"></lucide-icon>
+
+      <h2 class="section-title flex items-center gap-2 text-lg font-semibold">
+
+        <lucide-icon
+          [img]="BarChart3">
+        </lucide-icon>
+
         Classification
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
 
-        <div class="input-group">
-          <lucide-icon [img]="Layers"></lucide-icon>
-          <select
-            [(ngModel)]="doctor.category"
-            name="category">
+        <!-- Category -->
+        <div>
 
-            <option value="">Category</option>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
+          <div class="input-group">
 
-          </select>
+            <lucide-icon [img]="Layers"></lucide-icon>
+
+            <select formControlName="category">
+
+              <option value="">
+                Category
+              </option>
+
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+
+            </select>
+
+          </div>
+
+          <div
+            *ngIf="f['category'].touched && f['category'].invalid">
+
+            <p
+              *ngIf="f['category'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Category is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="TrendingUp"></lucide-icon>
-          <input
-            type="number"
-            placeholder="Potential Score"
-            [(ngModel)]="doctor.potentialScore"
-            name="potentialScore">
+        <!-- Potential -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon
+              [img]="TrendingUp">
+            </lucide-icon>
+
+            <input
+              type="number"
+              placeholder="Potential Score"
+              formControlName="potentialScore">
+
+          </div>
+
+          <div
+            *ngIf="f['potentialScore'].touched && f['potentialScore'].invalid">
+
+            <p
+              *ngIf="f['potentialScore'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Potential Score is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="FileText"></lucide-icon>
-          <select
-            [(ngModel)]="doctor.prescriptionType"
-            name="prescriptionType">
+        <!-- Prescription -->
+        <div>
 
-            <option value="">Prescription Type</option>
-            <option>High Prescriber</option>
-            <option>Medium Prescriber</option>
-            <option>Low Prescriber</option>
+          <div class="input-group">
 
-          </select>
+            <lucide-icon
+              [img]="FileText">
+            </lucide-icon>
+
+            <select formControlName="prescriptionType">
+
+              <option value="">
+                Prescription Type
+              </option>
+
+              <option>High Prescriber</option>
+              <option>Medium Prescriber</option>
+              <option>Low Prescriber</option>
+
+            </select>
+
+          </div>
+
+          <div
+            *ngIf="f['prescriptionType'].touched && f['prescriptionType'].invalid">
+
+            <p
+              *ngIf="f['prescriptionType'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Prescription Type is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="Smile"></lucide-icon>
-          <select
-            [(ngModel)]="doctor.doctorBehaviour"
-            name="doctorBehaviour">
+        <!-- Behaviour -->
+        <div>
 
-            <option value="">Doctor Behaviour</option>
-            <option>Friendly</option>
-            <option>Professional</option>
-            <option>Busy</option>
-            <option>Supportive</option>
-            <option>Neutral</option>
+          <div class="input-group">
 
-          </select>
+            <lucide-icon [img]="Smile"></lucide-icon>
+
+            <select formControlName="doctorBehaviour">
+
+              <option value="">
+                Doctor Behaviour
+              </option>
+
+              <option>Friendly</option>
+              <option>Professional</option>
+              <option>Busy</option>
+              <option>Supportive</option>
+              <option>Neutral</option>
+
+            </select>
+
+          </div>
+
+          <div
+            *ngIf="f['doctorBehaviour'].touched && f['doctorBehaviour'].invalid">
+
+            <p
+              *ngIf="f['doctorBehaviour'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Doctor Behaviour is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="UserCheck"></lucide-icon>
-          <select
-            [(ngModel)]="doctor.assignedMr"
-            name="assignedMr">
+        <!-- Assign MR -->
+        <div>
 
-            <option value="">Assign MR</option>
+          <div class="input-group">
 
-            <option
-              *ngFor="let mr of mrList"
-              [value]="mr.id">
+            <lucide-icon
+              [img]="UserCheck">
+            </lucide-icon>
 
-              {{ mr.name }}
+            <select formControlName="assignedMr">
 
-            </option>
+              <option value="">
+                Assign MR
+              </option>
 
-          </select>
+              <option
+                *ngFor="let mr of mrList"
+                [value]="mr.id">
+
+                {{mr.name}}
+
+              </option>
+
+            </select>
+
+          </div>
+
+          <div
+            *ngIf="f['assignedMr'].touched && f['assignedMr'].invalid">
+
+            <p
+              *ngIf="f['assignedMr'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Assign MR is required
+
+            </p>
+
+          </div>
+
         </div>
 
       </div>
+
     </div>
 
-    <!-- 📅 Visit Tracking -->
+    <!-- ================================================= -->
+    <!-- 🔷 VISIT TRACK -->
+    <!-- ================================================= -->
+
     <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="section-title">
-        <lucide-icon [img]="CalendarCheck"></lucide-icon>
+
+      <h2 class="section-title flex items-center gap-2 text-lg font-semibold">
+
+        <lucide-icon
+          [img]="CalendarCheck">
+        </lucide-icon>
+
         Visit Tracking
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
 
-        <div class="input-group">
-          <lucide-icon [img]="Calendar"></lucide-icon>
-          <input
-            type="date"
-            [(ngModel)]="doctor.lastVisit"
-            name="lastVisit">
+        <!-- Last Visit -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon [img]="Calendar"></lucide-icon>
+
+            <input
+              type="date"
+              formControlName="lastVisit">
+
+          </div>
+
+          <div
+            *ngIf="f['lastVisit'].touched && f['lastVisit'].invalid">
+
+            <p
+              *ngIf="f['lastVisit'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Last Visit is required
+
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="input-group">
-          <lucide-icon [img]="CalendarCheck"></lucide-icon>
-          <input
-            type="date"
-            [(ngModel)]="doctor.nextVisit"
-            name="nextVisit">
+        <!-- Next Visit -->
+        <div>
+
+          <div class="input-group">
+
+            <lucide-icon
+              [img]="CalendarCheck">
+            </lucide-icon>
+
+            <input
+              type="date"
+              formControlName="nextVisit">
+
+          </div>
+
+          <div
+            *ngIf="f['nextVisit'].touched && f['nextVisit'].invalid">
+
+            <p
+              *ngIf="f['nextVisit'].errors?.['required']"
+              class="text-red-500 text-sm mt-1">
+
+              Next Visit is required
+
+            </p>
+
+          </div>
+
         </div>
 
       </div>
+
     </div>
 
-    <!-- 🔘 Actions -->
+    <!-- ================================================= -->
+    <!-- 🔷 BUTTONS -->
+    <!-- ================================================= -->
+
     <div class="flex justify-end gap-4">
 
       <button
         type="button"
         routerLink="/doctors/list"
         class="bg-gray-400 text-white px-4 py-2 rounded-xl">
+
         Cancel
+
       </button>
 
       <button
@@ -278,6 +721,7 @@
         class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl flex items-center gap-2">
 
         <lucide-icon [img]="Save"></lucide-icon>
+
         Save Doctor
 
       </button>

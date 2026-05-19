@@ -1,7 +1,15 @@
-import { Component } from '@angular/core';
-import { Save, UserPlus } from 'lucide-angular';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 
-// lucide icons import
+import { Router } from '@angular/router';
+
+import { jwtDecode } from 'jwt-decode';
+
+import { Save, UserPlus } from 'lucide-angular';
 
 import {
   ArrowLeft,
@@ -25,15 +33,20 @@ import {
   UserCheck,
   MapPin
 } from 'lucide-angular';
+import { DoctorService } from '../../services/doctor.service';
 
 @Component({
   selector: 'app-doctors-list',
   templateUrl: './doctors-list.component.html',
   styleUrl: './doctors-list.component.css'
 })
-export class DoctorsListComponent {
+export class DoctorsListComponent implements OnInit {
 
- User = User;
+  // =====================================================
+  // 🔷 ICONS
+  // =====================================================
+
+  User = User;
   UserPlus = UserPlus;
   ArrowLeft = ArrowLeft;
   Phone = Phone;
@@ -56,28 +69,249 @@ export class DoctorsListComponent {
   MapPin = MapPin;
   Hospital = Hospital;
 
+  // =====================================================
+  // 🔷 FORM
+  // =====================================================
 
-  doctor: any = {};
+  doctorForm!: FormGroup;
 
+  submitted = false;
 
-mrList = [
-  {
-    id: 1,
-    name: 'Rahul Sharma'
-  },
-  {
-    id: 2,
-    name: 'Amit Das'
+  // =====================================================
+  // 🔷 USER DATA
+  // =====================================================
+
+  agencyId: any = localStorage.getItem('aid');
+
+  createdBy: any;
+
+  // =====================================================
+  // 🔷 MR LIST
+  // =====================================================
+
+  mrList = [
+    {
+      id: 1,
+      name: 'Rahul Sharma'
+    },
+    {
+      id: 2,
+      name: 'Amit Das'
+    }
+  ];
+
+  constructor(
+    private fb: FormBuilder,
+    private doctorService: DoctorService,
+    private router: Router
+  ) {}
+
+  // =====================================================
+  // 🔷 INIT
+  // =====================================================
+
+  ngOnInit(): void {
+
+    this.getUserIdFromToken();
+
+    this.initializeForm();
+
   }
-];
 
-saveDoctor(){
-  
-}
+  // =====================================================
+  // 🔷 INITIALIZE FORM
+  // =====================================================
 
+  initializeForm() {
 
+    this.doctorForm = this.fb.group({
 
+      agencyId: [this.agencyId],
 
+      name: [
+        '',
+        Validators.required
+      ],
 
+      qualification: [
+        '',
+        Validators.required
+      ],
+
+      specialization: [
+        '',
+        Validators.required
+      ],
+
+      mobile: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]{10}$/)
+        ]
+      ],
+
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      clinicName: [
+        '',
+        Validators.required
+      ],
+
+      hospitalName: [''],
+
+      address: [
+        '',
+        Validators.required
+      ],
+
+      category: [
+        '',
+        Validators.required
+      ],
+
+      potentialScore: [
+        '',
+        Validators.required
+      ],
+
+      assignedMr: [
+        '',
+        Validators.required
+      ],
+
+      lastVisit: [
+        '',
+        Validators.required
+      ],
+
+      nextVisit: [
+        '',
+        Validators.required
+      ],
+
+      createdBy: [0],
+
+      visitingHours: [
+        '',
+        Validators.required
+      ],
+
+      weeklyOffDay: [
+        '',
+        Validators.required
+      ],
+
+      prescriptionType: [
+        '',
+        Validators.required
+      ],
+
+      doctorBehaviour: [
+        '',
+        Validators.required
+      ]
+
+    });
+
+  }
+
+  // =====================================================
+  // 🔷 TOKEN DECODE
+  // =====================================================
+
+  getUserIdFromToken() {
+
+    const token =
+      localStorage.getItem('token');
+
+    if (token) {
+
+      const decodedToken: any =
+        jwtDecode(token);
+
+      this.createdBy =
+        decodedToken?.userId ||
+        decodedToken?.UserId ||
+        decodedToken?.id;
+
+    }
+
+  }
+
+  // =====================================================
+  // 🔷 SAVE DOCTOR
+  // =====================================================
+
+  saveDoctor() {
+
+    this.submitted = true;
+
+    // 🔴 SHOW ALL ERRORS
+    if (this.doctorForm.invalid) {
+
+      this.doctorForm.markAllAsTouched();
+
+      return;
+
+    }
+
+    // 🔷 PAYLOAD
+    const payload = {
+
+      ...this.doctorForm.value,
+
+      agencyId: this.agencyId,
+
+      createdBy: this.createdBy
+
+    };
+
+    console.log(payload);
+
+    // 🔷 API CALL
+    this.doctorService
+      .adddoctor(payload)
+      .subscribe({
+
+        next: (res: any) => {
+
+          alert(
+            'Doctor Added Successfully'
+          );
+
+          this.doctorForm.reset();
+
+          this.router.navigate([
+            '/doctor-master/dashboard'
+          ]);
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
+
+  }
+
+  // =====================================================
+  // 🔷 FORM CONTROLS
+  // =====================================================
+
+  get f() {
+
+    return this.doctorForm.controls;
+
+  }
 
 }

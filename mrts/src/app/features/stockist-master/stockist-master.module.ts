@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StockistMasterRoutingModule } from './stockist-master-routing.module';
 import { StockistMasterDashboardComponent } from './pages/stockist-master-dashboard/stockist-master-dashboard.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule , ReactiveFormsModule } from '@angular/forms';
 import {
   Stethoscope,
   Users,
@@ -49,6 +49,7 @@ import { MedicineOrderMasterComponent } from './pages/medicine-order-master/medi
     CommonModule,
     StockistMasterRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     LucideAngularModule.pick({
       Stethoscope,
       Users,

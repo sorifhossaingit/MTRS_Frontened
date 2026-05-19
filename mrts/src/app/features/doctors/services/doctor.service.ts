@@ -29,7 +29,7 @@ export class DoctorService {
 
 
   adddoctor(data: any) {
-    return this.http.put(`${this.apiUrl}/Doctor/dashboard/createdoctor`, data);
+    return this.http.post(`${this.apiUrl}/Doctor/dashboard/createdoctor`, data);
   }
 
 

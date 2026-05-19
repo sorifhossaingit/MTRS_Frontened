@@ -2,179 +2,688 @@
 
   <!-- 🔷 Header -->
   <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
+
     <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
       <lucide-icon [img]="Building2"></lucide-icon>
       Stockist Dashboard
     </h1>
 
-    <button routerLink="/stockist-master/add-stockist"
+    <button
+      routerLink="/stockist-master/add-stockist"
       class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center">
+
       <lucide-icon [img]="Plus"></lucide-icon>
       Add Stockist
+
     </button>
+
   </div>
 
   <!-- 🔷 Stats -->
+
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
+    <!-- TOTAL -->
+
     <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
+
       <div>
         <p class="text-gray-500 text-sm">Total</p>
         <h2 class="text-xl font-bold">{{ totalStockists }}</h2>
       </div>
-      <lucide-icon [img]="Building2" class="text-blue-500"></lucide-icon>
+
+      <lucide-icon
+        [img]="Building2"
+        class="text-blue-500">
+      </lucide-icon>
+
     </div>
 
+    <!-- ACTIVE -->
+
     <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
+
       <div>
         <p class="text-gray-500 text-sm">Active</p>
-        <h2 class="text-xl font-bold text-green-600">{{ activeStockists }}</h2>
+        <h2 class="text-xl font-bold text-green-600">
+          {{ activeStockists }}
+        </h2>
       </div>
-      <lucide-icon [img]="CheckCircle" class="text-green-500"></lucide-icon>
+
+      <lucide-icon
+        [img]="CheckCircle"
+        class="text-green-500">
+      </lucide-icon>
+
     </div>
 
+    <!-- OUTSTANDING -->
+
     <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
+
       <div>
         <p class="text-gray-500 text-sm">Outstanding</p>
-        <h2 class="text-xl font-bold text-red-500">₹{{ totalOutstanding }}</h2>
+        <h2 class="text-xl font-bold text-red-500">
+          ₹{{ totalOutstanding }}
+        </h2>
       </div>
-      <lucide-icon [img]="Wallet" class="text-red-500"></lucide-icon>
+
+      <lucide-icon
+        [img]="Wallet"
+        class="text-red-500">
+      </lucide-icon>
+
     </div>
 
+    <!-- CREDIT -->
+
     <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
+
       <div>
         <p class="text-gray-500 text-sm">Credit Limit</p>
-        <h2 class="text-xl font-bold text-purple-600">₹{{ totalCreditLimit }}</h2>
+        <h2 class="text-xl font-bold text-purple-600">
+          ₹{{ totalCreditLimit }}
+        </h2>
       </div>
-      <lucide-icon [img]="BadgeIndianRupee" class="text-purple-500"></lucide-icon>
+
+      <lucide-icon
+        [img]="BadgeIndianRupee"
+        class="text-purple-500">
+      </lucide-icon>
+
     </div>
 
   </div>
 
   <!-- 🔷 Filters -->
+
   <div class="flex flex-col md:flex-row gap-3 mb-4">
+
+    <!-- SEARCH -->
 
     <input
       type="text"
       [(ngModel)]="searchText"
+      (keyup)="applyFilter()"
       placeholder="Search stockist..."
-      class="border rounded-xl px-4 py-2 w-full md:w-1/3 focus:ring-2 focus:ring-blue-400 outline-none"
-    />
+      class="border rounded-xl px-4 py-2 w-full md:w-1/3 focus:ring-2 focus:ring-blue-400 outline-none" />
 
-    <select [(ngModel)]="filterType" class="border rounded-xl px-4 py-2 w-full md:w-auto">
+    <!-- TYPE -->
+
+    <select
+      [(ngModel)]="filterType"
+      (change)="applyFilter()"
+      class="border rounded-xl px-4 py-2 w-full md:w-auto">
+
       <option value="">All Types</option>
       <option value="Distributor">Distributor</option>
       <option value="Wholesaler">Wholesaler</option>
+
     </select>
 
-    <select [(ngModel)]="filterStatus" class="border rounded-xl px-4 py-2 w-full md:w-auto">
+    <!-- STATUS -->
+
+    <select
+      [(ngModel)]="filterStatus"
+      (change)="applyFilter()"
+      class="border rounded-xl px-4 py-2 w-full md:w-auto">
+
       <option value="">All Status</option>
       <option value="true">Active</option>
       <option value="false">Inactive</option>
+
     </select>
 
   </div>
 
-  <!-- 🔷 Table -->
+  <!-- 🔷 TABLE -->
+
   <div class="bg-white rounded-2xl shadow overflow-hidden">
 
-    <!-- Desktop Table -->
+    <!-- DESKTOP -->
+
     <div class="hidden md:block overflow-x-auto">
+
       <table class="w-full text-left">
 
         <thead class="bg-gray-50">
+
           <tr>
+
             <th class="p-4">Stockist</th>
             <th class="p-4">Contact</th>
             <th class="p-4">Location</th>
             <th class="p-4">License</th>
-            <th class="p-4">Financial</th>
             <th class="p-4">MR</th>
             <th class="p-4">Status</th>
             <th class="p-4 text-center">Actions</th>
+
           </tr>
+
         </thead>
 
         <tbody>
-          <tr *ngFor="let s of filteredStockists" class="border-t hover:bg-gray-50">
+
+          <tr
+            *ngFor="let s of stockists"
+            class="border-t hover:bg-gray-50">
+
+            <!-- NAME -->
 
             <td class="p-4">
-              <div class="font-semibold">{{ s.name }}</div>
-              <div class="text-sm text-gray-500">{{ s.firmType }}</div>
+
+              <div class="font-semibold">
+                {{ s.name }}
+              </div>
+
+              <div class="text-sm text-gray-500">
+                {{ s.firmType }}
+              </div>
+
             </td>
 
+            <!-- CONTACT -->
+
             <td class="p-4">
+
               <div>{{ s.contactPerson }}</div>
-              <div class="text-sm text-gray-500">{{ s.mobile }}</div>
+
+              <div class="text-sm text-gray-500">
+                {{ s.mobile }}
+              </div>
+
             </td>
 
+            <!-- LOCATION -->
+
             <td class="p-4">
+
               <div>{{ s.city }}</div>
-              <div class="text-sm text-gray-500">{{ s.state }}</div>
+
+              <div class="text-sm text-gray-500">
+                {{ s.state }}
+              </div>
+
             </td>
+
+            <!-- LICENSE -->
 
             <td class="p-4 text-sm">
-              DL: {{ s.drugLicense }}<br />
-              GST: {{ s.gst }}
+
+              DL: {{ s.drugLicenseNo }} <br>
+
+              GST: {{ s.gstNo }}
+
             </td>
 
+            <!-- AREA MANAGER -->
+
             <td class="p-4">
-              <div class="text-green-600">₹{{ s.creditLimit }}</div>
-              <div class="text-red-500 text-sm">₹{{ s.outstanding }}</div>
+
+              {{ s.assignedAreaManager }}
+
             </td>
 
-            <td class="p-4">{{ s.assignedMR }}</td>
+            <!-- STATUS -->
 
             <td class="p-4">
+
               <span
                 class="px-3 py-1 rounded-full text-sm"
-                [ngClass]="s.isActive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'">
+                [ngClass]="
+                  s.isActive
+                    ? 'bg-green-100 text-green-600'
+                    : 'bg-red-100 text-red-600'
+                ">
+
                 {{ s.isActive ? 'Active' : 'Inactive' }}
+
               </span>
+
             </td>
 
+            <!-- ACTIONS -->
+
             <td class="p-4 text-center">
+
               <div class="flex justify-center gap-3">
-                <lucide-icon [img]="Eye" class="cursor-pointer text-blue-500"></lucide-icon>
-                <lucide-icon [img]="Pencil" class="cursor-pointer text-green-600"></lucide-icon>
-                <lucide-icon [img]="Trash2" class="cursor-pointer text-red-500"></lucide-icon>
+
+                <lucide-icon
+                  [img]="Eye"
+                  class="cursor-pointer text-blue-500">
+                </lucide-icon>
+
+                <lucide-icon
+                  [img]="Pencil"
+                  class="cursor-pointer text-green-600"
+                  (click)="editStockist(s)">
+                </lucide-icon>
+
+                <lucide-icon
+                  [img]="Trash2"
+                  class="cursor-pointer text-red-500">
+                </lucide-icon>
+
               </div>
+
             </td>
 
           </tr>
+
         </tbody>
 
       </table>
+
     </div>
 
-    <!-- 📱 Mobile Cards -->
+    <!-- MOBILE -->
+
     <div class="md:hidden p-4 space-y-4">
 
-      <div *ngFor="let s of filteredStockists" class="border rounded-xl p-4 shadow-sm">
+      <div
+        *ngFor="let s of stockists"
+        class="border rounded-xl p-4 shadow-sm">
 
         <div class="flex justify-between items-start">
+
           <div>
-            <h3 class="font-semibold">{{ s.name }}</h3>
-            <p class="text-sm text-gray-500">{{ s.firmType }}</p>
+
+            <h3 class="font-semibold">
+              {{ s.name }}
+            </h3>
+
+            <p class="text-sm text-gray-500">
+              {{ s.firmType }}
+            </p>
+
           </div>
+
           <span
             class="px-2 py-1 text-xs rounded-full"
-            [ngClass]="s.isActive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'">
+            [ngClass]="
+              s.isActive
+                ? 'bg-green-100 text-green-600'
+                : 'bg-red-100 text-red-600'
+            ">
+
             {{ s.isActive ? 'Active' : 'Inactive' }}
+
           </span>
+
         </div>
 
         <div class="mt-2 text-sm">
-          📍 {{ s.city }}, {{ s.state }} <br />
-          📞 {{ s.mobile }} <br />
-          💰 ₹{{ s.outstanding }} / ₹{{ s.creditLimit }}
+
+          📍 {{ s.city }}, {{ s.state }} <br>
+
+          📞 {{ s.mobile }}
+
         </div>
 
         <div class="flex justify-end gap-4 mt-3">
+
           <lucide-icon [img]="Eye"></lucide-icon>
-          <lucide-icon [img]="Pencil"></lucide-icon>
+
+          <lucide-icon
+            [img]="Pencil"
+            (click)="editStockist(s)">
+          </lucide-icon>
+
           <lucide-icon [img]="Trash2"></lucide-icon>
+
         </div>
+
+      </div>
+
+    </div>
+
+    <!-- PAGINATION -->
+
+    <div class="flex justify-between items-center p-4 border-t">
+
+      <button
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
+        class="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50">
+
+        Previous
+
+      </button>
+
+      <div class="font-medium">
+
+        Page {{ pageNumber }} of {{ totalPages }}
+
+      </div>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="pageNumber === totalPages"
+        class="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50">
+
+        Next
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- ================================================= -->
+  <!-- EDIT MODAL -->
+  <!-- ================================================= -->
+
+  <div
+    *ngIf="showEditModal"
+    class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
+
+    <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto">
+
+      <!-- HEADER -->
+
+      <div class="flex justify-between items-center p-5 border-b">
+
+        <h2 class="text-2xl font-bold">
+
+          Update Stockist
+
+        </h2>
+
+        <button
+          (click)="closeModal()"
+          class="text-red-500 text-xl">
+
+          ✕
+
+        </button>
+
+      </div>
+
+      <!-- FORM -->
+
+      <form
+        [formGroup]="stockistForm"
+        class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <!-- NAME -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Stockist Name
+          </label>
+
+          <input
+            type="text"
+            formControlName="name"
+            class="input">
+
+          <p
+            *ngIf="f['name'].touched && f['name'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Stockist Name is required
+
+          </p>
+
+        </div>
+
+        <!-- FIRM TYPE -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Firm Type
+          </label>
+
+          <select
+            formControlName="firmType"
+            class="input">
+
+            <option value="">Select Type</option>
+            <option value="Distributor">Distributor</option>
+            <option value="Wholesaler">Wholesaler</option>
+
+          </select>
+
+          <p
+            *ngIf="f['firmType'].touched && f['firmType'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Firm Type is required
+
+          </p>
+
+        </div>
+
+        <!-- CONTACT PERSON -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Contact Person
+          </label>
+
+          <input
+            type="text"
+            formControlName="contactPerson"
+            class="input">
+
+          <p
+            *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Contact Person is required
+
+          </p>
+
+        </div>
+
+        <!-- MOBILE -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Mobile
+          </label>
+
+          <input
+            type="text"
+            formControlName="mobile"
+            class="input">
+
+        </div>
+
+        <!-- EMAIL -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Email
+          </label>
+
+          <input
+            type="email"
+            formControlName="email"
+            class="input">
+
+        </div>
+
+        <!-- ADDRESS -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Address
+          </label>
+
+          <input
+            type="text"
+            formControlName="address"
+            class="input">
+
+        </div>
+
+        <!-- CITY -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            City
+          </label>
+
+          <input
+            type="text"
+            formControlName="city"
+            class="input">
+
+        </div>
+
+        <!-- STATE -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            State
+          </label>
+
+          <input
+            type="text"
+            formControlName="state"
+            class="input">
+
+        </div>
+
+        <!-- PINCODE -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Pincode
+          </label>
+
+          <input
+            type="text"
+            formControlName="pincode"
+            class="input">
+
+        </div>
+
+        <!-- GST -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            GST Number
+          </label>
+
+          <input
+            type="text"
+            formControlName="gstNo"
+            class="input">
+
+        </div>
+
+        <!-- DRUG LICENSE -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Drug License Number
+          </label>
+
+          <input
+            type="text"
+            formControlName="drugLicenseNo"
+            class="input">
+
+        </div>
+
+        <!-- REGION -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Region
+          </label>
+
+          <input
+            type="text"
+            formControlName="region"
+            class="input">
+
+        </div>
+
+        <!-- AREA MANAGER -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Assigned Area Manager
+          </label>
+
+          <input
+            type="number"
+            formControlName="assignedAreaManager"
+            class="input">
+
+        </div>
+
+        <!-- COVER AREA -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Cover Area
+          </label>
+
+          <input
+            type="text"
+            formControlName="coverArea"
+            class="input">
+
+        </div>
+
+        <!-- STATUS -->
+
+        <div>
+
+          <label class="block mb-1 font-medium">
+            Status
+          </label>
+
+          <select
+            formControlName="isActive"
+            class="input">
+
+            <option [ngValue]="true">Active</option>
+            <option [ngValue]="false">Inactive</option>
+
+          </select>
+
+        </div>
+
+      </form>
+
+      <!-- FOOTER -->
+
+      <div class="flex justify-end gap-3 p-5 border-t">
+
+        <button
+          (click)="closeModal()"
+          class="px-5 py-2 bg-gray-300 rounded-xl">
+
+          Cancel
+
+        </button>
+
+        <button
+          (click)="updateStockist()"
+          class="px-5 py-2 bg-blue-600 text-white rounded-xl">
+
+          Update Stockist
+
+        </button>
 
       </div>
 
