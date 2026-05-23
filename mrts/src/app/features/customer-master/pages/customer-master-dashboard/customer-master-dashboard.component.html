@@ -154,11 +154,11 @@
         Status
       </option>
 
-      <option>
+      <option value=ture>
         Active
       </option>
 
-      <option>
+      <option value=false>
         Inactive
       </option>
 
@@ -201,7 +201,7 @@
 
             <th>Location</th>
 
-            <th>MR</th>
+            <th>AreaManager</th>
 
             <th>Status</th>
 
@@ -242,7 +242,7 @@
             </td>
 
             <td>
-              {{item.assignedMrName}}
+              {{item.assignedAreaManagerName}}
             </td>
 
             <td>
@@ -276,7 +276,9 @@
 
               </button>
 
-              <button class="text-red-600">
+              <button
+               (click)="deleteCustomer(item)"
+               class="text-red-600">
 
                 <lucide-icon [img]="Trash2"></lucide-icon>
 
@@ -414,7 +416,7 @@
       [formGroup]="customerForm"
       class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-      <!-- NAME -->
+      <!-- CUSTOMER NAME -->
 
       <div>
 
@@ -426,14 +428,6 @@
           type="text"
           formControlName="name"
           class="w-full border rounded-xl p-3 mt-1">
-
-        <p
-          *ngIf="f['name'].touched && f['name'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          Customer Name is required
-
-        </p>
 
       </div>
 
@@ -467,14 +461,6 @@
 
         </select>
 
-        <p
-          *ngIf="f['type'].touched && f['type'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          Customer Type is required
-
-        </p>
-
       </div>
 
       <!-- CONTACT PERSON -->
@@ -489,14 +475,6 @@
           type="text"
           formControlName="contactPerson"
           class="w-full border rounded-xl p-3 mt-1">
-
-        <p
-          *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          Contact Person is required
-
-        </p>
 
       </div>
 
@@ -513,22 +491,6 @@
           formControlName="mobile"
           class="w-full border rounded-xl p-3 mt-1">
 
-        <p
-          *ngIf="f['mobile'].touched && f['mobile'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          Mobile Number is required
-
-        </p>
-
-        <p
-          *ngIf="f['mobile'].touched && f['mobile'].errors?.['pattern']"
-          class="text-red-500 text-sm mt-1">
-
-          Enter valid 10 digit mobile number
-
-        </p>
-
       </div>
 
       <!-- EMAIL -->
@@ -543,22 +505,6 @@
           type="email"
           formControlName="email"
           class="w-full border rounded-xl p-3 mt-1">
-
-        <p
-          *ngIf="f['email'].touched && f['email'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          Email is required
-
-        </p>
-
-        <p
-          *ngIf="f['email'].touched && f['email'].errors?.['email']"
-          class="text-red-500 text-sm mt-1">
-
-          Enter valid email
-
-        </p>
 
       </div>
 
@@ -575,14 +521,6 @@
           formControlName="address"
           class="w-full border rounded-xl p-3 mt-1">
 
-        <p
-          *ngIf="f['address'].touched && f['address'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          Address is required
-
-        </p>
-
       </div>
 
       <!-- CITY -->
@@ -597,14 +535,6 @@
           type="text"
           formControlName="city"
           class="w-full border rounded-xl p-3 mt-1">
-
-        <p
-          *ngIf="f['city'].touched && f['city'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          City is required
-
-        </p>
 
       </div>
 
@@ -621,14 +551,6 @@
           formControlName="state"
           class="w-full border rounded-xl p-3 mt-1">
 
-        <p
-          *ngIf="f['state'].touched && f['state'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          State is required
-
-        </p>
-
       </div>
 
       <!-- PINCODE -->
@@ -643,14 +565,6 @@
           type="text"
           formControlName="pincode"
           class="w-full border rounded-xl p-3 mt-1">
-
-        <p
-          *ngIf="f['pincode'].touched && f['pincode'].errors?.['required']"
-          class="text-red-500 text-sm mt-1">
-
-          Pincode is required
-
-        </p>
 
       </div>
 
@@ -695,6 +609,49 @@
         <input
           type="text"
           formControlName="panNo"
+          class="w-full border rounded-xl p-3 mt-1">
+
+      </div>
+
+      <!-- ASSIGNED AREA MANAGER -->
+
+      <div>
+
+        <label class="text-sm font-medium">
+          Assigned Area Manager
+        </label>
+
+        <select
+          formControlName="assignedAreaManager"
+          class="w-full border rounded-xl p-3 mt-1">
+
+          <option value="">
+            Select Area Manager
+          </option>
+
+          <option
+            *ngFor="let am of areaManagerList"
+            [value]="am.areaManagerId">
+
+            {{ am.name }} ({{ am.assignedArea }})
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- REGION -->
+
+      <div>
+
+        <label class="text-sm font-medium">
+          Region
+        </label>
+
+        <input
+          type="number"
+          formControlName="region"
           class="w-full border rounded-xl p-3 mt-1">
 
       </div>

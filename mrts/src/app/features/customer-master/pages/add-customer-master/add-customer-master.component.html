@@ -14,7 +14,8 @@
 
     </h1>
 
-    <button routerLink="/customer-master/customer-master-dashboard"
+    <button
+      routerLink="/customer-master/customer-master-dashboard"
       class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
 
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
@@ -29,7 +30,10 @@
   <!-- 🔷 FORM -->
   <!-- ===================================================== -->
 
-  <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="space-y-6">
+  <form
+    [formGroup]="customerForm"
+    (ngSubmit)="saveCustomer()"
+    class="space-y-6">
 
     <!-- ===================================================== -->
     <!-- 🟦 BASIC INFO -->
@@ -51,9 +55,15 @@
 
         <div>
 
-          <input type="text" placeholder="Customer Name" formControlName="name" class="input">
+          <input
+            type="text"
+            placeholder="Customer Name"
+            formControlName="name"
+            class="input">
 
-          <p *ngIf="f['name'].touched && f['name'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['name'].touched && f['name'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             Customer Name is required
 
@@ -65,7 +75,9 @@
 
         <div>
 
-          <select formControlName="type" class="input">
+          <select
+            formControlName="type"
+            class="input">
 
             <option value="">
               Customer Type
@@ -85,7 +97,9 @@
 
           </select>
 
-          <p *ngIf="f['type'].touched && f['type'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['type'].touched && f['type'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             Customer Type is required
 
@@ -93,19 +107,18 @@
 
         </div>
 
-        
-
         <!-- REGISTRATION NUMBER -->
 
         <div>
 
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Registration Number
-          </label>
+          <input
+            type="text"
+            placeholder="Registration Number"
+            formControlName="registrationNo"
+            class="input">
 
-          <input type="text" placeholder="Enter Registration Number" formControlName="registrationNo" class="input">
-
-          <p *ngIf="f['registrationNo'].touched && f['registrationNo'].errors?.['required']"
+          <p
+            *ngIf="f['registrationNo'].touched && f['registrationNo'].errors?.['required']"
             class="text-red-500 text-sm mt-1">
 
             Registration Number is required
@@ -138,9 +151,14 @@
 
         <div>
 
-          <input type="text" placeholder="Contact Person" formControlName="contactPerson" class="input">
+          <input
+            type="text"
+            placeholder="Contact Person"
+            formControlName="contactPerson"
+            class="input">
 
-          <p *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']"
+          <p
+            *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']"
             class="text-red-500 text-sm mt-1">
 
             Contact Person is required
@@ -153,15 +171,23 @@
 
         <div>
 
-          <input type="text" placeholder="Mobile Number" formControlName="mobile" class="input">
+          <input
+            type="text"
+            placeholder="Mobile Number"
+            formControlName="mobile"
+            class="input">
 
-          <p *ngIf="f['mobile'].touched && f['mobile'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['mobile'].touched && f['mobile'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             Mobile Number is required
 
           </p>
 
-          <p *ngIf="f['mobile'].touched && f['mobile'].errors?.['pattern']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['mobile'].touched && f['mobile'].errors?.['pattern']"
+            class="text-red-500 text-sm mt-1">
 
             Enter valid 10 digit mobile number
 
@@ -173,15 +199,23 @@
 
         <div>
 
-          <input type="email" placeholder="Email" formControlName="email" class="input">
+          <input
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+            class="input">
 
-          <p *ngIf="f['email'].touched && f['email'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['email'].touched && f['email'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             Email is required
 
           </p>
 
-          <p *ngIf="f['email'].touched && f['email'].errors?.['email']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['email'].touched && f['email'].errors?.['email']"
+            class="text-red-500 text-sm mt-1">
 
             Enter valid email
 
@@ -193,7 +227,11 @@
 
         <div>
 
-          <input type="text" placeholder="Landline" formControlName="landline" class="input">
+          <input
+            type="text"
+            placeholder="Landline"
+            formControlName="landline"
+            class="input">
 
         </div>
 
@@ -221,9 +259,15 @@
 
         <div class="md:col-span-2">
 
-          <input type="text" placeholder="Address" formControlName="address" class="input">
+          <input
+            type="text"
+            placeholder="Address"
+            formControlName="address"
+            class="input">
 
-          <p *ngIf="f['address'].touched && f['address'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['address'].touched && f['address'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             Address is required
 
@@ -235,9 +279,15 @@
 
         <div>
 
-          <input type="text" placeholder="City" formControlName="city" class="input">
+          <input
+            type="text"
+            placeholder="City"
+            formControlName="city"
+            class="input">
 
-          <p *ngIf="f['city'].touched && f['city'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['city'].touched && f['city'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             City is required
 
@@ -249,9 +299,15 @@
 
         <div>
 
-          <input type="text" placeholder="State" formControlName="state" class="input">
+          <input
+            type="text"
+            placeholder="State"
+            formControlName="state"
+            class="input">
 
-          <p *ngIf="f['state'].touched && f['state'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['state'].touched && f['state'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             State is required
 
@@ -263,9 +319,15 @@
 
         <div>
 
-          <input type="text" placeholder="PIN Code" formControlName="pincode" class="input">
+          <input
+            type="text"
+            placeholder="PIN Code"
+            formControlName="pincode"
+            class="input">
 
-          <p *ngIf="f['pincode'].touched && f['pincode'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p
+            *ngIf="f['pincode'].touched && f['pincode'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
 
             Pincode is required
 
@@ -293,11 +355,23 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <input type="text" placeholder="GST Number" formControlName="gstNo" class="input">
+        <input
+          type="text"
+          placeholder="GST Number"
+          formControlName="gstNo"
+          class="input">
 
-        <input type="text" placeholder="Drug License Number" formControlName="drugLicenseNo" class="input">
+        <input
+          type="text"
+          placeholder="Drug License Number"
+          formControlName="drugLicenseNo"
+          class="input">
 
-        <input type="text" placeholder="PAN Number" formControlName="panNo" class="input">
+        <input
+          type="text"
+          placeholder="PAN Number"
+          formControlName="panNo"
+          class="input">
 
       </div>
 
@@ -317,33 +391,37 @@
 
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <!-- Assigned MR -->
-
-        <div>
-
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Assigned MR Id
-          </label>
-
-          <input type="number" placeholder="Enter Assigned MR Id" formControlName="assignedMr" class="input">
-
-        </div>
-
-        <!-- Assigned AM -->
+        <!-- AREA MANAGER -->
 
         <div>
 
           <label class="block text-sm font-medium text-gray-700 mb-1">
-            Assigned AM Id
+            Assigned Area Manager
           </label>
 
-          <input type="number" placeholder="Enter Assigned AM Id" formControlName="assignedAm" class="input">
+          <select
+            formControlName="assignedAreaManager"
+            class="input">
+
+            <option value="">
+              Select Area Manager
+            </option>
+
+            <option
+              *ngFor="let am of areaManagerList"
+              [value]="am.areaManagerId">
+
+              {{ am.name }} ({{am.assignedArea}})
+
+            </option>
+
+          </select>
 
         </div>
 
-        <!-- Region -->
+        <!-- REGION -->
 
         <div>
 
@@ -351,7 +429,11 @@
             Region Id
           </label>
 
-          <input type="number" placeholder="Enter Region Id" formControlName="region" class="input">
+          <input
+            type="number"
+            placeholder="Enter Region Id"
+            formControlName="region"
+            class="input">
 
         </div>
 
@@ -365,14 +447,17 @@
 
     <div class="bg-white p-4 rounded-2xl shadow flex flex-col sm:flex-row justify-end gap-3">
 
-      <button type="button" routerLink="/customer-master/customer-master-dashboard"
+      <button
+        type="button"
+        routerLink="/customer-master/customer-master-dashboard"
         class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
 
         Cancel
 
       </button>
 
-      <button type="submit"
+      <button
+        type="submit"
         class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
 
         <lucide-icon [img]="Save"></lucide-icon>

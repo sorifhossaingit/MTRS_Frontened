@@ -60,6 +60,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
   customerList: any[] = [];
 
+  areaManagerList: any[] = [];
+
   // =========================================================
   // 🔷 DASHBOARD
   // =========================================================
@@ -99,7 +101,7 @@ export class CustomerMasterDashboardComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   // =========================================================
   // 🔷 INIT
@@ -114,6 +116,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
     this.getDashboardDetails();
 
     this.getCustomerDetails();
+
+    this.getAreaManagerList();
 
   }
 
@@ -188,9 +192,10 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
       panNo: [''],
 
-      assignedMr: [''],
-
-      assignedAm: [''],
+      assignedAreaManager: [
+        '',
+        Validators.required
+      ],
 
       region: [''],
 
@@ -226,6 +231,33 @@ export class CustomerMasterDashboardComponent implements OnInit {
   }
 
   // =========================================================
+  // 🔷 AREA MANAGER LIST
+  // =========================================================
+
+  getAreaManagerList() {
+
+    this.customerService
+      .getAreamanagerlist(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.areaManagerList =
+            res.data || [];
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
+
+  }
+
+  // =========================================================
   // 🔷 DASHBOARD DETAILS
   // =========================================================
 
@@ -244,16 +276,16 @@ export class CustomerMasterDashboardComponent implements OnInit {
         next: (res: any) => {
 
           this.totalCustomer =
-            res?.totalCustomer || 0;
+            res?.totalCustomers || 0;
 
           this.activeCustomer =
-            res?.activeCustomer || 0;
+            res?.activeCustomers || 0;
 
           this.inactiveCustomer =
-            res?.inactiveCustomer || 0;
+            res?.inactiveCustomers || 0;
 
           this.newCustomer =
-            res?.newThisMonth || 0;
+            res?.newCustomersThisMonth || 0;
 
         },
 
@@ -378,9 +410,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
       panNo: data.panNo,
 
-      assignedMr: data.assignedMr,
-
-      assignedAm: data.assignedAm,
+      assignedAreaManager:
+        data.assignedAreaManager,
 
       region: data.region,
 
@@ -408,13 +439,69 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
     }
 
+    const formValue =
+      this.customerForm.value;
+
     const payload = {
 
-      ...this.customerForm.value,
+      customerId:
+        formValue.customerId,
 
-      agencyId: this.agencyId,
+      agencyId:
+        this.agencyId,
 
-      updatedBy: this.updatedBy
+      name:
+        formValue.name,
+
+      type:
+        formValue.type,
+
+      registrationNo:
+        formValue.registrationNo,
+
+      contactPerson:
+        formValue.contactPerson,
+
+      mobile:
+        formValue.mobile,
+
+      email:
+        formValue.email,
+
+      address:
+        formValue.address,
+
+      city:
+        formValue.city,
+
+      state:
+        formValue.state,
+
+      pincode:
+        formValue.pincode,
+
+      gstNo:
+        formValue.gstNo,
+
+      drugLicenseNo:
+        formValue.drugLicenseNo,
+
+      panNo:
+        formValue.panNo,
+
+      assignedAreaManager:
+        Number(
+          formValue.assignedAreaManager
+        ),
+
+      region:
+        Number(formValue.region),
+
+      landline:
+        formValue.landline,
+
+      updatedBy:
+        this.updatedBy
 
     };
 
@@ -451,6 +538,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
   closeModal() {
 
     this.showEditModal = false;
+
+    this.submitted = false;
 
   }
 
@@ -491,6 +580,99 @@ export class CustomerMasterDashboardComponent implements OnInit {
     this.getCustomerDetails();
 
   }
+
+
+  // =========================================================
+// 🔷 DELETE CUSTOMER
+// =========================================================
+
+deleteCustomer(item: any) {
+
+  const confirmDelete = confirm(
+    'Are you sure want to delete this customer?'
+  );
+
+  if (!confirmDelete) {
+
+    return;
+
+  }
+
+  const payload = {
+
+    customerId: item.customerId,
+
+    agencyId: this.agencyId,
+
+    name: item.name,
+
+    type: item.type,
+
+    registrationNo: item.registrationNo,
+
+    contactPerson: item.contactPerson,
+
+    mobile: item.mobile,
+
+    email: item.email,
+
+    address: item.address,
+
+    city: item.city,
+
+    state: item.state,
+
+    pincode: item.pincode,
+
+    gstNo: item.gstNo,
+
+    drugLicenseNo: item.drugLicenseNo,
+
+    panNo: item.panNo,
+
+    assignedAreaManager:
+      Number(item.assignedAreaManager || 0),
+
+    region:
+      Number(item.region || 0),
+
+    landline: item.landline,
+
+    updatedBy: this.updatedBy,
+
+    isActive: false
+
+  };
+
+  this.customerService
+    .updatecustomerdetails(payload)
+    .subscribe({
+
+      next: (res: any) => {
+
+        alert(
+          'Customer Deleted Successfully'
+        );
+
+        this.getCustomerDetails();
+
+        this.getDashboardDetails();
+
+      },
+
+      error: (err: any) => {
+
+        console.log(err);
+
+        alert(
+          'Something went wrong'
+        );
+
+      }
+
+    });
+
+}
 
   // =========================================================
   // 🔷 FORM CONTROLS

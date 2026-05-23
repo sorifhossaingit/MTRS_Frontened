@@ -55,6 +55,8 @@ export class AddCustomerMasterComponent implements OnInit {
 
   createdBy: any;
 
+  areaManagerList: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private customerService: CustomerService,
@@ -70,6 +72,8 @@ export class AddCustomerMasterComponent implements OnInit {
     this.getUserIdFromToken();
 
     this.initializeForm();
+
+    this.getAreaManagerList();
 
   }
 
@@ -145,9 +149,7 @@ export class AddCustomerMasterComponent implements OnInit {
 
       panNo: [''],
 
-      assignedMr: [0],
-
-      assignedAm: [0],
+      assignedAreaManager: [0],
 
       region: [0],
 
@@ -156,6 +158,32 @@ export class AddCustomerMasterComponent implements OnInit {
       createdBy: [0]
 
     });
+
+  }
+
+  // =========================================================
+  // 🔷 GET AREA MANAGER LIST
+  // =========================================================
+
+  getAreaManagerList() {
+
+    this.customerService
+      .getAreamanagerlist(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.areaManagerList = res.data || [];
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
 
   }
 
@@ -198,11 +226,52 @@ export class AddCustomerMasterComponent implements OnInit {
 
     }
 
+    const formValue =
+      this.customerForm.value;
+
     const payload = {
 
-      ...this.customerForm.value,
-
       agencyId: this.agencyId,
+
+      name: formValue.name,
+
+      type: formValue.type,
+
+      registrationNo:
+        formValue.registrationNo,
+
+      contactPerson:
+        formValue.contactPerson,
+
+      mobile: formValue.mobile,
+
+      email: formValue.email,
+
+      address: formValue.address,
+
+      city: formValue.city,
+
+      state: formValue.state,
+
+      pincode: formValue.pincode,
+
+      gstNo: formValue.gstNo,
+
+      drugLicenseNo:
+        formValue.drugLicenseNo,
+
+      panNo: formValue.panNo,
+
+      assignedAreaManager:
+        Number(
+          formValue.assignedAreaManager
+        ),
+
+      region:
+        Number(formValue.region),
+
+      landline:
+        formValue.landline,
 
       createdBy: this.createdBy
 

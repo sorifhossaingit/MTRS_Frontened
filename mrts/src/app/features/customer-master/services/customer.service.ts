@@ -10,29 +10,33 @@ export class CustomerService {
 private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
-
+  
 
 
   getcustomerdashboarddetails(params: any) {
     return this.http.get(
-      `${this.apiUrl}/Customer/dashboard/customer-dashboard`, { params });
+      `${this.apiUrl}/admin/customer/dashboard/customer-dashboard`, { params });
   }
 
   getcustomerdetails(params: any) {
     return this.http.get(
-      `${this.apiUrl}/Customer/dashboard/get-customers`, { params });
+      `${this.apiUrl}/admin/customer/dashboard/get-customers`, { params });
   }
 
 
   addcustomer(data: any) {
-    return this.http.post(`${this.apiUrl}/Customer/create-customer`, data);
+    return this.http.post(`${this.apiUrl}/admin/customer/create-customer`, data);
   }
 
 
   updatecustomerdetails(data: any) {
-    return this.http.put(`${this.apiUrl}/Customer/update-customer`, data);
+    return this.http.put(`${this.apiUrl}/admin/customer/update-customer`, data);
   }
 
-
+  getAreamanagerlist(agencyId: any) {
+    return this.http.get(
+      `${this.apiUrl}/admin/area-manager/dropdown/active-area-managers/${agencyId}`);
+  }
+  
 
 }
