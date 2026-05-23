@@ -151,7 +151,7 @@ export class AddCustomerMasterComponent implements OnInit {
 
       assignedAreaManager: [0],
 
-      region: [0],
+      region: [''],
 
       landline: [''],
 
@@ -267,8 +267,7 @@ export class AddCustomerMasterComponent implements OnInit {
           formValue.assignedAreaManager
         ),
 
-      region:
-        Number(formValue.region),
+      region:formValue.region,
 
       landline:
         formValue.landline,

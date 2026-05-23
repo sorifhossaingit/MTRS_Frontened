@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ProductMasterRoutingModule } from './product-master-routing.module';
 import { ProductMasterDashboardComponent } from './pages/product-master-dashboard/product-master-dashboard.component';
 import {
@@ -17,6 +16,7 @@ import {
 } from 'lucide-angular';
 import { AddProductMasterComponent } from './pages/add-product-master/add-product-master.component';
 import { StockistOrderDetailsComponent } from './pages/stockist-order-details/stockist-order-details.component';
+import { FormsModule , ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -27,6 +27,8 @@ import { StockistOrderDetailsComponent } from './pages/stockist-order-details/st
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     ProductMasterRoutingModule,
     LucideAngularModule.pick({
       Package,

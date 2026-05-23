@@ -1,144 +1,549 @@
 <div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
 
   <!-- 🔷 HEADER -->
+
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+
     <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+
       <lucide-icon [img]="PackagePlus"></lucide-icon>
+
       Add Product
+
     </h1>
 
-    <button routerLink="/product-master/product-master-dashboard"
+    <button
+      routerLink="/product-master/product-master-dashboard"
       class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
+
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
+
       Back
+
     </button>
+
   </div>
 
   <!-- 🔷 FORM -->
-  <form class="space-y-6">
+
+  <form
+    [formGroup]="productForm"
+    (ngSubmit)="saveProduct()"
+    class="space-y-6">
 
     <!-- 🟦 BASIC INFO -->
+
     <div class="card">
+
       <h2 class="section-title">
+
         <lucide-icon [img]="Package"></lucide-icon>
+
         Basic Information
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input class="input" placeholder="Product Name">
-        <input class="input" placeholder="Brand Name">
-        <input class="input" placeholder="Generic Name">
+
+        <!-- PRODUCT NAME -->
+
+        <div>
+
+          <input
+            class="input"
+            placeholder="Product Name"
+            formControlName="name">
+
+          <p
+            *ngIf="submitted && f['name'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Product Name is required
+
+          </p>
+
+        </div>
+
+        <!-- BRAND NAME -->
+
+        <div>
+
+          <input
+            class="input"
+            placeholder="Brand Name"
+            formControlName="brandName">
+
+          <p
+            *ngIf="submitted && f['brandName'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Brand Name is required
+
+          </p>
+
+        </div>
+
+        <!-- GENERIC NAME -->
+
+        <div>
+
+          <input
+            class="input"
+            placeholder="Generic Name"
+            formControlName="genericName">
+
+          <p
+            *ngIf="submitted && f['genericName'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Generic Name is required
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
 
     <!-- 🟪 CLASSIFICATION -->
+
     <div class="card">
+
       <h2 class="section-title">
+
         <lucide-icon [img]="ClipboardList"></lucide-icon>
+
         Classification
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input class="input" placeholder="Therapeutic Category">
-        <input class="input" placeholder="Division">
 
-        <select class="input">
-          <option>Dosage Form</option>
-          <option>Tablet</option>
-          <option>Syrup</option>
-          <option>Injection</option>
-        </select>
+        <!-- CATEGORY -->
 
-        <input class="input" placeholder="Strength (e.g., 500mg)">
+        <div>
+
+          <input
+            class="input"
+            placeholder="Category"
+            formControlName="category">
+
+          <p
+            *ngIf="submitted && f['category'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Category is required
+
+          </p>
+
+        </div>
+
+        <!-- DIVISION -->
+
+        <div>
+
+          <input
+            class="input"
+            placeholder="Division"
+            formControlName="division">
+
+          <p
+            *ngIf="submitted && f['division'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Division is required
+
+          </p>
+
+        </div>
+
+        <!-- DOSAGE FORM -->
+
+        <div>
+
+          <select
+            class="input"
+            formControlName="dosageForm">
+
+            <option value="">
+              Select Dosage Form
+            </option>
+
+            <option value="Tablet">
+              Tablet
+            </option>
+
+            <option value="Capsule">
+              Capsule
+            </option>
+
+            <option value="Syrup">
+              Syrup
+            </option>
+
+            <option value="Injection">
+              Injection
+            </option>
+
+            <option value="Cream">
+              Cream
+            </option>
+
+          </select>
+
+          <p
+            *ngIf="submitted && f['dosageForm'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Dosage Form is required
+
+          </p>
+
+        </div>
+
+        <!-- STRENGTH -->
+
+        <div>
+
+          <input
+            class="input"
+            placeholder="Strength (500mg)"
+            formControlName="strength">
+
+          <p
+            *ngIf="submitted && f['strength'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Strength is required
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
 
     <!-- 🟩 PRICING -->
+
     <div class="card">
+
       <h2 class="section-title">
+
         <lucide-icon [img]="DollarSign"></lucide-icon>
+
         Pricing Details
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <input class="input" placeholder="MRP">
-        <input class="input" placeholder="PTR">
-        <input class="input" placeholder="PTS">
+
+        <!-- MRP -->
+
+        <div>
+
+          <input
+            type="number"
+            class="input"
+            placeholder="MRP"
+            formControlName="mrp">
+
+          <p
+            *ngIf="submitted && f['mrp'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            MRP is required
+
+          </p>
+
+        </div>
+
+        <!-- PTR -->
+
+        <div>
+
+          <input
+            type="number"
+            class="input"
+            placeholder="PTR"
+            formControlName="ptr">
+
+          <p
+            *ngIf="submitted && f['ptr'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            PTR is required
+
+          </p>
+
+        </div>
+
+        <!-- PTS -->
+
+        <div>
+
+          <input
+            type="number"
+            class="input"
+            placeholder="PTS"
+            formControlName="pts">
+
+          <p
+            *ngIf="submitted && f['pts'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            PTS is required
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
 
     <!-- 🟨 PACKAGING -->
+
     <div class="card">
+
       <h2 class="section-title">
+
         <lucide-icon [img]="Box"></lucide-icon>
+
         Packaging
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input class="input" placeholder="Pack Size">
-        <input class="input" placeholder="Units per Box">
+
+        <!-- PACK SIZE -->
+
+        <div>
+
+          <input
+            class="input"
+            placeholder="Pack Size"
+            formControlName="packSize">
+
+          <p
+            *ngIf="submitted && f['packSize'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Pack Size is required
+
+          </p>
+
+        </div>
+
+        <!-- UNITS PER BOX -->
+
+        <div>
+
+          <input
+            type="number"
+            class="input"
+            placeholder="Units Per Box"
+            formControlName="unitsPerBox">
+
+          <p
+            *ngIf="submitted && f['unitsPerBox'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Units Per Box is required
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
 
     <!-- 🟫 COMPLIANCE -->
+
     <div class="card">
+
       <h2 class="section-title">
+
         <lucide-icon [img]="FileCheck"></lucide-icon>
+
         Compliance
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input class="input" placeholder="Manufacturing License No">
-        <input type="date" class="input">
+
+        <!-- LICENSE NUMBER -->
+
+        <div>
+
+          <input
+            class="input"
+            placeholder="Manufacturing License Number"
+            formControlName="manufacturingLicenseNumber">
+
+          <p
+            *ngIf="submitted && f['manufacturingLicenseNumber'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Manufacturing License Number is required
+
+          </p>
+
+        </div>
+
+        <!-- APPROVAL DATE -->
+
+        <div>
+
+          <input
+            type="date"
+            class="input"
+            formControlName="approvalDate">
+
+          <p
+            *ngIf="submitted && f['approvalDate'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Approval Date is required
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
 
     <!-- 🟥 MARKETING -->
+
     <div class="card">
+
       <h2 class="section-title">
+
         <lucide-icon [img]="TrendingUp"></lucide-icon>
+
         Marketing Details
+
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="date" class="input">
-        
-        <select class="input">
-          <option>Promotion Priority</option>
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-        </select>
 
-        <input class="input md:col-span-2" placeholder="Target Doctors">
+        <!-- LAUNCH DATE -->
+
+        <div>
+
+          <label class="text-sm font-medium text-gray-600 mb-1 block">
+            Launch Date
+          </label>
+
+          <input
+            type="date"
+            class="input"
+            formControlName="launchDate">
+
+          <p
+            *ngIf="submitted && f['launchDate'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Launch Date is required
+
+          </p>
+
+        </div>
+
+        <!-- PROMOTION PRIORITY -->
+
+        <div>
+
+          <select
+            class="input"
+            formControlName="promotionPriority">
+
+            <option [value]="1">
+              High
+            </option>
+
+            <option [value]="2">
+              Medium
+            </option>
+
+            <option [value]="3">
+              Low
+            </option>
+
+          </select>
+
+          <p
+            *ngIf="submitted && f['promotionPriority'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
+
+            Promotion Priority is required
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
 
-    <!-- 🟦 STATUS -->
+    <!-- 🟦 PRODUCT IMAGE -->
+
     <div class="card">
+
       <h2 class="section-title">
-        <lucide-icon [img]="CheckCircle"></lucide-icon>
-        Status
+
+        <lucide-icon [img]="Package"></lucide-icon>
+
+        Product Image
+
       </h2>
 
-      <div class="flex gap-4">
-        <label><input type="radio" name="status"> Active</label>
-        <label><input type="radio" name="status"> Discontinued</label>
+      <div class="space-y-4">
+
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onImageChange($event)"
+          class="input">
+
+        <div *ngIf="imagePreview">
+
+          <img
+            [src]="imagePreview"
+            class="w-40 h-40 object-cover rounded-xl border">
+
+        </div>
+
       </div>
+
     </div>
 
-    <!-- 🔷 ACTIONS -->
+    <!-- 🔷 ACTION BUTTONS -->
+
     <div class="flex flex-col sm:flex-row justify-end gap-3">
-      <button type="button"
+
+      <button
+        type="button"
+        routerLink="/product-master/product-master-dashboard"
         class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
+
         Cancel
+
       </button>
 
-      <button type="submit"
+      <button
+        type="submit"
         class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+
         <lucide-icon [img]="Save"></lucide-icon>
+
         Save Product
+
       </button>
+
     </div>
 
   </form>

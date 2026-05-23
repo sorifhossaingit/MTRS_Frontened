@@ -494,8 +494,7 @@ export class CustomerMasterDashboardComponent implements OnInit {
           formValue.assignedAreaManager
         ),
 
-      region:
-        Number(formValue.region),
+      region:formValue.region,
 
       landline:
         formValue.landline,
@@ -633,8 +632,7 @@ deleteCustomer(item: any) {
     assignedAreaManager:
       Number(item.assignedAreaManager || 0),
 
-    region:
-      Number(item.region || 0),
+    region:item.region ,
 
     landline: item.landline,
 
