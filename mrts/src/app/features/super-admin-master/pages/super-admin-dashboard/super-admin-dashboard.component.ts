@@ -16,6 +16,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { jwtDecode } from 'jwt-decode';
 
 
 @Component({
@@ -25,109 +26,126 @@ import {
 })
 export class SuperAdminDashboardComponent implements OnInit {
 
-  // Icons
+  // 🔷 Icons
   ShieldCheck = ShieldCheck;
   UserPlus = UserPlus;
   Building2 = Building2;
   BadgeCheck = BadgeCheck;
   AlertTriangle = AlertTriangle;
   Users = Users;
-  Eye = Eye;
   Pencil = Pencil;
-  Trash2 = Trash2;
 
   constructor(
     private superAdminService: SuperAdminMasterService,
     private fb: FormBuilder
   ) { }
 
+  // 🔷 Modal
   editModal = false;
 
   selectedAgencyId = 0;
 
+  // 🔷 Form
   editForm!: FormGroup;
 
-
-
-  // =========================
-  // DASHBOARD STATS
-  // =========================
-
+  // 🔷 Dashboard Summary
   totalCompanies = 0;
   activeCompanies = 0;
   totalUsers = 0;
   activeUsers = 0;
 
-  // =========================
-  // TABLE DATA
-  // =========================
-
+  // 🔷 Table Data
   companies: any[] = [];
 
-  // =========================
-  // PAGINATION
-  // =========================
-
+  // 🔷 Pagination
   currentPage = 1;
   pageSize = 10;
   totalRecords = 0;
 
-  // =========================
-  // FILTERS
-  // =========================
-
+  // 🔷 Filters
   searchText = '';
-  filterStatus = '';
+  filterStatus: any = '';
 
-  // =========================
-  // LOADER
-  // =========================
-
+  // 🔷 Loader
   loading = false;
 
   ngOnInit(): void {
 
+    this.initializeForm();
+
     this.getDashboardSummary();
 
     this.getAgencyList();
+  }
+
+  // ============================================
+  // INITIALIZE FORM
+  // ============================================
+
+  initializeForm() {
 
     this.editForm = this.fb.group({
 
-      name: ['', Validators.required],
+      companyName: ['', Validators.required],
 
-      email: ['', Validators.required],
+      agencyEmail: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
 
-      phone: ['', Validators.required],
+      agencyPhone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$')
+        ]
+      ],
 
-      address: [''],
+      address: ['', Validators.required],
 
-      gstNumber: [''],
+      gstNumber: ['', Validators.required],
 
-      licenseNo: [''],
+      licenseNo: ['', Validators.required],
 
-      state: [''],
+      state: ['', Validators.required],
 
-      city: [''],
+      city: ['', Validators.required],
 
       isActive: [true],
 
-      allUsersStatusUpdate: [false],
+      adminName: ['', Validators.required],
 
-      adminName: [''],
+      adminEmail: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
 
-      adminEmail: [''],
+      adminMobile: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$')
+        ]
+      ],
 
-      adminMobile: ['']
+      imageUrl: ['']
     });
   }
 
-  // =========================
-  // DASHBOARD SUMMARY API
-  // =========================
+  // ============================================
+  // DASHBOARD SUMMARY
+  // ============================================
 
   getDashboardSummary() {
 
-    this.superAdminService.getdashboradsummery()
+    this.superAdminService
+      .getdashboradsummery()
       .subscribe({
 
         next: (res: any) => {
@@ -145,14 +163,15 @@ export class SuperAdminDashboardComponent implements OnInit {
         },
 
         error: (err) => {
+
           console.log(err);
         }
       });
   }
 
-  // =========================
-  // AGENCY LIST API
-  // =========================
+  // ============================================
+  // GET AGENCY LIST
+  // ============================================
 
   getAgencyList() {
 
@@ -160,24 +179,23 @@ export class SuperAdminDashboardComponent implements OnInit {
 
     const params: any = {
 
-      pageNumber: this.currentPage,
+      PageNumber: this.currentPage,
 
-      pageSize: this.pageSize
+      PageSize: this.pageSize
     };
 
-    // Search filter
     if (this.searchText) {
 
-      params.name = this.searchText;
+      params.Search = this.searchText;
     }
 
-    // Status filter
     if (this.filterStatus !== '') {
 
       params.isActive = this.filterStatus;
     }
 
-    this.superAdminService.getAgency(params)
+    this.superAdminService
+      .getAgency(params)
       .subscribe({
 
         next: (res: any) => {
@@ -201,9 +219,9 @@ export class SuperAdminDashboardComponent implements OnInit {
       });
   }
 
-  // =========================
-  // SEARCH FILTER
-  // =========================
+  // ============================================
+  // FILTER
+  // ============================================
 
   applyFilter() {
 
@@ -212,33 +230,25 @@ export class SuperAdminDashboardComponent implements OnInit {
     this.getAgencyList();
   }
 
-  // =========================
+  // ============================================
   // PAGE CHANGE
-  // =========================
+  // ============================================
 
   changePage(page: number) {
+
+    if (page < 1 || page > this.totalPages) {
+
+      return;
+    }
 
     this.currentPage = page;
 
     this.getAgencyList();
   }
 
-  // =========================
-  // STATUS FILTER
-  // =========================
-
-  onStatusChange(status: string) {
-
-    this.filterStatus = status;
-
-    this.currentPage = 1;
-
-    this.getAgencyList();
-  }
-
-  // =========================
-  // ACTIONS
-  // =========================
+  // ============================================
+  // EDIT COMPANY
+  // ============================================
 
   editCompany(company: any) {
 
@@ -246,11 +256,11 @@ export class SuperAdminDashboardComponent implements OnInit {
 
     this.editForm.patchValue({
 
-      name: company.companyName,
+      companyName: company.companyName,
 
-      email: company.email,
+      agencyEmail: company.email,
 
-      phone: company.phone,
+      agencyPhone: company.phone,
 
       address: company.address,
 
@@ -264,47 +274,90 @@ export class SuperAdminDashboardComponent implements OnInit {
 
       isActive: company.isActive,
 
-      allUsersStatusUpdate: false,
-
       adminName: company.adminName,
 
       adminEmail: company.adminEmail,
 
-      adminMobile: company.adminMobile
+      adminMobile: company.adminMobile,
+
+      imageUrl: company.imageUrl || ''
     });
 
     this.editModal = true;
   }
+
+  // ============================================
+  // CLOSE MODAL
+  // ============================================
 
   closeModal() {
 
     this.editModal = false;
   }
 
+  // ============================================
+  // UPDATE AGENCY
+  // ============================================
+
   updateAgency() {
 
     if (this.editForm.invalid) {
 
       this.editForm.markAllAsTouched();
-      console.log("ferr")
 
       return;
     }
 
-    const rid = Number(
-      localStorage.getItem('rid')
-    );
+    console.log('Update button clicked');
+
+    let updatedBy = 0;
+
+    const token = localStorage.getItem('token');
+
+    if (token) {
+
+      const decodedToken: any = jwtDecode(token);
+
+      updatedBy =
+        Number(
+          decodedToken?.nameid ||
+          decodedToken?.sub ||
+          decodedToken?.userId
+        );
+    }
 
     const payload = {
 
       agencyId: this.selectedAgencyId,
 
-      ...this.editForm.value,
+      companyName: this.editForm.value.companyName,
 
-      updatedBy: rid
+      agencyEmail: this.editForm.value.agencyEmail,
+
+      agencyPhone: this.editForm.value.agencyPhone,
+
+      address: this.editForm.value.address,
+
+      gstNumber: this.editForm.value.gstNumber,
+
+      licenseNo: this.editForm.value.licenseNo,
+
+      state: this.editForm.value.state,
+
+      city: this.editForm.value.city,
+
+      isActive: this.editForm.value.isActive,
+
+      adminName: this.editForm.value.adminName,
+
+      adminEmail: this.editForm.value.adminEmail,
+
+      adminMobile: this.editForm.value.adminMobile,
+
+      imageUrl: this.editForm.value.imageUrl || '',
+
+      updatedBy: updatedBy
     };
-
-    console.log(payload);
 
     this.superAdminService
       .updateAgency(payload)
@@ -318,7 +371,6 @@ export class SuperAdminDashboardComponent implements OnInit {
 
             this.closeModal();
 
-            // Refresh Table
             this.getAgencyList();
           }
         },
@@ -326,13 +378,15 @@ export class SuperAdminDashboardComponent implements OnInit {
         error: (err) => {
 
           console.log(err);
+
+          alert('Failed to update agency');
         }
       });
   }
 
-  // =========================
+  // ============================================
   // TOTAL PAGES
-  // =========================
+  // ============================================
 
   get totalPages(): number {
 
@@ -341,9 +395,9 @@ export class SuperAdminDashboardComponent implements OnInit {
     );
   }
 
-  // =========================
+  // ============================================
   // PAGE ARRAY
-  // =========================
+  // ============================================
 
   get pages(): number[] {
 
@@ -351,4 +405,5 @@ export class SuperAdminDashboardComponent implements OnInit {
       .fill(0)
       .map((x, i) => i + 1);
   }
+
 }

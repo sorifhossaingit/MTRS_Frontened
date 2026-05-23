@@ -24,17 +24,17 @@ export class DoctorService {
 
   getdoctordetails(params: any) {
     return this.http.get(
-      `${this.apiUrl}/Doctor/dashboard/getdoctorbyagency`, { params });
+      `${this.apiUrl}/admin/doctor/dashboard/getdoctorbyagency`, { params });
   }
 
 
   adddoctor(data: any) {
-    return this.http.post(`${this.apiUrl}/Doctor/dashboard/createdoctor`, data);
+    return this.http.post(`${this.apiUrl}/admin/doctor/dashboard/createdoctor`, data);
   }
 
 
   updatedoctordetails(data: any) {
-    return this.http.put(`${this.apiUrl}/Doctor/dashboard/updatedoctor`, data);
+    return this.http.put(`${this.apiUrl}/admin/doctor/dashboard/updatedoctor`, data);
   }
 
 

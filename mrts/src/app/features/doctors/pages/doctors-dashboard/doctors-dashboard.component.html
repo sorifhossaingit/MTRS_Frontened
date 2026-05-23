@@ -296,7 +296,7 @@
               <lucide-icon
                 [img]="Trash2"
                 class="cursor-pointer text-red-500 hover:scale-110"
-                (click)="deleteDoctor(doc.id)">
+                (click)="deleteDoctor(doc)">
               </lucide-icon>
 
             </div>
@@ -400,14 +400,16 @@
 <!-- 🔷 EDIT MODAL -->
 <!-- ===================================================== -->
 
+<!-- EDIT MODAL -->
 <div
   *ngIf="showEditModal"
-  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
 
-  <div class="bg-white w-[95%] md:w-[70%] rounded-2xl p-6 max-h-[90vh] overflow-y-auto">
+  <div
+    class="bg-white w-full max-w-6xl rounded-2xl shadow-2xl max-h-[95vh] overflow-y-auto">
 
     <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center border-b px-6 py-4">
 
       <h2 class="text-2xl font-bold">
         Update Doctor
@@ -415,136 +417,375 @@
 
       <lucide-icon
         [img]="X"
-        class="cursor-pointer"
+        class="cursor-pointer text-red-500 hover:scale-110 transition"
         (click)="closeModal()">
       </lucide-icon>
 
     </div>
 
-    <!-- Form -->
+    <!-- FORM -->
     <form
       [formGroup]="editDoctorForm"
-      (ngSubmit)="updateDoctor()">
+      (ngSubmit)="updateDoctor()"
+      class="p-6 space-y-6">
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- BASIC DETAILS -->
+      <div>
 
-        <!-- Name -->
-        <div>
+        <h3 class="text-lg font-semibold mb-4 text-gray-700">
+          Basic Information
+        </h3>
 
-          <label class="font-medium">
-            Doctor Name
-          </label>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-          <input
-            type="text"
-            formControlName="name"
-            class="w-full border rounded-xl px-4 py-2 mt-1">
+          <!-- Doctor Name -->
+          <div>
 
-          <p
-            *ngIf="submitted && f['name'].errors"
-            class="text-red-500 text-sm mt-1">
+            <label class="font-medium">
+              Doctor Name *
+            </label>
 
-            Doctor Name is required
+            <input
+              type="text"
+              formControlName="name"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
 
-          </p>
+            <p
+              *ngIf="submitted && f['name'].errors"
+              class="text-red-500 text-sm mt-1">
 
-        </div>
+              Doctor name is required
 
-        <!-- Qualification -->
-        <div>
+            </p>
 
-          <label class="font-medium">
-            Qualification
-          </label>
+          </div>
 
-          <input
-            type="text"
-            formControlName="qualification"
-            class="w-full border rounded-xl px-4 py-2 mt-1">
+          <!-- Qualification -->
+          <div>
 
-        </div>
+            <label class="font-medium">
+              Qualification *
+            </label>
 
-        <!-- Mobile -->
-        <div>
+            <input
+              type="text"
+              formControlName="qualification"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
 
-          <label class="font-medium">
-            Mobile
-          </label>
+          </div>
 
-          <input
-            type="text"
-            formControlName="mobile"
-            class="w-full border rounded-xl px-4 py-2 mt-1">
+          <!-- Specialization -->
+          <div>
 
-          <p
-            *ngIf="submitted && f['mobile'].errors"
-            class="text-red-500 text-sm mt-1">
+            <label class="font-medium">
+              Specialization *
+            </label>
 
-            Enter Valid Mobile Number
+            <input
+              type="text"
+              formControlName="specialization"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
 
-          </p>
+          </div>
 
-        </div>
+          <!-- Mobile -->
+          <div>
 
-        <!-- Email -->
-        <div>
+            <label class="font-medium">
+              Mobile *
+            </label>
 
-          <label class="font-medium">
-            Email
-          </label>
+            <input
+              type="text"
+              formControlName="mobile"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
 
-          <input
-            type="email"
-            formControlName="email"
-            class="w-full border rounded-xl px-4 py-2 mt-1">
+            <p
+              *ngIf="submitted && f['mobile'].errors"
+              class="text-red-500 text-sm mt-1">
 
-          <p
-            *ngIf="submitted && f['email'].errors"
-            class="text-red-500 text-sm mt-1">
+              Enter valid 10 digit mobile number
 
-            Enter Valid Email
+            </p>
 
-          </p>
+          </div>
 
-        </div>
+          <!-- Email -->
+          <div>
 
-        <!-- Specialization -->
-        <div>
+            <label class="font-medium">
+              Email *
+            </label>
 
-          <label class="font-medium">
-            Specialization
-          </label>
+            <input
+              type="email"
+              formControlName="email"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
 
-          <input
-            type="text"
-            formControlName="specialization"
-            class="w-full border rounded-xl px-4 py-2 mt-1">
+            <p
+              *ngIf="submitted && f['email'].errors"
+              class="text-red-500 text-sm mt-1">
 
-        </div>
+              Enter valid email address
 
-        <!-- Clinic -->
-        <div>
+            </p>
 
-          <label class="font-medium">
-            Clinic Name
-          </label>
+          </div>
 
-          <input
-            type="text"
-            formControlName="clinicName"
-            class="w-full border rounded-xl px-4 py-2 mt-1">
+          <!-- Category -->
+          <div>
+
+            <label class="font-medium">
+              Category *
+            </label>
+
+            <select
+              formControlName="category"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+              <option value="">
+                Select Category
+              </option>
+
+              <option value="A">
+                A
+              </option>
+
+              <option value="B">
+                B
+              </option>
+
+              <option value="C">
+                C
+              </option>
+
+            </select>
+
+          </div>
 
         </div>
 
       </div>
 
-      <!-- Buttons -->
-      <div class="flex justify-end gap-4 mt-6">
+      <!-- CLINIC DETAILS -->
+      <div>
+
+        <h3 class="text-lg font-semibold mb-4 text-gray-700">
+          Clinic & Hospital Details
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          <!-- Clinic -->
+          <div>
+
+            <label class="font-medium">
+              Clinic Name *
+            </label>
+
+            <input
+              type="text"
+              formControlName="clinicName"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+          <!-- Hospital -->
+          <div>
+
+            <label class="font-medium">
+              Hospital Name
+            </label>
+
+            <input
+              type="text"
+              formControlName="hospitalName"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+          <!-- Address -->
+          <div class="md:col-span-2">
+
+            <label class="font-medium">
+              Address *
+            </label>
+
+            <textarea
+              rows="3"
+              formControlName="address"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+            </textarea>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- VISIT DETAILS -->
+      <div>
+
+        <h3 class="text-lg font-semibold mb-4 text-gray-700">
+          Visit & Assignment Details
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+          <!-- Potential Score -->
+          <div>
+
+            <label class="font-medium">
+              Potential Score *
+            </label>
+
+            <input
+              type="number"
+              formControlName="potentialScore"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+          <!-- Assigned Area Manager -->
+          <div>
+
+            <label class="font-medium">
+              Assigned Area Manager *
+            </label>
+
+            <input
+              type="number"
+              formControlName="assignedAM"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+          <!-- Visiting Hours -->
+          <div>
+
+            <label class="font-medium">
+              Visiting Hours *
+            </label>
+
+            <input
+              type="text"
+              formControlName="visitingHours"
+              class="w-full border rounded-xl px-4 py-3 mt-1"
+              placeholder="10 AM - 1 PM">
+
+          </div>
+
+          <!-- Last Visit -->
+          <div>
+
+            <label class="font-medium">
+              Last Visit *
+            </label>
+
+            <input
+              type="date"
+              formControlName="lastVisit"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+          <!-- Next Visit -->
+          <div>
+
+            <label class="font-medium">
+              Next Visit *
+            </label>
+
+            <input
+              type="date"
+              formControlName="nextVisit"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+          <!-- Weekly Off -->
+          <div>
+
+            <label class="font-medium">
+              Weekly Off Day *
+            </label>
+
+            <input
+              type="text"
+              formControlName="weeklyOffDay"
+              class="w-full border rounded-xl px-4 py-3 mt-1"
+              placeholder="Sunday">
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- OTHER DETAILS -->
+      <div>
+
+        <h3 class="text-lg font-semibold mb-4 text-gray-700">
+          Other Details
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          <!-- Prescription Type -->
+          <div>
+
+            <label class="font-medium">
+              Prescription Type *
+            </label>
+
+            <input
+              type="text"
+              formControlName="prescriptionType"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+          <!-- Doctor Behaviour -->
+          <div>
+
+            <label class="font-medium">
+              Doctor Behaviour *
+            </label>
+
+            <input
+              type="text"
+              formControlName="doctorBehaviour"
+              class="w-full border rounded-xl px-4 py-3 mt-1">
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- STATUS -->
+      <div>
+
+        <label class="flex items-center gap-3">
+
+          <input
+            type="checkbox"
+            formControlName="isActive"
+            class="w-5 h-5">
+
+          Active Doctor
+
+        </label>
+
+      </div>
+
+      <!-- BUTTONS -->
+      <div class="flex justify-end gap-4 pt-4 border-t">
 
         <button
           type="button"
           (click)="closeModal()"
-          class="border px-5 py-2 rounded-xl">
+          class="border px-5 py-2 rounded-xl hover:bg-gray-100">
 
           Cancel
 

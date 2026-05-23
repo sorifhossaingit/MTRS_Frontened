@@ -75,6 +75,26 @@ export const MENU_ITEMS: MenuItem[] = [
     ]
   },
   {
+    label: 'Area Manager',
+    icon: 'users',
+    route: '/area-manager',
+    roles: ['Admin'],
+    children: [
+      {
+        label: 'Area Manager Dashboard',
+        icon: 'clipboard-list',
+        route: '/area-manager/area-manager-dashboard',
+        roles: ['Admin']
+      },
+      {
+        label: 'Add Manager',
+        icon: 'UserPlus',
+        route: '/area-manager/add-area-manager',
+        roles: ['Admin']
+      }
+    ]
+  },
+  {
     label: 'Stockist Master',
     icon: 'building-2',
     route: '/stockist-master',

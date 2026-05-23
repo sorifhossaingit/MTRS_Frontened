@@ -165,7 +165,7 @@ export class DoctorsDashboardComponent implements OnInit {
         Validators.required
       ],
 
-      assignedMr: [
+      assignedAM: [
         '',
         Validators.required
       ],
@@ -388,7 +388,7 @@ export class DoctorsDashboardComponent implements OnInit {
 
     this.editDoctorForm.patchValue({
 
-      doctorId: doc.id,
+      doctorId: doc.doctorId,
 
       agencyId: this.agencyId,
 
@@ -412,7 +412,7 @@ export class DoctorsDashboardComponent implements OnInit {
 
       potentialScore: doc.potentialScore,
 
-      assignedMr: doc.assignedMr,
+      assignedAM: doc.assignedAreaManager,
 
       lastVisit: this.formatDate(doc.lastVisit),
 
@@ -450,8 +450,52 @@ export class DoctorsDashboardComponent implements OnInit {
 
     }
 
-    const payload =
-      this.editDoctorForm.value;
+    const formValue = this.editDoctorForm.value;
+
+    const payload = {
+
+      doctorId: formValue.doctorId,
+
+      agencyId: formValue.agencyId,
+
+      name: formValue.name,
+
+      qualification: formValue.qualification,
+
+      specialization: formValue.specialization,
+
+      mobile: formValue.mobile,
+
+      email: formValue.email,
+
+      clinicName: formValue.clinicName,
+
+      hospitalName: formValue.hospitalName,
+
+      address: formValue.address,
+
+      category: formValue.category,
+
+      potentialScore: Number(formValue.potentialScore),
+
+      assignedAreaManager: Number(formValue.assignedAM),
+
+      lastVisit: formValue.lastVisit,
+
+      nextVisit: formValue.nextVisit,
+
+      updatedBy: this.userId,
+
+      isActive: formValue.isActive,
+
+      visitingHours: formValue.visitingHours,
+
+      weeklyOffDay: formValue.weeklyOffDay,
+
+      prescriptionType: formValue.prescriptionType,
+
+      doctorBehaviour: formValue.doctorBehaviour
+    };
 
     this.doctorService
       .updatedoctordetails(payload)
@@ -497,21 +541,86 @@ export class DoctorsDashboardComponent implements OnInit {
   // 🔷 DELETE
   // =========================================================
 
-  deleteDoctor(id: number) {
+  deleteDoctor(doc: any) {
 
-    const confirmDelete = confirm(
-      'Are you sure want to delete?'
-    );
+  const confirmDelete = confirm(
+    'Are you sure want to delete?'
+  );
 
-    if (confirmDelete) {
+  if (!confirmDelete) return;
 
-      this.doctors = this.doctors.filter(
-        x => x.id !== id
-      );
+  const payload = {
 
-    }
+    doctorId: doc.doctorId,
 
-  }
+    agencyId: this.agencyId,
+
+    name: doc.name,
+
+    qualification: doc.qualification,
+
+    specialization: doc.specialization,
+
+    mobile: doc.mobile,
+
+    email: doc.email,
+
+    clinicName: doc.clinicName,
+
+    hospitalName: doc.hospitalName,
+
+    address: doc.address,
+
+    category: doc.category,
+
+    potentialScore: Number(doc.potentialScore),
+
+    assignedAreaManager: Number(doc.assignedAreaManager),
+
+    lastVisit: doc.lastVisit,
+
+    nextVisit: doc.nextVisit,
+
+    updatedBy: this.userId,
+
+    isActive: false,
+
+    visitingHours: doc.visitingHours,
+
+    weeklyOffDay: doc.weeklyOffDay,
+
+    prescriptionType: doc.prescriptionType,
+
+    doctorBehaviour: doc.doctorBehaviour
+  };
+
+  console.log(payload);
+
+  this.doctorService
+    .updatedoctordetails(payload)
+    .subscribe({
+
+      next: (res: any) => {
+
+        alert('Doctor Deleted Successfully');
+
+        this.loadDoctors();
+
+        this.loadDashboardSummary();
+
+      },
+
+      error: (err: any) => {
+
+        console.log(err);
+
+        alert('Failed to delete doctor');
+
+      }
+
+    });
+
+}
 
   // =========================================================
   // 🔷 FORMAT DATE

@@ -8,17 +8,14 @@
 
     <h1 class="text-2xl font-bold flex items-center gap-3">
 
-      <lucide-icon
-        [img]="UserPlus"
-        class="text-blue-500">
+      <lucide-icon [img]="UserPlus" class="text-blue-500">
       </lucide-icon>
 
       Add Doctor
 
     </h1>
 
-    <button
-      routerLink="/doctor-master/doctor-master-dashboard"
+    <button routerLink="/doctor-master/doctor-master-dashboard"
       class="bg-gray-500 text-white px-4 py-2 rounded-xl flex items-center gap-2">
 
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
@@ -33,10 +30,7 @@
   <!-- 🔷 FORM -->
   <!-- ===================================================== -->
 
-  <form
-    [formGroup]="doctorForm"
-    (ngSubmit)="saveDoctor()"
-    class="space-y-6">
+  <form [formGroup]="doctorForm" (ngSubmit)="saveDoctor()" class="space-y-6">
 
     <!-- ================================================= -->
     <!-- 🔷 BASIC INFO -->
@@ -61,19 +55,13 @@
 
             <lucide-icon [img]="User"></lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Doctor Name"
-              formControlName="name">
+            <input type="text" placeholder="Doctor Name" formControlName="name">
 
           </div>
 
-          <div
-            *ngIf="f['name'].touched && f['name'].invalid">
+          <div *ngIf="f['name'].touched && f['name'].invalid">
 
-            <p
-              *ngIf="f['name'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['name'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Doctor Name is required
 
@@ -88,23 +76,16 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="GraduationCap">
+            <lucide-icon [img]="GraduationCap">
             </lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Qualification"
-              formControlName="qualification">
+            <input type="text" placeholder="Qualification" formControlName="qualification">
 
           </div>
 
-          <div
-            *ngIf="f['qualification'].touched && f['qualification'].invalid">
+          <div *ngIf="f['qualification'].touched && f['qualification'].invalid">
 
-            <p
-              *ngIf="f['qualification'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['qualification'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Qualification is required
 
@@ -119,23 +100,16 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="Stethoscope">
+            <lucide-icon [img]="Stethoscope">
             </lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Specialization"
-              formControlName="specialization">
+            <input type="text" placeholder="Specialization" formControlName="specialization">
 
           </div>
 
-          <div
-            *ngIf="f['specialization'].touched && f['specialization'].invalid">
+          <div *ngIf="f['specialization'].touched && f['specialization'].invalid">
 
-            <p
-              *ngIf="f['specialization'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['specialization'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Specialization is required
 
@@ -172,27 +146,19 @@
 
             <lucide-icon [img]="Phone"></lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Mobile Number"
-              formControlName="mobile">
+            <input type="text" placeholder="Mobile Number" formControlName="mobile">
 
           </div>
 
-          <div
-            *ngIf="f['mobile'].touched && f['mobile'].invalid">
+          <div *ngIf="f['mobile'].touched && f['mobile'].invalid">
 
-            <p
-              *ngIf="f['mobile'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['mobile'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Mobile Number is required
 
             </p>
 
-            <p
-              *ngIf="f['mobile'].errors?.['pattern']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['mobile'].errors?.['pattern']" class="text-red-500 text-sm mt-1">
 
               Mobile Number must be 10 digits
 
@@ -209,27 +175,19 @@
 
             <lucide-icon [img]="Mail"></lucide-icon>
 
-            <input
-              type="email"
-              placeholder="Email Address"
-              formControlName="email">
+            <input type="email" placeholder="Email Address" formControlName="email">
 
           </div>
 
-          <div
-            *ngIf="f['email'].touched && f['email'].invalid">
+          <div *ngIf="f['email'].touched && f['email'].invalid">
 
-            <p
-              *ngIf="f['email'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['email'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Email is required
 
             </p>
 
-            <p
-              *ngIf="f['email'].errors?.['email']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['email'].errors?.['email']" class="text-red-500 text-sm mt-1">
 
               Invalid Email Format
 
@@ -246,19 +204,13 @@
 
             <lucide-icon [img]="MapPin"></lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Address"
-              formControlName="address">
+            <input type="text" placeholder="Address" formControlName="address">
 
           </div>
 
-          <div
-            *ngIf="f['address'].touched && f['address'].invalid">
+          <div *ngIf="f['address'].touched && f['address'].invalid">
 
-            <p
-              *ngIf="f['address'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['address'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Address is required
 
@@ -293,23 +245,16 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="Building2">
+            <lucide-icon [img]="Building2">
             </lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Clinic Name"
-              formControlName="clinicName">
+            <input type="text" placeholder="Clinic Name" formControlName="clinicName">
 
           </div>
 
-          <div
-            *ngIf="f['clinicName'].touched && f['clinicName'].invalid">
+          <div *ngIf="f['clinicName'].touched && f['clinicName'].invalid">
 
-            <p
-              *ngIf="f['clinicName'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['clinicName'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Clinic Name is required
 
@@ -324,14 +269,10 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="Hospital">
+            <lucide-icon [img]="Hospital">
             </lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Hospital Name"
-              formControlName="hospitalName">
+            <input type="text" placeholder="Hospital Name" formControlName="hospitalName">
 
           </div>
 
@@ -342,23 +283,16 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="Clock">
+            <lucide-icon [img]="Clock">
             </lucide-icon>
 
-            <input
-              type="text"
-              placeholder="Visiting Hours"
-              formControlName="visitingHours">
+            <input type="text" placeholder="Visiting Hours" formControlName="visitingHours">
 
           </div>
 
-          <div
-            *ngIf="f['visitingHours'].touched && f['visitingHours'].invalid">
+          <div *ngIf="f['visitingHours'].touched && f['visitingHours'].invalid">
 
-            <p
-              *ngIf="f['visitingHours'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['visitingHours'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Visiting Hours is required
 
@@ -373,8 +307,7 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="Calendar">
+            <lucide-icon [img]="Calendar">
             </lucide-icon>
 
             <select formControlName="weeklyOffDay">
@@ -395,12 +328,9 @@
 
           </div>
 
-          <div
-            *ngIf="f['weeklyOffDay'].touched && f['weeklyOffDay'].invalid">
+          <div *ngIf="f['weeklyOffDay'].touched && f['weeklyOffDay'].invalid">
 
-            <p
-              *ngIf="f['weeklyOffDay'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['weeklyOffDay'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Weekly Off Day is required
 
@@ -422,8 +352,7 @@
 
       <h2 class="section-title flex items-center gap-2 text-lg font-semibold">
 
-        <lucide-icon
-          [img]="BarChart3">
+        <lucide-icon [img]="BarChart3">
         </lucide-icon>
 
         Classification
@@ -453,12 +382,9 @@
 
           </div>
 
-          <div
-            *ngIf="f['category'].touched && f['category'].invalid">
+          <div *ngIf="f['category'].touched && f['category'].invalid">
 
-            <p
-              *ngIf="f['category'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['category'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Category is required
 
@@ -473,23 +399,16 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="TrendingUp">
+            <lucide-icon [img]="TrendingUp">
             </lucide-icon>
 
-            <input
-              type="number"
-              placeholder="Potential Score"
-              formControlName="potentialScore">
+            <input type="number" placeholder="Potential Score" formControlName="potentialScore">
 
           </div>
 
-          <div
-            *ngIf="f['potentialScore'].touched && f['potentialScore'].invalid">
+          <div *ngIf="f['potentialScore'].touched && f['potentialScore'].invalid">
 
-            <p
-              *ngIf="f['potentialScore'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['potentialScore'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Potential Score is required
 
@@ -504,8 +423,7 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="FileText">
+            <lucide-icon [img]="FileText">
             </lucide-icon>
 
             <select formControlName="prescriptionType">
@@ -522,12 +440,9 @@
 
           </div>
 
-          <div
-            *ngIf="f['prescriptionType'].touched && f['prescriptionType'].invalid">
+          <div *ngIf="f['prescriptionType'].touched && f['prescriptionType'].invalid">
 
-            <p
-              *ngIf="f['prescriptionType'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['prescriptionType'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Prescription Type is required
 
@@ -560,12 +475,9 @@
 
           </div>
 
-          <div
-            *ngIf="f['doctorBehaviour'].touched && f['doctorBehaviour'].invalid">
+          <div *ngIf="f['doctorBehaviour'].touched && f['doctorBehaviour'].invalid">
 
-            <p
-              *ngIf="f['doctorBehaviour'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['doctorBehaviour'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Doctor Behaviour is required
 
@@ -580,21 +492,18 @@
 
           <div class="input-group">
 
-            <lucide-icon
-              [img]="UserCheck">
+            <lucide-icon [img]="UserCheck">
             </lucide-icon>
 
             <select formControlName="assignedMr">
 
               <option value="">
-                Assign MR
+                Assign AM
               </option>
 
-              <option
-                *ngFor="let mr of mrList"
-                [value]="mr.id">
+              <option *ngFor="let AM of AMList" [value]="AM.id">
 
-                {{mr.name}}
+                {{AM.name}}
 
               </option>
 
@@ -602,12 +511,9 @@
 
           </div>
 
-          <div
-            *ngIf="f['assignedMr'].touched && f['assignedMr'].invalid">
+          <div *ngIf="f['assignedMr'].touched && f['assignedMr'].invalid">
 
-            <p
-              *ngIf="f['assignedMr'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['assignedMr'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Assign MR is required
 
@@ -629,8 +535,7 @@
 
       <h2 class="section-title flex items-center gap-2 text-lg font-semibold">
 
-        <lucide-icon
-          [img]="CalendarCheck">
+        <lucide-icon [img]="CalendarCheck">
         </lucide-icon>
 
         Visit Tracking
@@ -642,22 +547,21 @@
         <!-- Last Visit -->
         <div>
 
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Last Visit Date
+          </label>
+
           <div class="input-group">
 
             <lucide-icon [img]="Calendar"></lucide-icon>
 
-            <input
-              type="date"
-              formControlName="lastVisit">
+            <input type="date" formControlName="lastVisit">
 
           </div>
 
-          <div
-            *ngIf="f['lastVisit'].touched && f['lastVisit'].invalid">
+          <div *ngIf="f['lastVisit'].touched && f['lastVisit'].invalid">
 
-            <p
-              *ngIf="f['lastVisit'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['lastVisit'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Last Visit is required
 
@@ -670,24 +574,22 @@
         <!-- Next Visit -->
         <div>
 
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Next Visit Date
+          </label>
+
           <div class="input-group">
 
-            <lucide-icon
-              [img]="CalendarCheck">
+            <lucide-icon [img]="CalendarCheck">
             </lucide-icon>
 
-            <input
-              type="date"
-              formControlName="nextVisit">
+            <input type="date" formControlName="nextVisit">
 
           </div>
 
-          <div
-            *ngIf="f['nextVisit'].touched && f['nextVisit'].invalid">
+          <div *ngIf="f['nextVisit'].touched && f['nextVisit'].invalid">
 
-            <p
-              *ngIf="f['nextVisit'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['nextVisit'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Next Visit is required
 
@@ -707,17 +609,13 @@
 
     <div class="flex justify-end gap-4">
 
-      <button
-        type="button"
-        routerLink="/doctors/list"
-        class="bg-gray-400 text-white px-4 py-2 rounded-xl">
+      <button type="button" routerLink="/doctors/list" class="bg-gray-400 text-white px-4 py-2 rounded-xl">
 
         Cancel
 
       </button>
 
-      <button
-        type="submit"
+      <button type="submit"
         class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl flex items-center gap-2">
 
         <lucide-icon [img]="Save"></lucide-icon>

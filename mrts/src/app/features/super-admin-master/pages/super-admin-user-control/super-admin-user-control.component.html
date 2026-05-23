@@ -19,6 +19,7 @@
 
   </div>
 
+  <!-- FORM -->
   <form class="space-y-6" (ngSubmit)="saveCompany()">
 
     <!-- 🏢 Company Information -->
@@ -32,39 +33,45 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
 
         <!-- Company Name -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Building2" class="text-gray-500 mr-2"></lucide-icon>
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="Building2" class="text-gray-500 mr-2"></lucide-icon>
 
-          <input
-            type="text"
-            placeholder="Company Name"
-            [(ngModel)]="company.companyName"
-            name="companyName"
-            class="bg-transparent outline-none w-full">
+            <input
+              type="text"
+              placeholder="Company Name"
+              [(ngModel)]="company.companyName"
+              name="companyName"
+              class="bg-transparent outline-none w-full">
+          </div>
         </div>
 
         <!-- GST -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="FileText" class="text-gray-500 mr-2"></lucide-icon>
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="FileText" class="text-gray-500 mr-2"></lucide-icon>
 
-          <input
-            type="text"
-            placeholder="GST Number"
-            [(ngModel)]="company.gstNumber"
-            name="gstNumber"
-            class="bg-transparent outline-none w-full">
+            <input
+              type="text"
+              placeholder="GST Number"
+              [(ngModel)]="company.gstNumber"
+              name="gstNumber"
+              class="bg-transparent outline-none w-full">
+          </div>
         </div>
 
         <!-- License -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="BadgeCheck" class="text-gray-500 mr-2"></lucide-icon>
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="BadgeCheck" class="text-gray-500 mr-2"></lucide-icon>
 
-          <input
-            type="text"
-            placeholder="License Number"
-            [(ngModel)]="company.licenseNumber"
-            name="licenseNumber"
-            class="bg-transparent outline-none w-full">
+            <input
+              type="text"
+              placeholder="License Number"
+              [(ngModel)]="company.licenseNo"
+              name="licenseNo"
+              class="bg-transparent outline-none w-full">
+          </div>
         </div>
 
       </div>
@@ -82,39 +89,78 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
 
         <!-- Admin Name -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="User" class="text-gray-500 mr-2"></lucide-icon>
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="User" class="text-gray-500 mr-2"></lucide-icon>
 
-          <input
-            type="text"
-            placeholder="Admin Name"
-            [(ngModel)]="company.adminName"
-            name="adminName"
-            class="bg-transparent outline-none w-full">
+            <input
+              type="text"
+              placeholder="Admin Name"
+              [(ngModel)]="company.adminName"
+              name="adminName"
+              class="bg-transparent outline-none w-full">
+          </div>
         </div>
 
-        <!-- Email -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Mail" class="text-gray-500 mr-2"></lucide-icon>
+        <!-- Agency Email -->
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="Mail" class="text-gray-500 mr-2"></lucide-icon>
 
-          <input
-            type="email"
-            placeholder="Admin Email"
-            [(ngModel)]="company.email"
-            name="email"
-            class="bg-transparent outline-none w-full">
+            <input
+              type="email"
+              placeholder="Agency Email"
+              [(ngModel)]="company.agencyEmail"
+              name="agencyEmail"
+              class="bg-transparent outline-none w-full">
+          </div>
         </div>
 
-        <!-- Mobile -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Phone" class="text-gray-500 mr-2"></lucide-icon>
+        <!-- Agency Phone -->
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="Phone" class="text-gray-500 mr-2"></lucide-icon>
 
-          <input
-            type="text"
-            placeholder="Mobile Number"
-            [(ngModel)]="company.mobile"
-            name="mobile"
-            class="bg-transparent outline-none w-full">
+            <input
+              type="text"
+              placeholder="Agency Phone"
+              [(ngModel)]="company.agencyPhone"
+              name="agencyPhone"
+              class="bg-transparent outline-none w-full">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Admin Email + Mobile -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+
+        <!-- Admin Email -->
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="Mail" class="text-gray-500 mr-2"></lucide-icon>
+
+            <input
+              type="email"
+              placeholder="Admin Email"
+              [(ngModel)]="company.adminEmail"
+              name="adminEmail"
+              class="bg-transparent outline-none w-full">
+          </div>
+        </div>
+
+        <!-- Admin Mobile -->
+        <div>
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+            <lucide-icon [img]="Phone" class="text-gray-500 mr-2"></lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Admin Mobile"
+              [(ngModel)]="company.adminMobile"
+              name="adminMobile"
+              class="bg-transparent outline-none w-full">
+          </div>
         </div>
 
       </div>
@@ -132,159 +178,69 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
 
         <!-- Address -->
-        <div class="md:col-span-2 flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="MapPin" class="text-gray-500 mr-2"></lucide-icon>
+        <div class="md:col-span-2">
 
-          <input
-            type="text"
-            placeholder="Company Address"
-            [(ngModel)]="company.address"
-            name="address"
-            class="bg-transparent outline-none w-full">
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+
+            <lucide-icon [img]="MapPin" class="text-gray-500 mr-2"></lucide-icon>
+
+            <input
+              type="text"
+              placeholder="Company Address"
+              [(ngModel)]="company.address"
+              name="address"
+              class="bg-transparent outline-none w-full">
+
+          </div>
+
         </div>
 
         <!-- City -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Building" class="text-gray-500 mr-2"></lucide-icon>
+        <div>
 
-          <input
-            type="text"
-            placeholder="City"
-            [(ngModel)]="company.city"
-            name="city"
-            class="bg-transparent outline-none w-full">
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+
+            <lucide-icon [img]="Building" class="text-gray-500 mr-2"></lucide-icon>
+
+            <input
+              type="text"
+              placeholder="City"
+              [(ngModel)]="company.city"
+              name="city"
+              class="bg-transparent outline-none w-full">
+
+          </div>
+
         </div>
 
         <!-- State -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Globe" class="text-gray-500 mr-2"></lucide-icon>
+        <div>
 
-          <input
-            type="text"
-            placeholder="State"
-            [(ngModel)]="company.state"
-            name="state"
-            class="bg-transparent outline-none w-full">
+          <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
+
+            <lucide-icon [img]="Globe" class="text-gray-500 mr-2"></lucide-icon>
+
+            <input
+              type="text"
+              placeholder="State"
+              [(ngModel)]="company.state"
+              name="state"
+              class="bg-transparent outline-none w-full">
+
+          </div>
+
         </div>
 
       </div>
 
     </div>
 
-    <!-- 💳 Subscription -->
-    <div class="bg-white rounded-2xl shadow p-6">
-
-      <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700">
-        <lucide-icon [img]="CreditCard"></lucide-icon>
-        Subscription Details
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-
-        <!-- Plan -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Layers" class="text-gray-500 mr-2"></lucide-icon>
-
-          <select
-            [(ngModel)]="company.plan"
-            name="plan"
-            class="bg-transparent outline-none w-full">
-
-            <option value="">Select Plan</option>
-            <option value="Basic">Basic</option>
-            <option value="Standard">Standard</option>
-            <option value="Premium">Premium</option>
-
-          </select>
-        </div>
-
-        <!-- Start Date -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Calendar" class="text-gray-500 mr-2"></lucide-icon>
-
-          <input
-            type="date"
-            [(ngModel)]="company.startDate"
-            name="startDate"
-            class="bg-transparent outline-none w-full">
-        </div>
-
-        <!-- Expiry Date -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="CalendarCheck" class="text-gray-500 mr-2"></lucide-icon>
-
-          <input
-            type="date"
-            [(ngModel)]="company.expiryDate"
-            name="expiryDate"
-            class="bg-transparent outline-none w-full">
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- 👥 Employee Details -->
-    <div class="bg-white rounded-2xl shadow p-6">
-
-      <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700">
-        <lucide-icon [img]="Users"></lucide-icon>
-        Employee Configuration
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-
-        <!-- Employees -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Users" class="text-gray-500 mr-2"></lucide-icon>
-
-          <input
-            type="number"
-            placeholder="Total Employees"
-            [(ngModel)]="company.totalEmployees"
-            name="totalEmployees"
-            class="bg-transparent outline-none w-full">
-        </div>
-
-        <!-- Active Users -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="Activity" class="text-gray-500 mr-2"></lucide-icon>
-
-          <input
-            type="number"
-            placeholder="Active Users"
-            [(ngModel)]="company.activeUsers"
-            name="activeUsers"
-            class="bg-transparent outline-none w-full">
-        </div>
-
-        <!-- Status -->
-        <div class="flex items-center border rounded-xl px-3 py-2 bg-gray-50">
-          <lucide-icon [img]="BadgeCheck" class="text-gray-500 mr-2"></lucide-icon>
-
-          <select
-            [(ngModel)]="company.status"
-            name="status"
-            class="bg-transparent outline-none w-full">
-
-            <option value="">Select Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="expired">Expired</option>
-
-          </select>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Buttons -->
+    <!-- 🔘 Buttons -->
     <div class="flex justify-end gap-4">
 
       <button
         type="button"
-        routerLink="/super-admin/dashboard"
+        routerLink="/super-admin-master/super-admin-dashboard"
         class="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-xl">
 
         Cancel
@@ -293,10 +249,12 @@
 
       <button
         type="submit"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-xl flex items-center gap-2">
+        [disabled]="isSaving"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-xl flex items-center gap-2 disabled:opacity-50">
 
         <lucide-icon [img]="Save"></lucide-icon>
-        Save Company
+
+        {{ isSaving ? 'Saving...' : 'Save Company' }}
 
       </button>
 

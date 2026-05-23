@@ -89,15 +89,11 @@ export class DoctorsListComponent implements OnInit {
   // 🔷 MR LIST
   // =====================================================
 
-  mrList = [
+  AMList = [
     {
-      id: 1,
+      id: 5,
       name: 'Rahul Sharma'
     },
-    {
-      id: 2,
-      name: 'Amit Das'
-    }
   ];
 
   constructor(
@@ -181,7 +177,7 @@ export class DoctorsListComponent implements OnInit {
         Validators.required
       ],
 
-      assignedMr: [
+      assignedAM: [
         '',
         Validators.required
       ],

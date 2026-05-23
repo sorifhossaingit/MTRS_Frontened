@@ -112,6 +112,15 @@ const routes: Routes = [
         data: { roles: ['Superadmin'] }
       },
 
+      {
+        path: 'area-manager',
+        loadChildren: () =>
+          import('./features/area-manager/area-manager.module')
+            .then(m => m.AreaManagerModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['Admin'] }
+      },
+
 
     ]
   },

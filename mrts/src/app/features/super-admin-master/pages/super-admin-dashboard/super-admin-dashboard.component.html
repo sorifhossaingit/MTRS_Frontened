@@ -14,8 +14,7 @@
       </p>
     </div>
 
-    <button
-      routerLink="/super-admin-master/user-control"
+    <button routerLink="/super-admin-master/user-control"
       class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl flex items-center gap-2">
 
       <lucide-icon [img]="UserPlus"></lucide-icon>
@@ -37,9 +36,7 @@
         </h2>
       </div>
 
-      <lucide-icon
-        [img]="Building2"
-        class="text-indigo-600">
+      <lucide-icon [img]="Building2" class="text-indigo-600">
       </lucide-icon>
     </div>
 
@@ -52,9 +49,7 @@
         </h2>
       </div>
 
-      <lucide-icon
-        [img]="BadgeCheck"
-        class="text-green-500">
+      <lucide-icon [img]="BadgeCheck" class="text-green-500">
       </lucide-icon>
     </div>
 
@@ -67,9 +62,7 @@
         </h2>
       </div>
 
-      <lucide-icon
-        [img]="AlertTriangle"
-        class="text-red-500">
+      <lucide-icon [img]="AlertTriangle" class="text-red-500">
       </lucide-icon>
     </div>
 
@@ -82,9 +75,7 @@
         </h2>
       </div>
 
-      <lucide-icon
-        [img]="Users"
-        class="text-blue-500">
+      <lucide-icon [img]="Users" class="text-blue-500">
       </lucide-icon>
     </div>
 
@@ -94,18 +85,11 @@
   <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
 
     <!-- Search -->
-    <input
-      type="text"
-      [(ngModel)]="searchText"
-      (input)="applyFilter()"
-      placeholder="Search company..."
+    <input type="text" [(ngModel)]="searchText" (input)="applyFilter()" placeholder="Search company..."
       class="border rounded-xl px-4 py-2 w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
 
     <!-- Status Filter -->
-    <select
-      [(ngModel)]="filterStatus"
-      (change)="applyFilter()"
-      class="border rounded-xl px-4 py-2">
+    <select [(ngModel)]="filterStatus" (change)="applyFilter()" class="border rounded-xl px-4 py-2">
 
       <option value="">All Status</option>
 
@@ -125,18 +109,14 @@
   <div class="bg-white rounded-2xl shadow overflow-hidden">
 
     <!-- Loader -->
-    <div
-      *ngIf="loading"
-      class="p-10 text-center text-gray-500">
+    <div *ngIf="loading" class="p-10 text-center text-gray-500">
 
       Loading companies...
 
     </div>
 
     <!-- Table -->
-    <div
-      *ngIf="!loading"
-      class="overflow-x-auto">
+    <div *ngIf="!loading" class="overflow-x-auto">
 
       <table class="w-full text-left">
 
@@ -153,9 +133,9 @@
 
             <th class="p-4">Phone</th>
 
-            <th class="p-4">Employees</th>
+            <th class="p-4">Address</th>
 
-            <th class="p-4">Active Users</th>
+            <th class="p-4">LicenseNo.</th>
 
             <th class="p-4">Status</th>
 
@@ -168,9 +148,7 @@
         <!-- Body -->
         <tbody>
 
-          <tr
-            *ngFor="let company of companies"
-            class="border-t hover:bg-gray-50 transition">
+          <tr *ngFor="let company of companies" class="border-t hover:bg-gray-50 transition">
 
             <!-- Company -->
             <td class="p-4">
@@ -197,25 +175,23 @@
 
             <!-- Phone -->
             <td class="p-4">
-              {{ company.phone }}
+              {{ company.agencyPhone }}
             </td>
 
             <!-- Employees -->
             <td class="p-4">
-              {{ company.totalEmployees }}
+              {{ company.address }}
             </td>
 
             <!-- Active Users -->
             <td class="p-4">
-              {{ company.totalActiveUsers }}
+              {{ company.licenseNo }}
             </td>
 
             <!-- Status -->
             <td class="p-4">
 
-              <span
-                class="px-3 py-1 rounded-full text-sm"
-                [ngClass]="{
+              <span class="px-3 py-1 rounded-full text-sm" [ngClass]="{
                   'bg-green-100 text-green-600': company.isActive,
                   'bg-red-100 text-red-600': !company.isActive
                 }">
@@ -230,9 +206,7 @@
             <td class="p-4 text-center">
               <div class="flex justify-center gap-3">
                 <!-- Edit -->
-                <lucide-icon
-                  [img]="Pencil"
-                  class="cursor-pointer text-green-600 hover:scale-110 transition"
+                <lucide-icon [img]="Pencil" class="cursor-pointer text-green-600 hover:scale-110 transition"
                   (click)="editCompany(company)">
                 </lucide-icon>
               </div>
@@ -244,9 +218,7 @@
           <!-- No Data -->
           <tr *ngIf="companies.length === 0">
 
-            <td
-              colspan="8"
-              class="text-center py-10 text-gray-500">
+            <td colspan="8" class="text-center py-10 text-gray-500">
 
               No companies found
 
@@ -261,8 +233,7 @@
     </div>
 
     <!-- Pagination -->
-    <div
-      class="flex flex-col md:flex-row justify-between items-center gap-4 px-6 py-4 border-t bg-gray-50">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 px-6 py-4 border-t bg-gray-50">
 
       <!-- Left -->
       <div class="text-sm text-gray-500">
@@ -277,7 +248,7 @@
 
         <span class="font-semibold">
           {{
-            ((currentPage - 1) * pageSize) + companies.length
+          ((currentPage - 1) * pageSize) + companies.length
           }}
         </span>
 
@@ -295,9 +266,7 @@
       <div class="flex items-center gap-2">
 
         <!-- Previous -->
-        <button
-          (click)="changePage(currentPage - 1)"
-          [disabled]="currentPage === 1"
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
           class="px-4 py-2 rounded-lg border bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
 
           Previous
@@ -305,10 +274,7 @@
         </button>
 
         <!-- Page Numbers -->
-        <button
-          *ngFor="let page of pages"
-          (click)="changePage(page)"
-          class="w-10 h-10 rounded-lg border transition"
+        <button *ngFor="let page of pages" (click)="changePage(page)" class="w-10 h-10 rounded-lg border transition"
           [ngClass]="{
             'bg-indigo-600 text-white border-indigo-600': currentPage === page,
             'bg-white hover:bg-gray-100': currentPage !== page
@@ -319,9 +285,7 @@
         </button>
 
         <!-- Next -->
-        <button
-          (click)="changePage(currentPage + 1)"
-          [disabled]="currentPage === totalPages"
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"
           class="px-4 py-2 rounded-lg border bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
 
           Next
@@ -338,16 +302,10 @@
 
 
 
-<!-- modal -->
+<!-- EDIT MODAL -->
+<div *ngIf="editModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
-<!-- Edit Modal -->
-<div
-  *ngIf="editModal"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-
-  <!-- Modal -->
-  <div
-    class="bg-white rounded-2xl w-full max-w-4xl shadow-2xl max-h-[95vh] overflow-y-auto">
+  <div class="bg-white rounded-2xl w-full max-w-5xl shadow-2xl max-h-[95vh] overflow-y-auto">
 
     <!-- Header -->
     <div class="flex justify-between items-center border-b px-6 py-4">
@@ -356,9 +314,7 @@
         Update Company
       </h2>
 
-      <button
-        (click)="closeModal()"
-        class="text-gray-500 hover:text-red-500 text-2xl">
+      <button (click)="closeModal()" class="text-gray-500 hover:text-red-500 text-2xl">
 
         ×
 
@@ -367,10 +323,7 @@
     </div>
 
     <!-- Form -->
-    <form
-      [formGroup]="editForm"
-      (ngSubmit)="updateAgency()"
-      class="p-6 space-y-6">
+    <form [formGroup]="editForm" (ngSubmit)="updateAgency()" class="p-6 space-y-6">
 
       <!-- Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -379,41 +332,60 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            Company Name
+            Company Name *
           </label>
 
-          <input
-            type="text"
-            formControlName="name"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="companyName" class="w-full border rounded-xl px-4 py-3" />
+
+          <p *ngIf="editForm.get('companyName')?.touched &&
+                   editForm.get('companyName')?.invalid" class="text-red-500 text-sm mt-1">
+
+            Company name is required
+
+          </p>
 
         </div>
 
-        <!-- Email -->
+        <!-- Agency Email -->
         <div>
 
           <label class="block mb-2 font-medium">
-            Email
+            Agency Email *
           </label>
 
-          <input
-            type="email"
-            formControlName="email"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="email" formControlName="agencyEmail" class="w-full border rounded-xl px-4 py-3" />
+
+          <p *ngIf="editForm.get('agencyEmail')?.touched &&
+                   editForm.get('agencyEmail')?.errors?.['required']" class="text-red-500 text-sm mt-1">
+
+            Agency email is required
+
+          </p>
+
+          <p *ngIf="editForm.get('agencyEmail')?.touched &&
+                   editForm.get('agencyEmail')?.errors?.['email']" class="text-red-500 text-sm mt-1">
+
+            Invalid email format
+
+          </p>
 
         </div>
 
-        <!-- Phone -->
+        <!-- Agency Phone -->
         <div>
 
           <label class="block mb-2 font-medium">
-            Phone
+            Agency Phone *
           </label>
 
-          <input
-            type="text"
-            formControlName="phone"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="agencyPhone" class="w-full border rounded-xl px-4 py-3" />
+
+          <p *ngIf="editForm.get('agencyPhone')?.touched &&
+                   editForm.get('agencyPhone')?.invalid" class="text-red-500 text-sm mt-1">
+
+            Valid 10 digit phone number required
+
+          </p>
 
         </div>
 
@@ -421,13 +393,10 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            GST Number
+            GST Number *
           </label>
 
-          <input
-            type="text"
-            formControlName="gstNumber"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="gstNumber" class="w-full border rounded-xl px-4 py-3" />
 
         </div>
 
@@ -435,13 +404,10 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            License No
+            License Number *
           </label>
 
-          <input
-            type="text"
-            formControlName="licenseNo"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="licenseNo" class="w-full border rounded-xl px-4 py-3" />
 
         </div>
 
@@ -449,13 +415,10 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            State
+            State *
           </label>
 
-          <input
-            type="text"
-            formControlName="state"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="state" class="w-full border rounded-xl px-4 py-3" />
 
         </div>
 
@@ -463,13 +426,10 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            City
+            City *
           </label>
 
-          <input
-            type="text"
-            formControlName="city"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="city" class="w-full border rounded-xl px-4 py-3" />
 
         </div>
 
@@ -477,13 +437,10 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            Admin Name
+            Admin Name *
           </label>
 
-          <input
-            type="text"
-            formControlName="adminName"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="adminName" class="w-full border rounded-xl px-4 py-3" />
 
         </div>
 
@@ -491,13 +448,10 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            Admin Email
+            Admin Email *
           </label>
 
-          <input
-            type="email"
-            formControlName="adminEmail"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="email" formControlName="adminEmail" class="w-full border rounded-xl px-4 py-3" />
 
         </div>
 
@@ -505,13 +459,21 @@
         <div>
 
           <label class="block mb-2 font-medium">
-            Admin Mobile
+            Admin Mobile *
           </label>
 
-          <input
-            type="text"
-            formControlName="adminMobile"
-            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
+          <input type="text" formControlName="adminMobile" class="w-full border rounded-xl px-4 py-3" />
+
+        </div>
+
+        <!-- Image URL -->
+        <div>
+
+          <label class="block mb-2 font-medium">
+            Image URL
+          </label>
+
+          <input type="text" formControlName="imageUrl" class="w-full border rounded-xl px-4 py-3" />
 
         </div>
 
@@ -521,41 +483,22 @@
       <div>
 
         <label class="block mb-2 font-medium">
-          Address
+          Address *
         </label>
 
-        <textarea
-          rows="3"
-          formControlName="address"
-          class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none">
+        <textarea rows="3" formControlName="address" class="w-full border rounded-xl px-4 py-3">
         </textarea>
 
       </div>
 
-      <!-- Checkboxes -->
-      <div class="flex flex-col md:flex-row gap-5">
+      <!-- Status -->
+      <div>
 
-        <!-- Active -->
         <label class="flex items-center gap-3">
 
-          <input
-            type="checkbox"
-            formControlName="isActive"
-            class="w-5 h-5" />
+          <input type="checkbox" formControlName="isActive" class="w-5 h-5" />
 
           Active Company
-
-        </label>
-
-        <!-- All Users Status -->
-        <label class="flex items-center gap-3">
-
-          <input
-            type="checkbox"
-            formControlName="allUsersStatusUpdate"
-            class="w-5 h-5" />
-
-          Update All Users Status
 
         </label>
 
@@ -564,17 +507,13 @@
       <!-- Footer -->
       <div class="flex justify-end gap-3 pt-5 border-t">
 
-        <button
-          type="button"
-          (click)="closeModal()"
-          class="px-5 py-2 rounded-xl border hover:bg-gray-100">
+        <button type="button" (click)="closeModal()" class="px-5 py-2 rounded-xl border hover:bg-gray-100">
 
           Cancel
 
         </button>
 
-        <button
-          type="submit"
+        <button type="button" (click)="updateAgency()"
           class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">
 
           Update Company
