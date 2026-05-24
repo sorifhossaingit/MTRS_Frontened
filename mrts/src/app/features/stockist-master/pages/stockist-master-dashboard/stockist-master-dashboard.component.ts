@@ -39,24 +39,33 @@ export class StockistMasterDashboardComponent implements OnInit {
   CheckCircle = CheckCircle;
   Wallet = Wallet;
   BadgeIndianRupee = BadgeIndianRupee;
-
+  X = X;
   // =====================================================
   // VARIABLES
   // =====================================================
 
   searchText = '';
+
   filterType = '';
-  filterStatus = '';
+
+  filterStatus: any = '';
 
   stockists: any[] = [];
 
+  areaManagerList: any[] = [];
+
   totalStockists = 0;
+
   activeStockists = 0;
+
   totalOutstanding = 0;
+
   totalCreditLimit = 0;
 
   pageNumber = 1;
+
   pageSize = 10;
+
   totalPages = 0;
 
   showEditModal = false;
@@ -79,7 +88,7 @@ export class StockistMasterDashboardComponent implements OnInit {
   constructor(
     private stockistService: StockistService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   // =====================================================
   // INIT
@@ -90,6 +99,8 @@ export class StockistMasterDashboardComponent implements OnInit {
     this.decodeToken();
 
     this.initializeForm();
+
+    this.getAreaManagers();
 
     this.getStockists();
 
@@ -120,7 +131,10 @@ export class StockistMasterDashboardComponent implements OnInit {
 
       mobile: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]{10}$/)
+        ]
       ],
 
       email: [
@@ -157,7 +171,10 @@ export class StockistMasterDashboardComponent implements OnInit {
 
       region: [''],
 
-      assignedAreaManager: [0],
+      assignedAreaManager: [
+        '',
+        Validators.required
+      ],
 
       coverArea: [''],
 
@@ -191,6 +208,33 @@ export class StockistMasterDashboardComponent implements OnInit {
   }
 
   // =====================================================
+  // GET AREA MANAGER LIST
+  // =====================================================
+
+  getAreaManagers() {
+
+    this.stockistService
+      .getAreamanagerlist(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.areaManagerList =
+            res?.data || res || [];
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
+
+  }
+
+  // =====================================================
   // GET STOCKISTS
   // =====================================================
 
@@ -198,17 +242,17 @@ export class StockistMasterDashboardComponent implements OnInit {
 
     const params = {
 
-      agencyId: this.agencyId,
+      AgencyId: this.agencyId,
 
-      search: this.searchText,
+      Search: this.searchText,
 
-      firmType: this.filterType,
+      FirmType: this.filterType,
 
-      isActive: this.filterStatus,
+      IsActive: this.filterStatus,
 
-      pageNumber: this.pageNumber,
+      PageNumber: this.pageNumber,
 
-      pageSize: this.pageSize
+      PageSize: this.pageSize
 
     };
 
@@ -219,12 +263,10 @@ export class StockistMasterDashboardComponent implements OnInit {
         next: (res: any) => {
 
           this.stockists =
-            res?.data || [];
-
-          // SUMMARY
+            res?.data?.data || [];
 
           this.totalStockists =
-            this.stockists.length;
+            res?.data?.totalRecords || 0;
 
           this.activeStockists =
             this.stockists.filter(
@@ -245,10 +287,10 @@ export class StockistMasterDashboardComponent implements OnInit {
               0
             );
 
-          // PAGINATION
-
-          this.totalPages =
-            res?.totalPages || 0;
+          this.totalPages = Math.ceil(
+            this.totalStockists /
+            this.pageSize
+          );
 
         },
 
@@ -321,7 +363,8 @@ export class StockistMasterDashboardComponent implements OnInit {
 
       firmType: stockist.firmType,
 
-      contactPerson: stockist.contactPerson,
+      contactPerson:
+        stockist.contactPerson,
 
       mobile: stockist.mobile,
 
@@ -345,9 +388,11 @@ export class StockistMasterDashboardComponent implements OnInit {
       assignedAreaManager:
         stockist.assignedAreaManager,
 
-      coverArea: stockist.coverArea,
+      coverArea:
+        stockist.coverArea,
 
-      isActive: stockist.isActive
+      isActive:
+        stockist.isActive
 
     });
 
@@ -388,11 +433,58 @@ export class StockistMasterDashboardComponent implements OnInit {
       stockistId:
         this.selectedStockistId,
 
-      agencyId: this.agencyId,
+      agencyId:
+        Number(this.agencyId),
 
-      updatedBy: this.updatedBy,
+      name:
+        this.stockistForm.value.name,
 
-      ...this.stockistForm.value
+      firmType:
+        this.stockistForm.value.firmType,
+
+      contactPerson:
+        this.stockistForm.value.contactPerson,
+
+      mobile:
+        this.stockistForm.value.mobile,
+
+      email:
+        this.stockistForm.value.email,
+
+      address:
+        this.stockistForm.value.address,
+
+      city:
+        this.stockistForm.value.city,
+
+      state:
+        this.stockistForm.value.state,
+
+      pincode:
+        this.stockistForm.value.pincode,
+
+      gstNo:
+        this.stockistForm.value.gstNo,
+
+      drugLicenseNo:
+        this.stockistForm.value.drugLicenseNo,
+
+      region:
+        this.stockistForm.value.region,
+
+      assignedAreaManager:
+        Number(
+          this.stockistForm.value.assignedAreaManager
+        ),
+
+      coverArea:
+        this.stockistForm.value.coverArea,
+
+      isActive:
+        this.stockistForm.value.isActive,
+
+      updatedBy:
+        this.updatedBy
 
     };
 

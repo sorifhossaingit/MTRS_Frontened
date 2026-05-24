@@ -19,19 +19,24 @@ private apiUrl = environment.apiUrl;
 
   getstockistdetails(params: any) {
     return this.http.get(
-      `${this.apiUrl}/Stockiest/get-stockiestlist`, { params });
+      `${this.apiUrl}/admin/stockiest/get-stockiestlist`, { params });
   }
 
 
   addstockist(data: any) {
-    return this.http.post(`${this.apiUrl}/Stockiest/create-stockiest`, data);
+    return this.http.post(`${this.apiUrl}/admin/stockiest/create-stockiest`, data);
   }
 
 
   updatestockistdetails(data: any) {
-    return this.http.put(`${this.apiUrl}/Stockiest/update-stockeist`, data);
+    return this.http.put(`${this.apiUrl}/admin/stockiest/update-stockeist`, data);
   }
 
+
+  getAreamanagerlist(agencyId: any) {
+    return this.http.get(
+      `${this.apiUrl}/admin/area-manager/dropdown/active-area-managers/${agencyId}`);
+  }
  
 
 }

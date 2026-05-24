@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   Building2,
@@ -29,7 +29,7 @@ import { StockistService } from '../../services/stockist.service';
   templateUrl: './add-stockist.component.html',
   styleUrl: './add-stockist.component.css'
 })
-export class AddStockistComponent {
+export class AddStockistComponent implements OnInit {
 
   // 🔷 Icons
   Building2 = Building2;
@@ -49,14 +49,33 @@ export class AddStockistComponent {
   Layers = Layers;
   CheckCircle = CheckCircle;
   Save = Save;
+// =====================================================
+  // FORM
+  // =====================================================
 
   stockistForm!: FormGroup;
 
-  agencyId: number = 0;
-  userId: number = 0;
-
   submitted = false;
+
   isSaving = false;
+
+  // =====================================================
+  // STORAGE DATA
+  // =====================================================
+
+  agencyId: number = 0;
+
+  createdBy: number = 0;
+
+  // =====================================================
+  // AREA MANAGER LIST
+  // =====================================================
+
+  areaManagerList: any[] = [];
+
+  // =====================================================
+  // CONSTRUCTOR
+  // =====================================================
 
   constructor(
     private fb: FormBuilder,
@@ -64,33 +83,69 @@ export class AddStockistComponent {
     private router: Router
   ) {}
 
+  // =====================================================
+  // INIT
+  // =====================================================
+
   ngOnInit(): void {
 
-    // 🔷 Agency Id
-    this.agencyId = Number(localStorage.getItem('aid'));
+    this.agencyId =
+      Number(localStorage.getItem('aid'));
 
-    // 🔷 Decode Token
-    const token = localStorage.getItem('token');
+    this.decodeToken();
+
+    this.initializeForm();
+
+    this.getAreaManagerList();
+
+  }
+
+  // =====================================================
+  // DECODE TOKEN
+  // =====================================================
+
+  decodeToken() {
+
+    const token =
+      localStorage.getItem('token');
 
     if (token) {
 
-      const decoded: any = jwtDecode(token);
+      const decoded: any =
+        jwtDecode(token);
 
-      this.userId =
+      this.createdBy =
         decoded?.userId ||
         decoded?.UserId ||
         decoded?.id ||
         0;
+
     }
 
-    // 🔷 Form
+  }
+
+  // =====================================================
+  // FORM
+  // =====================================================
+
+  initializeForm() {
+
     this.stockistForm = this.fb.group({
 
-      name: ['', Validators.required],
+      name: [
+        '',
+        Validators.required
+      ],
 
-      firmType: ['', Validators.required],
+      firmType: [
+        '',
+        Validators.required
+      ],
 
-      contactPerson: ['', Validators.required],
+      contactPerson: [
+        '',
+        Validators.required
+      ],
 
       mobile: [
         '',
@@ -108,11 +163,20 @@ export class AddStockistComponent {
         ]
       ],
 
-      address: ['', Validators.required],
+      address: [
+        '',
+        Validators.required
+      ],
 
-      city: ['', Validators.required],
+      city: [
+        '',
+        Validators.required
+      ],
 
-      state: ['', Validators.required],
+      state: [
+        '',
+        Validators.required
+      ],
 
       pincode: [
         '',
@@ -122,25 +186,66 @@ export class AddStockistComponent {
         ]
       ],
 
-      gstNo: ['', Validators.required],
+      gstNo: [
+        '',
+        Validators.required
+      ],
 
-      drugLicenseNo: ['', Validators.required],
+      drugLicenseNo: [
+        '',
+        Validators.required
+      ],
 
-      region: ['', Validators.required],
+      region: [
+        '',
+        Validators.required
+      ],
 
-      assignedAreaManager: ['', Validators.required],
+      assignedAreaManager: [
+        '',
+        Validators.required
+      ],
 
-      coverArea: ['', Validators.required]
+      coverArea: [
+        '',
+        Validators.required
+      ]
+
     });
 
   }
 
-  // 🔷 Getter
-  get f() {
-    return this.stockistForm.controls;
+  // =====================================================
+  // GET AREA MANAGER LIST
+  // =====================================================
+
+  getAreaManagerList() {
+
+    this.stockistService
+      .getAreamanagerlist(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.areaManagerList =
+            res?.data || [];
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
+
   }
 
-  // 🔷 Save Stockist
+  // =====================================================
+  // SAVE STOCKIST
+  // =====================================================
+
   saveStockist() {
 
     this.submitted = true;
@@ -150,6 +255,7 @@ export class AddStockistComponent {
       this.stockistForm.markAllAsTouched();
 
       return;
+
     }
 
     this.isSaving = true;
@@ -158,61 +264,97 @@ export class AddStockistComponent {
 
       agencyId: this.agencyId,
 
-      name: this.stockistForm.value.name,
+      name:
+        this.stockistForm.value.name,
 
-      firmType: this.stockistForm.value.firmType,
+      firmType:
+        this.stockistForm.value.firmType,
 
-      contactPerson: this.stockistForm.value.contactPerson,
+      contactPerson:
+        this.stockistForm.value.contactPerson,
 
-      mobile: this.stockistForm.value.mobile,
+      mobile:
+        this.stockistForm.value.mobile,
 
-      email: this.stockistForm.value.email,
+      email:
+        this.stockistForm.value.email,
 
-      address: this.stockistForm.value.address,
+      address:
+        this.stockistForm.value.address,
 
-      city: this.stockistForm.value.city,
+      city:
+        this.stockistForm.value.city,
 
-      state: this.stockistForm.value.state,
+      state:
+        this.stockistForm.value.state,
 
-      pincode: this.stockistForm.value.pincode,
+      pincode:
+        this.stockistForm.value.pincode,
 
-      gstNo: this.stockistForm.value.gstNo,
+      gstNo:
+        this.stockistForm.value.gstNo,
 
-      drugLicenseNo: this.stockistForm.value.drugLicenseNo,
+      drugLicenseNo:
+        this.stockistForm.value.drugLicenseNo,
 
-      region: this.stockistForm.value.region,
+      region:
+        this.stockistForm.value.region,
 
-      assignedAreaManager: Number(
-        this.stockistForm.value.assignedAreaManager
-      ),
+      assignedAreaManager:
+        Number(
+          this.stockistForm.value
+            .assignedAreaManager
+        ),
 
-      coverArea: this.stockistForm.value.coverArea,
+      coverArea:
+        this.stockistForm.value.coverArea,
 
-      createdBy: this.userId
+      createdBy: this.createdBy
+
     };
 
-    this.stockistService.addstockist(payload).subscribe({
+    this.stockistService
+      .addstockist(payload)
+      .subscribe({
 
-      next: (res: any) => {
+        next: (res: any) => {
 
-        this.isSaving = false;
+          this.isSaving = false;
 
-        alert('Stockist added successfully');
+          alert(
+            'Stockist Added Successfully'
+          );
 
-        this.router.navigate([
-          '/stockist-master/stockist-master-dashboard'
-        ]);
-      },
+          this.router.navigate([
+            '/stockist-master/stockist-master-dashboard'
+          ]);
 
-      error: (err: any) => {
+        },
 
-        this.isSaving = false;
+        error: (err: any) => {
 
-        console.error(err);
+          this.isSaving = false;
 
-        alert('Failed to add stockist');
-      }
-    });
+          console.log(err);
+
+          alert(
+            'Failed To Add Stockist'
+          );
+
+        }
+
+      });
+
+  }
+
+  // =====================================================
+  // FORM CONTROLS
+  // =====================================================
+
+  get f() {
+
+    return this.stockistForm.controls;
+
   }
 
 }

@@ -10,8 +10,7 @@
         Add Stockist
       </h1>
 
-      <button
-        routerLink="/stockist-master/stockist-master-dashboard"
+      <button routerLink="/stockist-master/stockist-master-dashboard"
         class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2">
 
         <lucide-icon [img]="ArrowLeft"></lucide-icon>
@@ -23,10 +22,7 @@
     </div>
 
     <!-- 🔷 FORM -->
-    <form
-      [formGroup]="stockistForm"
-      (ngSubmit)="saveStockist()"
-      class="space-y-8">
+    <form [formGroup]="stockistForm" (ngSubmit)="saveStockist()" class="space-y-8">
 
       <!-- 🏢 Basic Info -->
       <div class="bg-white p-6 rounded-2xl shadow">
@@ -48,15 +44,10 @@
               Stockist Name <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="name"
-              placeholder="Enter stockist name"
+            <input type="text" formControlName="name" placeholder="Enter stockist name"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['name'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['name'].errors" class="text-red-500 text-sm mt-1">
 
               Stockist name is required
 
@@ -71,9 +62,7 @@
               Firm Type <span class="text-red-500">*</span>
             </label>
 
-            <select
-              formControlName="firmType"
-              class="w-full border rounded-xl px-4 h-12">
+            <select formControlName="firmType" class="w-full border rounded-xl px-4 h-12">
 
               <option value="">Select firm type</option>
               <option value="Distributor">Distributor</option>
@@ -81,9 +70,7 @@
 
             </select>
 
-            <p
-              *ngIf="submitted && f['firmType'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['firmType'].errors" class="text-red-500 text-sm mt-1">
 
               Firm type is required
 
@@ -98,15 +85,10 @@
               Contact Person <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="contactPerson"
-              placeholder="Enter contact person"
+            <input type="text" formControlName="contactPerson" placeholder="Enter contact person"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['contactPerson'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['contactPerson'].errors" class="text-red-500 text-sm mt-1">
 
               Contact person is required
 
@@ -138,23 +120,16 @@
               Mobile Number <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="mobile"
-              placeholder="Enter mobile number"
+            <input type="text" formControlName="mobile" placeholder="Enter mobile number"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['mobile'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['mobile'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Mobile number is required
 
             </p>
 
-            <p
-              *ngIf="submitted && f['mobile'].errors?.['pattern']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['mobile'].errors?.['pattern']" class="text-red-500 text-sm mt-1">
 
               Enter valid 10 digit mobile number
 
@@ -169,23 +144,16 @@
               Email <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="email"
-              formControlName="email"
-              placeholder="Enter email"
+            <input type="email" formControlName="email" placeholder="Enter email"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['email'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['email'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Email is required
 
             </p>
 
-            <p
-              *ngIf="submitted && f['email'].errors?.['email']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['email'].errors?.['email']" class="text-red-500 text-sm mt-1">
 
               Enter valid email
 
@@ -217,15 +185,10 @@
               Address <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="address"
-              placeholder="Enter full address"
+            <input type="text" formControlName="address" placeholder="Enter full address"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['address'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['address'].errors" class="text-red-500 text-sm mt-1">
 
               Address is required
 
@@ -240,15 +203,10 @@
               City <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="city"
-              placeholder="Enter city"
+            <input type="text" formControlName="city" placeholder="Enter city"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['city'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['city'].errors" class="text-red-500 text-sm mt-1">
 
               City is required
 
@@ -263,15 +221,10 @@
               State <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="state"
-              placeholder="Enter state"
+            <input type="text" formControlName="state" placeholder="Enter state"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['state'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['state'].errors" class="text-red-500 text-sm mt-1">
 
               State is required
 
@@ -286,23 +239,16 @@
               Pincode <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="pincode"
-              placeholder="Enter pincode"
+            <input type="text" formControlName="pincode" placeholder="Enter pincode"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['pincode'].errors?.['required']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['pincode'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
               Pincode is required
 
             </p>
 
-            <p
-              *ngIf="submitted && f['pincode'].errors?.['pattern']"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['pincode'].errors?.['pattern']" class="text-red-500 text-sm mt-1">
 
               Enter valid 6 digit pincode
 
@@ -334,15 +280,10 @@
               GST Number <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="gstNo"
-              placeholder="Enter GST number"
+            <input type="text" formControlName="gstNo" placeholder="Enter GST number"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['gstNo'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['gstNo'].errors" class="text-red-500 text-sm mt-1">
 
               GST number is required
 
@@ -357,15 +298,10 @@
               Drug License Number <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="drugLicenseNo"
-              placeholder="Enter drug license number"
+            <input type="text" formControlName="drugLicenseNo" placeholder="Enter drug license number"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['drugLicenseNo'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['drugLicenseNo'].errors" class="text-red-500 text-sm mt-1">
 
               Drug license number is required
 
@@ -397,15 +333,10 @@
               Region <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="region"
-              placeholder="Enter region"
+            <input type="text" formControlName="region" placeholder="Enter region"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['region'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['region'].errors" class="text-red-500 text-sm mt-1">
 
               Region is required
 
@@ -413,22 +344,31 @@
 
           </div>
 
-          <!-- Area Manager -->
+         
+          <!-- AREA MANAGER -->
+
           <div>
 
             <label class="block text-sm font-medium mb-2">
-              Assigned Area Manager Id <span class="text-red-500">*</span>
+              Assigned Area Manager
+              <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="number"
-              formControlName="assignedAreaManager"
-              placeholder="Enter AM Id"
-              class="w-full border rounded-xl px-4 h-12">
+            <select formControlName="assignedAreaManager" class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['assignedAreaManager'].errors"
-              class="text-red-500 text-sm mt-1">
+              <option value="">
+                Select Area Manager
+              </option>
+
+              <option *ngFor="let manager of areaManagerList" [value]="manager.areaManagerId">
+
+                {{ manager.name }}
+
+              </option>
+
+            </select>
+
+            <p *ngIf="submitted && f['assignedAreaManager'].errors" class="text-red-500 text-sm mt-1">
 
               Assigned area manager is required
 
@@ -443,15 +383,10 @@
               Cover Area <span class="text-red-500">*</span>
             </label>
 
-            <input
-              type="text"
-              formControlName="coverArea"
-              placeholder="Enter cover area"
+            <input type="text" formControlName="coverArea" placeholder="Enter cover area"
               class="w-full border rounded-xl px-4 h-12">
 
-            <p
-              *ngIf="submitted && f['coverArea'].errors"
-              class="text-red-500 text-sm mt-1">
+            <p *ngIf="submitted && f['coverArea'].errors" class="text-red-500 text-sm mt-1">
 
               Cover area is required
 
@@ -466,18 +401,14 @@
       <!-- 🔘 Actions -->
       <div class="flex flex-col md:flex-row justify-end gap-4 pt-4">
 
-        <button
-          type="button"
-          routerLink="/stockist-master/stockist-master-dashboard"
+        <button type="button" routerLink="/stockist-master/stockist-master-dashboard"
           class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2.5 rounded-xl">
 
           Cancel
 
         </button>
 
-        <button
-          type="submit"
-          [disabled]="isSaving"
+        <button type="submit" [disabled]="isSaving"
           class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2">
 
           <lucide-icon [img]="Save"></lucide-icon>
