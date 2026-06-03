@@ -23,4 +23,21 @@ export class ProductService {
    updateproductdetails(data: any) {
     return this.http.put(`${this.apiUrl}/admin/product/update`, data);
   }
+
+// Stockist Order Details APIs //
+
+  getstockistorderdetails(params: any) {
+    return this.http.get(
+      `${this.apiUrl}/admin/stockiestorder/stockiest-order-list`, { params });
+  }
+
+  getstockistorderpreview(orderid: any) {
+    return this.http.get(
+      `${this.apiUrl}/admin/stockiestorder/stockiest-order-details/${orderid}`);
+  }
+
+  updateorderstatus(data: any) {
+    return this.http.put(`${this.apiUrl}/admin/stockiestorder/update-status`, data);
+  }
+
 }
