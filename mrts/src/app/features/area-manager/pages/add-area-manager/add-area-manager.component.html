@@ -1,1 +1,332 @@
-<p>add-area-manager works!</p>
+<div class="p-4 md:p-6 bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+
+    <h1 class="text-2xl font-bold flex items-center gap-2">
+      <lucide-icon [img]="UserPlus"></lucide-icon>
+      Add Area Manager
+    </h1>
+
+    <button
+      routerLink="/area-manager/dashboard"
+      type="button"
+      class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-xl flex items-center gap-2">
+
+      <lucide-icon [img]="ArrowLeft"></lucide-icon>
+      Back
+
+    </button>
+
+  </div>
+
+  <form
+    [formGroup]="areaManagerForm"
+    (ngSubmit)="saveAreaManager()"
+    class="space-y-6">
+
+    <!-- PERSONAL INFORMATION -->
+    <div class="bg-white rounded-2xl shadow p-6">
+
+      <h2 class="text-lg font-semibold mb-5">
+        Personal Information
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <!-- Name -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Full Name *
+          </label>
+
+          <input
+            type="text"
+            formControlName="name"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['name'].hasError('required')"
+            class="error">
+            Name is required
+          </p>
+
+          <p
+            *ngIf="submitted && f['name'].hasError('minlength')"
+            class="error">
+            Minimum 3 characters required
+          </p>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Email *
+          </label>
+
+          <input
+            type="email"
+            formControlName="email"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['email'].hasError('required')"
+            class="error">
+            Email is required
+          </p>
+
+          <p
+            *ngIf="submitted && f['email'].hasError('email')"
+            class="error">
+            Invalid email format
+          </p>
+        </div>
+
+        <!-- Mobile -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Mobile Number *
+          </label>
+
+          <input
+            type="text"
+            formControlName="mobile"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['mobile'].hasError('required')"
+            class="error">
+            Mobile number is required
+          </p>
+
+          <p
+            *ngIf="submitted && f['mobile'].hasError('pattern')"
+            class="error">
+            Enter valid 10 digit mobile number
+          </p>
+        </div>
+
+        <!-- Gender -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Gender *
+          </label>
+
+          <select
+            formControlName="gender"
+            class="input">
+
+            <option value="">
+              Select Gender
+            </option>
+
+            <option value="Male">
+              Male
+            </option>
+
+            <option value="Female">
+              Female
+            </option>
+
+            <option value="Other">
+              Other
+            </option>
+
+          </select>
+
+          <p
+            *ngIf="submitted && f['gender'].hasError('required')"
+            class="error">
+            Gender is required
+          </p>
+        </div>
+
+        <!-- DOB -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Date Of Birth *
+          </label>
+
+          <input
+            type="date"
+            formControlName="dateOfBirth"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['dateOfBirth'].hasError('required')"
+            class="error">
+            Date of Birth is required
+          </p>
+        </div>
+
+        <!-- Joining Date -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Joining Date *
+          </label>
+
+          <input
+            type="date"
+            formControlName="joiningDate"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['joiningDate'].hasError('required')"
+            class="error">
+            Joining Date is required
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TERRITORY DETAILS -->
+    <div class="bg-white rounded-2xl shadow p-6">
+
+      <h2 class="text-lg font-semibold mb-5">
+        Territory Details
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <!-- Region -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Region *
+          </label>
+
+          <input
+            type="text"
+            formControlName="region"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['region'].hasError('required')"
+            class="error">
+            Region is required
+          </p>
+        </div>
+
+        <!-- Assigned Area -->
+        <div>
+          <label class="block mb-2 font-medium">
+            Assigned Area *
+          </label>
+
+          <input
+            type="text"
+            formControlName="assignedArea"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['assignedArea'].hasError('required')"
+            class="error">
+            Assigned Area is required
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ADDRESS DETAILS -->
+    <div class="bg-white rounded-2xl shadow p-6">
+
+      <h2 class="text-lg font-semibold mb-5">
+        Address Details
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <!-- Address -->
+        <div class="md:col-span-2">
+
+          <label class="block mb-2 font-medium">
+            Address *
+          </label>
+
+          <textarea
+            rows="4"
+            formControlName="address"
+            class="input">
+          </textarea>
+
+          <p
+            *ngIf="submitted && f['address'].hasError('required')"
+            class="error">
+            Address is required
+          </p>
+
+        </div>
+
+        <!-- City -->
+        <div>
+
+          <label class="block mb-2 font-medium">
+            City *
+          </label>
+
+          <input
+            type="text"
+            formControlName="city"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['city'].hasError('required')"
+            class="error">
+            City is required
+          </p>
+
+        </div>
+
+        <!-- State -->
+        <div>
+
+          <label class="block mb-2 font-medium">
+            State *
+          </label>
+
+          <input
+            type="text"
+            formControlName="state"
+            class="input">
+
+          <p
+            *ngIf="submitted && f['state'].hasError('required')"
+            class="error">
+            State is required
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="flex flex-col sm:flex-row justify-end gap-3">
+
+      <button
+        type="button"
+        class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-xl">
+
+        Cancel
+
+      </button>
+
+      <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl flex items-center justify-center gap-2">
+
+        <lucide-icon [img]="Save"></lucide-icon>
+
+        Save Area Manager
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

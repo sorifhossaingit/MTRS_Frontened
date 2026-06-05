@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Eye, EyeOff, Lock } from 'lucide-angular';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -112,80 +113,73 @@ export class LoginComponent {
 
           if (res.success) {
 
-            // Store token
-            localStorage.setItem('token', res.token);
+            Swal.fire({
+              icon: 'success',
+              title: 'Login Successful',
+              text: 'Welcome back!',
+              timer: 1500,
+              showConfirmButton: false
+            }).then(() => {
 
-            // Decode token
-            const decodedToken: any = jwtDecode(res.token);
+              // Store token
+              localStorage.setItem('token', res.token);
 
-            console.log(decodedToken);
+              // Decode token
+              const decodedToken: any = jwtDecode(res.token);
 
-            // =========================
-            // GET VALUES FROM TOKEN
-            // =========================
+              const rid = decodedToken.rid || decodedToken.Rid;
+              localStorage.setItem('rid', rid);
 
-            const rid =
-              decodedToken.rid ||
-              decodedToken.Rid;
+              const isSuperAdmin =
+                decodedToken.isSuperAdmin ||
+                decodedToken.IsSuperAdmin;
 
-            localStorage.setItem('rid', rid);
+              localStorage.setItem('is', isSuperAdmin);
 
-            const isSuperAdmin =
-              decodedToken.isSuperAdmin ||
-              decodedToken.IsSuperAdmin;
-            localStorage.setItem('is', isSuperAdmin)
+              const aid = decodedToken.aid;
 
-            const aid = decodedToken.aid
+              let role = '';
 
-            // =========================
-            // MANUAL ROLE MAPPING
-            // =========================
+              if (isSuperAdmin === 'True') {
+                role = 'Superadmin';
+              } else {
 
-            let role = '';
+                switch (rid.toLowerCase()) {
 
+                  case 'a5fabfee-5506-4e12-bfec-c898fc5af3ae':
+                    role = 'Admin';
+                    break;
 
-            if (isSuperAdmin === 'True') {
+                  case 'fd1c87b5-524a-49e5-b60c-5d7b82ddeb43':
+                    role = 'MR';
+                    break;
 
-              role = 'Superadmin';
+                  case '258fc58f-f4e8-4d51-9a19-7bc88f6f3d40':
+                    role = 'Stockist';
+                    break;
 
-            } else {
-
-              switch (rid) {
-
-                case 'a5fabfee-5506-4e12-bfec-c898fc5af3ae':
-                  role = 'Admin';
-                  break;
-
-                case 'fd1c87b5-524a-49e5-b60c-5d7b82ddeb43':
-                  role = 'MR';
-                  break;
-
-                case '258fc58f-f4e8-4d51-9a19-7bc88f6f3d40':
-                  role = 'Stockist';
-                  break;
-
-                case '39e853c2-805c-49f8-8527-15b2a9ede106':
-                  role = 'Manager';
-                  break;
-
-                default:
-                  role = '';
+                  case '39e853c2-805c-49f8-8527-15b2a9ede106':
+                    role = 'Manager';
+                    break;
+                }
               }
-            }
 
-            // Store role manually
+              localStorage.setItem('aid', aid);
 
-            localStorage.setItem('aid', aid);
-
-            this.navigateByRole(role);
+              this.navigateByRole(role);
+            });
           }
         },
 
         error: (err) => {
 
-          console.log(err);
+          console.error(err);
 
-          alert('Invalid email or password');
+          Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: 'Invalid email or password'
+          });
         }
       });
   }

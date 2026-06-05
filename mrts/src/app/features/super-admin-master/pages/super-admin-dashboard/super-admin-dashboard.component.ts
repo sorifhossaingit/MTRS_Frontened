@@ -17,6 +17,7 @@ import {
   Validators
 } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -144,7 +145,7 @@ export class SuperAdminDashboardComponent implements OnInit {
 
   getDashboardSummary() {
 
-    this.superAdminService
+    this.superAdminService 
       .getdashboradsummery()
       .subscribe({
 
