@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Eye, EyeOff, Lock } from 'lucide-angular';
 import Swal from 'sweetalert2';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -29,9 +30,12 @@ export class LoginComponent {
   // API URL
   apiUrl = 'https://localhost:7078/api/Auth/login';
 
+  userid = 0
+
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -43,6 +47,7 @@ export class LoginComponent {
       // Decode token
       const decodedToken: any = jwtDecode(token);
 
+      this.userid = decodedToken.userId;
       // Get values
       const rid =
         decodedToken.rid ||
@@ -137,7 +142,7 @@ export class LoginComponent {
               localStorage.setItem('is', isSuperAdmin);
 
               const aid = decodedToken.aid;
-
+              this.userid = decodedToken.userId;
               let role = '';
 
               if (isSuperAdmin === 'True') {
@@ -192,37 +197,106 @@ export class LoginComponent {
     switch (role) {
 
       case 'Superadmin':
+
         this.router.navigate([
           '/super-admin-master/super-admin-dashboard'
         ]);
+
         break;
 
       case 'Admin':
+
         this.router.navigate([
           '/dashboard'
         ]);
+
         break;
 
       case 'MR':
-        this.router.navigate([
-          '/medical-representative-master/mr-attendance'
-        ]);
+
+        this.authService
+          .get_mr_id(this.userid)
+          .subscribe({
+
+            next: (res: any) => {
+
+              localStorage.setItem(
+                'mid',
+                res.mrId.toString()
+              );
+
+              this.router.navigate([
+                '/medical-representative-master/mr-attendance'
+              ]);
+
+            },
+            error: (err: any) => {
+              console.error(err);
+            }
+
+          });
+
         break;
 
       case 'Stockist':
-        this.router.navigate([
-          '/stockist-master/stockist-product-dashboard'
-        ]);
+
+        this.authService
+          .get_stockist_id(this.userid)
+          .subscribe({
+
+            next: (res: any) => {
+
+              localStorage.setItem(
+                'mid',
+                res.stockistId.toString()
+              );
+
+              this.router.navigate([
+                '/stockist-master/stockist-product-dashboard'
+              ]);
+
+            },
+            error: (err: any) => {
+              console.error(err);
+            }
+
+          });
+
         break;
 
       case 'Manager':
-        this.router.navigate([
-          '/visits/visit-master-dashboard'
-        ]);
+
+        this.authService
+          .get_area_manager_id(this.userid)
+          .subscribe({
+
+            next: (res: any) => {
+
+              localStorage.setItem(
+                'mid',
+                res.areaManagerId.toString()
+              );
+
+              this.router.navigate([
+                '/visits/visit-master-dashboard'
+              ]);
+
+            },
+            error: (err: any) => {
+              console.error(err);
+            }
+
+          });
+
         break;
 
       default:
-        this.router.navigate(['/login']);
+
+        this.router.navigate([
+          '/login'
+        ]);
     }
   }
+
+
 }
