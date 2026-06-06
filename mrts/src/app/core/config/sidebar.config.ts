@@ -168,19 +168,19 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Representative Master',
     icon: 'Users', // group of representatives
     route: '/medical-representative-master',
-    roles: ['Admin', 'MR' , 'Manager'],
+    roles: ['MR' , 'Manager'],
     children: [
       {
         label: 'Representative Master Dashboard',
         icon: 'BarChart3', // dashboard analytics
         route: '/medical-representative-master/medical-representative-master-dashboard',
-        roles: ['MR', 'Admin' , 'Manager']
+        roles: ['MR', 'Manager']
       },
       {
         label: 'Add Representative',
         icon: 'UserPlus', // add new MR
         route: '/medical-representative-master/add-medical-representative',
-        roles: ['Admin' , 'Manager']
+        roles: ['Manager']
       },
       {
         label: 'Medicine Master',
@@ -192,7 +192,7 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Representative Order Master',
         icon: 'Pill', // add new MR
         route: '/medical-representative-master/mr-order-master',
-        roles: ['MR', 'Admin', 'Manager']
+        roles: ['MR', 'Manager']
       },
       {
         label: 'Representative Attendance',
@@ -219,13 +219,13 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Add Visit',
         icon: 'CalendarPlus',
         route: '/visits/add-visit',
-        roles: ['Admin', 'MR']
+        roles: ['MR']
       },
       {
         label: 'Assign Visit',
         icon: 'CalendarPlus',
         route: '/visits/assign-visit',
-        roles: ['Admin', 'Manager']
+        roles: ['Manager']
       }
 
     ]

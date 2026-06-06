@@ -487,7 +487,7 @@
 
         </div>
 
-        <!-- Assign MR -->
+        <!-- Assign AM -->
         <div>
 
           <div class="input-group">
@@ -495,15 +495,15 @@
             <lucide-icon [img]="UserCheck">
             </lucide-icon>
 
-            <select formControlName="assignedMr">
+            <select formControlName="assignedAM" class="input">
 
               <option value="">
-                Assign AM
+                Select Area Manager
               </option>
 
-              <option *ngFor="let AM of AMList" [value]="AM.id">
+              <option *ngFor="let am of areaManagerList" [value]="am.areaManagerId">
 
-                {{AM.name}}
+                {{ am.name }} ({{am.assignedArea}})
 
               </option>
 
@@ -511,11 +511,11 @@
 
           </div>
 
-          <div *ngIf="f['assignedMr'].touched && f['assignedMr'].invalid">
+          <div *ngIf="f['assignedAM'].touched && f['assignedAM'].invalid">
 
-            <p *ngIf="f['assignedMr'].errors?.['required']" class="text-red-500 text-sm mt-1">
+            <p *ngIf="f['assignedAM'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
-              Assign MR is required
+              Assign AM is required
 
             </p>
 

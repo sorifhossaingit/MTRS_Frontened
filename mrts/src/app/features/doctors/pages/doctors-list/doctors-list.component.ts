@@ -86,15 +86,10 @@ export class DoctorsListComponent implements OnInit {
   createdBy: any;
 
   // =====================================================
-  // 🔷 MR LIST
+  // 🔷 AM LIST
   // =====================================================
 
-  AMList = [
-    {
-      id: 5,
-      name: 'Rahul Sharma'
-    },
-  ];
+  areaManagerList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -111,6 +106,29 @@ export class DoctorsListComponent implements OnInit {
     this.getUserIdFromToken();
 
     this.initializeForm();
+
+    this.getAreaManagerList();
+  }
+
+   getAreaManagerList() {
+
+    this.doctorService
+      .getAreamanagerlist(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.areaManagerList = res.data || [];
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
 
   }
 

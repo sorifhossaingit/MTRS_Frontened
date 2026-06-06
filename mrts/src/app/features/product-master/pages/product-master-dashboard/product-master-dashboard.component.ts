@@ -634,8 +634,9 @@ export class ProductMasterDashboardComponent implements OnInit {
 
     formData.append(
       'ImageUrl',
-      item.imageUrl || ''
-    );
+      item.imageUrl
+    ); 
+    
 
     this.productService
       .updateproductdetails(formData)

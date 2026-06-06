@@ -38,7 +38,10 @@ export class DoctorService {
   }
 
 
-
+  getAreamanagerlist(agencyId: any) {
+    return this.http.get(
+      `${this.apiUrl}/admin/area-manager/dropdown/active-area-managers/${agencyId}`);
+  }
 
 
 
