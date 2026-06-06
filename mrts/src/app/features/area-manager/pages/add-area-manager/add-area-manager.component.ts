@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -15,13 +15,17 @@ import {
   Building,
   Save
 } from 'lucide-angular';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { jwtDecode } from 'jwt-decode';
+import { AreaManagerService } from '../../services/area-manager.service';
 
 @Component({
   selector: 'app-add-area-manager',
   templateUrl: './add-area-manager.component.html',
   styleUrl: './add-area-manager.component.css'
 })
-export class AddAreaManagerComponent {
+export class AddAreaManagerComponent implements OnInit {
 
   UserPlus = UserPlus;
   ArrowLeft = ArrowLeft;
@@ -37,7 +41,16 @@ export class AddAreaManagerComponent {
 
   areaManagerForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  agencyId: number =
+    Number(localStorage.getItem('aid')) || 0;
+
+  userId: number = 0;
+
+  constructor(
+    private fb: FormBuilder,
+    private areaManagerService: AreaManagerService,
+    private router: Router
+  ) {
 
     this.areaManagerForm = this.fb.group({
 
@@ -105,6 +118,32 @@ export class AddAreaManagerComponent {
         Validators.required
       ]
     });
+
+  }
+
+
+  ngOnInit(): void {
+
+    this.decodeToken();
+
+  }
+
+  decodeToken() {
+
+    const token = localStorage.getItem('token');
+
+    if (token) {
+
+      const decoded: any = jwtDecode(token);
+
+      this.userId =
+        decoded?.userId ||
+        decoded?.UserId ||
+        decoded?.id ||
+        0;
+
+    }
+
   }
 
   get f() {
@@ -116,11 +155,100 @@ export class AddAreaManagerComponent {
     this.submitted = true;
 
     if (this.areaManagerForm.invalid) {
+
+      this.areaManagerForm.markAllAsTouched();
+
       return;
+
     }
 
-    console.log(this.areaManagerForm.value);
+    const payload = {
 
-    // Call API Here
+      agencyId: this.agencyId,
+
+      name:
+        this.areaManagerForm.value.name,
+
+      email:
+        this.areaManagerForm.value.email,
+
+      gender:
+        this.areaManagerForm.value.gender,
+
+      dateOfBirth:
+        this.areaManagerForm.value.dateOfBirth + 'T00:00:00',
+
+      joiningDate:
+        this.areaManagerForm.value.joiningDate + 'T00:00:00',
+
+      mobile:
+        this.areaManagerForm.value.mobile,
+
+      region:
+        this.areaManagerForm.value.region,
+
+      assignedArea:
+        this.areaManagerForm.value.assignedArea,
+
+      address:
+        this.areaManagerForm.value.address,
+
+      city:
+        this.areaManagerForm.value.city,
+
+      state:
+        this.areaManagerForm.value.state,
+
+      createdBy:
+        this.userId
+
+    };
+
+    this.areaManagerService
+      .add_area_manager(payload)
+      .subscribe({
+
+        next: (res: any) => {
+
+          Swal.fire({
+
+            icon: 'success',
+
+            title: 'Success',
+
+            text: 'Area Manager Added Successfully'
+
+          }).then(() => {
+
+            this.areaManagerForm.reset();
+
+            this.submitted = false;
+
+            this.router.navigate([
+              '/area-manager/area-manager-dashboard'
+            ]);
+
+          });
+
+        },
+
+        error: (err: any) => {
+
+          console.error(err);
+
+          Swal.fire({
+
+            icon: 'error',
+
+            title: 'Error',
+
+            text: 'Failed To Add Area Manager'
+
+          });
+
+        }
+
+      });
+
   }
 }

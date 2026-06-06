@@ -1,10 +1,10 @@
 <div class="p-6 bg-gray-100 min-h-screen">
 
   <!-- ===================================================== -->
-  <!-- 🔷 HEADER -->
+  <!-- HEADER -->
   <!-- ===================================================== -->
 
-  <div class="flex justify-between items-center mb-6">
+  <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
 
     <h1 class="text-2xl font-bold flex items-center gap-2">
       <lucide-icon [img]="Briefcase"></lucide-icon>
@@ -13,7 +13,7 @@
 
     <button
       routerLink="/area-manager/add-area-manager"
-      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl flex items-center gap-2">
+      class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow">
 
       <lucide-icon [img]="UserPlus"></lucide-icon>
 
@@ -24,350 +24,381 @@
   </div>
 
   <!-- ===================================================== -->
-  <!-- 🔷 DASHBOARD CARDS -->
+  <!-- DASHBOARD CARDS -->
   <!-- ===================================================== -->
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
 
-    <!-- Total Managers -->
-    <div class="bg-white p-5 rounded-2xl shadow flex justify-between items-center">
-
-      <div>
-        <p class="text-gray-500">Total Managers</p>
-        <h2 class="text-2xl font-bold">{{totalManagers}}</h2>
-      </div>
-
-      <lucide-icon
-        [img]="Users"
-        class="text-blue-500">
-      </lucide-icon>
-
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <p class="text-gray-500 text-sm">Total Managers</p>
+      <h2 class="text-3xl font-bold mt-2">{{ totalManagers }}</h2>
     </div>
 
-    <!-- Active Managers -->
-    <div class="bg-white p-5 rounded-2xl shadow flex justify-between items-center">
-
-      <div>
-        <p class="text-gray-500">Active Managers</p>
-        <h2 class="text-2xl font-bold text-green-600">
-          {{activeManagers}}
-        </h2>
-      </div>
-
-      <lucide-icon
-        [img]="Activity"
-        class="text-green-500">
-      </lucide-icon>
-
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <p class="text-gray-500 text-sm">Active Managers</p>
+      <h2 class="text-3xl font-bold text-green-600 mt-2">
+        {{ activeManagers }}
+      </h2>
     </div>
 
-    <!-- Managed MR -->
-    <div class="bg-white p-5 rounded-2xl shadow flex justify-between items-center">
-
-      <div>
-        <p class="text-gray-500">Managed MRs</p>
-        <h2 class="text-2xl font-bold text-purple-600">
-          {{totalMRs}}
-        </h2>
-      </div>
-
-      <lucide-icon
-        [img]="UserCheck"
-        class="text-purple-500">
-      </lucide-icon>
-
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <p class="text-gray-500 text-sm">Inactive Managers</p>
+      <h2 class="text-3xl font-bold text-red-600 mt-2">
+        {{ inactiveManagers }}
+      </h2>
     </div>
 
-    <!-- Visits -->
-    <div class="bg-white p-5 rounded-2xl shadow flex justify-between items-center">
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <p class="text-gray-500 text-sm">Total Records</p>
+      <h2 class="text-3xl font-bold text-blue-600 mt-2">
+        {{ totalRecords }}
+      </h2>
+    </div>
+
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- FILTER -->
+  <!-- ===================================================== -->
+
+  <div class="bg-white rounded-2xl shadow p-6 mb-6">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
 
       <div>
-        <p class="text-gray-500">Assigned Visits Today</p>
-        <h2 class="text-2xl font-bold text-orange-600">
-          {{todayVisits}}
-        </h2>
+        <label class="block text-sm font-medium mb-2">
+          Name
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Search Name"
+          class="w-full border rounded-xl px-4 h-12">
       </div>
 
-      <lucide-icon
-        [img]="Calendar"
-        class="text-orange-500">
-      </lucide-icon>
+      <div>
+        <label class="block text-sm font-medium mb-2">
+          Mobile
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="mobile"
+          placeholder="Search Mobile"
+          class="w-full border rounded-xl px-4 h-12">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">
+          Region
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="selectedRegion"
+          placeholder="Region"
+          class="w-full border rounded-xl px-4 h-12">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">
+          Status
+        </label>
+
+        <select
+          [(ngModel)]="isActive"
+          class="w-full border rounded-xl px-4 h-12">
+
+          <option value="">
+            All
+          </option>
+
+          <option [ngValue]="true">
+            Active
+          </option>
+
+          <option [ngValue]="false">
+            Inactive
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="flex items-end gap-2">
+
+        <button
+          (click)="applyFilter()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-5 h-12 rounded-xl w-full">
+
+          Search
+
+        </button>
+
+        <button
+          (click)="resetFilters()"
+          class="bg-gray-500 hover:bg-gray-600 text-white px-5 h-12 rounded-xl">
+
+          Reset
+
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
   <!-- ===================================================== -->
-  <!-- 🔷 SEARCH & FILTER -->
+  <!-- TABLE -->
   <!-- ===================================================== -->
 
-  <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-4">
+  <div class="bg-white rounded-2xl shadow overflow-hidden">
 
-    <input
-      type="text"
-      [(ngModel)]="searchText"
-      placeholder="Search Area Manager..."
-      class="border rounded-xl px-4 py-2 w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    <div class="overflow-x-auto">
 
-    <select
-      [(ngModel)]="selectedRegion"
-      class="border rounded-xl px-4 py-2">
+      <table class="w-full min-w-[1200px]">
 
-      <option value="">
-        All Regions
-      </option>
+        <thead class="bg-gray-100">
 
-      <option value="North">
-        North
-      </option>
+          <tr>
 
-      <option value="South">
-        South
-      </option>
+            <th class="p-4 text-left">Name</th>
+            <th class="p-4 text-left">Email</th>
+            <th class="p-4 text-left">Mobile</th>
+            <th class="p-4 text-left">Region</th>
+            <th class="p-4 text-left">Assigned Area</th>
+            <th class="p-4 text-left">City</th>
+            <th class="p-4 text-left">State</th>
+            <th class="p-4 text-left">Status</th>
+            <th class="p-4 text-center">Action</th>
 
-      <option value="East">
-        East
-      </option>
+          </tr>
 
-      <option value="West">
-        West
-      </option>
+        </thead>
 
-    </select>
+        <tbody>
+
+          <tr
+            *ngFor="let manager of areaManagers"
+            class="border-t hover:bg-gray-50">
+
+            <td class="p-4 font-medium">
+              {{ manager.name }}
+            </td>
+
+            <td class="p-4">
+              {{ manager.email }}
+            </td>
+
+            <td class="p-4">
+              {{ manager.mobile }}
+            </td>
+
+            <td class="p-4">
+              {{ manager.region }}
+            </td>
+
+            <td class="p-4">
+              {{ manager.assignedArea }}
+            </td>
+
+            <td class="p-4">
+              {{ manager.city }}
+            </td>
+
+            <td class="p-4">
+              {{ manager.state }}
+            </td>
+
+            <td class="p-4">
+
+              <span
+                class="px-3 py-1 rounded-full text-xs font-medium"
+                [ngClass]="manager.isActive
+                ? 'bg-green-100 text-green-700'
+                : 'bg-red-100 text-red-700'">
+
+                {{ manager.isActive ? 'Active' : 'Inactive' }}
+
+              </span>
+
+            </td>
+
+            <td class="p-4">
+
+              <div class="flex justify-center gap-3">
+
+                <button
+                  (click)="editManager(manager)"
+                  class="text-green-600 hover:text-green-800">
+
+                  <lucide-icon [img]="Pencil"></lucide-icon>
+
+                </button>
+
+                <button
+                  (click)="deleteManager(manager)"
+                  class="text-red-600 hover:text-red-800">
+
+                  <lucide-icon [img]="Trash2"></lucide-icon>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="areaManagers.length === 0">
+
+            <td colspan="9" class="text-center py-10 text-gray-500">
+
+              No Area Managers Found
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
 
   </div>
 
   <!-- ===================================================== -->
-  <!-- 🔷 TABLE -->
+  <!-- PAGINATION -->
   <!-- ===================================================== -->
 
-  <div class="bg-white rounded-2xl shadow overflow-auto">
+  <div class="flex justify-between items-center mt-6">
 
-    <table class="w-full text-left min-w-[1100px]">
+    <div class="text-sm text-gray-600">
 
-      <thead class="bg-gray-50">
-
-        <tr>
-
-          <th class="p-4">
-            Area Manager
-          </th>
-
-          <th class="p-4">
-            Employee ID
-          </th>
-
-          <th class="p-4">
-            Mobile
-          </th>
-
-          <th class="p-4">
-            Region
-          </th>
-
-          <th class="p-4">
-            Managed MRs
-          </th>
-
-          <th class="p-4">
-            Doctors
-          </th>
-
-          <th class="p-4">
-            Hospitals
-          </th>
-
-          <th class="p-4">
-            Status
-          </th>
-
-          <th class="p-4 text-center">
-            Actions
-          </th>
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-        <tr
-          *ngFor="let manager of areaManagers"
-          class="border-t hover:bg-gray-50 transition">
-
-          <!-- Manager -->
-          <td class="p-4">
-
-            <div class="font-semibold">
-              {{manager.name}}
-            </div>
-
-            <div class="text-sm text-gray-500">
-              {{manager.email}}
-            </div>
-
-          </td>
-
-          <!-- Employee -->
-          <td class="p-4">
-            {{manager.employeeCode}}
-          </td>
-
-          <!-- Mobile -->
-          <td class="p-4">
-            {{manager.mobile}}
-          </td>
-
-          <!-- Region -->
-          <td class="p-4">
-            {{manager.region}}
-          </td>
-
-          <!-- MRs -->
-          <td class="p-4">
-            {{manager.totalMRs}}
-          </td>
-
-          <!-- Doctors -->
-          <td class="p-4">
-            {{manager.totalDoctors}}
-          </td>
-
-          <!-- Hospitals -->
-          <td class="p-4">
-            {{manager.totalHospitals}}
-          </td>
-
-          <!-- Status -->
-          <td class="p-4">
-
-            <span
-              class="px-3 py-1 rounded-full text-sm"
-              [ngClass]="manager.isActive
-                ? 'bg-green-100 text-green-600'
-                : 'bg-red-100 text-red-600'">
-
-              {{manager.isActive ? 'Active' : 'Inactive'}}
-
-            </span>
-
-          </td>
-
-          <!-- Actions -->
-          <td class="p-4 text-center">
-
-            <div class="flex justify-center gap-3">
-
-              <!-- View -->
-              <lucide-icon
-                [img]="Eye"
-                class="cursor-pointer text-blue-500 hover:scale-110"
-                (click)="viewManager(manager.id)">
-              </lucide-icon>
-
-              <!-- Edit -->
-              <lucide-icon
-                [img]="Pencil"
-                class="cursor-pointer text-green-600 hover:scale-110"
-                (click)="editManager(manager)">
-              </lucide-icon>
-
-              <!-- Delete -->
-              <lucide-icon
-                [img]="Trash2"
-                class="cursor-pointer text-red-500 hover:scale-110"
-                (click)="deleteManager(manager)">
-              </lucide-icon>
-
-            </div>
-
-          </td>
-
-        </tr>
-
-        <!-- No Data -->
-        <tr *ngIf="areaManagers.length === 0">
-
-          <td
-            colspan="9"
-            class="text-center py-6 text-gray-500">
-
-            No Area Managers Found
-
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-  <!-- ===================================================== -->
-  <!-- 🔷 PAGINATION -->
-  <!-- ===================================================== -->
-
-  <div
-    class="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-
-    <div class="text-gray-600">
-
-      Showing Page
-
-      <span class="font-semibold">
-        {{currentPage}}
-      </span>
-
-      of
-
-      <span class="font-semibold">
-        {{totalPages}}
-      </span>
+      Page {{ currentPage  }}
+      of {{ totalPages }}
 
       |
-
-      Total Records :
-
-      <span class="font-semibold">
-        {{totalRecords}}
-      </span>
+      Total Records: {{ totalRecords }}
 
     </div>
 
-    <div class="flex items-center gap-2">
+    <div class="flex gap-2">
 
-      <!-- Previous -->
       <button
         (click)="prevPage()"
         [disabled]="currentPage === 1"
-        class="border px-3 py-2 rounded-lg hover:bg-gray-100 disabled:opacity-50">
+        class="px-4 py-2 border rounded-lg disabled:opacity-50">
 
-        <lucide-icon [img]="ChevronLeft"></lucide-icon>
-
-      </button>
-
-      <!-- Pages -->
-      <button
-        *ngFor="let page of pages"
-        (click)="goToPage(page)"
-        [ngClass]="{
-          'bg-blue-500 text-white': currentPage === page,
-          'bg-white': currentPage !== page
-        }"
-        class="px-4 py-2 rounded-lg border hover:bg-blue-100">
-
-        {{page}}
+        Previous
 
       </button>
 
-      <!-- Next -->
       <button
         (click)="nextPage()"
         [disabled]="currentPage === totalPages"
-        class="border px-3 py-2 rounded-lg hover:bg-gray-100 disabled:opacity-50">
+        class="px-4 py-2 border rounded-lg disabled:opacity-50">
 
-        <lucide-icon [img]="ChevronRight"></lucide-icon>
+        Next
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- EDIT MODAL -->
+<!-- ===================================================== -->
+
+<div
+  *ngIf="showEditModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+
+  <div
+    class="bg-white rounded-3xl w-full max-w-6xl max-h-[95vh] overflow-y-auto">
+
+    <div class="sticky top-0 bg-white border-b p-5 flex justify-between items-center">
+
+      <h2 class="text-2xl font-bold">
+        Update Area Manager
+      </h2>
+
+      <button
+        (click)="closeModal()"
+        class="w-10 h-10 rounded-full hover:bg-gray-100">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <form
+      [formGroup]="editForm"
+      class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <input formControlName="name" placeholder="Name" class="border rounded-xl px-4 h-12">
+
+      <input formControlName="email" placeholder="Email" class="border rounded-xl px-4 h-12">
+
+      <input formControlName="mobile" placeholder="Mobile" class="border rounded-xl px-4 h-12">
+
+      <select formControlName="gender" class="border rounded-xl px-4 h-12">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <input type="date" formControlName="dateOfBirth" class="border rounded-xl px-4 h-12">
+
+      <input type="date" formControlName="joiningDate" class="border rounded-xl px-4 h-12">
+
+      <input formControlName="region" placeholder="Region" class="border rounded-xl px-4 h-12">
+
+      <input formControlName="assignedArea" placeholder="Assigned Area" class="border rounded-xl px-4 h-12">
+
+      <input formControlName="city" placeholder="City" class="border rounded-xl px-4 h-12">
+
+      <input formControlName="state" placeholder="State" class="border rounded-xl px-4 h-12">
+
+      <div class="md:col-span-2 lg:col-span-3">
+        <textarea
+          rows="3"
+          formControlName="address"
+          placeholder="Address"
+          class="w-full border rounded-xl p-4">
+        </textarea>
+      </div>
+
+      <div>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" formControlName="isActive">
+          Active
+        </label>
+      </div>
+
+    </form>
+
+    <div class="border-t p-5 flex justify-end gap-3">
+
+      <button
+        (click)="closeModal()"
+        class="px-5 py-2 rounded-xl bg-gray-200">
+
+        Cancel
+
+      </button>
+
+      <button
+        (click)="updateManager()"
+        class="px-5 py-2 rounded-xl bg-blue-600 text-white">
+
+        Update Manager
 
       </button>
 
