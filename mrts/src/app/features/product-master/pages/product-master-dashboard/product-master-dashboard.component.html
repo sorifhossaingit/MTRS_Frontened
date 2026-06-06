@@ -111,120 +111,124 @@
 
   <div class="card overflow-hidden">
 
-    <div class="overflow-x-auto">
+  <div class="overflow-x-auto">
 
-      <table class="min-w-[1000px] w-full text-sm">
+    <table class="min-w-[1000px] w-full text-sm">
 
-        <thead class="bg-gray-100 text-left">
+      <thead class="bg-gray-100 text-left">
+        <tr>
+          <th class="px-6 py-4">Name</th>
+          <th class="px-6 py-4">Brand</th>
+          <th class="px-6 py-4">Category</th>
+          <th class="px-6 py-4">Dosage</th>
+          <th class="px-6 py-4">Strength</th>
+          <th class="px-6 py-4">MRP</th>
+          <th class="px-6 py-4">Price-To-Retail</th>
+          <th class="px-6 py-4">Price-To-Stockist</th>
+          <th class="px-6 py-4">Status</th>
+          <th class="px-6 py-4 text-center">Actions</th>
+        </tr>
+      </thead>
 
-          <tr>
+      <tbody>
 
-            <th>Name</th>
+        <tr
+          *ngFor="let item of productList"
+          class="border-t hover:bg-gray-50 h-20">
 
-            <th>Brand</th>
+          <td class="px-6 py-4 font-medium whitespace-nowrap">
+            {{ item.name }}
+          </td>
 
-            <th>Category</th>
+          <td class="px-6 py-4 text-gray-600">
+            {{ item.brandName }}
+          </td>
 
-            <th>Dosage</th>
+          <td class="px-6 py-4 text-gray-600">
+            {{ item.category }}
+          </td>
 
-            <th>Strength</th>
+          <td class="px-6 py-4 whitespace-nowrap">
+            {{ item.dosageForm }}
+          </td>
 
-            <th>MRP</th>
+          <td class="px-6 py-4 whitespace-nowrap">
+            {{ item.strength }}
+          </td>
 
-            <th>Price-To-Retail</th>
+          <td class="px-6 py-4 font-semibold whitespace-nowrap">
+            ₹{{ item.mrp }}
+          </td>
 
-            <th>Price-To-Stockist</th>
+          <td class="px-6 py-4 whitespace-nowrap">
+            ₹{{ item.ptr }}
+          </td>
 
-            <th>Status</th>
+          <td class="px-6 py-4 whitespace-nowrap">
+            ₹{{ item.pts }}
+          </td>
 
-            <th class="text-center">
-              Actions
-            </th>
+          <td class="px-6 py-4">
 
-          </tr>
+            <span
+              *ngIf="item.isActive"
+              class="bg-green-100 text-green-700 px-3 py-1.5 rounded-full text-xs font-medium">
 
-        </thead>
+              Active
 
-        <tbody>
+            </span>
 
-          <tr *ngFor="let item of productList" class="border-t hover:bg-gray-50">
+            <span
+              *ngIf="!item.isActive"
+              class="bg-red-100 text-red-700 px-3 py-1.5 rounded-full text-xs font-medium">
 
-            <td class="font-medium">
-              {{ item.name }}
-            </td>
+              Inactive
 
-            <td>
-              {{ item.brandName }}
-            </td>
+            </span>
 
-            <td>
-              {{ item.category }}
-            </td>
+          </td>
 
-            <td>
-              {{ item.dosageForm }}
-            </td>
+          <td class="px-6 py-4">
 
-            <td>
-              {{ item.strength }}
-            </td>
+            <div class="flex justify-center items-center gap-4">
 
-            <td>
-              ₹{{ item.mrp }}
-            </td>
-
-            <td>{{ item.ptr }}</td>
-
-            <td>{{ item.pts }}</td>
-
-            <td>
-
-              <span *ngIf="item.isActive" class="bg-green-100 text-green-700 px-2 py-1 rounded">
-
-                Active
-
-              </span>
-
-              <span *ngIf="!item.isActive" class="bg-red-100 text-red-700 px-2 py-1 rounded">
-
-                Inactive
-
-              </span>
-
-            </td>
-
-            <td class="text-center space-x-2">
-
-              <button (click)="viewProduct(item)" class="text-blue-600">
+              <button
+                (click)="viewProduct(item)"
+                class="text-blue-600 hover:scale-110 transition-transform duration-200">
 
                 <lucide-icon [img]="Eye"></lucide-icon>
 
               </button>
 
-              <button (click)="editProduct(item)" class="text-yellow-600">
+              <button
+                (click)="editProduct(item)"
+                class="text-yellow-600 hover:scale-110 transition-transform duration-200">
 
                 <lucide-icon [img]="Pencil"></lucide-icon>
 
               </button>
 
-              <button (click)="deleteProduct(item)" class="text-red-600">
+              <button
+                (click)="deleteProduct(item)"
+                class="text-red-600 hover:scale-110 transition-transform duration-200">
 
                 <lucide-icon [img]="Trash2"></lucide-icon>
 
               </button>
 
-            </td>
+            </div>
 
-          </tr>
+          </td>
 
-        </tbody>
+        </tr>
 
-      </table>
+      </tbody>
 
-    </div>
+    </table>
 
   </div>
 
+</div>
   <!-- PAGINATION -->
 
   <div class="flex justify-between items-center mt-5">

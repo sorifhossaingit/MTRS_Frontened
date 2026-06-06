@@ -35,21 +35,27 @@ export const MENU_ITEMS: MenuItem[] = [
     roles: ['Admin']
   },
   {
-    label: 'Doctor Master',
-    icon: 'stethoscope',
-    route: '/doctor-master',
+    label: 'Product Master',
+    icon: 'package',
+    route: '/product-master',
     roles: ['Admin'],
     children: [
       {
-        label: 'Doctor Dashboard',
-        icon: 'clipboard-list',
-        route: '/doctor-master/doctor-master-dashboard',
+        label: 'Product Master Dashboard',
+        icon: 'ClipboardList',
+        route: '/product-master/product-master-dashboard',
         roles: ['Admin']
       },
       {
-        label: 'Add Doctor',
+        label: 'Add Product Master',
         icon: 'UserPlus',
-        route: '/doctor-master/add-doctor',
+        route: '/product-master/add-product-master',
+        roles: ['Admin']
+      },
+      {
+        label: 'Stockist Order Details',
+        icon: 'Pill',
+        route: '/product-master/stockist-order-details',
         roles: ['Admin']
       }
     ]
@@ -75,21 +81,21 @@ export const MENU_ITEMS: MenuItem[] = [
     ]
   },
   {
-    label: 'Area Manager',
-    icon: 'users',
-    route: '/area-manager',
+    label: 'Doctor Master',
+    icon: 'stethoscope',
+    route: '/doctor-master',
     roles: ['Admin'],
     children: [
       {
-        label: 'Area Manager Dashboard',
+        label: 'Doctor Dashboard',
         icon: 'clipboard-list',
-        route: '/area-manager/area-manager-dashboard',
+        route: '/doctor-master/doctor-master-dashboard',
         roles: ['Admin']
       },
       {
-        label: 'Add Manager',
+        label: 'Add Doctor',
         icon: 'UserPlus',
-        route: '/area-manager/add-area-manager',
+        route: '/doctor-master/add-doctor',
         roles: ['Admin']
       }
     ]
@@ -139,27 +145,21 @@ export const MENU_ITEMS: MenuItem[] = [
     ]
   },
   {
-    label: 'Product Master',
-    icon: 'package',
-    route: '/product-master',
+    label: 'Area Manager',
+    icon: 'users',
+    route: '/area-manager',
     roles: ['Admin'],
     children: [
       {
-        label: 'Product Master Dashboard',
-        icon: 'ClipboardList',
-        route: '/product-master/product-master-dashboard',
+        label: 'Area Manager Dashboard',
+        icon: 'clipboard-list',
+        route: '/area-manager/area-manager-dashboard',
         roles: ['Admin']
       },
       {
-        label: 'Add Product Master',
+        label: 'Add Manager',
         icon: 'UserPlus',
-        route: '/product-master/add-product-master',
-        roles: ['Admin']
-      },
-      {
-        label: 'Stockist Order Details',
-        icon: 'Pill',
-        route: '/product-master/stockist-order-details',
+        route: '/area-manager/add-area-manager',
         roles: ['Admin']
       }
     ]
