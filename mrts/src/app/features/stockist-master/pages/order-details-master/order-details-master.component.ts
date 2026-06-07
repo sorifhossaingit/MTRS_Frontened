@@ -303,23 +303,12 @@ export class OrderDetailsMasterComponent implements OnInit {
           },
           error: (err: any) => {
 
-            let errorMessage =
-              err?.error?.message ||
-              err?.error ||
-              'Status update failed';
-
-            if (typeof errorMessage === 'string') {
-              // Get only the first line
-              errorMessage = errorMessage.split('\n')[0];
-
-              // Optional: Remove "System.Exception:"
-              errorMessage = errorMessage.replace('System.Exception:', '').trim();
-            }
-
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: errorMessage
+              text:
+                err?.error?.message ||
+                'Status update failed'
             });
           }
         });
