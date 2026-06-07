@@ -39,7 +39,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           this.userRole = 'Stockist';
           break;
 
-        case '39e853c2-805c-49f8-8527-15b2a9ede106':
+        case '11714ca6-4cdb-46c5-bb12-d582ef179bc2':
           this.userRole = 'Manager';
           break;
 

@@ -86,7 +86,7 @@ export class LoginComponent {
             role = 'Stockist';
             break;
 
-          case '39e853c2-805c-49f8-8527-15b2a9ede106':
+          case '11714ca6-4cdb-46c5-bb12-d582ef179bc2':
             role = 'Manager';
             break;
 
@@ -104,11 +104,21 @@ export class LoginComponent {
     }
   }
 
-  login() {
+  async login() {
+
+  try {
+
+    const position = await this.getCurrentLocation();
+    const ipAddress = await this.getIpAddress();
+    const deviceId = this.getDeviceId();
 
     const payload = {
       email: this.email,
-      password: this.password
+      password: this.password,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      deviceId: deviceId,
+      ipAddress: ipAddress
     };
 
     this.http.post(this.apiUrl, payload)
@@ -126,10 +136,8 @@ export class LoginComponent {
               showConfirmButton: false
             }).then(() => {
 
-              // Store token
               localStorage.setItem('token', res.token);
 
-              // Decode token
               const decodedToken: any = jwtDecode(res.token);
 
               const rid = decodedToken.rid || decodedToken.Rid;
@@ -143,6 +151,7 @@ export class LoginComponent {
 
               const aid = decodedToken.aid;
               this.userid = decodedToken.userId;
+
               let role = '';
 
               if (isSuperAdmin === 'True') {
@@ -163,7 +172,7 @@ export class LoginComponent {
                     role = 'Stockist';
                     break;
 
-                  case '39e853c2-805c-49f8-8527-15b2a9ede106':
+                  case '11714ca6-4cdb-46c5-bb12-d582ef179bc2':
                     role = 'Manager';
                     break;
                 }
@@ -183,11 +192,22 @@ export class LoginComponent {
           Swal.fire({
             icon: 'error',
             title: 'Login Failed',
-            text: 'Invalid email or password'
+            text: err?.error?.message || 'Invalid email or password'
           });
         }
       });
+
+  } catch (error) {
+
+    console.error(error);
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Location Required',
+      text: 'Please allow location access to login.'
+    });
   }
+}
 
   // ==========================
   // ROLE BASED ROUTING
@@ -298,5 +318,45 @@ export class LoginComponent {
     }
   }
 
+  getCurrentLocation(): Promise<GeolocationPosition> {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject('Geolocation is not supported');
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => resolve(position),
+        (error) => reject(error),
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    });
+  }
+
+  async getIpAddress(): Promise<string> {
+    try {
+      const response: any = await fetch(
+        'https://api.ipify.org?format=json'
+      );
+      const data = await response.json();
+      return data.ip;
+    } catch {
+      return '';
+    }
+  }
+
+  getDeviceId(): string {
+    let deviceId = localStorage.getItem('deviceId');
+
+    if (!deviceId) {
+      deviceId = crypto.randomUUID();
+    }
+
+    return deviceId;
+  }
 
 }

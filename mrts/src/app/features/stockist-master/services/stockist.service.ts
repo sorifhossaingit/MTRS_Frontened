@@ -68,6 +68,9 @@ private apiUrl = environment.apiUrl;
       `${this.apiUrl}/admin/stockiestorder/stockiest-order-details/${orderid}`);
   }
 
+  update_stockist_status(data: any) {
+    return this.http.put(`${this.apiUrl}/stockiest/update-order-status`, data);
+  }
 
 
 
@@ -81,5 +84,21 @@ private apiUrl = environment.apiUrl;
     return this.http.get(
       `${this.apiUrl}/admin/product/list`, { params });
   }
+
+
+ 
+//MR ORDER TO STOCKIST 
+
+  get_mr_order_list(data: any) {
+    return this.http.post(`${this.apiUrl}/mrorder/mr-ordr-list`, data);
+  }
   
+  get_mr_order_preview(orderid: any) {
+    return this.http.get(
+      `${this.apiUrl}/mrorder/mr-order-details/${orderid}`);
+  }
+
+  update_mr_order_status(data: any) {
+    return this.http.post(`${this.apiUrl}/mrorder/mr-order-accept-by-stockiest`, data);
+  }
 }

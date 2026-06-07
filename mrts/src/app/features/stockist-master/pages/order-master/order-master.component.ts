@@ -269,52 +269,52 @@ export class OrderMasterComponent implements OnInit {
   // APPROVE / REJECT
   // =====================================================
 
-  // updateStatus(
-  //   order: any,
-  //   status: string
-  // ) {
+  updateStatus(
+    order: any,
+    status: string
+  ) {
 
-  //   const payload = {
+    const payload = {
 
-  //     orderId: order.orderId,
+      orderId: order.orderId,
 
-  //     status: status,
+      status: status,
 
-  //     remarks:
-  //       status === 'Approved'
-  //         ? 'Approved By Admin'
-  //         : 'Rejected By Admin',
+      remarks:
+        status === 'Received'
+          ? 'Recived By Stockist'
+          : 'Not Recived By Stockist',
 
-  //     updatedBy: this.userId
+      updatedBy: this.StockistId
 
-  //   };
+    };
 
-  //   this.stockistService
-  //     .updateorderstatus(payload)
-  //     .subscribe({
+    this.stockistService
+      .update_stockist_status(payload)
+      .subscribe({
 
-  //       next: (res: any) => {
+        next: (res: any) => {
 
-  //         alert(
-  //           `Order ${status} Successfully`
-  //         );
+          alert(
+            `Order ${status} Successfully`
+          );
 
-  //         this.getOrders();
+          this.getOrders();
 
-  //       },
+        },
 
-  //       error: (err: any) => {
+        error: (err: any) => {
 
-  //         console.log(err);
+          console.log(err);
 
-  //         alert(
-  //           'Failed To Update Status'
-  //         );
+          alert(
+            'Failed To Update Status'
+          );
 
-  //       }
+        }
 
-  //     });
+      });
 
-  // }
+  }
 
 }
