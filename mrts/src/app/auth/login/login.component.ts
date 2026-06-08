@@ -242,7 +242,7 @@ export class LoginComponent {
 
               localStorage.setItem(
                 'mid',
-                res.mrId.toString()
+                res.medicalRepresentativeId.toString()
               );
 
               this.router.navigate([

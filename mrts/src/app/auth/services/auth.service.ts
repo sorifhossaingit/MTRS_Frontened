@@ -22,6 +22,6 @@ export class AuthService {
   }
   
   get_mr_id(userid: any) {
-    return this.http.get(`${this.apiUrl}/GetUserId/area-manager-id/${userid}`);
+    return this.http.get(`${this.apiUrl}/getuserid/medical-representative-id/${userid}`);
   }
 }
