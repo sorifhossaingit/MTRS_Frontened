@@ -174,7 +174,13 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Representative Master Dashboard',
         icon: 'BarChart3', // dashboard analytics
         route: '/medical-representative-master/medical-representative-master-dashboard',
-        roles: ['MR', 'Manager']
+        roles: ['MR']
+      },
+      {
+        label: 'Medical Representative Dashboard',
+        icon: 'BarChart3', // dashboard analytics
+        route: '/medical-representative-master/medical-representative-dashboard',
+        roles: ['Manager']
       },
       {
         label: 'Add Representative',
@@ -192,7 +198,7 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Representative Order Master',
         icon: 'Pill', // add new MR
         route: '/medical-representative-master/mr-order-master',
-        roles: ['MR', 'Manager']
+        roles: ['MR']
       },
       {
         label: 'Representative Attendance',

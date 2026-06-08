@@ -2,142 +2,380 @@
 
   <div class="max-w-7xl mx-auto">
 
-    <!-- 🔷 Header -->
+    <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
+
       <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-        <lucide-icon [img]="UserPlus" class="text-blue-500"></lucide-icon>
+        <lucide-icon [img]="UserPlus" class="text-blue-600"></lucide-icon>
         Add Medical Representative
       </h1>
 
       <button
+        type="button"
+        routerLink="/medical-representative-master/medical-representative-dashboard"
         class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center transition">
+
         <lucide-icon [img]="ArrowLeft"></lucide-icon>
         Back
+
       </button>
+
     </div>
 
-    <form class="space-y-8">
+    <form
+      [formGroup]="mrForm"
+      class="space-y-8">
 
-      <!-- 🧑 Basic Info -->
+      <!-- Basic Information -->
       <div class="bg-white rounded-2xl shadow p-6 md:p-8">
-        <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700 border-b pb-2">
+
+        <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700 border-b pb-3">
+
           <lucide-icon [img]="User"></lucide-icon>
-          Basic Information
+          Medical Representative Information
+
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
 
-          <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-            <lucide-icon [img]="Hash"></lucide-icon>
-            <input class="w-full h-12 bg-transparent outline-none text-sm" placeholder="MR ID">
+          <!-- Agency Name -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Agency Name <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="User"></lucide-icon>
+
+              <input
+                formControlName="name"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Agency Name">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['name'].errors?.['required']"
+              class="text-red-500">
+
+              Agency Name is required
+
+            </small>
+
           </div>
 
-          <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-            <lucide-icon [img]="User"></lucide-icon>
-            <input class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Full Name">
+          <!-- Contact Person -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Contact Person <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="User"></lucide-icon>
+
+              <input
+                formControlName="contactPerson"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Contact Person">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['contactPerson'].errors?.['required']"
+              class="text-red-500">
+
+              Contact Person is required
+
+            </small>
+
           </div>
 
-          <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-            <lucide-icon [img]="Calendar"></lucide-icon>
-            <input type="date" class="w-full h-12 bg-transparent outline-none text-sm">
+          <!-- Mobile -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Mobile Number <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="Phone"></lucide-icon>
+
+              <input
+                formControlName="mobile"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Mobile Number">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['mobile'].errors?.['required']"
+              class="text-red-500">
+
+              Mobile Number is required
+
+            </small>
+
+            <small
+              *ngIf="submitted && f['mobile'].errors?.['pattern']"
+              class="text-red-500">
+
+              Enter valid 10 digit mobile number
+
+            </small>
+
+          </div>
+
+          <!-- Email -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Email <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="Mail"></lucide-icon>
+
+              <input
+                formControlName="email"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Email">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['email'].errors?.['required']"
+              class="text-red-500">
+
+              Email is required
+
+            </small>
+
+            <small
+              *ngIf="submitted && f['email'].errors?.['email']"
+              class="text-red-500">
+
+              Enter valid email address
+
+            </small>
+
+          </div>
+
+          <!-- Address -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Address <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="MapPin"></lucide-icon>
+
+              <input
+                formControlName="address"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Address">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['address'].errors?.['required']"
+              class="text-red-500">
+
+              Address is required
+
+            </small>
+
+          </div>
+
+          <!-- City -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              City <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="Building2"></lucide-icon>
+
+              <input
+                formControlName="city"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter City">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['city'].errors?.['required']"
+              class="text-red-500">
+
+              City is required
+
+            </small>
+
+          </div>
+
+          <!-- State -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              State <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="Map"></lucide-icon>
+
+              <input
+                formControlName="state"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter State">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['state'].errors?.['required']"
+              class="text-red-500">
+
+              State is required
+
+            </small>
+
+          </div>
+
+          <!-- Pincode -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Pincode <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="Hash"></lucide-icon>
+
+              <input
+                formControlName="pincode"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Pincode">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['pincode'].errors?.['required']"
+              class="text-red-500">
+
+              Pincode is required
+
+            </small>
+
+            <small
+              *ngIf="submitted && f['pincode'].errors?.['pattern']"
+              class="text-red-500">
+
+              Enter valid 6 digit pincode
+
+            </small>
+
+          </div>
+
+          <!-- Region -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Region <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="Route"></lucide-icon>
+
+              <input
+                formControlName="region"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Region">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['region'].errors?.['required']"
+              class="text-red-500">
+
+              Region is required
+
+            </small>
+
+          </div>
+
+          <!-- Cover Area -->
+          <div>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Cover Area <span class="text-red-500">*</span>
+            </label>
+
+            <div
+              class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
+              <lucide-icon [img]="MapPin"></lucide-icon>
+
+              <input
+                formControlName="coverArea"
+                class="w-full h-12 bg-transparent outline-none text-sm"
+                placeholder="Enter Cover Area">
+
+            </div>
+
+            <small
+              *ngIf="submitted && f['coverArea'].errors?.['required']"
+              class="text-red-500">
+
+              Cover Area is required
+
+            </small>
+
           </div>
 
         </div>
+
       </div>
 
-      <!-- 📞 Contact -->
-      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
-        <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700 border-b pb-2">
-          <lucide-icon [img]="Phone"></lucide-icon>
-          Contact Details
-        </h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-
-          <div class="input-box">
-            <lucide-icon [img]="Phone"></lucide-icon>
-            <input placeholder="Mobile Number">
-          </div>
-
-          <div class="input-box">
-            <lucide-icon [img]="Mail"></lucide-icon>
-            <input placeholder="Email">
-          </div>
-
-          <div class="input-box">
-            <lucide-icon [img]="MapPin"></lucide-icon>
-            <input placeholder="City">
-          </div>
-
-        </div>
-      </div>
-
-      <!-- 🏢 Work Info -->
-      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
-        <h2 class="section-title">
-          <lucide-icon [img]="Briefcase"></lucide-icon>
-          Work Details
-        </h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-
-          <div class="input-box">
-            <lucide-icon [img]="Calendar"></lucide-icon>
-            <input type="date">
-          </div>
-
-          <div class="input-box">
-            <lucide-icon [img]="UserCheck"></lucide-icon>
-            <input placeholder="Manager Name">
-          </div>
-
-          <div class="input-box">
-            <lucide-icon [img]="Map"></lucide-icon>
-            <input placeholder="Region">
-          </div>
-
-        </div>
-      </div>
-
-      <!-- 🌍 Territory -->
-      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
-        <h2 class="section-title">
-          <lucide-icon [img]="Route"></lucide-icon>
-          Territory Mapping
-        </h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-
-          <div class="input-box">
-            <lucide-icon [img]="Map"></lucide-icon>
-            <input placeholder="Assigned Area">
-          </div>
-
-          <div class="input-box">
-            <lucide-icon [img]="Users"></lucide-icon>
-            <input placeholder="Assigned Doctors">
-          </div>
-
-          <div class="input-box">
-            <lucide-icon [img]="Building2"></lucide-icon>
-            <input placeholder="Assigned Stockists">
-          </div>
-
-        </div>
-      </div>
-
-      <!-- 🔘 Actions -->
+      <!-- Actions -->
       <div class="flex flex-col md:flex-row justify-end gap-4">
 
         <button
-          class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2.5 rounded-xl w-full md:w-auto transition">
-          Cancel
+          type="button"
+          (click)="resetForm()"
+          class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl transition">
+
+          Reset
+
         </button>
 
         <button
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 w-full md:w-auto transition">
+          type="button"
+          (click)="saveMr()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl flex items-center justify-center gap-2 transition">
+
           <lucide-icon [img]="Save"></lucide-icon>
           Save Representative
+
         </button>
 
       </div>
@@ -145,4 +383,5 @@
     </form>
 
   </div>
+
 </div>

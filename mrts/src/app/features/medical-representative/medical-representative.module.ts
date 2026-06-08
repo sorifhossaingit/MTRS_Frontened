@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule , ReactiveFormsModule} from '@angular/forms';
 import { MedicalRepresentativeRoutingModule } from './medical-representative-routing.module';
 import { MedicalRepresentativeMasterDashboardComponent } from './pages/medical-representative-master-dashboard/medical-representative-master-dashboard.component';
 import {
@@ -18,6 +18,7 @@ import { AddMedicalRepresentativeComponent } from './pages/add-medical-represent
 import { MedicineMasterComponent } from './pages/medicine-master/medicine-master.component';
 import { MrAttendanceComponent } from './pages/mr-attendance/mr-attendance.component';
 import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.component';
+import { MrDashboardComponent } from './pages/mr-dashboard/mr-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -25,12 +26,14 @@ import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.
     AddMedicalRepresentativeComponent,
     MedicineMasterComponent,
     MrAttendanceComponent,
-    MrOrderMasterComponent
+    MrOrderMasterComponent,
+    MrDashboardComponent
   ],
   imports: [
     CommonModule,
     MedicalRepresentativeRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     LucideAngularModule.pick({
       UserCheck,
       Plus,

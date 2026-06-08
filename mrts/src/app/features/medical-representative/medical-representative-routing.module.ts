@@ -5,6 +5,7 @@ import { AddMedicalRepresentativeComponent } from './pages/add-medical-represent
 import { MedicineMasterComponent } from './pages/medicine-master/medicine-master.component';
 import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.component';
 import { MrAttendanceComponent } from './pages/mr-attendance/mr-attendance.component';
+import { MrDashboardComponent } from './pages/mr-dashboard/mr-dashboard.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
       {
         path: 'medical-representative-master-dashboard',
         component: MedicalRepresentativeMasterDashboardComponent
+      },
+      {
+        path: 'medical-representative-dashboard',
+        component: MrDashboardComponent
       },
       {
         path: 'add-medical-representative',
