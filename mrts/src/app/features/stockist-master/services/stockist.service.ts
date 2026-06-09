@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment';
 export class StockistService {
   
 private apiUrl = environment.apiUrl;
+private authurl = environment.authurl
 
   constructor(private http: HttpClient) { }
 
@@ -38,6 +39,9 @@ private apiUrl = environment.apiUrl;
       `${this.apiUrl}/admin/area-manager/dropdown/active-area-managers/${agencyId}`);
   }
  
+  reset_password(data: any) {
+    return this.http.post(`${this.authurl}/Auth/reset-password`, data);
+  }
 
 
 

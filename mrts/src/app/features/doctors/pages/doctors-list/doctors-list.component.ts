@@ -34,6 +34,7 @@ import {
   MapPin
 } from 'lucide-angular';
 import { DoctorService } from '../../services/doctor.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-doctors-list',
@@ -95,7 +96,7 @@ export class DoctorsListComponent implements OnInit {
     private fb: FormBuilder,
     private doctorService: DoctorService,
     private router: Router
-  ) {}
+  ) { }
 
   // =====================================================
   // 🔷 INIT
@@ -110,7 +111,7 @@ export class DoctorsListComponent implements OnInit {
     this.getAreaManagerList();
   }
 
-   getAreaManagerList() {
+  getAreaManagerList() {
 
     this.doctorService
       .getAreamanagerlist(this.agencyId)
@@ -272,6 +273,13 @@ export class DoctorsListComponent implements OnInit {
 
       this.doctorForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
 
     }
@@ -296,21 +304,35 @@ export class DoctorsListComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
-            'Doctor Added Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Doctor Added Successfully',
+            confirmButtonColor: '#16a34a'
+          }).then(() => {
 
-          this.doctorForm.reset();
+            this.doctorForm.reset();
 
-          this.router.navigate([
-            '/doctor-master/dashboard'
-          ]);
+            this.router.navigate([
+              '/doctor-master/dashboard'
+            ]);
+
+          });
 
         },
 
         error: (err: any) => {
 
           console.log(err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text:
+              err?.error?.message ||
+              'Failed to add doctor',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 

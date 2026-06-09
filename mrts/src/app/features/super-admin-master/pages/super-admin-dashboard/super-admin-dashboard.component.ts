@@ -145,7 +145,7 @@ export class SuperAdminDashboardComponent implements OnInit {
 
   getDashboardSummary() {
 
-    this.superAdminService 
+    this.superAdminService
       .getdashboradsummery()
       .subscribe({
 
@@ -211,11 +211,21 @@ export class SuperAdminDashboardComponent implements OnInit {
           }
         },
 
-        error: (err) => {
+        error: (err: any) => {
 
           this.loading = false;
 
           console.log(err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Loading Failed',
+            text:
+              err?.error?.message ||
+              'Unable to load data.',
+            confirmButtonColor: '#dc2626'
+          });
+
         }
       });
   }
@@ -306,6 +316,13 @@ export class SuperAdminDashboardComponent implements OnInit {
 
       this.editForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
     }
 
@@ -368,19 +385,33 @@ export class SuperAdminDashboardComponent implements OnInit {
 
           if (res.success) {
 
-            alert('Agency updated successfully');
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Agency updated successfully',
+              confirmButtonColor: '#16a34a'
+            });
 
             this.closeModal();
 
             this.getAgencyList();
           }
+
         },
 
-        error: (err) => {
+        error: (err: any) => {
 
           console.log(err);
 
-          alert('Failed to update agency');
+          Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text:
+              err?.error?.message ||
+              'Failed to update agency',
+            confirmButtonColor: '#dc2626'
+          });
+
         }
       });
   }

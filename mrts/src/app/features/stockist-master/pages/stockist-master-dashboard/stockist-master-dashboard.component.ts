@@ -8,7 +8,8 @@ import {
   CheckCircle,
   Wallet,
   BadgeIndianRupee,
-  X
+  X,
+  KeyRound
 } from 'lucide-angular';
 
 import {
@@ -19,6 +20,7 @@ import {
 
 import { jwtDecode } from 'jwt-decode';
 import { StockistService } from '../../services/stockist.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-stockist-master-dashboard',
@@ -40,6 +42,7 @@ export class StockistMasterDashboardComponent implements OnInit {
   Wallet = Wallet;
   BadgeIndianRupee = BadgeIndianRupee;
   X = X;
+  KeyRound = KeyRound;
   // =====================================================
   // VARIABLES
   // =====================================================
@@ -424,6 +427,13 @@ export class StockistMasterDashboardComponent implements OnInit {
 
       this.stockistForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
 
     }
@@ -493,10 +503,12 @@ export class StockistMasterDashboardComponent implements OnInit {
       .subscribe({
 
         next: (res: any) => {
-
-          alert(
-            'Stockist Updated Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Stockist Updated Successfully',
+            confirmButtonColor: '#16a34a'
+          });
 
           this.closeModal();
 
@@ -508,13 +520,166 @@ export class StockistMasterDashboardComponent implements OnInit {
 
           console.log(err);
 
-          alert(
-            'Something went wrong'
-          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text:
+              err?.error?.message ||
+              'Something went wrong',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 
       });
+
+  }
+
+  reset_password(data: any): void {
+    Swal.fire({
+      title: 'Reset Password?',
+      text: `Are you sure you want to reset the password for ${data.name}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Reset',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#2563eb'
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        const payload = {
+          userId: data.userId, // change if your API expects another field
+          updatedBy: this.updatedBy
+        };
+
+        this.stockistService.reset_password(payload).subscribe({
+          next: (res: any) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: res?.message || 'Password reset successfully.'
+            });
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Failed',
+              text:
+                err?.error?.message ||
+                'Unable to reset password. Please try again.'
+            });
+          }
+        });
+
+      }
+
+    });
+  }
+
+  deleteStockist(stockist: any) {
+
+    Swal.fire({
+      title: 'Delete Stockist?',
+      text: `Are you sure you want to delete ${stockist.name}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280'
+    }).then((result) => {
+
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      const payload = {
+
+        stockistId: stockist.stockistId,
+
+        agencyId: Number(this.agencyId),
+
+        name: stockist.name,
+
+        firmType: stockist.firmType,
+
+        contactPerson: stockist.contactPerson,
+
+        mobile: stockist.mobile,
+
+        email: stockist.email,
+
+        address: stockist.address,
+
+        city: stockist.city,
+
+        state: stockist.state,
+
+        pincode: stockist.pincode,
+
+        gstNo: stockist.gstNo,
+
+        drugLicenseNo: stockist.drugLicenseNo,
+
+        region: stockist.region,
+
+        assignedAreaManager:
+          Number(stockist.assignedAreaManager),
+
+        coverArea: stockist.coverArea,
+
+        isActive: false,
+
+        updatedBy: this.updatedBy
+
+      };
+
+      Swal.fire({
+        title: 'Deleting Stockist...',
+        text: 'Please wait',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      this.stockistService
+        .updatestockistdetails(payload)
+        .subscribe({
+
+          next: (res: any) => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted',
+              text: 'Stockist Deleted Successfully',
+              confirmButtonColor: '#16a34a'
+            });
+
+            this.getStockists();
+
+          },
+
+          error: (err: any) => {
+
+            console.log(err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed',
+              text:
+                err?.error?.message ||
+                'Something went wrong',
+              confirmButtonColor: '#dc2626'
+            });
+
+          }
+
+        });
+
+    });
 
   }
 

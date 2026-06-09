@@ -15,6 +15,7 @@ import {
 } from 'lucide-angular';
 import { DoctorService } from '../../services/doctor.service';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -446,6 +447,13 @@ export class DoctorsDashboardComponent implements OnInit {
 
       this.editDoctorForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
 
     }
@@ -503,9 +511,12 @@ export class DoctorsDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
-            'Doctor Updated Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Doctor Updated Successfully',
+            confirmButtonColor: '#16a34a'
+          });
 
           this.showEditModal = false;
 
@@ -518,6 +529,15 @@ export class DoctorsDashboardComponent implements OnInit {
         error: (err: any) => {
 
           console.log(err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text:
+              err?.error?.message ||
+              'Something went wrong while updating the doctor.',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 
@@ -543,84 +563,117 @@ export class DoctorsDashboardComponent implements OnInit {
 
   deleteDoctor(doc: any) {
 
-  const confirmDelete = confirm(
-    'Are you sure want to delete?'
-  );
+    Swal.fire({
+      title: 'Delete Doctor?',
+      text: `Are you sure you want to delete ${doc.name}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280'
+    }).then((result) => {
 
-  if (!confirmDelete) return;
-
-  const payload = {
-
-    doctorId: doc.doctorId,
-
-    agencyId: this.agencyId,
-
-    name: doc.name,
-
-    qualification: doc.qualification,
-
-    specialization: doc.specialization,
-
-    mobile: doc.mobile,
-
-    email: doc.email,
-
-    clinicName: doc.clinicName,
-
-    hospitalName: doc.hospitalName,
-
-    address: doc.address,
-
-    category: doc.category,
-
-    potentialScore: Number(doc.potentialScore),
-
-    assignedAreaManager: Number(doc.assignedAreaManager),
-
-    lastVisit: doc.lastVisit,
-
-    nextVisit: doc.nextVisit,
-
-    updatedBy: this.userId,
-
-    isActive: false,
-
-    visitingHours: doc.visitingHours,
-
-    weeklyOffDay: doc.weeklyOffDay,
-
-    prescriptionType: doc.prescriptionType,
-
-    doctorBehaviour: doc.doctorBehaviour
-  };
-
-  console.log(payload);
-
-  this.doctorService
-    .updatedoctordetails(payload)
-    .subscribe({
-
-      next: (res: any) => {
-
-        alert('Doctor Deleted Successfully');
-
-        this.loadDoctors();
-
-        this.loadDashboardSummary();
-
-      },
-
-      error: (err: any) => {
-
-        console.log(err);
-
-        alert('Failed to delete doctor');
-
+      if (!result.isConfirmed) {
+        return;
       }
+
+      const payload = {
+
+        doctorId: doc.doctorId,
+
+        agencyId: this.agencyId,
+
+        name: doc.name,
+
+        qualification: doc.qualification,
+
+        specialization: doc.specialization,
+
+        mobile: doc.mobile,
+
+        email: doc.email,
+
+        clinicName: doc.clinicName,
+
+        hospitalName: doc.hospitalName,
+
+        address: doc.address,
+
+        category: doc.category,
+
+        potentialScore: Number(doc.potentialScore),
+
+        assignedAreaManager:
+          Number(doc.assignedAreaManager),
+
+        lastVisit: doc.lastVisit,
+
+        nextVisit: doc.nextVisit,
+
+        updatedBy: this.userId,
+
+        isActive: false,
+
+        visitingHours: doc.visitingHours,
+
+        weeklyOffDay: doc.weeklyOffDay,
+
+        prescriptionType: doc.prescriptionType,
+
+        doctorBehaviour: doc.doctorBehaviour
+
+      };
+
+      Swal.fire({
+        title: 'Deleting Doctor...',
+        text: 'Please wait',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      this.doctorService
+        .updatedoctordetails(payload)
+        .subscribe({
+
+          next: (res: any) => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted',
+              text: 'Doctor Deleted Successfully',
+              confirmButtonColor: '#16a34a'
+            });
+
+            this.loadDoctors();
+
+            this.loadDashboardSummary();
+
+          },
+
+          error: (err: any) => {
+
+            console.log(err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed',
+              text:
+                err?.error?.message ||
+                'Failed to delete doctor',
+              confirmButtonColor: '#dc2626'
+            });
+
+          }
+
+        });
 
     });
 
-}
+  }
 
   // =========================================================
   // 🔷 FORMAT DATE

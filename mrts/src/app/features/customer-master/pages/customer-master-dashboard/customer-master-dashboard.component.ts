@@ -14,6 +14,7 @@ import {
 } from 'lucide-angular';
 
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
 import {
   FormBuilder,
@@ -200,6 +201,9 @@ export class CustomerMasterDashboardComponent implements OnInit {
       region: [''],
 
       landline: [''],
+
+      isActive: [true],
+
 
       updatedBy: [0]
 
@@ -417,6 +421,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
       landline: data.landline,
 
+      isActive: data.isActive,
+
       updatedBy: this.updatedBy
 
     });
@@ -434,6 +440,13 @@ export class CustomerMasterDashboardComponent implements OnInit {
     if (this.customerForm.invalid) {
 
       this.customerForm.markAllAsTouched();
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
 
       return;
 
@@ -494,10 +507,12 @@ export class CustomerMasterDashboardComponent implements OnInit {
           formValue.assignedAreaManager
         ),
 
-      region:formValue.region,
+      region: formValue.region,
 
       landline:
         formValue.landline,
+
+      isActive: formValue.isActive,
 
       updatedBy:
         this.updatedBy
@@ -510,9 +525,12 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
-            'Customer Updated Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Customer Updated Successfully',
+            confirmButtonColor: '#16a34a'
+          });
 
           this.showEditModal = false;
 
@@ -523,6 +541,13 @@ export class CustomerMasterDashboardComponent implements OnInit {
         error: (err: any) => {
 
           console.log(err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text: err?.error?.message || 'Something went wrong',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 
@@ -582,95 +607,120 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
 
   // =========================================================
-// 🔷 DELETE CUSTOMER
-// =========================================================
+  // 🔷 DELETE CUSTOMER
+  // =========================================================
 
-deleteCustomer(item: any) {
+  deleteCustomer(item: any) {
 
-  const confirmDelete = confirm(
-    'Are you sure want to delete this customer?'
-  );
+    Swal.fire({
+      title: 'Delete Customer?',
+      text: `Are you sure you want to delete ${item.name}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280'
+    }).then((result) => {
 
-  if (!confirmDelete) {
-
-    return;
-
-  }
-
-  const payload = {
-
-    customerId: item.customerId,
-
-    agencyId: this.agencyId,
-
-    name: item.name,
-
-    type: item.type,
-
-    registrationNo: item.registrationNo,
-
-    contactPerson: item.contactPerson,
-
-    mobile: item.mobile,
-
-    email: item.email,
-
-    address: item.address,
-
-    city: item.city,
-
-    state: item.state,
-
-    pincode: item.pincode,
-
-    gstNo: item.gstNo,
-
-    drugLicenseNo: item.drugLicenseNo,
-
-    panNo: item.panNo,
-
-    assignedAreaManager:
-      Number(item.assignedAreaManager || 0),
-
-    region:item.region ,
-
-    landline: item.landline,
-
-    updatedBy: this.updatedBy,
-
-    isActive: false
-
-  };
-
-  this.customerService
-    .updatecustomerdetails(payload)
-    .subscribe({
-
-      next: (res: any) => {
-
-        alert(
-          'Customer Deleted Successfully'
-        );
-
-        this.getCustomerDetails();
-
-        this.getDashboardDetails();
-
-      },
-
-      error: (err: any) => {
-
-        console.log(err);
-
-        alert(
-          'Something went wrong'
-        );
-
+      if (!result.isConfirmed) {
+        return;
       }
+
+      const payload = {
+
+        customerId: item.customerId,
+
+        agencyId: this.agencyId,
+
+        name: item.name,
+
+        type: item.type,
+
+        registrationNo: item.registrationNo,
+
+        contactPerson: item.contactPerson,
+
+        mobile: item.mobile,
+
+        email: item.email,
+
+        address: item.address,
+
+        city: item.city,
+
+        state: item.state,
+
+        pincode: item.pincode,
+
+        gstNo: item.gstNo,
+
+        drugLicenseNo: item.drugLicenseNo,
+
+        panNo: item.panNo,
+
+        assignedAreaManager:
+          Number(item.assignedAreaManager || 0),
+
+        region: item.region,
+
+        landline: item.landline,
+
+        updatedBy: this.updatedBy,
+
+        isActive: false
+
+      };
+
+      Swal.fire({
+        title: 'Deleting...',
+        text: 'Please wait',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      this.customerService
+        .updatecustomerdetails(payload)
+        .subscribe({
+
+          next: (res: any) => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted',
+              text: 'Customer Deleted Successfully',
+              confirmButtonColor: '#16a34a'
+            });
+
+            this.getCustomerDetails();
+
+            this.getDashboardDetails();
+
+          },
+
+          error: (err: any) => {
+
+            console.log(err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed',
+              text:
+                err?.error?.message ||
+                'Something went wrong',
+              confirmButtonColor: '#dc2626'
+            });
+
+          }
+
+        });
 
     });
 
-}
+  }
 
   // =========================================================
   // 🔷 FORM CONTROLS

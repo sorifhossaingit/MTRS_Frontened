@@ -23,6 +23,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { StockistService } from '../../services/stockist.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-stockist',
@@ -49,7 +50,7 @@ export class AddStockistComponent implements OnInit {
   Layers = Layers;
   CheckCircle = CheckCircle;
   Save = Save;
-// =====================================================
+  // =====================================================
   // FORM
   // =====================================================
 
@@ -81,7 +82,7 @@ export class AddStockistComponent implements OnInit {
     private fb: FormBuilder,
     private stockistService: StockistService,
     private router: Router
-  ) {}
+  ) { }
 
   // =====================================================
   // INIT
@@ -254,6 +255,13 @@ export class AddStockistComponent implements OnInit {
 
       this.stockistForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
 
     }
@@ -321,13 +329,18 @@ export class AddStockistComponent implements OnInit {
 
           this.isSaving = false;
 
-          alert(
-            'Stockist Added Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Stockist Added Successfully',
+            confirmButtonColor: '#16a34a'
+          }).then(() => {
 
-          this.router.navigate([
-            '/stockist-master/stockist-master-dashboard'
-          ]);
+            this.router.navigate([
+              '/stockist-master/stockist-master-dashboard'
+            ]);
+
+          });
 
         },
 
@@ -337,9 +350,14 @@ export class AddStockistComponent implements OnInit {
 
           console.log(err);
 
-          alert(
-            'Failed To Add Stockist'
-          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text:
+              err?.error?.message ||
+              'Failed To Add Stockist',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 

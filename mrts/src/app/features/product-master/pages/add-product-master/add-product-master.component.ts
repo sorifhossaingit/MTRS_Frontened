@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 
 import { jwtDecode } from 'jwt-decode';
 import { ProductService } from '../../services/product.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-product-master',
@@ -250,6 +251,13 @@ export class AddProductMasterComponent implements OnInit {
 
       this.productForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
 
     }
@@ -370,13 +378,18 @@ export class AddProductMasterComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
-            'Product Added Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Product Added Successfully',
+            confirmButtonColor: '#16a34a'
+          }).then(() => {
 
-          this.router.navigate([
-            '/product-master/product-master-dashboard'
-          ]);
+            this.router.navigate([
+              '/product-master/product-master-dashboard'
+            ]);
+
+          });
 
         },
 
@@ -384,9 +397,14 @@ export class AddProductMasterComponent implements OnInit {
 
           console.log(err);
 
-          alert(
-            'Something went wrong'
-          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text:
+              err?.error?.message ||
+              'Something went wrong',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 

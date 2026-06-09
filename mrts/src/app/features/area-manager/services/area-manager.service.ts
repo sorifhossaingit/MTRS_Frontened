@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class AreaManagerService {
   private apiUrl = environment.apiUrl;
-
+  private authurl = environment.authurl;
 
   constructor(private http: HttpClient) { }
 
@@ -32,6 +32,10 @@ export class AreaManagerService {
     return this.http.put(`${this.apiUrl}/admin/area-manager/update`, data);
   }
 
+
+  reset_password(data: any) {
+    return this.http.post(`${this.authurl}/Auth/reset-password`, data);
+  }
 
 
 }

@@ -23,6 +23,7 @@ import {
 
 import { jwtDecode } from 'jwt-decode';
 import { ProductService } from '../../services/product.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product-master-dashboard',
@@ -444,6 +445,13 @@ export class ProductMasterDashboardComponent implements OnInit {
 
       this.productForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
 
     }
@@ -498,9 +506,12 @@ export class ProductMasterDashboardComponent implements OnInit {
 
         next: () => {
 
-          alert(
-            'Product Updated Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Product Updated Successfully',
+            confirmButtonColor: '#16a34a'
+          });
 
           this.showEditModal = false;
 
@@ -511,6 +522,15 @@ export class ProductMasterDashboardComponent implements OnInit {
         error: (err: any) => {
 
           console.log(err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text:
+              err?.error?.message ||
+              'Something went wrong while updating the product.',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 
@@ -524,141 +544,173 @@ export class ProductMasterDashboardComponent implements OnInit {
 
   deleteProduct(item: any) {
 
-    const confirmDelete = confirm(
-      'Are you sure want to delete?'
-    );
+    Swal.fire({
+      title: 'Delete Product?',
+      text: `Are you sure you want to delete ${item.name}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280'
+    }).then((result) => {
 
-    if (!confirmDelete) return;
+      if (!result.isConfirmed) {
+        return;
+      }
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append(
-      'ProductId',
-      item.productId
-    );
+      formData.append(
+        'ProductId',
+        item.productId
+      );
 
-    formData.append(
-      'AgencyId',
-      this.agencyId
-    );
+      formData.append(
+        'AgencyId',
+        this.agencyId
+      );
 
-    formData.append(
-      'Name',
-      item.name || ''
-    );
+      formData.append(
+        'Name',
+        item.name || ''
+      );
 
-    formData.append(
-      'BrandName',
-      item.brandName || ''
-    );
+      formData.append(
+        'BrandName',
+        item.brandName || ''
+      );
 
-    formData.append(
-      'GenericName',
-      item.genericName || ''
-    );
+      formData.append(
+        'GenericName',
+        item.genericName || ''
+      );
 
-    formData.append(
-      'Category',
-      item.category || ''
-    );
+      formData.append(
+        'Category',
+        item.category || ''
+      );
 
-    formData.append(
-      'DosageForm',
-      item.dosageForm || ''
-    );
+      formData.append(
+        'DosageForm',
+        item.dosageForm || ''
+      );
 
-    formData.append(
-      'Strength',
-      item.strength || ''
-    );
+      formData.append(
+        'Strength',
+        item.strength || ''
+      );
 
-    formData.append(
-      'Mrp',
-      item.mrp || 0
-    );
+      formData.append(
+        'Mrp',
+        item.mrp || 0
+      );
 
-    formData.append(
-      'Ptr',
-      item.ptr || 0
-    );
+      formData.append(
+        'Ptr',
+        item.ptr || 0
+      );
 
-    formData.append(
-      'Pts',
-      item.pts || 0
-    );
+      formData.append(
+        'Pts',
+        item.pts || 0
+      );
 
-    formData.append(
-      'PackSize',
-      item.packSize || ''
-    );
+      formData.append(
+        'PackSize',
+        item.packSize || ''
+      );
 
-    formData.append(
-      'UnitsPerBox',
-      item.unitsPerBox || 0
-    );
+      formData.append(
+        'UnitsPerBox',
+        item.unitsPerBox || 0
+      );
 
-    formData.append(
-      'LaunchDate',
-      item.launchDate
-    );
+      formData.append(
+        'LaunchDate',
+        item.launchDate
+      );
 
-    formData.append(
-      'Division',
-      item.division || ''
-    );
+      formData.append(
+        'Division',
+        item.division || ''
+      );
 
-    formData.append(
-      'ManufacturingLicenseNumber',
-      item.manufacturingLicenseNumber || ''
-    );
+      formData.append(
+        'ManufacturingLicenseNumber',
+        item.manufacturingLicenseNumber || ''
+      );
 
-    formData.append(
-      'ApprovalDate',
-      item.approvalDate
-    );
+      formData.append(
+        'ApprovalDate',
+        item.approvalDate
+      );
 
-    formData.append(
-      'PromotionPriority',
-      item.promotionPriority || 1
-    );
+      formData.append(
+        'PromotionPriority',
+        item.promotionPriority || 1
+      );
 
-    formData.append(
-      'IsActive',
-      'false'
-    );
+      formData.append(
+        'IsActive',
+        'false'
+      );
 
-    formData.append(
-      'UpdatedBy',
-      this.updatedBy
-    );
+      formData.append(
+        'UpdatedBy',
+        this.updatedBy
+      );
 
-    formData.append(
-      'ImageUrl',
-      item.imageUrl
-    ); 
-    
+      formData.append(
+        'ImageUrl',
+        item.imageUrl
+      );
 
-    this.productService
-      .updateproductdetails(formData)
-      .subscribe({
-
-        next: () => {
-
-          alert(
-            'Product Deleted Successfully'
-          );
-
-          this.getProductDetails();
-
-        },
-
-        error: (err: any) => {
-
-          console.log(err);
-
+      Swal.fire({
+        title: 'Deleting Product...',
+        text: 'Please wait',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
         }
-
       });
+
+      this.productService
+        .updateproductdetails(formData)
+        .subscribe({
+
+          next: () => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted',
+              text: 'Product Deleted Successfully',
+              confirmButtonColor: '#16a34a'
+            });
+
+            this.getProductDetails();
+
+          },
+
+          error: (err: any) => {
+
+            console.log(err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed',
+              text:
+                err?.error?.message ||
+                'Something went wrong while deleting the product.',
+              confirmButtonColor: '#dc2626'
+            });
+
+          }
+
+        });
+
+    });
 
   }
 

@@ -16,6 +16,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 import { Router } from '@angular/router';
 
@@ -222,6 +223,13 @@ export class AddCustomerMasterComponent implements OnInit {
 
       this.customerForm.markAllAsTouched();
 
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill all required fields correctly.',
+        confirmButtonColor: '#f59e0b'
+      });
+
       return;
 
     }
@@ -267,7 +275,7 @@ export class AddCustomerMasterComponent implements OnInit {
           formValue.assignedAreaManager
         ),
 
-      region:formValue.region,
+      region: formValue.region,
 
       landline:
         formValue.landline,
@@ -282,13 +290,18 @@ export class AddCustomerMasterComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
-            'Customer Added Successfully'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Customer Added Successfully',
+            confirmButtonColor: '#16a34a'
+          }).then(() => {
 
-          this.router.navigate([
-            '/customer-master/customer-master-dashboard'
-          ]);
+            this.router.navigate([
+              '/customer-master/customer-master-dashboard'
+            ]);
+
+          });
 
         },
 
@@ -296,9 +309,14 @@ export class AddCustomerMasterComponent implements OnInit {
 
           console.log(err);
 
-          alert(
-            'Something went wrong'
-          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text:
+              err?.error?.message ||
+              'Something went wrong',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 

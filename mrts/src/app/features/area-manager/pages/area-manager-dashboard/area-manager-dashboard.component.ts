@@ -11,7 +11,8 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
+  KeyRound 
 } from 'lucide-angular';
 
 import {
@@ -47,7 +48,7 @@ export class AreaManagerDashboardComponent implements OnInit {
   ChevronLeft = ChevronLeft;
   ChevronRight = ChevronRight;
   X = X;
-
+  KeyRound = KeyRound ;
   // =====================================================
   // VARIABLES
   // =====================================================
@@ -587,6 +588,48 @@ export class AreaManagerDashboardComponent implements OnInit {
     });
 
   }
+
+  reset_password(data: any): void {
+  Swal.fire({
+    title: 'Reset Password?',
+    text: `Are you sure you want to reset the password for ${data.name}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Reset',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#2563eb'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      const payload = {
+        userId: data.userId, // change if your API expects another field
+        updatedBy: this.userId
+      };
+
+      this.areaManagerService.reset_password(payload).subscribe({
+        next: (res: any) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: res?.message || 'Password reset successfully.'
+          });
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text:
+              err?.error?.message ||
+              'Unable to reset password. Please try again.'
+          });
+        }
+      });
+
+    }
+
+  });
+}
 
   
 

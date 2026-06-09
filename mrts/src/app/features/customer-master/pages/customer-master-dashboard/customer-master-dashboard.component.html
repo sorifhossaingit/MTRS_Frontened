@@ -10,8 +10,7 @@
 
     <div class="flex flex-wrap gap-2 w-full sm:w-auto">
 
-      <button
-        routerLink="/customer-master/add-customer-master"
+      <button routerLink="/customer-master/add-customer-master"
         class="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
 
         <lucide-icon [img]="Plus"></lucide-icon>
@@ -115,17 +114,10 @@
 
   <div class="bg-white p-4 rounded-2xl shadow mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
 
-    <input
-      type="text"
-      [(ngModel)]="searchText"
-      (keyup)="getCustomerDetails()"
-      placeholder="Search name/mobile"
+    <input type="text" [(ngModel)]="searchText" (keyup)="getCustomerDetails()" placeholder="Search name/mobile"
       class="border p-2 rounded-lg sm:col-span-2" />
 
-    <select
-      [(ngModel)]="typeFilter"
-      (change)="getCustomerDetails()"
-      class="border p-2 rounded-lg">
+    <select [(ngModel)]="typeFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
 
       <option value="">
         Type
@@ -145,10 +137,7 @@
 
     </select>
 
-    <select
-      [(ngModel)]="statusFilter"
-      (change)="getCustomerDetails()"
-      class="border p-2 rounded-lg">
+    <select [(ngModel)]="statusFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
 
       <option value="">
         Status
@@ -164,16 +153,10 @@
 
     </select>
 
-    <input
-      type="text"
-      [(ngModel)]="stateFilter"
-      (keyup)="getCustomerDetails()"
-      placeholder="State"
+    <input type="text" [(ngModel)]="stateFilter" (keyup)="getCustomerDetails()" placeholder="State"
       class="border p-2 rounded-lg" />
 
-    <button
-      (click)="resetFilter()"
-      class="bg-gray-200 rounded-lg py-2">
+    <button (click)="resetFilter()" class="bg-gray-200 rounded-lg py-2">
 
       Reset
 
@@ -184,90 +167,82 @@
   <!-- TABLE -->
 
   <div class="bg-white rounded-2xl shadow overflow-hidden">
-  <div class="overflow-x-auto">
+    <div class="overflow-x-auto">
 
-    <table class="min-w-[900px] w-full text-sm">
+      <table class="min-w-[900px] w-full text-sm">
 
-      <thead class="bg-gray-100 text-left">
-        <tr>
-          <th class="px-6 py-4">Name</th>
-          <th class="px-6 py-4">Type</th>
-          <th class="px-6 py-4">Contact</th>
-          <th class="px-6 py-4">Location</th>
-          <th class="px-6 py-4">Area Manager</th>
-          <th class="px-6 py-4">Status</th>
-          <th class="px-6 py-4 text-center">Actions</th>
-        </tr>
-      </thead>
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="px-6 py-4">Name</th>
+            <th class="px-6 py-4">Type</th>
+            <th class="px-6 py-4">Contact</th>
+            <th class="px-6 py-4">Location</th>
+            <th class="px-6 py-4">Area Manager</th>
+            <th class="px-6 py-4">Status</th>
+            <th class="px-6 py-4 text-center">Actions</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr
-          *ngFor="let item of customerList"
-          class="border-t hover:bg-gray-50 h-20">
+        <tbody>
+          <tr *ngFor="let item of customerList" class="border-t hover:bg-gray-50 h-20">
 
-          <td class="px-6 py-4 font-medium">
-            {{ item.name }}
-          </td>
+            <td class="px-6 py-4 font-medium">
+              {{ item.name }}
+            </td>
 
-          <td class="px-6 py-4">
-            {{ item.type }}
-          </td>
+            <td class="px-6 py-4">
+              {{ item.type }}
+            </td>
 
-          <td class="px-6 py-4">
-            <div>{{ item.mobile }}</div>
-            <div class="text-gray-500 text-xs mt-1">
-              {{ item.email }}
-            </div>
-          </td>
+            <td class="px-6 py-4">
+              <div>{{ item.mobile }}</div>
+              <div class="text-gray-500 text-xs mt-1">
+                {{ item.email }}
+              </div>
+            </td>
 
-          <td class="px-6 py-4">
-            {{ item.city }}
-          </td>
+            <td class="px-6 py-4">
+              {{ item.city }}
+            </td>
 
-          <td class="px-6 py-4">
-            {{ item.assignedAreaManagerName }}
-          </td>
+            <td class="px-6 py-4">
+              {{ item.assignedAreaManagerName }}
+            </td>
 
-          <td class="px-6 py-4">
-            <span
-              class="px-3 py-1.5 rounded-full text-xs font-medium"
-              [ngClass]="item.isActive
+            <td class="px-6 py-4">
+              <span class="px-3 py-1.5 rounded-full text-xs font-medium" [ngClass]="item.isActive
                 ? 'bg-green-100 text-green-700'
                 : 'bg-red-100 text-red-700'">
 
-              {{ item.isActive ? 'Active' : 'Inactive' }}
-            </span>
-          </td>
+                {{ item.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
 
-          <td class="px-6 py-4 text-center">
-            <div class="flex justify-center items-center gap-4">
+            <td class="px-6 py-4 text-center">
+              <div class="flex justify-center items-center gap-4">
 
-              <button class="text-blue-600 hover:scale-110 transition">
-                <lucide-icon [img]="Eye"></lucide-icon>
-              </button>
+                <button class="text-blue-600 hover:scale-110 transition">
+                  <lucide-icon [img]="Eye"></lucide-icon>
+                </button>
 
-              <button
-                (click)="editCustomer(item)"
-                class="text-yellow-600 hover:scale-110 transition">
-                <lucide-icon [img]="Pencil"></lucide-icon>
-              </button>
+                <button (click)="editCustomer(item)" class="text-yellow-600 hover:scale-110 transition">
+                  <lucide-icon [img]="Pencil"></lucide-icon>
+                </button>
 
-              <button
-                (click)="deleteCustomer(item)"
-                class="text-red-600 hover:scale-110 transition">
-                <lucide-icon [img]="Trash2"></lucide-icon>
-              </button>
+                <button (click)="deleteCustomer(item)" class="text-red-600 hover:scale-110 transition">
+                  <lucide-icon [img]="Trash2"></lucide-icon>
+                </button>
 
-            </div>
-          </td>
+              </div>
+            </td>
 
-        </tr>
-      </tbody>
+          </tr>
+        </tbody>
 
-    </table>
+      </table>
 
+    </div>
   </div>
-</div>
 
   <!-- PAGINATION -->
 
@@ -299,18 +274,14 @@
 
     <div class="flex items-center gap-2">
 
-      <button
-        (click)="previousPage()"
-        [disabled]="pageNumber === 1"
+      <button (click)="previousPage()" [disabled]="pageNumber === 1"
         class="px-4 py-2 rounded-lg bg-gray-200 disabled:opacity-50">
 
         Previous
 
       </button>
 
-      <button
-        (click)="nextPage()"
-        [disabled]="pageNumber === totalPages"
+      <button (click)="nextPage()" [disabled]="pageNumber === totalPages"
         class="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-50">
 
         Next
@@ -325,9 +296,7 @@
         Rows:
       </span>
 
-      <select
-        (change)="changePageSize($event)"
-        class="border rounded-lg p-2">
+      <select (change)="changePageSize($event)" class="border rounded-lg p-2">
 
         <option value="10">
           10
@@ -359,9 +328,7 @@
 <!-- 🔷 EDIT CUSTOMER MODAL -->
 <!-- ====================================================== -->
 
-<div
-  *ngIf="showEditModal"
-  class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
+<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
 
   <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl">
 
@@ -373,9 +340,7 @@
         Update Customer
       </h2>
 
-      <button
-        (click)="closeModal()"
-        class="text-gray-500 hover:text-red-500">
+      <button (click)="closeModal()" class="text-gray-500 hover:text-red-500">
 
         <lucide-icon [img]="X"></lucide-icon>
 
@@ -385,9 +350,7 @@
 
     <!-- FORM -->
 
-    <form
-      [formGroup]="customerForm"
-      class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <form [formGroup]="customerForm" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
       <!-- CUSTOMER NAME -->
 
@@ -397,10 +360,7 @@
           Customer Name
         </label>
 
-        <input
-          type="text"
-          formControlName="name"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="name" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -412,9 +372,7 @@
           Customer Type
         </label>
 
-        <select
-          formControlName="type"
-          class="w-full border rounded-xl p-3 mt-1">
+        <select formControlName="type" class="w-full border rounded-xl p-3 mt-1">
 
           <option value="">
             Select Type
@@ -444,10 +402,7 @@
           Contact Person
         </label>
 
-        <input
-          type="text"
-          formControlName="contactPerson"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="contactPerson" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -459,10 +414,7 @@
           Mobile Number
         </label>
 
-        <input
-          type="text"
-          formControlName="mobile"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="mobile" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -474,10 +426,7 @@
           Email
         </label>
 
-        <input
-          type="email"
-          formControlName="email"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="email" formControlName="email" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -489,10 +438,7 @@
           Address
         </label>
 
-        <input
-          type="text"
-          formControlName="address"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="address" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -504,10 +450,7 @@
           City
         </label>
 
-        <input
-          type="text"
-          formControlName="city"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="city" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -519,10 +462,7 @@
           State
         </label>
 
-        <input
-          type="text"
-          formControlName="state"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="state" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -534,10 +474,7 @@
           Pincode
         </label>
 
-        <input
-          type="text"
-          formControlName="pincode"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="pincode" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -549,10 +486,7 @@
           GST Number
         </label>
 
-        <input
-          type="text"
-          formControlName="gstNo"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="gstNo" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -564,10 +498,7 @@
           Drug License No
         </label>
 
-        <input
-          type="text"
-          formControlName="drugLicenseNo"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="drugLicenseNo" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -579,10 +510,7 @@
           PAN Number
         </label>
 
-        <input
-          type="text"
-          formControlName="panNo"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="panNo" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -594,17 +522,13 @@
           Assigned Area Manager
         </label>
 
-        <select
-          formControlName="assignedAreaManager"
-          class="w-full border rounded-xl p-3 mt-1">
+        <select formControlName="assignedAreaManager" class="w-full border rounded-xl p-3 mt-1">
 
           <option value="">
             Select Area Manager
           </option>
 
-          <option
-            *ngFor="let am of areaManagerList"
-            [value]="am.areaManagerId">
+          <option *ngFor="let am of areaManagerList" [value]="am.areaManagerId">
 
             {{ am.name }} ({{ am.assignedArea }})
 
@@ -612,6 +536,26 @@
 
         </select>
 
+      </div>
+
+      <!-- STATUS -->
+
+      <div>
+        <label class="text-sm font-medium">
+          Status
+        </label>
+
+        <select formControlName="isActive" class="w-full border rounded-xl p-3 mt-1">
+
+          <option [ngValue]="true">
+            Active
+          </option>
+
+          <option [ngValue]="false">
+            Inactive
+          </option>
+
+        </select>
       </div>
 
       <!-- REGION -->
@@ -622,10 +566,7 @@
           Region
         </label>
 
-        <input
-          type="text"
-          formControlName="region"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="region" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -637,10 +578,7 @@
           Landline
         </label>
 
-        <input
-          type="text"
-          formControlName="landline"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="landline" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -652,10 +590,7 @@
           Registration Number
         </label>
 
-        <input
-          type="text"
-          formControlName="registrationNo"
-          class="w-full border rounded-xl p-3 mt-1">
+        <input type="text" formControlName="registrationNo" class="w-full border rounded-xl p-3 mt-1">
 
       </div>
 
@@ -665,18 +600,14 @@
 
     <div class="flex justify-end gap-3 border-t px-6 py-4">
 
-      <button
-        type="button"
-        (click)="closeModal()"
+      <button type="button" (click)="closeModal()"
         class="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-xl">
 
         Cancel
 
       </button>
 
-      <button
-        type="button"
-        (click)="updateCustomer()"
+      <button type="button" (click)="updateCustomer()"
         class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl">
 
         Update Customer

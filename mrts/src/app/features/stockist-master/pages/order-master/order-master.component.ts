@@ -10,6 +10,7 @@ import {
 } from 'lucide-angular';
 import { jwtDecode } from 'jwt-decode';
 import { StockistService } from '../../services/stockist.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order-master',
@@ -75,8 +76,8 @@ export class OrderMasterComponent implements OnInit {
   // =====================================================
 
   constructor(
-  private stockistService: StockistService
-  ) {}
+    private stockistService: StockistService
+  ) { }
 
   // =====================================================
   // INIT
@@ -88,7 +89,7 @@ export class OrderMasterComponent implements OnInit {
 
   }
 
-  
+
 
   // =====================================================
   // GET ORDERS
@@ -106,9 +107,9 @@ export class OrderMasterComponent implements OnInit {
 
       Status: this.status,
 
-      FromDate: this.fromDate ,
+      FromDate: this.fromDate,
 
-      ToDate: this.toDate ,
+      ToDate: this.toDate,
 
       PageNumber: this.pageNumber,
 
@@ -155,6 +156,15 @@ export class OrderMasterComponent implements OnInit {
           console.log(err);
 
           this.loading = false;
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Loading Failed',
+            text:
+              err?.error?.message ||
+              'Unable to load Order.',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 
@@ -247,6 +257,15 @@ export class OrderMasterComponent implements OnInit {
 
           this.previewLoading = false;
 
+          Swal.fire({
+            icon: 'error',
+            title: 'Preview Failed',
+            text:
+              err?.error?.message ||
+              'Unable to generate preview.',
+            confirmButtonColor: '#dc2626'
+          });
+
         }
 
       });
@@ -295,9 +314,12 @@ export class OrderMasterComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
-            `Order ${status} Successfully`
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: `Order ${status} Successfully`,
+            confirmButtonColor: '#16a34a'
+          });
 
           this.getOrders();
 
@@ -307,9 +329,14 @@ export class OrderMasterComponent implements OnInit {
 
           console.log(err);
 
-          alert(
-            'Failed To Update Status'
-          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text:
+              err?.error?.message ||
+              'Failed To Update Status',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 

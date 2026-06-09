@@ -10,6 +10,7 @@ import {
 } from 'lucide-angular';
 import { jwtDecode } from 'jwt-decode';
 import { ProductService } from '../../services/product.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-stockist-order-details',
@@ -78,7 +79,7 @@ export class StockistOrderDetailsComponent implements OnInit {
 
   constructor(
     private productService: ProductService
-  ) {}
+  ) { }
 
   // =====================================================
   // INIT
@@ -133,9 +134,9 @@ export class StockistOrderDetailsComponent implements OnInit {
 
       Status: this.status,
 
-      FromDate: this.fromDate ,
+      FromDate: this.fromDate,
 
-      ToDate: this.toDate ,
+      ToDate: this.toDate,
 
       PageNumber: this.pageNumber,
 
@@ -278,6 +279,15 @@ export class StockistOrderDetailsComponent implements OnInit {
 
           this.previewLoading = false;
 
+          Swal.fire({
+            icon: 'error',
+            title: 'Preview Failed',
+            text:
+              err?.error?.message ||
+              'Unable to load preview. Please try again.',
+            confirmButtonColor: '#dc2626'
+          });
+
         }
 
       });
@@ -326,9 +336,12 @@ export class StockistOrderDetailsComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
-            `Order ${status} Successfully`
-          );
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: `Order ${status} Successfully`,
+            confirmButtonColor: '#16a34a'
+          });
 
           this.getOrders();
 
@@ -338,9 +351,14 @@ export class StockistOrderDetailsComponent implements OnInit {
 
           console.log(err);
 
-          alert(
-            'Failed To Update Status'
-          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text:
+              err?.error?.message ||
+              'Failed To Update Status',
+            confirmButtonColor: '#dc2626'
+          });
 
         }
 
