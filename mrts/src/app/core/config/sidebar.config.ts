@@ -219,13 +219,13 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Visit Master Dashboard',
         icon: 'ClipboardList',
         route: '/visits/visit-master-dashboard',
-        roles: ['Admin', 'Manager']
+        roles: ['Admin', 'Manager', 'MR']
       },
       {
         label: 'Add Visit',
         icon: 'CalendarPlus',
         route: '/visits/add-visit',
-        roles: ['MR']
+        roles: ['MRR']
       },
       {
         label: 'Assign Visit',
