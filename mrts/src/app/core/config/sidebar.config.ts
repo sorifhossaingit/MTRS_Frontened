@@ -131,7 +131,7 @@ export const MENU_ITEMS: MenuItem[] = [
         roles: ['Stockist']
       },
       {
-        label: 'Order Details Master',
+        label: 'MR Order Details Master',
         icon: 'Pill',
         route: '/stockist-master/order-details-master',
         roles: ['Stockist']

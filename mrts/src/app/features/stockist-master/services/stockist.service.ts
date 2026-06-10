@@ -103,6 +103,6 @@ private authurl = environment.authurl
   }
 
   update_mr_order_status(data: any) {
-    return this.http.post(`${this.apiUrl}/mrorder/mr-order-accept-by-stockiest`, data);
+    return this.http.post(`${this.apiUrl}/mrorder/mrorder-accept-reject-bystockiest`, data);
   }
 }
