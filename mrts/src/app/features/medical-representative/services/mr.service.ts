@@ -8,12 +8,12 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class MrService {
- private apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl;
 
 
   constructor(private http: HttpClient) { }
 
-   
+
 
   get_mr(data: any) {
     return this.http.post(`${this.apiUrl}/areamanager/get-medical-representatives`, data);
@@ -27,5 +27,33 @@ export class MrService {
     return this.http.put(`${this.apiUrl}/areamanager/update-medicalrepresentative`, data);
   }
 
+
+
+  //MR OWN APIs
+
+  get_inventory_for_order(params: any) {
+    return this.http.get(
+      `${this.apiUrl}/medicalpresentativeown/nearest-stockist-inventory`, { params });
+  }
+
+  mr_create_order(data: any) {
+    return this.http.post(`${this.apiUrl}/mrorder/create-order`, data);
+  }
+
+
+  //MR ORDER TO STOCKIST APIs
+
+  get_mr_order_list(data: any) {
+    return this.http.post(`${this.apiUrl}/mrorder/mr-ordr-list`, data);
+  }
+ 
+  get_mr_order_preview(orderid: any) {
+    return this.http.get(
+      `${this.apiUrl}/mrorder/mr-order-details/${orderid}`);
+  }
+
+  update_order_status_by_mr(data: any) {
+    return this.http.post(`${this.apiUrl}/mrorder/mr-order-accept-by-stockiest`, data);
+  }
 
 }

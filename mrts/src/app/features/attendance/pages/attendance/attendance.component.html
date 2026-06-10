@@ -15,7 +15,17 @@
       <lucide-icon [img]="Users"></lucide-icon>
       <div>
         <p class="text-sm text-gray-500">Total MR</p>
-        <h2 class="text-xl font-bold">{{totalMR}}</h2>
+        <h2 class="text-xl font-bold">{{ totalMR }}</h2>
+      </div>
+    </div>
+
+    <div class="card flex items-center gap-3">
+      <lucide-icon [img]="UserCheck"></lucide-icon>
+      <div>
+        <p class="text-sm text-gray-500">Active MR</p>
+        <h2 class="text-xl font-bold text-blue-600">
+          {{ activeMR }}
+        </h2>
       </div>
     </div>
 
@@ -23,7 +33,9 @@
       <lucide-icon [img]="CheckCircle"></lucide-icon>
       <div>
         <p class="text-sm text-gray-500">Present</p>
-        <h2 class="text-xl font-bold text-green-600">{{presentCount}}</h2>
+        <h2 class="text-xl font-bold text-green-600">
+          {{ presentCount }}
+        </h2>
       </div>
     </div>
 
@@ -31,40 +43,66 @@
       <lucide-icon [img]="XCircle"></lucide-icon>
       <div>
         <p class="text-sm text-gray-500">Absent</p>
-        <h2 class="text-xl font-bold text-red-600">{{absentCount}}</h2>
-      </div>
-    </div>
-
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="Clock"></lucide-icon>
-      <div>
-        <p class="text-sm text-gray-500">Late</p>
-        <h2 class="text-xl font-bold text-orange-500">{{lateCount}}</h2>
+        <h2 class="text-xl font-bold text-red-600">
+          {{ absentCount }}
+        </h2>
       </div>
     </div>
 
   </div>
 
-  <!-- 🔍 FILTER -->
-  <div class="card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+  <!-- 🔍 FILTERS -->
+  <div class="card mb-6">
 
-    <input type="date" class="input" [(ngModel)]="filter.date">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
 
-    <select class="input" [(ngModel)]="filter.mr">
-      <option value="">All MR</option>
-      <option *ngFor="let m of mrList">{{m}}</option>
-    </select>
+      <input
+        type="date"
+        class="input"
+        [(ngModel)]="filter.date">
 
-    <select class="input" [(ngModel)]="filter.status">
-      <option value="">All Status</option>
-      <option>Present</option>
-      <option>Absent</option>
-      <option>Leave</option>
-    </select>
+      <input
+        type="text"
+        class="input"
+        placeholder="MR Name"
+        [(ngModel)]="filter.name">
 
-    <button class="bg-gray-200 rounded-lg py-2" (click)="resetFilter()">
-      Reset
-    </button>
+      <input
+        type="text"
+        class="input"
+        placeholder="Mobile Number"
+        [(ngModel)]="filter.mobile">
+
+      <input
+        type="text"
+        class="input"
+        placeholder="Email Address"
+        [(ngModel)]="filter.email">
+
+      <select
+        class="input"
+        [(ngModel)]="filter.status">
+
+        <option value="">All Status</option>
+        <option value="Present">Present</option>
+        <option value="Absent">Absent</option>
+        <option value="Leave">Leave</option>
+
+      </select>
+
+      <button
+        class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
+        (click)="applyFilters()">
+        Search
+      </button>
+
+      <button
+        class="bg-gray-200 rounded-lg px-4 py-2 hover:bg-gray-300"
+        (click)="resetFilter()">
+        Reset
+      </button>
+
+    </div>
 
   </div>
 
@@ -73,36 +111,92 @@
 
     <div class="overflow-x-auto">
 
-      <table class="min-w-[800px] w-full text-sm">
+      <table class="min-w-[1000px] w-full text-sm">
+
         <thead class="bg-gray-100 text-left">
+
           <tr>
+
+            <th class="p-3">#</th>
+            <th class="p-3">MR Name</th>
+            <th class="p-3">Mobile</th>
+            <th class="p-3">Email</th>
             <th class="p-3">Date</th>
-            <th>MR Name</th>
-            <th>Check In</th>
-            <th>Check Out</th>
-            <th>Status</th>
+            <th class="p-3">Check In</th>
+            <th class="p-3">Check Out</th>
+            <th class="p-3">Status</th>
+
           </tr>
+
         </thead>
 
         <tbody>
 
-          <tr *ngFor="let a of attendanceList" class="border-t hover:bg-gray-50">
+          <tr
+            *ngFor="let a of attendanceList; let i = index"
+            class="border-t hover:bg-gray-50">
 
-            <td class="p-3">{{a.date}}</td>
-            <td>{{a.name}}</td>
-            <td>{{a.checkIn}}</td>
-            <td>{{a.checkOut}}</td>
+            <td class="p-3">
+              {{ getSerial(i) }}
+            </td>
 
-            <td>
+            <td class="p-3 font-medium">
+              {{ a.name }}
+            </td>
+
+            <td class="p-3">
+              {{ a.mobile || '-' }}
+            </td>
+
+            <td class="p-3">
+              {{ a.email || '-' }}
+            </td>
+
+            <td class="p-3">
+              {{ formatDate(a.date) }}
+            </td>
+
+            <td class="p-3">
+              {{ formatTime(a.checkIn) }}
+            </td>
+
+            <td class="p-3">
+              {{ formatTime(a.checkOut) }}
+            </td>
+
+            <td class="p-3">
+
               <span
-                class="px-2 py-1 rounded text-xs"
+                class="px-3 py-1 rounded-full text-xs font-medium"
                 [ngClass]="{
-                  'bg-green-100 text-green-700': a.status === 'Present',
-                  'bg-red-100 text-red-700': a.status === 'Absent',
-                  'bg-yellow-100 text-yellow-700': a.status === 'Leave'
+                  'bg-green-100 text-green-700':
+                    a.status === 'Present',
+
+                  'bg-red-100 text-red-700':
+                    a.status === 'Absent',
+
+                  'bg-yellow-100 text-yellow-700':
+                    a.status === 'Leave'
                 }">
-                {{a.status}}
+
+                {{ a.status }}
+
               </span>
+
+            </td>
+
+          </tr>
+
+          <!-- No Data -->
+
+          <tr *ngIf="attendanceList.length === 0">
+
+            <td
+              colspan="8"
+              class="text-center py-8 text-gray-500">
+
+              No attendance records found
+
             </td>
 
           </tr>
@@ -110,6 +204,56 @@
         </tbody>
 
       </table>
+
+    </div>
+
+    <!-- 🔢 PAGINATION -->
+
+    <div
+      class="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t bg-white">
+
+      <div class="text-sm text-gray-600">
+        Total Records:
+        <strong>{{ totalRecords }}</strong>
+      </div>
+
+      <div class="flex items-center gap-3">
+
+        <select
+          class="border rounded-lg px-3 py-2"
+          [(ngModel)]="pageSize"
+          (change)="changePageSize(+pageSize)">
+
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+
+        </select>
+
+        <button
+          class="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+          (click)="previousPage()"
+          [disabled]="pageNumber === 1">
+
+          Previous
+
+        </button>
+
+        <span class="text-sm font-medium">
+          Page {{ pageNumber }} of {{ totalPages }}
+        </span>
+
+        <button
+          class="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+          (click)="nextPage()"
+          [disabled]="pageNumber >= totalPages">
+
+          Next
+
+        </button>
+
+      </div>
 
     </div>
 
