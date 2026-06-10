@@ -40,6 +40,19 @@ export class NavbarComponent {
   showCurrentPassword = false;
   showNewPassword = false;
 
+  profileDetails: any = {
+  userId: 0,
+  userUuid: '',
+  name: '',
+  email: '',
+  mobile: '',
+  roleName: '',
+  agencyName: '',
+  agencyEmail: '',
+  agencyPhone: '',
+  isActive: false
+};
+
   constructor(
     private router: Router,
     private layoutService: LayoutService,
@@ -98,10 +111,37 @@ export class NavbarComponent {
   // PROFILE
   // ==========================
 
-  openProfileModal() {
-    this.showProfileModal = true;
-    this.showProfileMenu = false;
-  }
+ openProfileModal() {
+
+  this.showProfileMenu = false;
+
+  this.layoutService.get_profile_details(this.userId)
+    .subscribe({
+
+      next: (res: any) => {
+
+        if (res.success) {
+
+          this.profileDetails = res.data;
+
+          this.showProfileModal = true;
+        }
+
+      },
+
+      error: (err) => {
+
+        Swal.fire(
+          'Error',
+          err?.error?.message || 'Failed to load profile details',
+          'error'
+        );
+
+      }
+
+    });
+
+}
 
   closeProfileModal() {
     this.showProfileModal = false;

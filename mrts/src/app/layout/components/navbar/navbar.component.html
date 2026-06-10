@@ -105,51 +105,132 @@
 
 </header>
 
+
 <!-- PROFILE MODAL -->
-<div *ngIf="showProfileModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+<div
+  *ngIf="showProfileModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
 
-  <div class="bg-white rounded-xl shadow-xl w-[90%] max-w-md p-6">
+  <div class="bg-white rounded-xl shadow-xl w-[95%] max-w-2xl p-6">
 
-    <div class="flex justify-between items-center mb-5">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
 
-      <h2 class="text-xl font-bold">
+      <h2 class="text-2xl font-bold">
         User Profile
       </h2>
 
-      <button (click)="closeProfileModal()" class="text-xl">
+      <button
+        (click)="closeProfileModal()"
+        class="text-2xl text-gray-500 hover:text-red-500">
+
         ×
+
       </button>
 
     </div>
 
-    <div class="space-y-4">
+    <!-- Profile Details -->
 
-      <div>
-        <label class="text-sm text-gray-500">
-          User ID
-        </label>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-        <div class="font-semibold">
-          {{ userId }}
-        </div>
-      </div>
 
       <div>
         <label class="text-sm text-gray-500">
           Name
         </label>
 
-        <div class="font-semibold">
-          {{ userName }}
+        <div class="font-semibold text-gray-800">
+          {{ profileDetails.name }}
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">
+          Mobile
+        </label>
+
+        <div class="font-semibold text-gray-800">
+          {{ profileDetails.mobile }}
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">
+          Email
+        </label>
+
+        <div class="font-semibold text-gray-800 break-all">
+          {{ profileDetails.email }}
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">
+          Role
+        </label>
+
+        <div class="font-semibold text-blue-600">
+          {{ profileDetails.roleName }}
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">
+          Agency Name
+        </label>
+
+        <div class="font-semibold text-gray-800">
+          {{ profileDetails.agencyName }}
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">
+          Agency Phone
+        </label>
+
+        <div class="font-semibold text-gray-800">
+          {{ profileDetails.agencyPhone }}
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">
+          Status
+        </label>
+
+        <div>
+
+          <span
+            class="px-3 py-1 rounded-full text-xs font-semibold"
+            [ngClass]="{
+              'bg-green-100 text-green-700':
+                profileDetails.isActive,
+
+              'bg-red-100 text-red-700':
+                !profileDetails.isActive
+            }">
+
+            {{ profileDetails.isActive ? 'Active' : 'Inactive' }}
+
+          </span>
+
         </div>
       </div>
 
     </div>
 
-    <div class="flex justify-end mt-6">
+    <!-- Footer -->
 
-      <button (click)="closeProfileModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+    <div class="flex justify-end mt-8">
+
+      <button
+        (click)="closeProfileModal()"
+        class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+
         Close
+
       </button>
 
     </div>

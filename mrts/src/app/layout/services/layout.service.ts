@@ -21,5 +21,8 @@ export class LayoutService {
     return this.http.post(`${this.apiUrl}/Auth/logout`, data);
   }
 
+  get_profile_details(userid: any) {
+    return this.http.get(`${this.apiUrl}/Auth/get-users-details/${userid}`);
+  }
 }
  
