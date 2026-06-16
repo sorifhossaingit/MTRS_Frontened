@@ -23,17 +23,17 @@ export class MrVisitDashboardComponent implements OnInit {
 
   // Icons
 
-  readonly MapPin = MapPin;
-  readonly ClipboardList = ClipboardList;
-  readonly CalendarDays = CalendarDays;
-  readonly Filter = Filter;
-  readonly Eye = Eye;
-  readonly CheckCircle = CheckCircle;
-  readonly XCircle = XCircle;
-  readonly PlayCircle = PlayCircle;
-  readonly Navigation = Navigation;
-  readonly Flag = Flag;
-  readonly BadgeCheck = BadgeCheck;
+   MapPin = MapPin;
+   ClipboardList = ClipboardList;
+   CalendarDays = CalendarDays;
+   Filter = Filter;
+   Eye = Eye;
+   CheckCircle = CheckCircle;
+   XCircle = XCircle;
+   PlayCircle = PlayCircle;
+   Navigation = Navigation;
+   Flag = Flag;
+   BadgeCheck = BadgeCheck;
 
   loading = false;
 

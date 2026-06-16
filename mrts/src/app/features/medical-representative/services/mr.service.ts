@@ -56,4 +56,15 @@ export class MrService {
     return this.http.post(`${this.apiUrl}/mrorder/mr-order-accept-by-stockiest`, data);
   }
 
+
+//MR VISIT DASHBOARD APIs
+
+  get_visit_plan(data: any) {
+    return this.http.post(`${this.apiUrl}/mrvisit/visit-plans`, data);
+  }
+  
+  get_assigned_area_manager(params: any) {
+    return this.http.get(
+      `${this.apiUrl}/medicalpresentativeown/assigned-area-manager`, { params });
+  }
 }
