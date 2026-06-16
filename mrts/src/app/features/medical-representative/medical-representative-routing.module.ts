@@ -6,6 +6,7 @@ import { MedicineMasterComponent } from './pages/medicine-master/medicine-master
 import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.component';
 import { MrAttendanceComponent } from './pages/mr-attendance/mr-attendance.component';
 import { MrDashboardComponent } from './pages/mr-dashboard/mr-dashboard.component';
+import { MrVisitDashboardComponent } from './pages/mr-visit-dashboard/mr-visit-dashboard.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
       {
         path: 'mr-attendance',
         component: MrAttendanceComponent
+      },
+      {
+        path: 'mr-visit-dashboard',
+        component: MrVisitDashboardComponent
       },
       {
         path: '',

@@ -201,6 +201,12 @@ export const MENU_ITEMS: MenuItem[] = [
         roles: ['MR']
       },
       {
+        label: 'MR Visit Dashboard',
+        icon: 'ClipboardList',
+        route: '/medical-representative-master/mr-visit-dashboard',
+        roles: ['MR']
+      },
+      {
         label: 'Representative Attendance',
         icon: 'clock', // add new MR
         route: '/medical-representative-master/mr-attendance',

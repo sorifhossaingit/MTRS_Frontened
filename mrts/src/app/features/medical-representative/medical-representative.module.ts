@@ -19,6 +19,7 @@ import { MedicineMasterComponent } from './pages/medicine-master/medicine-master
 import { MrAttendanceComponent } from './pages/mr-attendance/mr-attendance.component';
 import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.component';
 import { MrDashboardComponent } from './pages/mr-dashboard/mr-dashboard.component';
+import { MrVisitDashboardComponent } from './pages/mr-visit-dashboard/mr-visit-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MrDashboardComponent } from './pages/mr-dashboard/mr-dashboard.componen
     MedicineMasterComponent,
     MrAttendanceComponent,
     MrOrderMasterComponent,
-    MrDashboardComponent
+    MrDashboardComponent,
+    MrVisitDashboardComponent
   ],
   imports: [
     CommonModule,

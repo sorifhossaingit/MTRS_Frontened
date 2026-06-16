@@ -8,7 +8,8 @@ import {
   Users,
   Eye,
   Pencil,
-  Trash2
+  Trash2,
+  UserCheck 
 } from 'lucide-angular';
 import { SuperAdminMasterService } from '../../services/super-admin-master.service';
 import {
@@ -35,6 +36,7 @@ export class SuperAdminDashboardComponent implements OnInit {
   AlertTriangle = AlertTriangle;
   Users = Users;
   Pencil = Pencil;
+  UserCheck = UserCheck ;
 
   constructor(
     private superAdminService: SuperAdminMasterService,
@@ -269,9 +271,9 @@ export class SuperAdminDashboardComponent implements OnInit {
 
       companyName: company.companyName,
 
-      agencyEmail: company.email,
+      agencyEmail: company.agencyEmail,
 
-      agencyPhone: company.phone,
+      agencyPhone: company.agencyPhone,
 
       address: company.address,
 
@@ -395,6 +397,7 @@ export class SuperAdminDashboardComponent implements OnInit {
             this.closeModal();
 
             this.getAgencyList();
+            this.getDashboardSummary();
           }
 
         },

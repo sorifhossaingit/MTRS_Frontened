@@ -314,7 +314,7 @@ export class DoctorsListComponent implements OnInit {
             this.doctorForm.reset();
 
             this.router.navigate([
-              '/doctor-master/dashboard'
+              '/doctor-master/doctor-master-dashboard'
             ]);
 
           });

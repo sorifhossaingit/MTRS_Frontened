@@ -76,6 +76,8 @@ export class DoctorsDashboardComponent implements OnInit {
   // =========================================================
 
   doctors: any[] = [];
+  areaManagerList: any[] = [];
+
 
   // =========================================================
   // 🔷 Pagination
@@ -117,7 +119,34 @@ export class DoctorsDashboardComponent implements OnInit {
 
     this.loadDoctors();
 
+    this.getAreaManagerList();
+
   }
+
+
+getAreaManagerList() {
+
+    this.doctorService
+      .getAreamanagerlist(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.areaManagerList = res.data || [];
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
+
+  }
+
+
 
   // =========================================================
   // 🔷 INIT FORM
