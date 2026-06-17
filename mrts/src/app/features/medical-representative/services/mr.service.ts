@@ -40,7 +40,7 @@ export class MrService {
     return this.http.post(`${this.apiUrl}/mrorder/create-order`, data);
   }
 
-
+ 
   //MR ORDER TO STOCKIST APIs
 
   get_mr_order_list(data: any) {
@@ -67,4 +67,35 @@ export class MrService {
     return this.http.get(
       `${this.apiUrl}/medicalpresentativeown/assigned-area-manager`, { params });
   }
+
+  visit_accepted_by_mr(data: any) {
+    return this.http.put(`${this.apiUrl}/mrvisit/mr/accept-visit-by-mr`, data);
+  }
+
+  start_visit(data: any) {
+    return this.http.post(`${this.apiUrl}/mrvisit/start`, data);
+  }
+
+  track_visit(data: any) {
+    return this.http.post(`${this.apiUrl}/mrvisit/track`, data);
+  }
+
+  end_visit(data: any) {
+    return this.http.post(`${this.apiUrl}/mrvisit/end`, data);
+  }
+
+  get_tracking_of_mr(visitplanid: any) {
+    return this.http.get(
+      `${this.apiUrl}/mrvisit/tracking-of-mr/${visitplanid}`);
+  }
+
+  complete_visit(data: any) {
+    return this.http.post(`${this.apiUrl}/mrvisit/complete-customer-visit-by-mr`, data);
+  }
+
+  get_customers(params: any) {
+    return this.http.get(
+      `${this.apiUrl}/mrvisit/ar-dropown-customers`, { params });
+  }
+  
 }

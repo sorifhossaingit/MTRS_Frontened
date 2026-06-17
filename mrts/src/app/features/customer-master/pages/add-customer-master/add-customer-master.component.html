@@ -1,473 +1,211 @@
 <div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
 
-  <!-- ===================================================== -->
-  <!-- 🔷 HEADER -->
-  <!-- ===================================================== -->
-
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-
     <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
-
       <lucide-icon [img]="UserPlus"></lucide-icon>
-
       Add Customer
-
     </h1>
-
-    <button
-      routerLink="/customer-master/customer-master-dashboard"
-      class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
-
+    <button routerLink="/customer-master/customer-master-dashboard" class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
-
       Back
-
     </button>
-
   </div>
 
-  <!-- ===================================================== -->
-  <!-- 🔷 FORM -->
-  <!-- ===================================================== -->
-
-  <form
-    [formGroup]="customerForm"
-    (ngSubmit)="saveCustomer()"
-    class="space-y-6">
-
-    <!-- ===================================================== -->
-    <!-- 🟦 BASIC INFO -->
-    <!-- ===================================================== -->
+  <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="space-y-6">
 
     <div class="bg-white p-5 rounded-2xl shadow">
-
       <h2 class="font-semibold mb-4 flex items-center gap-2">
-
         <lucide-icon [img]="User"></lucide-icon>
-
         Basic Information
-
       </h2>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <!-- NAME -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="Customer Name"
-            formControlName="name"
-            class="input">
-
-          <p
-            *ngIf="f['name'].touched && f['name'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="Customer Name" formControlName="name" class="input">
+          <p *ngIf="f['name'].touched && f['name'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Customer Name is required
-
           </p>
-
         </div>
-
-        <!-- TYPE -->
-
         <div>
-
-          <select
-            formControlName="type"
-            class="input">
-
-            <option value="">
-              Customer Type
-            </option>
-
-            <option value="Hospital">
-              Hospital
-            </option>
-
-            <option value="Clinic">
-              Clinic
-            </option>
-
-            <option value="Pharmacy">
-              Pharmacy
-            </option>
-
+          <select formControlName="type" class="input">
+            <option value="">Customer Type</option>
+            <option value="Hospital">Hospital</option>
+            <option value="Clinic">Clinic</option>
+            <option value="Pharmacy">Pharmacy</option>
           </select>
-
-          <p
-            *ngIf="f['type'].touched && f['type'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <p *ngIf="f['type'].touched && f['type'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Customer Type is required
-
           </p>
-
         </div>
-
-        <!-- REGISTRATION NUMBER -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="Registration Number"
-            formControlName="registrationNo"
-            class="input">
-
-          <p
-            *ngIf="f['registrationNo'].touched && f['registrationNo'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="Registration Number" formControlName="registrationNo" class="input">
+          <p *ngIf="f['registrationNo'].touched && f['registrationNo'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Registration Number is required
-
           </p>
-
         </div>
-
       </div>
-
     </div>
 
-    <!-- ===================================================== -->
-    <!-- 🟩 CONTACT -->
-    <!-- ===================================================== -->
-
     <div class="bg-white p-5 rounded-2xl shadow">
-
       <h2 class="font-semibold mb-4 flex items-center gap-2">
-
         <lucide-icon [img]="Phone"></lucide-icon>
-
         Contact Details
-
       </h2>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <!-- CONTACT PERSON -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="Contact Person"
-            formControlName="contactPerson"
-            class="input">
-
-          <p
-            *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="Contact Person" formControlName="contactPerson" class="input">
+          <p *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Contact Person is required
-
           </p>
-
         </div>
-
-        <!-- MOBILE -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="Mobile Number"
-            formControlName="mobile"
-            class="input">
-
-          <p
-            *ngIf="f['mobile'].touched && f['mobile'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="Mobile Number" formControlName="mobile" class="input">
+          <p *ngIf="f['mobile'].touched && f['mobile'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Mobile Number is required
-
           </p>
-
-          <p
-            *ngIf="f['mobile'].touched && f['mobile'].errors?.['pattern']"
-            class="text-red-500 text-sm mt-1">
-
+          <p *ngIf="f['mobile'].touched && f['mobile'].errors?.['pattern']" class="text-red-500 text-sm mt-1">
             Enter valid 10 digit mobile number
-
           </p>
-
         </div>
-
-        <!-- EMAIL -->
-
         <div>
-
-          <input
-            type="email"
-            placeholder="Email"
-            formControlName="email"
-            class="input">
-
-          <p
-            *ngIf="f['email'].touched && f['email'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="email" placeholder="Email" formControlName="email" class="input">
+          <p *ngIf="f['email'].touched && f['email'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Email is required
-
           </p>
-
-          <p
-            *ngIf="f['email'].touched && f['email'].errors?.['email']"
-            class="text-red-500 text-sm mt-1">
-
+          <p *ngIf="f['email'].touched && f['email'].errors?.['email']" class="text-red-500 text-sm mt-1">
             Enter valid email
-
           </p>
-
         </div>
-
-        <!-- LANDLINE -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="Landline"
-            formControlName="landline"
-            class="input">
-
+          <input type="text" placeholder="Landline" formControlName="landline" class="input">
         </div>
-
       </div>
-
     </div>
 
-    <!-- ===================================================== -->
-    <!-- 🟨 ADDRESS -->
-    <!-- ===================================================== -->
-
     <div class="bg-white p-5 rounded-2xl shadow">
-
       <h2 class="font-semibold mb-4 flex items-center gap-2">
-
         <lucide-icon [img]="MapPin"></lucide-icon>
-
         Address Details
-
       </h2>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <!-- ADDRESS -->
-
         <div class="md:col-span-2">
-
-          <input
-            type="text"
-            placeholder="Address"
-            formControlName="address"
-            class="input">
-
-          <p
-            *ngIf="f['address'].touched && f['address'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="Address" formControlName="address" class="input">
+          <p *ngIf="f['address'].touched && f['address'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Address is required
-
           </p>
-
         </div>
-
-        <!-- CITY -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="City"
-            formControlName="city"
-            class="input">
-
-          <p
-            *ngIf="f['city'].touched && f['city'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="City" formControlName="city" class="input">
+          <p *ngIf="f['city'].touched && f['city'].errors?.['required']" class="text-red-500 text-sm mt-1">
             City is required
-
           </p>
-
         </div>
-
-        <!-- STATE -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="State"
-            formControlName="state"
-            class="input">
-
-          <p
-            *ngIf="f['state'].touched && f['state'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="State" formControlName="state" class="input">
+          <p *ngIf="f['state'].touched && f['state'].errors?.['required']" class="text-red-500 text-sm mt-1">
             State is required
-
           </p>
-
         </div>
-
-        <!-- PINCODE -->
-
         <div>
-
-          <input
-            type="text"
-            placeholder="PIN Code"
-            formControlName="pincode"
-            class="input">
-
-          <p
-            *ngIf="f['pincode'].touched && f['pincode'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+          <input type="text" placeholder="PIN Code" formControlName="pincode" class="input">
+          <p *ngIf="f['pincode'].touched && f['pincode'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Pincode is required
-
           </p>
-
         </div>
-
       </div>
-
     </div>
 
-    <!-- ===================================================== -->
-    <!-- 🟪 BUSINESS -->
-    <!-- ===================================================== -->
+    <div class="bg-white p-5 rounded-2xl shadow">
+      <h2 class="font-semibold mb-4 flex items-center gap-2">
+        <lucide-icon [img]="MapPin"></lucide-icon>
+        Location Coordinates
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Latitude" formControlName="latitude" class="input" readonly>
+        <input type="text" placeholder="Longitude" formControlName="longitude" class="input" readonly>
+      </div>
+      <button type="button" (click)="openMap()" class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg">
+        Select Location on Map
+      </button>
+      <p *ngIf="f['latitude'].touched && f['latitude'].errors?.['required']" class="text-red-500 text-sm mt-1">
+        Location Map coordinates are required
+      </p>
+    </div>
 
     <div class="bg-white p-5 rounded-2xl shadow">
-
       <h2 class="font-semibold mb-4 flex items-center gap-2">
-
         <lucide-icon [img]="FileText"></lucide-icon>
-
         Business Information
-
       </h2>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <input
-          type="text"
-          placeholder="GST Number"
-          formControlName="gstNo"
-          class="input">
-
-        <input
-          type="text"
-          placeholder="Drug License Number"
-          formControlName="drugLicenseNo"
-          class="input">
-
-        <input
-          type="text"
-          placeholder="PAN Number"
-          formControlName="panNo"
-          class="input">
-
+        <input type="text" placeholder="GST Number" formControlName="gstNo" class="input">
+        <input type="text" placeholder="Drug License Number" formControlName="drugLicenseNo" class="input">
+        <input type="text" placeholder="PAN Number" formControlName="panNo" class="input">
       </div>
-
     </div>
-
-    <!-- ===================================================== -->
-    <!-- 🟫 MAPPING -->
-    <!-- ===================================================== -->
 
     <div class="bg-white p-5 rounded-2xl shadow">
-
       <h2 class="font-semibold mb-4 flex items-center gap-2">
-
         <lucide-icon [img]="Users"></lucide-icon>
-
         Mapping
-
       </h2>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <!-- AREA MANAGER -->
-
         <div>
-
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Assigned Area Manager
-          </label>
-
-          <select
-            formControlName="assignedAreaManager"
-            class="input">
-
-            <option value="">
-              Select Area Manager
-            </option>
-
-            <option
-              *ngFor="let am of areaManagerList"
-              [value]="am.areaManagerId">
-
+          <label class="block text-sm font-medium text-gray-700 mb-1">Assigned Area Manager</label>
+          <select formControlName="assignedAreaManager" class="input">
+            <option value="">Select Area Manager</option>
+            <option *ngFor="let am of areaManagerList" [value]="am.areaManagerId">
               {{ am.name }} ({{am.assignedArea}})
-
             </option>
-
           </select>
-
         </div>
-
-        <!-- REGION -->
-
         <div>
-
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Region
-          </label>
-
-          <input
-            type="text"
-            placeholder="Enter Region"
-            formControlName="region"
-            class="input">
-
+          <label class="block text-sm font-medium text-gray-700 mb-1">Region</label>
+          <input type="text" placeholder="Enter Region" formControlName="region" class="input">
         </div>
-
       </div>
-
     </div>
-
-    <!-- ===================================================== -->
-    <!-- 🔷 ACTION BUTTONS -->
-    <!-- ===================================================== -->
 
     <div class="bg-white p-4 rounded-2xl shadow flex flex-col sm:flex-row justify-end gap-3">
-
-      <button
-        type="button"
-        routerLink="/customer-master/customer-master-dashboard"
-        class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
-
+      <button type="button" routerLink="/customer-master/customer-master-dashboard" class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
         Cancel
-
       </button>
-
-      <button
-        type="submit"
-        class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
-
+      <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
         <lucide-icon [img]="Save"></lucide-icon>
-
         Save Customer
-
       </button>
-
     </div>
 
   </form>
+</div>
 
+<div *ngIf="showMapModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white w-11/12 md:w-3/4 h-[550px] rounded-lg p-4 relative flex flex-col">
+    
+    <div class="flex justify-between items-center mb-3">
+      <h3 class="text-lg font-semibold text-gray-800">Search & Select Location</h3>
+      <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition-colors" (click)="showMapModal=false">
+        Close
+      </button>
+    </div>
+
+    <div class="mb-3 flex gap-2">
+      <input 
+        type="text" 
+        #searchBox
+        (keyup.enter)="searchAddress(searchBox.value)"
+        placeholder="Search for an address, city, or landmark..." 
+        class="border border-gray-300 p-2 rounded-lg flex-1 outline-none focus:ring-2 focus:ring-blue-400"
+      >
+      <button 
+        type="button" 
+        (click)="searchAddress(searchBox.value)" 
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+      >
+        Search
+      </button>
+    </div>
+
+    <div id="map" class="w-full flex-1 rounded bg-gray-100 relative"></div>
+
+  </div>
 </div>
