@@ -26,10 +26,10 @@ export class MrService {
   update_mr(data: any) {
     return this.http.put(`${this.apiUrl}/areamanager/update-medicalrepresentative`, data);
   }
+ 
 
 
-
-  //MR OWN APIs
+  //MR OWN APIs 
 
   get_inventory_for_order(params: any) {
     return this.http.get(
@@ -37,7 +37,7 @@ export class MrService {
   }
 
   mr_create_order(data: any) {
-    return this.http.post(`${this.apiUrl}/mrorder/create-order`, data);
+    return this.http.post(`${this.apiUrl}/medicalpresentativeown/create-order`, data);
   }
 
  
@@ -53,7 +53,7 @@ export class MrService {
   }
 
   update_order_status_by_mr(data: any) {
-    return this.http.post(`${this.apiUrl}/mrorder/mr-order-accept-by-stockiest`, data);
+    return this.http.put(`${this.apiUrl}/areamanager/updatestatus-mr_deliver-order`, data);
   }
 
 

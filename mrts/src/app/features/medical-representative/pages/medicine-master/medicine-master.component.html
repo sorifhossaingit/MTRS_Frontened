@@ -1,68 +1,128 @@
-<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
+<div class="min-h-screen bg-slate-100 p-4 sm:p-6">
 
-  <!-- 🔷 HEADER -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-    <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
-      <lucide-icon [img]="Package"></lucide-icon>
-      Medicine Master
-    </h1>
+  <!-- ========================= HEADER ========================= -->
 
-    <div class="flex gap-2 w-full sm:w-auto">
-      <input class="input w-full sm:w-64"
-        placeholder="Search product..."
-        [(ngModel)]="searchText">
-    </div>
-  </div>
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 mb-6">
 
-  <!-- 🔷 PRODUCT GRID -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
-    <div *ngFor="let product of products"
-         class="card hover:shadow-lg transition">
+      <div>
 
-      <!-- 🖼 Image -->
-      <img [src]="product.image"
-           class="h-40 w-full object-cover rounded-lg mb-3">
+        <h1 class="text-2xl font-bold flex items-center gap-3">
 
-      <!-- 📦 Info -->
-      <h3 class="font-semibold text-lg">{{product.name}}</h3>
-      <p class="text-sm text-gray-500">{{product.category}}</p>
+          <lucide-icon [img]="Package"></lucide-icon>
 
-      <p class="text-sm mt-2">
-        <span class="font-medium">Composition:</span>
-        {{product.composition}}
-      </p>
+          Medicine Ordering
 
-      <p class="text-sm">
-        <span class="font-medium">MRP:</span>
-        ₹{{product.price}}
-      </p>
+        </h1>
 
-      <!-- 🏬 Stockists -->
-      <div class="mt-2">
-        <p class="text-xs text-gray-500">Available at:</p>
-        <div class="flex flex-wrap gap-1 mt-1">
-          <span *ngFor="let s of product.stockists"
-                class="bg-blue-100 text-blue-600 px-2 py-1 text-xs rounded">
-            {{s}}
-          </span>
-        </div>
+        <p class="text-sm text-gray-500 mt-1">
+
+          Order medicines from nearby stockists
+
+        </p>
+
       </div>
 
-      <!-- 🔢 Quantity + Order -->
-      <div class="flex items-center gap-2 mt-4">
+      <div
+        class="flex items-center gap-2 bg-blue-600 text-white rounded-xl px-4 py-2">
 
-        <input type="number"
-               min="1"
-               [(ngModel)]="product.qty"
-               class="input w-20"
-               placeholder="Qty">
+        <lucide-icon [img]="ShoppingBag"></lucide-icon>
+
+        <span class="font-medium">
+
+          Cart ({{ getCartCount() }})
+
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================= FILTERS ========================= -->
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 mb-6">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <!-- Search -->
+
+      <div>
+
+        <label class="text-sm font-medium mb-2 block">
+
+          Search Product
+
+        </label>
+
+        <div class="relative">
+
+          <input
+            type="text"
+            class="w-full rounded-lg border border-gray-300 pl-10 pr-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="Search medicine..."
+            [(ngModel)]="searchText"
+            (keyup.enter)="searchProducts()">
+
+          <div class="absolute left-3 top-2.5 text-gray-400">
+
+            <lucide-icon [img]="Search"></lucide-icon>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Category -->
+
+      <div>
+
+        <label class="text-sm font-medium mb-2 block">
+
+          Category
+
+        </label>
+
+        <select
+          class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500"
+          [(ngModel)]="selectedCategory"
+          (change)="categoryChanged()">
+
+          <option value="">All Categories</option>
+
+          <option
+            *ngFor="let category of categories"
+            [value]="category">
+
+            {{ category }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- Actions -->
+
+      <div class="flex items-end gap-2">
 
         <button
-          class="btn-primary flex-1 flex items-center justify-center gap-1"
-          (click)="placeOrder(product)">
-          <lucide-icon [img]="ShoppingCart"></lucide-icon>
-          Order
+          class="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2.5 font-medium transition"
+          (click)="searchProducts()">
+
+          Search
+
+        </button>
+
+        <button
+          class="flex-1 bg-gray-200 hover:bg-gray-300 rounded-lg py-2.5 font-medium transition"
+          (click)="clearFilters()">
+
+          Reset
+
         </button>
 
       </div>
@@ -70,5 +130,744 @@
     </div>
 
   </div>
+
+  <!-- ========================= LOADING ========================= -->
+
+  <div
+    *ngIf="loading"
+    class="bg-white rounded-2xl shadow-sm p-12 text-center">
+
+    <div
+      class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto">
+    </div>
+
+    <p class="text-gray-500 mt-4">
+
+      Loading medicines...
+
+    </p>
+
+  </div>
+
+  <!-- ========================= EMPTY ========================= -->
+
+  <div
+    *ngIf="!loading && products.length===0"
+    class="bg-white rounded-2xl shadow-sm p-12 text-center">
+
+    <img
+      src="assets/images/empty-box.svg"
+      class="w-44 mx-auto mb-5">
+
+    <h3 class="text-xl font-semibold">
+
+      No Products Found
+
+    </h3>
+
+    <p class="text-gray-500 mt-2">
+
+      Try changing your search or category filter.
+
+    </p>
+
+  </div>
+
+  <!-- ========================= PRODUCT GRID ========================= -->
+
+  <div
+    *ngIf="!loading && products.length"
+    class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+        <!-- ========================= PRODUCT CARD ========================= -->
+
+    <div
+      *ngFor="let product of products"
+      class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
+
+      <!-- Product Image -->
+      <div class="relative">
+
+        <img
+          [src]="getProductImage(product)"
+          (error)="product.imageUrl='assets/images/no-image.png'"
+          class="h-52 w-full object-cover">
+
+        <!-- Nearest Badge -->
+        <span
+          class="absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full"
+          [ngClass]="getNearestBadge(product)">
+
+          {{ product.isNearestStockist ? 'Nearest Stockist' : 'Other Stockist' }}
+
+        </span>
+
+        <!-- Stock Badge -->
+        <span
+          class="absolute top-3 right-3 text-xs font-semibold px-3 py-1 rounded-full"
+          [ngClass]="getStockBadge(product)">
+
+          {{ product.isAvailable ? ('Stock : ' + product.quantity) : 'Out of Stock' }}
+
+        </span>
+
+      </div>
+
+      <!-- Card Body -->
+      <div class="p-5 flex flex-col flex-1">
+
+        <!-- Product Name -->
+        <h2 class="font-bold text-lg text-gray-800">
+
+          {{ product.productName }}
+
+        </h2>
+
+        <!-- Brand -->
+        <p class="text-sm text-blue-600 mt-1">
+
+          <strong>Brand :</strong>
+          {{ product.brandName }}
+
+        </p>
+
+        <!-- Generic -->
+        <p class="text-sm text-gray-600">
+
+          <strong>Generic :</strong>
+          {{ product.genericName }}
+
+        </p>
+
+        <!-- Category -->
+        <div class="grid grid-cols-2 gap-2 mt-4 text-sm">
+
+          <div>
+
+            <span class="text-gray-500">
+
+              Category
+
+            </span>
+
+            <div class="font-medium">
+
+              {{ product.category }}
+
+            </div>
+
+          </div>
+
+          <div>
+
+            <span class="text-gray-500">
+
+              Dosage
+
+            </span>
+
+            <div class="font-medium">
+
+              {{ product.dosageForm }}
+
+            </div>
+
+          </div>
+
+          <div>
+
+            <span class="text-gray-500">
+
+              Strength
+
+            </span>
+
+            <div class="font-medium">
+
+              {{ product.strength }}
+
+            </div>
+
+          </div>
+
+          <div>
+
+            <span class="text-gray-500">
+
+              Available
+
+            </span>
+
+            <div class="font-medium">
+
+              {{ product.quantity }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Prices -->
+
+        <div class="mt-5 flex items-center justify-between">
+
+          <div>
+
+            <div class="text-xs text-gray-500">
+
+              MRP
+
+            </div>
+
+            <div class="font-bold text-red-600">
+
+              ₹{{ product.mrp }}
+
+            </div>
+
+          </div>
+
+          <div class="text-right">
+
+            <div class="text-xs text-gray-500">
+
+              Selling Price
+
+            </div>
+
+            <div class="font-bold text-green-600">
+
+              ₹{{ product.sellingPrice }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Stockist -->
+
+        <div class="mt-5 p-3 rounded-xl bg-slate-50 border">
+
+          <div class="text-xs text-gray-500">
+
+            Stockist
+
+          </div>
+
+          <div class="font-semibold flex items-center gap-2 mt-1">
+
+            <lucide-icon [img]="MapPin"></lucide-icon>
+
+            {{ product.stockistName }}
+
+          </div>
+
+        </div>
+
+        <!-- Quantity -->
+
+        <div class="mt-5">
+
+          <label class="text-sm font-medium mb-2 block">
+
+            Order Quantity
+
+          </label>
+
+          <div class="flex items-center gap-2">
+
+            <button
+              class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
+              (click)="decreaseQty(product)">
+
+              <lucide-icon [img]="Minus"></lucide-icon>
+
+            </button>
+
+            <input
+              type="number"
+              min="1"
+              [max]="product.quantity"
+              class="flex-1 border rounded-lg text-center py-2"
+              [(ngModel)]="product.orderQty"
+              (change)="validateQuantity(product)">
+
+            <button
+              class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
+              (click)="increaseQty(product)">
+
+              <lucide-icon [img]="Plus"></lucide-icon>
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Add To Cart -->
+
+        <button
+          class="mt-6 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl py-3 font-semibold transition"
+          [disabled]="!product.isAvailable || product.quantity===0"
+          (click)="addToCart(product)">
+
+          <div class="flex items-center justify-center gap-2">
+
+            <lucide-icon [img]="ShoppingCart"></lucide-icon>
+
+            Add To Cart
+
+          </div>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===================================================== -->
+<!-- SHOPPING CART -->
+<!-- ===================================================== -->
+
+<div
+  class="fixed right-5 bottom-5 w-[380px] max-w-[95vw] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden z-50">
+
+  <!-- Header -->
+
+  <div class="bg-blue-600 text-white px-5 py-4">
+
+    <div class="flex items-center justify-between">
+
+      <div class="flex items-center gap-2">
+
+        <lucide-icon [img]="ShoppingBag"></lucide-icon>
+
+        <h2 class="font-bold text-lg">
+
+          Shopping Cart
+
+        </h2>
+
+      </div>
+
+      <span
+        class="bg-white text-blue-700 text-sm font-bold rounded-full px-3 py-1">
+
+        {{ getCartCount() }}
+
+      </span>
+
+    </div>
+
+  </div>
+
+  <!-- Empty Cart -->
+
+  <div
+    *ngIf="cart.length===0"
+    class="p-8 text-center">
+
+    <lucide-icon
+      [img]="ShoppingCart"
+      class="mx-auto mb-3 text-gray-400">
+    </lucide-icon>
+
+    <h3 class="font-semibold text-lg">
+
+      Your cart is empty
+
+    </h3>
+
+    <p class="text-sm text-gray-500 mt-2">
+
+      Add medicines from the inventory.
+
+    </p>
+
+  </div>
+
+  <!-- Cart Items -->
+
+  <div
+    *ngIf="cart.length>0"
+    class="max-h-[420px] overflow-y-auto">
+
+    <div
+      *ngFor="let item of cart"
+      class="p-4 border-b">
+
+      <!-- Product -->
+
+      <div class="flex gap-3">
+
+        <!-- Image -->
+
+        <img
+          [src]="getProductImage(item)"
+          class="w-16 h-16 rounded-lg object-cover border">
+
+        <!-- Details -->
+
+        <div class="flex-1">
+
+          <h3 class="font-semibold text-sm">
+
+            {{ item.productName }}
+
+          </h3>
+
+          <p class="text-xs text-gray-500">
+
+            {{ item.brandName }}
+
+          </p>
+
+          <p class="text-xs text-blue-600 mt-1">
+
+            {{ item.stockistName }}
+
+          </p>
+
+          <div class="mt-2 font-semibold text-green-600">
+
+            ₹{{ item.sellingPrice }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Quantity -->
+
+      <div
+        class="flex items-center justify-between mt-4">
+
+        <div class="flex items-center gap-2">
+
+          <button
+            class="w-8 h-8 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
+            (click)="decreaseCartQty(item)">
+
+            <lucide-icon [img]="Minus"></lucide-icon>
+
+          </button>
+
+          <input
+            type="number"
+            min="1"
+            [max]="item.quantity"
+            [(ngModel)]="item.orderQty"
+            (change)="validateCartQty(item)"
+            class="w-14 border rounded-lg text-center py-1">
+
+          <button
+            class="w-8 h-8 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
+            (click)="increaseCartQty(item)">
+
+            <lucide-icon [img]="Plus"></lucide-icon>
+
+          </button>
+
+        </div>
+
+        <!-- Line Total -->
+
+        <div class="text-right">
+
+          <div class="font-bold text-blue-700">
+
+            ₹{{ item.orderQty * item.sellingPrice }}
+
+          </div>
+
+          <button
+            class="text-red-600 text-xs hover:underline mt-1"
+            (click)="removeFromCart(item)">
+
+            Remove
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+    <!-- ===================================================== -->
+  <!-- ORDER SUMMARY -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="cart.length > 0"
+    class="border-t bg-slate-50">
+
+    <div class="p-4">
+
+      <!-- Selected Stockist -->
+
+      <div class="mb-4">
+
+        <div class="text-xs text-gray-500 uppercase tracking-wide">
+
+          Ordering From
+
+        </div>
+
+        <div class="font-semibold text-gray-800 mt-1">
+
+          {{ getSelectedStockistName() }}
+
+        </div>
+
+      </div>
+
+      <!-- Summary -->
+
+      <div class="space-y-2 text-sm">
+
+        <div class="flex justify-between">
+
+          <span>Total Items</span>
+
+          <span class="font-semibold">
+
+            {{ getCartCount() }}
+
+          </span>
+
+        </div>
+
+        <div class="flex justify-between">
+
+          <span>Total Quantity</span>
+
+          <span class="font-semibold">
+
+            {{ getTotalQuantity() }}
+
+          </span>
+
+        </div>
+
+        <div class="flex justify-between">
+
+          <span>Sub Total</span>
+
+          <span class="font-semibold">
+
+            ₹{{ getSubTotal() }}
+
+          </span>
+
+        </div>
+
+        <div class="flex justify-between">
+
+          <span>Discount</span>
+
+          <span class="font-semibold text-green-600">
+
+            - ₹{{ getTotalDiscount() }}
+
+          </span>
+
+        </div>
+
+        <hr>
+
+        <div class="flex justify-between text-lg">
+
+          <span class="font-bold">
+
+            Grand Total
+
+          </span>
+
+          <span class="font-bold text-blue-700">
+
+            ₹{{ getGrandTotal() }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Remarks -->
+
+      <div class="mt-5">
+
+        <label class="block text-sm font-medium mb-2">
+
+          Remarks
+
+        </label>
+
+        <textarea
+          rows="3"
+          [(ngModel)]="remarks"
+          placeholder="Enter remarks (optional)..."
+          class="w-full border border-gray-300 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </textarea>
+
+      </div>
+
+      <!-- Buttons -->
+
+      <div class="grid grid-cols-2 gap-3 mt-5">
+
+        <button
+          class="rounded-xl bg-gray-200 hover:bg-gray-300 py-3 font-semibold transition"
+          (click)="clearCart()">
+
+          Clear Cart
+
+        </button>
+
+        <button
+          class="rounded-xl bg-blue-600 hover:bg-blue-700 text-white py-3 font-semibold transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+          [disabled]="placingOrder || cart.length === 0"
+          (click)="placeOrder()">
+
+          <span *ngIf="!placingOrder">
+
+            Place Order
+
+          </span>
+
+          <span
+            *ngIf="placingOrder"
+            class="flex items-center justify-center gap-2">
+
+            <span
+              class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin">
+            </span>
+
+            Processing...
+
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- PAGINATION -->
+<!-- ===================================================== -->
+
+<div
+  *ngIf="!loading && totalPages > 1"
+  class="mt-8 bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+
+  <div
+    class="flex flex-col md:flex-row items-center justify-between gap-4">
+
+    <!-- Page Info -->
+
+    <div class="text-sm text-gray-600">
+
+      Showing
+
+      <span class="font-semibold">
+
+        {{ ((pageNumber - 1) * pageSize) + 1 }}
+
+      </span>
+
+      to
+
+      <span class="font-semibold">
+
+        {{
+          pageNumber * pageSize > totalRecords
+            ? totalRecords
+            : pageNumber * pageSize
+        }}
+
+      </span>
+
+      of
+
+      <span class="font-semibold">
+
+        {{ totalRecords }}
+
+      </span>
+
+      products
+
+    </div>
+
+    <!-- Buttons -->
+
+    <div class="flex items-center gap-2">
+
+      <button
+        class="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50"
+        [disabled]="pageNumber === 1"
+        (click)="previousPage()">
+
+        <div class="flex items-center gap-2">
+
+          <lucide-icon [img]="ChevronLeft"></lucide-icon>
+
+          Previous
+
+        </div>
+
+      </button>
+
+      <!-- Current Page -->
+
+      <div
+        class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold">
+
+        {{ pageNumber }}
+
+        /
+
+        {{ totalPages }}
+
+      </div>
+
+      <button
+        class="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50"
+        [disabled]="pageNumber === totalPages"
+        (click)="nextPage()">
+
+        <div class="flex items-center gap-2">
+
+          Next
+
+          <lucide-icon [img]="ChevronRight"></lucide-icon>
+
+        </div>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- FOOTER -->
+<!-- ===================================================== -->
+
+<div class="h-8"></div>
 
 </div>

@@ -261,10 +261,7 @@ export class MrOrderMasterComponent implements OnInit {
   // UPDATE STATUS
   // ===========================
 
-  updateStatus(
-    order: any,
-    status: 'Accepted' | 'Rejected'
-  ): void {
+  updateStatus(orderid: any): void {
 
     Swal.fire({
       title: `Are you sure?`,
@@ -278,10 +275,7 @@ export class MrOrderMasterComponent implements OnInit {
 
       const payload = {
 
-        orderId: order.OrderId,
-
-        status: status,
-
+        orderId:orderid,
         updatedBy:
           Number(localStorage.getItem('mid'))
       };

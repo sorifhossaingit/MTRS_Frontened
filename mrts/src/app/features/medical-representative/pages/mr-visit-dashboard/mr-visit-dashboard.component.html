@@ -19,7 +19,7 @@
         </p>
       </div>
 
-    
+
     </div>
   </div>
 
@@ -42,14 +42,12 @@
 
         <div>
           <label class="block text-sm font-medium mb-2">Visit Date</label>
-          <input type="date" [(ngModel)]="filters.visitDate"
-            class="w-full border rounded-xl px-4 py-3">
+          <input type="date" [(ngModel)]="filters.visitDate" class="w-full border rounded-xl px-4 py-3">
         </div>
 
         <div>
           <label class="block text-sm font-medium mb-2">Status</label>
-          <select [(ngModel)]="filters.status"
-            class="w-full border rounded-xl px-4 py-3">
+          <select [(ngModel)]="filters.status" class="w-full border rounded-xl px-4 py-3">
 
             <option value="">All</option>
             <option value="Assigned">Assigned</option>
@@ -62,15 +60,13 @@
         </div>
 
         <div class="flex items-end">
-          <button (click)="applyFilters()"
-            class="w-full bg-blue-600 text-white py-3 rounded-xl">
+          <button (click)="applyFilters()" class="w-full bg-blue-600 text-white py-3 rounded-xl">
             Search
           </button>
         </div>
 
         <div class="flex items-end">
-          <button (click)="resetFilters()"
-            class="w-full bg-gray-200 py-3 rounded-xl">
+          <button (click)="resetFilters()" class="w-full bg-gray-200 py-3 rounded-xl">
             Reset
           </button>
         </div>
@@ -146,8 +142,7 @@
             </td>
 
             <td>
-              <span class="px-2 py-1 rounded text-xs"
-                [ngClass]="getStatusClass(visit.status)">
+              <span class="px-2 py-1 rounded text-xs" [ngClass]="getStatusClass(visit.status)">
                 {{ visit.status }}
               </span>
             </td>
@@ -159,13 +154,11 @@
                   View
                 </button>
 
-                <button *ngIf="canAccept(visit)" (click)="acceptVisit(visit)"
-                  class="bg-green-100 px-2 py-1 rounded">
+                <button *ngIf="canAccept(visit)" (click)="acceptVisit(visit)" class="bg-green-100 px-2 py-1 rounded">
                   Accept
                 </button>
 
-                <button *ngIf="canReject(visit)" (click)="rejectVisit(visit)"
-                  class="bg-red-100 px-2 py-1 rounded">
+                <button *ngIf="canReject(visit)" (click)="rejectVisit(visit)" class="bg-red-100 px-2 py-1 rounded">
                   Reject
                 </button>
 
@@ -174,13 +167,11 @@
                   Start
                 </button>
 
-                <button *ngIf="canRoute(visit)" (click)="showTracking(visit)"
-                  class="bg-indigo-100 px-2 py-1 rounded">
+                <button *ngIf="canRoute(visit)" (click)="showTracking(visit)" class="bg-indigo-100 px-2 py-1 rounded">
                   Route
                 </button>
 
-                <button *ngIf="canEndVisit(visit)" (click)="endVisit(visit)"
-                  class="bg-purple-100 px-2 py-1 rounded">
+                <button *ngIf="canEndVisit(visit)" (click)="endVisit(visit)" class="bg-purple-100 px-2 py-1 rounded">
                   End
                 </button>
 
@@ -209,14 +200,12 @@
 
   <div class="md:hidden mt-6 space-y-4">
 
-    <div *ngFor="let visit of visits"
-      class="bg-white rounded-xl shadow p-4">
+    <div *ngFor="let visit of visits" class="bg-white rounded-xl shadow p-4">
 
       <div class="flex justify-between items-center">
         <div class="font-semibold">{{ visit.customerName }}</div>
 
-        <span class="text-xs px-2 py-1 rounded"
-          [ngClass]="getStatusClass(visit.status)">
+        <span class="text-xs px-2 py-1 rounded" [ngClass]="getStatusClass(visit.status)">
           {{ visit.status }}
         </span>
       </div>
@@ -239,13 +228,11 @@
           Start
         </button>
 
-        <button *ngIf="canRoute(visit)" (click)="showTracking(visit)"
-          class="bg-indigo-100 px-3 py-2 rounded">
+        <button *ngIf="canRoute(visit)" (click)="showTracking(visit)" class="bg-indigo-100 px-3 py-2 rounded">
           Route
         </button>
 
-        <button *ngIf="visit.status === 'Accepted'"
-          (click)="completeVisit(visit)"
+        <button *ngIf="visit.status === 'Accepted'" (click)="completeVisit(visit)"
           class="bg-emerald-100 px-3 py-2 rounded">
           Complete
         </button>
@@ -254,8 +241,7 @@
 
     </div>
 
-    <div *ngIf="!loading && visits.length === 0"
-      class="bg-white rounded-xl p-8 text-center text-gray-500">
+    <div *ngIf="!loading && visits.length === 0" class="bg-white rounded-xl p-8 text-center text-gray-500">
       No Visits Available
     </div>
 
@@ -278,9 +264,7 @@
         Prev
       </button>
 
-      <button *ngFor="let page of getPageNumbers()"
-        (click)="goToPage(page)"
-        class="px-3 py-1 border rounded"
+      <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)" class="px-3 py-1 border rounded"
         [ngClass]="{ 'bg-blue-600 text-white': page === pageNumber }">
         {{ page }}
       </button>
@@ -305,9 +289,7 @@
 <!-- VIEW VISIT MODAL -->
 <!-- ====================================================== -->
 
-<div
-  *ngIf="showViewModal"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+<div *ngIf="showViewModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
   <div class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
 
@@ -328,9 +310,7 @@
 
         <!-- (Optional global button removed to avoid confusion per your requirement) -->
 
-        <button
-          (click)="closeViewModal()"
-          class="text-red-600 hover:text-red-800">
+        <button (click)="closeViewModal()" class="text-red-600 hover:text-red-800">
 
           <lucide-icon [img]="XCircle"></lucide-icon>
 
@@ -369,9 +349,7 @@
         <div class="bg-purple-50 rounded-xl p-4">
           <p class="text-xs text-gray-500">Status</p>
 
-          <span
-            class="px-3 py-1 rounded-full text-xs font-semibold"
-            [ngClass]="getStatusClass(selectedVisit?.status)">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(selectedVisit?.status)">
 
             {{ selectedVisit?.status }}
 
@@ -400,9 +378,7 @@
           Customer Visit Plan
         </h3>
 
-        <div
-          *ngFor="let place of selectedVisit?.places"
-          class="border rounded-xl p-5 mb-5">
+        <div *ngFor="let place of selectedVisit?.places" class="border rounded-xl p-5 mb-5">
 
           <!-- TOP INFO -->
           <div class="grid lg:grid-cols-5 gap-4 mb-4">
@@ -427,9 +403,7 @@
             <div>
               <p class="text-xs text-gray-500">Status</p>
 
-              <span
-                class="px-3 py-1 rounded-full text-xs font-semibold"
-                [ngClass]="getStatusClass(place.status)">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(place.status)">
 
                 {{ place.status }}
 
@@ -439,8 +413,7 @@
             <!-- ✅ COMPLETE BUTTON PER CUSTOMER -->
             <div class="flex items-end justify-end">
 
-              <button
-                *ngIf="selectedVisit?.status === 'Accepted' || selectedVisit?.status === 'InProgress'"
+              <button *ngIf="selectedVisit?.status === 'Accepted' || selectedVisit?.status === 'InProgress'"
                 (click)="openCompleteForPlace(selectedVisit, place)"
                 class="bg-emerald-600 text-white px-3 py-2 rounded text-xs">
 
@@ -459,24 +432,17 @@
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-              <div
-                *ngFor="let product of place.products"
-                class="border rounded-xl overflow-hidden bg-white p-3">
+              <div *ngFor="let product of place.products" class="border rounded-xl overflow-hidden bg-white p-3">
 
                 <div class="flex items-start gap-2">
 
                   <!-- SELECT PRODUCT -->
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="product.showProduct"
-                    class="mt-1"
-                    [disabled]="selectedVisit?.status !== 'Accepted' || selectedVisit?.status !== 'InProgress'">
+                  <input type="checkbox" [(ngModel)]="product.showProduct" class="mt-1"
+                    [disabled]="selectedVisit?.status !== 'Accepted' && selectedVisit?.status !== 'InProgress'">
 
                   <div class="w-full">
 
-                    <img
-                      [src]="product.imageUrl"
-                      class="w-full h-28 object-cover rounded">
+                    <img [src]="product.imageUrl" class="w-full h-28 object-cover rounded">
 
                     <h5 class="font-semibold text-sm mt-2">
                       {{ product.productName }}

@@ -225,31 +225,17 @@
             <td class="text-center">
 
               <div class="flex justify-center gap-2">
-
                 <button
-                  *ngIf="order.Status === 'Pending'"
-                  (click)="updateStatus(order,'Accepted')"
-                  class="bg-green-600 text-white px-3 py-1 rounded">
-
-                  Accept
-
-                </button>
-
-                <button
-                  *ngIf="order.Status === 'Pending'"
-                  (click)="updateStatus(order,'Rejected')"
+                  *ngIf="order.Status === 'Accepted'"
+                  (click)="updateStatus(order.OrderId)"
                   class="bg-red-600 text-white px-3 py-1 rounded">
-
-                  Reject
-
+                  Update Status
                 </button>
 
                 <button
                   (click)="viewOrder(order)"
                   class="text-blue-600">
-
                   <lucide-icon [img]="Eye"></lucide-icon>
-
                 </button>
 
               </div>
