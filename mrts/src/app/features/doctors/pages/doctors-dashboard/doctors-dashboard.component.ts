@@ -11,7 +11,9 @@ import {
   Stethoscope,
   Trash2,
   Users,
-  X
+  X,
+  XCircle,
+  TrendingUp
 } from 'lucide-angular';
 import { DoctorService } from '../../services/doctor.service';
 import { jwtDecode } from 'jwt-decode';
@@ -39,6 +41,8 @@ export class DoctorsDashboardComponent implements OnInit {
   X = X;
   ChevronLeft = ChevronLeft;
   ChevronRight = ChevronRight;
+  XCircle = XCircle;
+  TrendingUp = TrendingUp;
 
   constructor(
     private router: Router,
@@ -60,8 +64,8 @@ export class DoctorsDashboardComponent implements OnInit {
 
   totalDoctors = 0;
   activeDoctors = 0;
-  categoryA = 0;
-  todayVisits = 0;
+  inactivedoctor = 0;
+  newdocthismonth = 0;
 
   // =========================================================
   // 🔷 Search & Filter
@@ -256,16 +260,16 @@ getAreaManagerList() {
         next: (res: any) => {
 
           this.totalDoctors =
-            res.totalDoctors || 0;
+            res.data.totalDoctors || 0;
 
           this.activeDoctors =
-            res.activeDoctors || 0;
+            res.data.activeDoctors || 0;
 
-          this.categoryA =
-            res.categoryA || 0;
+          this.inactivedoctor =
+            res.data.inactiveDoctors || 0;
 
-          this.todayVisits =
-            res.todayVisits || 0;
+          this.newdocthismonth =
+            res.data.newDoctorsThisMonth || 0;
 
         },
 

@@ -69,7 +69,8 @@ export class ProductMasterDashboardComponent implements OnInit {
   totalProducts = 0;
   activeProducts = 0;
   inactiveProducts = 0;
-  topProducts = 0;
+  topProducts: any[] = [];
+  topProduct: any = null;
 
   // =========================================================
   // 🔷 FILTERS
@@ -126,6 +127,7 @@ export class ProductMasterDashboardComponent implements OnInit {
 
     this.initializeForm();
 
+    this.loadProductDashboardSummary();
     this.getProductDetails();
 
   }
@@ -207,6 +209,40 @@ export class ProductMasterDashboardComponent implements OnInit {
 
   }
 
+  loadProductDashboardSummary() {
+
+    this.productService
+      .get_product_dashborad_summery(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.totalProducts =
+            res.data.totalProducts || 0;
+
+          this.activeProducts =
+            res.data.activeProducts || 0;
+
+          this.inactiveProducts =
+            res.data.inactiveProducts || 0;
+
+          this.topProducts =
+            res.data.topProducts || 0;
+
+          this.topProduct = this.topProducts[0];
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
+
+  }
+
   // =========================================================
   // 🔷 GET PRODUCTS
   // =========================================================
@@ -246,24 +282,6 @@ export class ProductMasterDashboardComponent implements OnInit {
           this.totalPages = Math.ceil(
             this.totalRecords / this.pageSize
           );
-
-          this.totalProducts = res?.totalCount || 0;
-
-          this.activeProducts =
-            this.productList.filter(
-              (x: any) => x.isActive
-            ).length;
-
-          this.inactiveProducts =
-            this.productList.filter(
-              (x: any) => !x.isActive
-            ).length;
-
-          this.topProducts =
-            this.productList.filter(
-              (x: any) =>
-                x.promotionPriority === 1
-            ).length;
 
         },
 
@@ -516,6 +534,7 @@ export class ProductMasterDashboardComponent implements OnInit {
           this.showEditModal = false;
 
           this.getProductDetails();
+          this.loadProductDashboardSummary();
 
         },
 
@@ -689,6 +708,7 @@ export class ProductMasterDashboardComponent implements OnInit {
               confirmButtonColor: '#16a34a'
             });
 
+            this.loadProductDashboardSummary();
             this.getProductDetails();
 
           },

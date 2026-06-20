@@ -28,6 +28,7 @@ import {
   Repeat,
   Save,
   GraduationCap,
+  XCircle
   // Stethoscope
 } from 'lucide-angular';
 import { AddStockistComponent } from './pages/add-stockist/add-stockist.component';
@@ -74,6 +75,7 @@ import { MedicineOrderMasterComponent } from './pages/medicine-order-master/medi
       Repeat,
       Save,
       GraduationCap,
+      XCircle
       // Stethoscope
     })
   ]

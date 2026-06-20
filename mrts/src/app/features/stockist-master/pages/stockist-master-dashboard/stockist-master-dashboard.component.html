@@ -75,16 +75,16 @@
 
       <div>
         <p class="text-gray-500 text-sm">
-          Outstanding
+          Inactive Stockist
         </p>
 
         <h2 class="text-2xl font-bold text-red-500 mt-1">
-          ₹{{ totalOutstanding }}
+          {{ inactivestockist }}
         </h2>
       </div>
 
       <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
-        <lucide-icon [img]="Wallet" class="text-red-600">
+        <lucide-icon [img]="XCircle" class="text-red-600">
         </lucide-icon>
       </div>
 
@@ -96,23 +96,22 @@
 
       <div>
         <p class="text-gray-500 text-sm">
-          Credit Limit
+          New Stockist This Month
         </p>
 
         <h2 class="text-2xl font-bold text-purple-600 mt-1">
-          ₹{{ totalCreditLimit }}
+          {{ newstockist }}
         </h2>
       </div>
 
       <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-        <lucide-icon [img]="BadgeIndianRupee" class="text-purple-600">
+        <lucide-icon [img]="TrendingUp" class="text-purple-600">
         </lucide-icon>
       </div>
 
     </div>
 
   </div>
-
   <!-- ===================================================== -->
   <!-- FILTERS -->
   <!-- ===================================================== -->

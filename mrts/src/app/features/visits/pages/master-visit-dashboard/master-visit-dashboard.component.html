@@ -19,8 +19,7 @@
 
     <div class="flex flex-wrap gap-2 w-full lg:w-auto">
 
-      <button
-        routerLink="/visits/assign-visit"
+      <button routerLink="/visits/assign-visit"
         class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
 
         <lucide-icon [img]="Plus"></lucide-icon>
@@ -131,10 +130,7 @@
           MR Name
         </label>
 
-        <input
-          type="text"
-          class="w-full border rounded-lg px-3 py-2"
-          placeholder="Search MR"
+        <input type="text" class="w-full border rounded-lg px-3 py-2" placeholder="Search MR"
           [(ngModel)]="filters.mrName">
       </div>
 
@@ -145,10 +141,7 @@
           Visit Date
         </label>
 
-        <input
-          type="date"
-          class="w-full border rounded-lg px-3 py-2"
-          [(ngModel)]="filters.visitDate">
+        <input type="date" class="w-full border rounded-lg px-3 py-2" [(ngModel)]="filters.visitDate">
       </div>
 
       <!-- STATUS -->
@@ -158,9 +151,7 @@
           Status
         </label>
 
-        <select
-          class="w-full border rounded-lg px-3 py-2"
-          [(ngModel)]="filters.status">
+        <select class="w-full border rounded-lg px-3 py-2" [(ngModel)]="filters.status">
 
           <option value="">
             All
@@ -189,9 +180,7 @@
 
       <div class="flex items-end">
 
-        <button
-          (click)="applyFilters()"
-          class="w-full bg-blue-600 text-white rounded-lg py-2">
+        <button (click)="applyFilters()" class="w-full bg-blue-600 text-white rounded-lg py-2">
 
           Search
 
@@ -201,9 +190,7 @@
 
       <div class="flex items-end">
 
-        <button
-          (click)="resetFilters()"
-          class="w-full bg-gray-200 rounded-lg py-2">
+        <button (click)="resetFilters()" class="w-full bg-gray-200 rounded-lg py-2">
 
           Reset
 
@@ -229,17 +216,13 @@
 
     </div>
 
-    <div
-      *ngIf="loading"
-      class="text-center py-10">
+    <div *ngIf="loading" class="text-center py-10">
 
       Loading visits...
 
     </div>
 
-    <div
-      *ngIf="!loading"
-      class="overflow-x-auto">
+    <div *ngIf="!loading" class="overflow-x-auto">
 
       <table class="min-w-[1200px] w-full text-sm">
 
@@ -289,9 +272,7 @@
 
         <tbody>
 
-          <tr
-            *ngFor="let visit of visits"
-            class="border-t hover:bg-gray-50">
+          <tr *ngFor="let visit of visits" class="border-t hover:bg-gray-50">
 
             <td class="p-4">
               {{ visit.visitDate | date:'dd MMM yyyy' }}
@@ -325,9 +306,7 @@
 
             <td>
 
-              <span
-                class="px-3 py-1 rounded-full text-xs font-semibold"
-                [ngClass]="getStatusClass(visit.status)">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(visit.status)">
 
                 {{ visit.status }}
 
@@ -341,8 +320,7 @@
 
                 <!-- VIEW -->
 
-                <button
-                  (click)="openViewModal(visit)"
+                <button (click)="openViewModal(visit)"
                   class="p-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
 
                   <lucide-icon [img]="Eye"></lucide-icon>
@@ -351,9 +329,7 @@
 
                 <!-- EDIT -->
 
-                <button
-                  *ngIf="canEdit(visit)"
-                  (click)="openEditModal(visit)"
+                <button *ngIf="canEdit(visit)" (click)="openEditModal(visit)"
                   class="p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200">
 
                   <lucide-icon [img]="Edit"></lucide-icon>
@@ -362,13 +338,15 @@
 
                 <!-- CANCEL -->
 
-                <button
-                  *ngIf="canCancel(visit)"
-                  (click)="cancelVisit(visit)"
+                <button *ngIf="canCancel(visit)" (click)="cancelVisit(visit)"
                   class="p-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200">
 
                   <lucide-icon [img]="XCircle"></lucide-icon>
 
+                </button>
+
+                <button *ngIf="canRoute(visit)" (click)="showTracking(visit)" class="bg-indigo-100 px-3 py-2 rounded">
+                  Route
                 </button>
 
               </div>
@@ -379,9 +357,7 @@
 
           <tr *ngIf="visits.length === 0">
 
-            <td
-              colspan="9"
-              class="text-center py-10 text-gray-500">
+            <td colspan="9" class="text-center py-10 text-gray-500">
 
               No Visit Plans Found
 
@@ -401,8 +377,7 @@
   <!-- PAGINATION -->
   <!-- ========================= -->
 
-  <div
-    class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+  <div class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
 
     <div class="text-sm text-gray-600">
 
@@ -413,31 +388,23 @@
 
     <div class="flex items-center gap-2">
 
-      <button
-        (click)="previousPage()"
-        [disabled]="pageNumber === 1"
+      <button (click)="previousPage()" [disabled]="pageNumber === 1"
         class="px-3 py-2 border rounded-lg disabled:opacity-50">
 
         Previous
 
       </button>
 
-      <button
-        *ngFor="let page of getPageNumbers()"
-        (click)="goToPage(page)"
-        [ngClass]="{
+      <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)" [ngClass]="{
           'bg-blue-600 text-white': pageNumber === page,
           'bg-white': pageNumber !== page
-        }"
-        class="px-3 py-2 border rounded-lg">
+        }" class="px-3 py-2 border rounded-lg">
 
         {{ page }}
 
       </button>
 
-      <button
-        (click)="nextPage()"
-        [disabled]="pageNumber === totalPages"
+      <button (click)="nextPage()" [disabled]="pageNumber === totalPages"
         class="px-3 py-2 border rounded-lg disabled:opacity-50">
 
         Next
@@ -454,12 +421,9 @@
 <!-- VIEW VISIT MODAL -->
 <!-- ===================================================== -->
 
-<div
-  *ngIf="showViewModal"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+<div *ngIf="showViewModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
-  <div
-    class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
 
     <!-- HEADER -->
     <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
@@ -474,9 +438,7 @@
         </p>
       </div>
 
-      <button
-        (click)="closeViewModal()"
-        class="text-red-600 hover:text-red-800">
+      <button (click)="closeViewModal()" class="text-red-600 hover:text-red-800">
 
         <lucide-icon [img]="XCircle"></lucide-icon>
 
@@ -524,9 +486,7 @@
             Status
           </p>
 
-          <span
-            class="px-3 py-1 rounded-full text-xs font-semibold"
-            [ngClass]="getStatusClass(selectedVisit?.status)">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(selectedVisit?.status)">
 
             {{ selectedVisit?.status }}
 
@@ -555,9 +515,7 @@
           Customer Visit Plan
         </h3>
 
-        <div
-          *ngFor="let place of selectedVisit?.places"
-          class="border rounded-xl p-5 mb-5">
+        <div *ngFor="let place of selectedVisit?.places" class="border rounded-xl p-5 mb-5">
 
           <!-- TOP -->
           <div class="grid lg:grid-cols-4 gap-4 mb-4">
@@ -604,9 +562,7 @@
                 Status
               </p>
 
-              <span
-                class="px-3 py-1 rounded-full text-xs font-semibold"
-                [ngClass]="getStatusClass(place.status)">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(place.status)">
 
                 {{ place.status }}
 
@@ -623,17 +579,11 @@
               Products
             </h4>
 
-            <div
-              class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-              <div
-                *ngFor="let product of place.products"
-                class="border rounded-xl overflow-hidden bg-white">
+              <div *ngFor="let product of place.products" class="border rounded-xl overflow-hidden bg-white">
 
-                <img
-                  [src]="product.imageUrl"
-                  [alt]="product.productName"
-                  class="w-full h-32 object-cover">
+                <img [src]="product.imageUrl" [alt]="product.productName" class="w-full h-32 object-cover">
 
                 <div class="p-3">
 
@@ -675,12 +625,9 @@
 <!-- EDIT VISIT MODAL -->
 <!-- ===================================================== -->
 
-<div
-  *ngIf="showEditModal"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
-  <div
-    class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
 
     <!-- HEADER -->
 
@@ -690,9 +637,7 @@
         Edit Visit Plan
       </h2>
 
-      <button
-        (click)="closeEditModal()"
-        class="text-red-600">
+      <button (click)="closeEditModal()" class="text-red-600">
 
         <lucide-icon [img]="XCircle"></lucide-icon>
 
@@ -712,17 +657,13 @@
             MR
           </label>
 
-          <select
-            [(ngModel)]="editVisit.mrId"
-            class="w-full border rounded-lg px-3 py-2">
+          <select [(ngModel)]="editVisit.mrId" class="w-full border rounded-lg px-3 py-2">
 
             <option [ngValue]="null">
               Select MR
             </option>
 
-            <option
-              *ngFor="let mr of mrList"
-              [ngValue]="mr.medicalRepresentativeId">
+            <option *ngFor="let mr of mrList" [ngValue]="mr.medicalRepresentativeId">
 
               {{ mr.name }} ({{mr.coverArea}})
 
@@ -738,10 +679,7 @@
             Visit Date
           </label>
 
-          <input
-            type="date"
-            [(ngModel)]="editVisit.visitDate"
-            class="w-full border rounded-lg px-3 py-2">
+          <input type="date" [(ngModel)]="editVisit.visitDate" class="w-full border rounded-lg px-3 py-2">
 
         </div>
 
@@ -751,10 +689,7 @@
             Remarks
           </label>
 
-          <input
-            type="text"
-            [(ngModel)]="editVisit.remarks"
-            class="w-full border rounded-lg px-3 py-2">
+          <input type="text" [(ngModel)]="editVisit.remarks" class="w-full border rounded-lg px-3 py-2">
 
         </div>
 
@@ -768,9 +703,7 @@
           Customer Visits
         </h3>
 
-        <button
-          (click)="addPlace()"
-          class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+        <button (click)="addPlace()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
 
           Add Customer
 
@@ -778,9 +711,7 @@
 
       </div>
 
-      <div
-        *ngFor="let place of editVisit?.places; let i = index"
-        class="border rounded-xl p-5 mb-5">
+      <div *ngFor="let place of editVisit?.places; let i = index" class="border rounded-xl p-5 mb-5">
 
         <div class="grid lg:grid-cols-5 gap-4">
 
@@ -792,17 +723,13 @@
               Customer
             </label>
 
-            <select
-              [(ngModel)]="place.customerId"
-              class="w-full border rounded-lg px-3 py-2">
+            <select [(ngModel)]="place.customerId" class="w-full border rounded-lg px-3 py-2">
 
               <option [ngValue]="null">
                 Select Customer
               </option>
 
-              <option
-                *ngFor="let customer of customerList"
-                [ngValue]="customer.customerId">
+              <option *ngFor="let customer of customerList" [ngValue]="customer.customerId">
 
                 {{ customer.name }} ({{customer.region}})
 
@@ -820,10 +747,7 @@
               Time
             </label>
 
-            <input
-              type="time"
-              [(ngModel)]="place.plannedTime"
-              class="w-full border rounded-lg px-3 py-2">
+            <input type="time" [(ngModel)]="place.plannedTime" class="w-full border rounded-lg px-3 py-2">
 
           </div>
 
@@ -835,10 +759,7 @@
               Sequence
             </label>
 
-            <input
-              type="number"
-              [(ngModel)]="place.sequenceNo"
-              class="w-full border rounded-lg px-3 py-2">
+            <input type="number" [(ngModel)]="place.sequenceNo" class="w-full border rounded-lg px-3 py-2">
 
           </div>
 
@@ -850,10 +771,7 @@
               Remarks
             </label>
 
-            <input
-              type="text"
-              [(ngModel)]="place.remarks"
-              class="w-full border rounded-lg px-3 py-2">
+            <input type="text" [(ngModel)]="place.remarks" class="w-full border rounded-lg px-3 py-2">
 
           </div>
 
@@ -861,9 +779,7 @@
 
           <div class="flex items-end">
 
-            <button
-              (click)="removePlace(i)"
-              class="bg-red-600 text-white px-4 py-2 rounded-lg w-full">
+            <button (click)="removePlace(i)" class="bg-red-600 text-white px-4 py-2 rounded-lg w-full">
 
               Remove
 
@@ -883,9 +799,7 @@
               Products
             </h4>
 
-            <button
-              (click)="openProductModal(i)"
-              class="bg-green-600 text-white px-4 py-2 rounded-lg">
+            <button (click)="openProductModal(i)" class="bg-green-600 text-white px-4 py-2 rounded-lg">
 
               Add / Edit Products
 
@@ -893,16 +807,11 @@
 
           </div>
 
-          <div
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-            <div
-              *ngFor="let product of place.selectedProducts"
-              class="border rounded-xl overflow-hidden">
+            <div *ngFor="let product of place.selectedProducts" class="border rounded-xl overflow-hidden">
 
-              <img
-                [src]="product.imageUrl"
-                class="w-full h-32 object-cover">
+              <img [src]="product.imageUrl" class="w-full h-32 object-cover">
 
               <div class="p-3">
 
@@ -928,17 +837,13 @@
 
       <div class="flex justify-end gap-3 mt-6">
 
-        <button
-          (click)="closeEditModal()"
-          class="bg-gray-200 px-5 py-2 rounded-lg">
+        <button (click)="closeEditModal()" class="bg-gray-200 px-5 py-2 rounded-lg">
 
           Close
 
         </button>
 
-        <button
-          (click)="updateVisit()"
-          class="bg-blue-600 text-white px-5 py-2 rounded-lg flex items-center gap-2">
+        <button (click)="updateVisit()" class="bg-blue-600 text-white px-5 py-2 rounded-lg flex items-center gap-2">
 
           <lucide-icon [img]="Save"></lucide-icon>
 
@@ -958,12 +863,9 @@
 <!-- PRODUCT SELECTION MODAL -->
 <!-- ===================================================== -->
 
-<div
-  *ngIf="showProductModal"
-  class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
+<div *ngIf="showProductModal" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
 
-  <div
-    class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto p-6">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto p-6">
 
     <div class="flex justify-between items-center mb-6">
 
@@ -971,9 +873,7 @@
         Select Products
       </h2>
 
-      <button
-        (click)="closeProductModal()"
-        class="text-red-600">
+      <button (click)="closeProductModal()" class="text-red-600">
 
         <lucide-icon [img]="XCircle"></lucide-icon>
 
@@ -985,29 +885,19 @@
 
     <div class="grid md:grid-cols-4 gap-4 mb-6">
 
-      <input
-        type="text"
-        placeholder="Product Name"
-        [(ngModel)]="productSearch.name"
+      <input type="text" placeholder="Product Name" [(ngModel)]="productSearch.name"
         class="border rounded-lg px-3 py-2">
 
-      <input
-        type="text"
-        placeholder="Brand Name"
-        [(ngModel)]="productSearch.brandName"
+      <input type="text" placeholder="Brand Name" [(ngModel)]="productSearch.brandName"
         class="border rounded-lg px-3 py-2">
 
-      <button
-        (click)="searchProducts()"
-        class="bg-blue-600 text-white rounded-lg">
+      <button (click)="searchProducts()" class="bg-blue-600 text-white rounded-lg">
 
         Search
 
       </button>
 
-      <button
-        (click)="clearProductSearch()"
-        class="bg-gray-200 rounded-lg">
+      <button (click)="clearProductSearch()" class="bg-gray-200 rounded-lg">
 
         Reset
 
@@ -1017,25 +907,17 @@
 
     <!-- PRODUCTS -->
 
-    <div
-      *ngIf="loadingProducts"
-      class="text-center py-10">
+    <div *ngIf="loadingProducts" class="text-center py-10">
 
       Loading Products...
 
     </div>
 
-    <div
-      *ngIf="!loadingProducts"
-      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+    <div *ngIf="!loadingProducts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
 
-      <div
-        *ngFor="let product of products"
-        class="border rounded-xl overflow-hidden">
+      <div *ngFor="let product of products" class="border rounded-xl overflow-hidden">
 
-        <img
-          [src]="product.imageUrl"
-          class="w-full h-36 object-cover">
+        <img [src]="product.imageUrl" class="w-full h-36 object-cover">
 
         <div class="p-3">
 
@@ -1055,10 +937,7 @@
 
             <label class="flex items-center gap-2 cursor-pointer">
 
-              <input
-                type="checkbox"
-                [checked]="isSelected(product.productId)"
-                (change)="toggleProduct(product)">
+              <input type="checkbox" [checked]="isSelected(product.productId)" (change)="toggleProduct(product)">
 
               <span>Select</span>
 
@@ -1074,9 +953,7 @@
 
     <div class="flex justify-end mt-6">
 
-      <button
-        (click)="saveProducts()"
-        class="bg-green-600 text-white px-5 py-2 rounded-lg">
+      <button (click)="saveProducts()" class="bg-green-600 text-white px-5 py-2 rounded-lg">
 
         Save Selected Products
 

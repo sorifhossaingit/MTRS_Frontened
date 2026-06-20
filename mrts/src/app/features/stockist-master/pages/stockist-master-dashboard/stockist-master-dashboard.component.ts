@@ -9,7 +9,9 @@ import {
   Wallet,
   BadgeIndianRupee,
   X,
-  KeyRound
+  KeyRound,
+  XCircle,
+  TrendingUp
 } from 'lucide-angular';
 
 import {
@@ -43,6 +45,8 @@ export class StockistMasterDashboardComponent implements OnInit {
   BadgeIndianRupee = BadgeIndianRupee;
   X = X;
   KeyRound = KeyRound;
+  XCircle = XCircle;
+  TrendingUp = TrendingUp;
   // =====================================================
   // VARIABLES
   // =====================================================
@@ -61,9 +65,9 @@ export class StockistMasterDashboardComponent implements OnInit {
 
   activeStockists = 0;
 
-  totalOutstanding = 0;
+  inactivestockist = 0;
 
-  totalCreditLimit = 0;
+  newstockist = 0;
 
   pageNumber = 1;
 
@@ -106,6 +110,8 @@ export class StockistMasterDashboardComponent implements OnInit {
     this.getAreaManagers();
 
     this.getStockists();
+
+    this.loadStockistDashboardSummary();
 
   }
 
@@ -237,6 +243,39 @@ export class StockistMasterDashboardComponent implements OnInit {
 
   }
 
+loadStockistDashboardSummary() {
+
+    this.stockistService
+      .getstockistdashboarddetails(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.totalStockists =
+            res.data.totalStockists || 0;
+
+          this.activeStockists =
+            res.data.activeStockists || 0;
+
+          this.inactivestockist =
+            res.data.inactiveStockists || 0;
+
+          this.newstockist =
+            res.data.newStockistsThisMonth || 0;
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
+
+  }
+
+
   // =====================================================
   // GET STOCKISTS
   // =====================================================
@@ -267,28 +306,6 @@ export class StockistMasterDashboardComponent implements OnInit {
 
           this.stockists =
             res?.data?.data || [];
-
-          this.totalStockists =
-            res?.data?.totalRecords || 0;
-
-          this.activeStockists =
-            this.stockists.filter(
-              (s: any) => s.isActive
-            ).length;
-
-          this.totalOutstanding =
-            this.stockists.reduce(
-              (sum: number, s: any) =>
-                sum + (s.outstanding || 0),
-              0
-            );
-
-          this.totalCreditLimit =
-            this.stockists.reduce(
-              (sum: number, s: any) =>
-                sum + (s.creditLimit || 0),
-              0
-            );
 
           this.totalPages = Math.ceil(
             this.totalStockists /
@@ -513,6 +530,7 @@ export class StockistMasterDashboardComponent implements OnInit {
           this.closeModal();
 
           this.getStockists();
+          this.loadStockistDashboardSummary();
 
         },
 
@@ -659,7 +677,7 @@ export class StockistMasterDashboardComponent implements OnInit {
             });
 
             this.getStockists();
-
+            this.loadStockistDashboardSummary();
           },
 
           error: (err: any) => {

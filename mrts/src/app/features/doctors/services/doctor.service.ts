@@ -18,7 +18,7 @@ export class DoctorService {
 
 
   getdoctordashboradsummery(agenid: any) {
-    return this.http.get(`${this.apiUrl}/Doctor/dashboard/summary/${agenid}`);
+    return this.http.get(`${this.apiUrl}/admin/doctor/doctor-dashboard/${agenid}`);
   }
 
 

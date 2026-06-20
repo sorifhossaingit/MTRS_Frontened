@@ -51,6 +51,9 @@ export class VisitService {
   }
 
 
-
+  get_tracking_of_mr(visitplanid: any) {
+    return this.http.get(
+      `${this.apiUrl}/mrvisit/tracking-of-mr/${visitplanid}`);
+  }
 
 }

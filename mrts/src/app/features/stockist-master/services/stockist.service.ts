@@ -13,9 +13,9 @@ private authurl = environment.authurl
 
   constructor(private http: HttpClient) { }
 
-  getstockistdashboarddetails(params: any) {
+  getstockistdashboarddetails(agencyid: any) {
     return this.http.get(
-      `${this.apiUrl}/Customer/dashboard/customer-dashboard`, { params });
+      `${this.apiUrl}/admin/stockiest/stockist-dashboard/${agencyid}`);
   }
 
   getstockistdetails(params: any) {

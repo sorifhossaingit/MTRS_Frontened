@@ -84,6 +84,7 @@ export class AreaManagerDashboardComponent implements OnInit {
   totalManagers = 0;
   activeManagers = 0;
   inactiveManagers = 0;
+  newManagerthismonth = 0;
   totalMRs = 0;
   todayVisits = 0;
 
@@ -111,7 +112,8 @@ export class AreaManagerDashboardComponent implements OnInit {
     this.initializeForm();
 
     this.getManagers();
-
+    
+    this.loadManagerDashboardSummary();
   }
 
   // =====================================================
@@ -184,6 +186,38 @@ export class AreaManagerDashboardComponent implements OnInit {
         decoded?.id ||
         0;
     }
+
+  }
+
+  loadManagerDashboardSummary() {
+
+    this.areaManagerService
+      .get_area_manager_dashborad_summery(this.agencyId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.totalManagers =
+            res.data.totalAreaManagers || 0;
+
+          this.activeManagers =
+            res.data.activeAreaManagers || 0;
+
+          this.inactiveManagers =
+            res.data.inactiveAreaManagers || 0;
+
+          this.newManagerthismonth =
+            res.data.newAreaManagersThisMonth || 0;
+
+        },
+
+        error: (err: any) => {
+
+          console.log(err);
+
+        }
+
+      });
 
   }
 
@@ -452,6 +486,8 @@ export class AreaManagerDashboardComponent implements OnInit {
 
           this.getManagers();
 
+          this.loadManagerDashboardSummary();
+
         },
 
         error: (err: any) => {
@@ -563,6 +599,7 @@ export class AreaManagerDashboardComponent implements OnInit {
             });
 
             this.getManagers();
+            this.loadManagerDashboardSummary();
 
           },
 

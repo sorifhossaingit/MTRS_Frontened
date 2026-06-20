@@ -11,6 +11,10 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  get_product_dashborad_summery(agencyid: any) {
+    return this.http.get(`${this.apiUrl}/admin/product/product-dashboard/${agencyid}`);
+  }
+
    getproductdetails(params: any) {
     return this.http.get(
       `${this.apiUrl}/admin/product/list`, { params });

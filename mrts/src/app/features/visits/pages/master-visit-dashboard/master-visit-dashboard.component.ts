@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
+import * as L from 'leaflet';
 import {
   MapPin,
   Plus,
@@ -15,7 +16,11 @@ import {
   User,
   Calendar,
   Clock,
-  Trash2
+  Trash2,
+  Navigation,
+  Flag,
+  BadgeCheck
+
 } from 'lucide-angular';
 import { VisitService } from '../../services/visit.service';
 
@@ -42,6 +47,9 @@ export class MasterVisitDashboardComponent implements OnInit {
   Calendar = Calendar;
   Clock = Clock;
   Trash2 = Trash2;
+  Navigation = Navigation;
+  Flag = Flag;
+  BadgeCheck = BadgeCheck;
 
   // =========================
   // Dashboard Data
@@ -107,6 +115,15 @@ export class MasterVisitDashboardComponent implements OnInit {
   };
 
   loadingProducts = false;
+
+  trackingTimer: any;
+
+  trackingData: any = null;
+
+  map!: L.Map;
+
+  routeLayer!: L.Polyline;
+
 
   constructor(
     private visitService: VisitService
@@ -287,8 +304,8 @@ export class MasterVisitDashboardComponent implements OnInit {
   loadMRs(): void {
 
     const payload = {
-      assignedAreaManager:Number(localStorage.getItem('mid')),
-      agencyId:Number(localStorage.getItem('aid')),
+      assignedAreaManager: Number(localStorage.getItem('mid')),
+      agencyId: Number(localStorage.getItem('aid')),
     };
 
     this.visitService
@@ -312,6 +329,254 @@ export class MasterVisitDashboardComponent implements OnInit {
 
   }
 
+  canRoute(visit: any): boolean {
+
+    return visit.status === 'Accepted'
+      || visit.status === 'InProgress'
+      || visit.status === 'Completed';
+
+  }
+
+  showTracking(visit: any): void {
+  
+      this.visitService
+        .get_tracking_of_mr(visit.visitPlanId)
+        .subscribe({
+  
+          next: (res: any) => {
+  
+            if (!res.success) {
+  
+              Swal.fire(
+                'Error',
+                res.message,
+                'error'
+              );
+  
+              return;
+  
+            }
+  
+            this.trackingData = res.data;
+  
+            this.openTrackingMap();
+  
+          },
+  
+          error: () => {
+  
+            Swal.fire(
+              'Error',
+              'Unable to fetch tracking.',
+              'error'
+            );
+  
+          }
+  
+        });
+  
+    }
+  
+    openTrackingMap(): void {
+  
+      Swal.fire({
+  
+        title: 'MR Route',
+  
+        width: '90%',
+  
+        html: `
+  
+          <div id="trackingMap"
+               style="height:600px;border-radius:12px;"></div>
+  
+      `,
+  
+        showConfirmButton: true,
+  
+        confirmButtonText: 'Close',
+  
+        didOpen: () => {
+  
+          setTimeout(() => {
+  
+            this.loadTrackingMap();
+  
+          }, 300);
+  
+        }
+  
+      });
+  
+    }
+  
+  
+    loadTrackingMap(): void {
+  
+      if (!this.trackingData || !this.trackingData.session) {
+        return;
+      }
+  
+      const session = this.trackingData.session;
+  
+      // Destroy previous map
+      if (this.map) {
+        this.map.remove();
+      }
+  
+      // Create map
+      this.map = L.map('trackingMap');
+  
+      L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }
+      ).addTo(this.map);
+  
+      const routeCoordinates: L.LatLngExpression[] = [];
+  
+      // -------------------------------
+      // START MARKER
+      // -------------------------------
+  
+      if (
+        session.startLatitude != null &&
+        session.startLongitude != null
+      ) {
+  
+        const startLatLng: L.LatLngExpression = [
+          session.startLatitude,
+          session.startLongitude
+        ];
+  
+        routeCoordinates.push(startLatLng);
+  
+        L.marker(startLatLng)
+          .addTo(this.map)
+          .bindPopup(`
+          <b>Visit Started</b><br>
+          Time :
+          ${new Date(session.startTime).toLocaleString()}
+        `);
+  
+      }
+  
+      // -------------------------------
+      // TRACKING POINTS
+      // -------------------------------
+  
+      if (
+        session.trackingPoints &&
+        session.trackingPoints.length > 0
+      ) {
+  
+        session.trackingPoints.forEach(
+          (point: any, index: number) => {
+  
+            const latLng: L.LatLngExpression = [
+              point.latitude,
+              point.longitude
+            ];
+  
+            routeCoordinates.push(latLng);
+  
+            L.circleMarker(latLng, {
+  
+              radius: 6,
+  
+              color: '#2563eb',
+  
+              fillColor: '#3b82f6',
+  
+              fillOpacity: 1,
+  
+              weight: 2
+  
+            })
+              .addTo(this.map)
+              .bindPopup(`
+              <b>Tracking Point ${index + 1}</b><br>
+              Time :
+              ${new Date(point.trackedAt).toLocaleString()}
+            `);
+  
+          });
+  
+      }
+  
+      // -------------------------------
+      // END MARKER
+      // -------------------------------
+  
+      if (
+        session.endLatitude != null &&
+        session.endLongitude != null
+      ) {
+  
+        const endLatLng: L.LatLngExpression = [
+          session.endLatitude,
+          session.endLongitude
+        ];
+  
+        routeCoordinates.push(endLatLng);
+  
+        L.marker(endLatLng)
+          .addTo(this.map)
+          .bindPopup(`
+          <b>Visit Ended</b><br>
+          Time :
+          ${new Date(session.endTime).toLocaleString()}
+        `);
+  
+      }
+  
+      else if (routeCoordinates.length > 0) {
+  
+        const lastPoint =
+          routeCoordinates[routeCoordinates.length - 1];
+  
+        L.marker(lastPoint)
+          .addTo(this.map)
+          .bindPopup(`
+          <b>Current Position</b>
+        `);
+  
+      }
+  
+      // -------------------------------
+      // ROUTE LINE
+      // -------------------------------
+  
+      if (routeCoordinates.length > 1) {
+  
+        this.routeLayer = L.polyline(
+          routeCoordinates,
+          {
+            color: '#2563eb',
+            weight: 5,
+            opacity: 0.8
+          }
+        ).addTo(this.map);
+  
+        this.map.fitBounds(
+          this.routeLayer.getBounds(),
+          {
+            padding: [40, 40]
+          }
+        );
+  
+      }
+  
+      else if (routeCoordinates.length === 1) {
+  
+        this.map.setView(routeCoordinates[0] as L.LatLngExpression, 16);
+  
+      }
+  
+    }
+
   // =========================
   // LOAD CUSTOMERS
   // =========================
@@ -319,8 +584,8 @@ export class MasterVisitDashboardComponent implements OnInit {
   loadCustomers(): void {
 
     const payload = {
-      assignedAreaManager:Number(localStorage.getItem('mid')),
-      agencyId:Number(localStorage.getItem('aid')),
+      assignedAreaManager: Number(localStorage.getItem('mid')),
+      agencyId: Number(localStorage.getItem('aid')),
 
     };
 
@@ -701,15 +966,15 @@ export class MasterVisitDashboardComponent implements OnInit {
 
     this.editVisit
       .places[
-        this.currentPlaceIndex
-      ]
+      this.currentPlaceIndex
+    ]
       .selectedProducts =
       [...this.selectedProducts];
 
     this.editVisit
       .places[
-        this.currentPlaceIndex
-      ]
+      this.currentPlaceIndex
+    ]
       .productIds =
       this.selectedProducts.map(
         (x: any) =>
@@ -942,7 +1207,7 @@ export class MasterVisitDashboardComponent implements OnInit {
   ): string {
 
     switch (
-      status?.toLowerCase()
+    status?.toLowerCase()
     ) {
 
       case 'completed':

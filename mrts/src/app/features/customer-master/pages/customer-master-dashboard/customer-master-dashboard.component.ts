@@ -535,6 +535,7 @@ export class CustomerMasterDashboardComponent implements OnInit {
           this.showEditModal = false;
 
           this.getCustomerDetails();
+          this.getDashboardDetails();
 
         },
 

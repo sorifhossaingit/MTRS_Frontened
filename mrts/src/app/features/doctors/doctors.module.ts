@@ -29,6 +29,7 @@ import {
   Repeat,
   Save,
   GraduationCap,
+  XCircle
   // Stethoscope
 } from 'lucide-angular';
 
@@ -68,6 +69,7 @@ import {
       Repeat,
       Save,
       GraduationCap,
+      XCircle
       // Stethoscope
     })
   ]

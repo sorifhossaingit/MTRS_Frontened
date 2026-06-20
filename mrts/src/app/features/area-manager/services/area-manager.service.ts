@@ -12,8 +12,8 @@ export class AreaManagerService {
 
   constructor(private http: HttpClient) { }
 
-   get_area_manager_dashborad_summery(agenid: any) {
-    return this.http.get(`${this.apiUrl}/Doctor/dashboard/summary/${agenid}`);
+   get_area_manager_dashborad_summery(agencyid: any) {
+    return this.http.get(`${this.apiUrl}/admin/area-manager/area-manager-dashboard/${agencyid}`);
   }
 
 
