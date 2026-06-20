@@ -3,14 +3,17 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { BaseChartDirective } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
+
 import {
   LucideAngularModule,
   MapPin,
   Users,
-  DollarSign,
-  Clock
+  Building2,
+  BriefcaseBusiness
 } from 'lucide-angular';
-
 
 @NgModule({
   declarations: [
@@ -18,12 +21,14 @@ import {
   ],
   imports: [
     CommonModule,
+    FormsModule,
     DashboardRoutingModule,
-       LucideAngularModule.pick({
+    BaseChartDirective,
+    LucideAngularModule.pick({
       MapPin,
       Users,
-      DollarSign,
-      Clock
+      Building2,
+      BriefcaseBusiness
     })
   ]
 })

@@ -26,6 +26,7 @@ import {
   EyeOff,
   Lock
 } from 'lucide-angular';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [AppComponent],
@@ -57,9 +58,9 @@ import {
   providers: [
   provideHttpClient(
     withInterceptors([authInterceptor])
-  )
+  ),
+  provideCharts(withDefaultRegisterables())
 ],
-
 
 
   bootstrap: [AppComponent]
