@@ -25,7 +25,9 @@ export class AttendanceComponent implements OnInit {
   UserCheck = UserCheck;
 
   agencyId = Number(localStorage.getItem('aid'));
-  areaManagerId = Number(localStorage.getItem('mid'));
+  areaManagerId = localStorage.getItem('mid')
+  ? Number(localStorage.getItem('mid'))
+  : null;
 
   // KPI
   totalMR = 0;

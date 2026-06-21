@@ -213,7 +213,7 @@ export class MedicineOrderMasterComponent implements OnInit {
 
     return this.cartItems.reduce(
       (sum, item) =>
-        sum + (item.quantity * item.ptr),
+        sum + (item.quantity * item.mrp),
       0
     );
   }

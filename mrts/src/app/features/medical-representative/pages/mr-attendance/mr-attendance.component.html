@@ -1,6 +1,6 @@
 <div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
 
-  <!-- 🔷 HEADER -->
+  <!-- HEADER -->
   <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-3">
     <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
       <lucide-icon [img]="CalendarCheck"></lucide-icon>
@@ -8,69 +8,126 @@
     </h1>
   </div>
 
-  <!-- 🔷 KPI -->
+  <!-- KPI CARDS -->
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
 
-    <div class="card text-center">
-      <p class="text-sm text-gray-500">Present</p>
-      <h2 class="text-xl font-bold text-green-600">{{presentCount}}</h2>
+    <div class="bg-white rounded-xl shadow p-5 text-center border-l-4 border-green-500">
+      <p class="text-sm text-gray-500">Present Days</p>
+      <h2 class="text-3xl font-bold text-green-600 mt-2">
+        {{ presentCount }}
+      </h2>
     </div>
 
-    <div class="card text-center">
-      <p class="text-sm text-gray-500">Absent</p>
-      <h2 class="text-xl font-bold text-red-600">{{absentCount}}</h2>
+    <div class="bg-white rounded-xl shadow p-5 text-center border-l-4 border-red-500">
+      <p class="text-sm text-gray-500">Absent Days</p>
+      <h2 class="text-3xl font-bold text-red-600 mt-2">
+        {{ absentCount }}
+      </h2>
     </div>
 
-    <div class="card text-center">
+    <div class="bg-white rounded-xl shadow p-5 text-center border-l-4 border-blue-500">
       <p class="text-sm text-gray-500">Total Days</p>
-      <h2 class="text-xl font-bold">{{totalDays}}</h2>
+      <h2 class="text-3xl font-bold text-blue-600 mt-2">
+        {{ totalDays }}
+      </h2>
     </div>
 
   </div>
 
-  <!-- 🔷 MARK ATTENDANCE -->
-  <div class="card flex flex-col sm:flex-row justify-between items-center mb-6 gap-3">
+  <!-- ATTENDANCE SECTION -->
+  <div class="bg-white rounded-xl shadow p-5">
 
-    <div>
-      <p class="font-medium">Today: {{today | date}}</p>
-      <p class="text-sm text-gray-500">
-        Status:
-        <span [ngClass]="isTodayMarked ? 'text-green-600' : 'text-red-600'">
-          {{isTodayMarked ? 'Present' : 'Not Marked'}}
-        </span>
-      </p>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
+      <h2 class="font-semibold text-lg">
+        Monthly Attendance
+      </h2>
+
+      <div class="flex gap-4 text-sm">
+
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          Present
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          Absent
+        </div>
+
+      </div>
     </div>
 
-    <button
-      class="btn-primary w-full sm:w-auto"
-      [disabled]="isTodayMarked"
-      (click)="markAttendance()">
-      <lucide-icon [img]="CheckCircle"></lucide-icon>
-      {{isTodayMarked ? 'Marked' : 'Mark Attendance'}}
-    </button>
+    <!-- Attendance Cards -->
+    <div
+      *ngIf="days.length > 0"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3"
+    >
 
-  </div>
+      <div
+        *ngFor="let day of days"
+        class="rounded-xl border p-3 transition-all duration-200 hover:shadow-md"
+        [ngClass]="{
+          'bg-green-50 border-green-200': day.status === 'Present',
+          'bg-red-50 border-red-200': day.status === 'Absent'
+        }"
+      >
 
-  <!-- 🔷 CALENDAR GRID -->
-  <div class="card">
+        <div class="flex justify-between items-start">
 
-    <h2 class="font-semibold mb-4">Monthly Attendance</h2>
+          <div>
+            <p class="text-lg font-bold">
+              {{ day.fullDate | date:'dd' }}
+            </p>
 
-    <div class="grid grid-cols-7 gap-2 text-center text-sm">
+            <p class="text-xs text-gray-500">
+              {{ day.fullDate | date:'EEE' }}
+            </p>
+          </div>
 
-      <!-- Days -->
-      <div *ngFor="let day of days"
-           class="p-2 rounded-lg"
-           [ngClass]="{
-             'bg-green-100 text-green-700': day.status === 'Present',
-             'bg-red-100 text-red-700': day.status === 'Absent',
-             'bg-gray-100': !day.status
-           }">
+          <div
+            class="w-3 h-3 rounded-full mt-1"
+            [ngClass]="{
+              'bg-green-500': day.status === 'Present',
+              'bg-red-500': day.status === 'Absent'
+            }"
+          ></div>
 
-        <p class="font-medium">{{day.date}}</p>
+        </div>
+
+        <div class="mt-3">
+          <p class="text-xs text-gray-500">
+            {{ day.fullDate | date:'MMM yyyy' }}
+          </p>
+
+          <p
+            class="font-medium text-sm mt-1"
+            [ngClass]="{
+              'text-green-600': day.status === 'Present',
+              'text-red-600': day.status === 'Absent'
+            }"
+          >
+            {{ day.status }}
+          </p>
+        </div>
 
       </div>
 
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="days.length === 0"
+      class="flex flex-col items-center justify-center py-12 text-gray-500"
+    >
+      <lucide-icon [img]="CalendarCheck" size="48"></lucide-icon>
+
+      <p class="mt-3 font-medium">
+        No attendance records found
+      </p>
+
+      <p class="text-sm">
+        Attendance data will appear here once available.
+      </p>
     </div>
 
   </div>

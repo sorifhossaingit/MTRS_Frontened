@@ -1,54 +1,73 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CalendarCheck, CheckCircle } from 'lucide-angular';
+import { MrService } from '../../services/mr.service';
 
 @Component({
   selector: 'app-mr-attendance',
   templateUrl: './mr-attendance.component.html',
   styleUrl: './mr-attendance.component.css'
 })
-export class MrAttendanceComponent {
+export class MrAttendanceComponent implements OnInit {
 
   CalendarCheck = CalendarCheck;
-  CheckCircle = CheckCircle;
-
-  today = new Date();
-  isTodayMarked = false;
 
   days: any[] = [];
 
   presentCount = 0;
   absentCount = 0;
-  totalDays = 30;
+  totalDays = 0;
 
-  constructor() {
-    this.generateMonth();
+  mrId: number | null = null;
+
+  constructor(private mrService: MrService) {}
+
+  ngOnInit(): void {
+    this.mrId = Number(localStorage.getItem('mid')) || null;
+
+    if (this.mrId) {
+      this.loadAttendanceSummary();
+      this.loadAttendanceData();
+    }
   }
 
-  generateMonth() {
-    for (let i = 1; i <= this.totalDays; i++) {
-      this.days.push({
-        date: i,
-        status: Math.random() > 0.5 ? 'Present' : 'Absent'
-      });
+  loadAttendanceSummary(): void {
+    this.mrService.get_mr_attendance_summary(this.mrId).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.totalDays = res.data.totalDays;
+          this.presentCount = res.data.presentDays;
+          this.absentCount = res.data.absentDays;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load attendance summary', err);
+      }
+    });
+  }
+
+  loadAttendanceData(): void {
+    this.mrService.get_mr_attendance_data(this.mrId).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+
+          this.days = res.data.map((item: any) => ({
+            fullDate: item.date,
+            status: item.status
+          }));
+
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load attendance data', err);
+      }
+    });
+  }
+
+  get attendancePercentage(): number {
+    if (!this.totalDays) {
+      return 0;
     }
 
-    this.calculateStats();
-  }
-
-  calculateStats() {
-    this.presentCount = this.days.filter(d => d.status === 'Present').length;
-    this.absentCount = this.days.filter(d => d.status === 'Absent').length;
-  }
-
-  markAttendance() {
-    const todayDate = this.today.getDate();
-
-    const day = this.days.find(d => d.date === todayDate);
-
-    if (day && !this.isTodayMarked) {
-      day.status = 'Present';
-      this.isTodayMarked = true;
-      this.calculateStats();
-    }
+    return Math.round((this.presentCount / this.totalDays) * 100);
   }
 }

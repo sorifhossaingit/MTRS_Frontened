@@ -98,4 +98,17 @@ export class MrService {
       `${this.apiUrl}/mrvisit/ar-dropown-customers`, { params });
   }
   
+
+//Mr attendance APIs
+ 
+ get_mr_attendance_summary(mrid: any) {
+    return this.http.get(
+      `${this.apiUrl}/medicalpresentativeown/attendence-dashboard/attendance-summary/${mrid}`);
+  }
+
+   get_mr_attendance_data(mrid: any) {
+    return this.http.get(
+      `${this.apiUrl}/medicalpresentativeown/attendence-dashboard/attendance-calendar/${mrid}`);
+  }
+
 }
