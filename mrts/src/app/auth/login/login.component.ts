@@ -28,7 +28,7 @@ export class LoginComponent {
   password = '';
 
   // API URL
-  apiUrl = 'https://localhost:7078/api/Auth/login';
+  apiUrl = 'https://iqdb.computingmantra.in/api/Auth/login';
 
   userid = 0
 

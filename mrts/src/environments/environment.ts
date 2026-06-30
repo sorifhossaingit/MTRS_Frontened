@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7078/api/v1',
-  authurl : 'https://localhost:7078/api'
+  apiUrl: 'https://iqdb.computingmantra.in/api/v1',
+  authurl : 'https://iqdb.computingmantra.in/api'
 };
