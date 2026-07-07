@@ -28,7 +28,7 @@ export class LoginComponent {
   password = '';
 
   // API URL
-  apiUrl = 'https://iqdb.computingmantra.in/api/Auth/login';
+  apiUrl = 'https://api.cliniva.in/api/Auth/login';
 
   userid = 0
 
