@@ -12,8 +12,7 @@
 
     </h1>
 
-    <button
-      routerLink="/product-master/product-master-dashboard"
+    <button routerLink="/product-master/product-master-dashboard"
       class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
 
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
@@ -26,10 +25,7 @@
 
   <!-- 🔷 FORM -->
 
-  <form
-    [formGroup]="productForm"
-    (ngSubmit)="saveProduct()"
-    class="space-y-6">
+  <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="space-y-6">
 
     <!-- 🟦 BASIC INFO -->
 
@@ -49,14 +45,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Product Name"
-            formControlName="name">
+          <input class="input" placeholder="Product Name" formControlName="name">
 
-          <p
-            *ngIf="submitted && f['name'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['name'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Product Name is required
 
@@ -68,14 +59,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Brand Name"
-            formControlName="brandName">
+          <input class="input" placeholder="Brand Name" formControlName="brandName">
 
-          <p
-            *ngIf="submitted && f['brandName'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['brandName'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Brand Name is required
 
@@ -87,14 +73,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Generic Name"
-            formControlName="genericName">
+          <input class="input" placeholder="Generic Name" formControlName="genericName">
 
-          <p
-            *ngIf="submitted && f['genericName'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['genericName'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Generic Name is required
 
@@ -124,14 +105,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Category"
-            formControlName="category">
+          <input class="input" placeholder="Category" formControlName="category">
 
-          <p
-            *ngIf="submitted && f['category'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['category'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Category is required
 
@@ -143,14 +119,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Division"
-            formControlName="division">
+          <input class="input" placeholder="Division" formControlName="division">
 
-          <p
-            *ngIf="submitted && f['division'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['division'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Division is required
 
@@ -162,9 +133,7 @@
 
         <div>
 
-          <select
-            class="input"
-            formControlName="dosageForm">
+          <select class="input" formControlName="dosageForm">
 
             <option value="">
               Select Dosage Form
@@ -192,9 +161,7 @@
 
           </select>
 
-          <p
-            *ngIf="submitted && f['dosageForm'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['dosageForm'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Dosage Form is required
 
@@ -206,14 +173,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Strength (500mg)"
-            formControlName="strength">
+          <input class="input" placeholder="Strength (500mg)" formControlName="strength">
 
-          <p
-            *ngIf="submitted && f['strength'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['strength'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Strength is required
 
@@ -243,15 +205,9 @@
 
         <div>
 
-          <input
-            type="number"
-            class="input"
-            placeholder="MRP"
-            formControlName="mrp">
+          <input type="number" class="input" placeholder="MRP" formControlName="mrp">
 
-          <p
-            *ngIf="submitted && f['mrp'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['mrp'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             MRP is required
 
@@ -263,15 +219,9 @@
 
         <div>
 
-          <input
-            type="number"
-            class="input"
-            placeholder="PTR"
-            formControlName="ptr">
+          <input type="number" class="input" placeholder="PTR" formControlName="ptr">
 
-          <p
-            *ngIf="submitted && f['ptr'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['ptr'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             PTR is required
 
@@ -283,15 +233,9 @@
 
         <div>
 
-          <input
-            type="number"
-            class="input"
-            placeholder="PTS"
-            formControlName="pts">
+          <input type="number" class="input" placeholder="PTS" formControlName="pts">
 
-          <p
-            *ngIf="submitted && f['pts'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['pts'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             PTS is required
 
@@ -321,14 +265,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Pack Size"
-            formControlName="packSize">
+          <input class="input" placeholder="Pack Size" formControlName="packSize">
 
-          <p
-            *ngIf="submitted && f['packSize'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['packSize'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Pack Size is required
 
@@ -340,15 +279,9 @@
 
         <div>
 
-          <input
-            type="number"
-            class="input"
-            placeholder="Units Per Box"
-            formControlName="unitsPerBox">
+          <input type="number" class="input" placeholder="Units Per Box" formControlName="unitsPerBox">
 
-          <p
-            *ngIf="submitted && f['unitsPerBox'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['unitsPerBox'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Units Per Box is required
 
@@ -378,13 +311,9 @@
 
         <div>
 
-          <input
-            class="input"
-            placeholder="Manufacturing License Number"
-            formControlName="manufacturingLicenseNumber">
+          <input class="input" placeholder="Manufacturing License Number" formControlName="manufacturingLicenseNumber">
 
-          <p
-            *ngIf="submitted && f['manufacturingLicenseNumber'].errors?.['required']"
+          <p *ngIf="submitted && f['manufacturingLicenseNumber'].errors?.['required']"
             class="text-red-500 text-sm mt-1">
 
             Manufacturing License Number is required
@@ -397,14 +326,9 @@
 
         <div>
 
-          <input
-            type="date"
-            class="input"
-            formControlName="approvalDate">
+          <input type="date" class="input" formControlName="approvalDate">
 
-          <p
-            *ngIf="submitted && f['approvalDate'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['approvalDate'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Approval Date is required
 
@@ -438,14 +362,9 @@
             Launch Date
           </label>
 
-          <input
-            type="date"
-            class="input"
-            formControlName="launchDate">
+          <input type="date" class="input" formControlName="launchDate">
 
-          <p
-            *ngIf="submitted && f['launchDate'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['launchDate'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Launch Date is required
 
@@ -453,13 +372,35 @@
 
         </div>
 
+ <!-- QUANTITY -->
+<div>
+  <label class="text-sm font-medium text-gray-600 mb-1 block">
+    Quantity
+  </label>
+
+  <input 
+    type="number" 
+    class="input" 
+    placeholder="e.g. 100" 
+    formControlName="quantity" 
+    min="0"
+  >
+
+  <!-- Error Container: Uses safe navigation (?.) to prevent template runtime errors -->
+  <ng-container *ngIf="submitted && f['quantity']?.invalid">
+    <p *ngIf="f['quantity']?.errors?.['required']" class="text-red-500 text-sm mt-1">
+      Quantity is required
+    </p>
+    <p *ngIf="f['quantity']?.errors?.['min']" class="text-red-500 text-sm mt-1">
+      Quantity cannot be negative
+    </p>
+  </ng-container>
+</div>
         <!-- PROMOTION PRIORITY -->
 
         <div>
 
-          <select
-            class="input"
-            formControlName="promotionPriority">
+          <select class="input" formControlName="promotionPriority">
 
             <option [value]="1">
               High
@@ -475,9 +416,7 @@
 
           </select>
 
-          <p
-            *ngIf="submitted && f['promotionPriority'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
+          <p *ngIf="submitted && f['promotionPriority'].errors?.['required']" class="text-red-500 text-sm mt-1">
 
             Promotion Priority is required
 
@@ -503,17 +442,11 @@
 
       <div class="space-y-4">
 
-        <input
-          type="file"
-          accept="image/*"
-          (change)="onImageChange($event)"
-          class="input">
+        <input type="file" accept="image/*" (change)="onImageChange($event)" class="input">
 
         <div *ngIf="imagePreview">
 
-          <img
-            [src]="imagePreview"
-            class="w-40 h-40 object-cover rounded-xl border">
+          <img [src]="imagePreview" class="w-40 h-40 object-cover rounded-xl border">
 
         </div>
 
@@ -525,17 +458,14 @@
 
     <div class="flex flex-col sm:flex-row justify-end gap-3">
 
-      <button
-        type="button"
-        routerLink="/product-master/product-master-dashboard"
+      <button type="button" routerLink="/product-master/product-master-dashboard"
         class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
 
         Cancel
 
       </button>
 
-      <button
-        type="submit"
+      <button type="submit"
         class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
 
         <lucide-icon [img]="Save"></lucide-icon>

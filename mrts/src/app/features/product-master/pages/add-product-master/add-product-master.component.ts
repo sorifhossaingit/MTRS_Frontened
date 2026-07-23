@@ -176,6 +176,8 @@ export class AddProductMasterComponent implements OnInit {
         Validators.required
       ],
 
+      quantity: [0, [Validators.required, Validators.min(0)]],
+
       createdBy: [0],
 
       imageUrl: [''],
@@ -347,6 +349,11 @@ export class AddProductMasterComponent implements OnInit {
       'ApprovalDate',
       formValue.approvalDate
     );
+
+    formData.append(
+  'Quantity',
+  formValue.quantity
+);
 
     formData.append(
       'PromotionPriority',

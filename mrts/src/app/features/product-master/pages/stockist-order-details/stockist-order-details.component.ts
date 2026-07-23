@@ -322,7 +322,7 @@ export class StockistOrderDetailsComponent implements OnInit {
       status: status,
 
       remarks:
-        status === 'Approved'
+        status === 'Accepted'
           ? 'Approved By Admin'
           : 'Rejected By Admin',
 

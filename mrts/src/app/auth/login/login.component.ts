@@ -28,7 +28,7 @@ export class LoginComponent {
   password = '';
 
   // API URL
-  apiUrl = 'https://api.cliniva.in/api/Auth/login';
+  apiUrl = 'https://localhost:7078/api/Auth/login';
 
   userid = 0
 
