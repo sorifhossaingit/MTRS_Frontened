@@ -69,6 +69,16 @@ newCustomerType = '';
 
   submitted = false;
 
+
+routeList: any[] = [];
+
+showRouteModal = false;
+
+newRouteName = '';
+
+newRouteDescription = '';
+
+
   agencyId: any =
     localStorage.getItem('aid');
 
@@ -102,6 +112,8 @@ newCustomerType = '';
 
     this.getCustomerTypeList();
 
+    this.getRouteList();
+
   }
 
   // =========================================================
@@ -113,7 +125,7 @@ newCustomerType = '';
       agencyId: [this.agencyId],
 
       name: ['', Validators.required],
-      type: ['', Validators.required],
+      type: [null, Validators.required],
       registrationNo: ['', Validators.required],
 
       contactPerson: ['', Validators.required],
@@ -131,6 +143,7 @@ newCustomerType = '';
       panNo: [''],
 
       assignedAreaManager: [0],
+      routeId: [null, Validators.required],
       region: [''],
       landline: [''],
 
@@ -420,6 +433,7 @@ loadMap() {
       latitude: formValue.latitude,
       longitude: formValue.longitude,
       isActive:true,
+      routeId: Number(formValue.routeId),
       createdBy: this.createdBy
     };
 
@@ -627,6 +641,145 @@ deleteCustomerType(id:number){
           Swal.fire(
             'Error',
             'Unable to delete customer type',
+            'error'
+          );
+
+        }
+
+      });
+
+    }
+
+  });
+
+}
+
+getRouteList() {
+
+  this.http.get<any[]>(
+    'https://localhost:7078/api/v1/admin/customer/get-route'
+  ).subscribe({
+
+    next: (res) => {
+
+      this.routeList = res;
+
+    },
+
+    error: (err) => {
+
+      console.log(err);
+
+    }
+
+  });
+
+}
+
+openRouteModal() {
+
+  this.showRouteModal = true;
+
+}
+addRoute() {
+
+  if (!this.newRouteName.trim()) {
+
+    Swal.fire(
+      'Validation',
+      'Route Name is required.',
+      'warning'
+    );
+
+    return;
+
+  }
+
+  const payload = {
+
+    createdby: this.createdBy,
+
+    routeName: this.newRouteName,
+
+    description: this.newRouteDescription
+
+  };
+
+  this.http.post(
+    'https://localhost:7078/api/v1/admin/customer/create-route',
+    payload
+  ).subscribe({
+
+    next: () => {
+
+      Swal.fire(
+        'Success',
+        'Route Added Successfully',
+        'success'
+      );
+
+      this.newRouteName = '';
+
+      this.newRouteDescription = '';
+
+      this.getRouteList();
+
+    },
+
+    error: (err) => {
+
+      console.log(err);
+
+      Swal.fire(
+        'Error',
+        'Unable to add route.',
+        'error'
+      );
+
+    }
+
+  });
+
+}
+deleteRoute(id: number) {
+
+  Swal.fire({
+
+    title: 'Delete Route?',
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonText: 'Delete'
+
+  }).then(result => {
+
+    if (result.isConfirmed) {
+
+      this.http.delete(
+        `https://localhost:7078/api/v1/admin/customer/delete-route/${id}`
+      ).subscribe({
+
+        next: () => {
+
+          Swal.fire(
+            'Deleted',
+            'Route Deleted Successfully',
+            'success'
+          );
+
+          this.getRouteList();
+
+        },
+
+        error: (err) => {
+
+          console.log(err);
+
+          Swal.fire(
+            'Error',
+            'Unable to delete route.',
             'error'
           );
 
