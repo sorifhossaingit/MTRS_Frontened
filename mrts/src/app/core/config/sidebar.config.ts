@@ -188,6 +188,18 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/medical-representative-master/add-medical-representative',
         roles: ['Manager']
       },
+            {
+        label: 'Customer Dashboard',
+        icon: 'UserPlus', // add new MR
+        route: '/medical-representative-master/customer-dashboard',
+        roles: ['MR']
+      },
+      {
+        label: 'Add Customer',
+        icon: 'UserPlus', // add new MR
+        route: '/medical-representative-master/add-customer',
+        roles: ['MR']
+      },
       {
         label: 'Medicine Master',
         icon: 'Pill', // add new MR

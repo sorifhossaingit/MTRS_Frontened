@@ -130,67 +130,115 @@ export class AddCustomerMasterComponent implements OnInit {
   }
 
 
-  openMap() {
-    this.showMapModal = true;
-    setTimeout(() => {
-      this.loadMap();
-    }, 300);
+openMap() {
+
+  this.showMapModal = true;
+
+  if (!navigator.geolocation) {
+
+    Swal.fire(
+      'Error',
+      'Geolocation is not supported by your browser.',
+      'error'
+    );
+
+    setTimeout(() => this.loadMap(), 300);
+
+    return;
   }
 
-  loadMap() {
-    const mapContainer = document.getElementById('map');
-    if (!mapContainer) return;
+  navigator.geolocation.getCurrentPosition(
 
-    if (this.map) {
-      this.map.setTarget(undefined);
-      this.map = null;
+    (position) => {
+
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      this.customerForm.patchValue({
+        latitude,
+        longitude
+      });
+
+      setTimeout(() => {
+        this.loadMap();
+      }, 300);
+
+    },
+
+    (error) => {
+
+      Swal.fire(
+        'Location Error',
+        'Unable to get your current location.',
+        'error'
+      );
+
+      setTimeout(() => {
+        this.loadMap();
+      }, 300);
+
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
     }
 
-    const defaultLat = this.customerForm.get('latitude')?.value || 22.5726;
-    const defaultLng = this.customerForm.get('longitude')?.value || 88.3639;
+  );
 
-    this.vectorSource.clear();
+}
 
-    const markerStyle = new Style({
+loadMap() {
+
+  if (this.map) {
+    this.map.setTarget(undefined);
+    this.map = null;
+  }
+
+  const lat = this.customerForm.get('latitude')?.value || 22.5726;
+  const lng = this.customerForm.get('longitude')?.value || 88.3639;
+
+  this.vectorSource.clear();
+
+  this.vectorLayer = new VectorLayer({
+    source: this.vectorSource,
+    style: new Style({
       image: new Icon({
         anchor: [0.5, 1],
         src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-        scale: 1.0
+        scale: 1
       })
-    });
+    })
+  });
 
-    this.vectorLayer = new VectorLayer({
-      source: this.vectorSource,
-      style: markerStyle
-    });
+  this.map = new Map({
+    target: 'map',
+    layers: [
+      new TileLayer({
+        source: new OSM()
+      }),
+      this.vectorLayer
+    ],
+    view: new View({
+      center: fromLonLat([lng, lat]),
+      zoom: 16
+    })
+  });
 
-    this.map = new Map({
-      target: 'map',
-      layers: [
-        new TileLayer({ source: new OSM() }),
-        this.vectorLayer
-      ],
-      view: new View({
-        center: fromLonLat([defaultLng, defaultLat]), 
-        zoom: 13
-      })
-    });
+  const coordinate = fromLonLat([lng, lat]);
 
-    if (this.customerForm.get('latitude')?.value && this.customerForm.get('longitude')?.value) {
-      const existingFeature = new Feature({
-        geometry: new Point(fromLonLat([defaultLng, defaultLat]))
-      });
-      this.vectorSource.addFeature(existingFeature);
-    }
+  this.updateMarkerAndForm(coordinate);
 
-    setTimeout(() => {
-      if (this.map) this.map.updateSize();
-    }, 100);
+  this.map.on('singleclick', (event) => {
+    this.updateMarkerAndForm(event.coordinate);
+  });
 
-    this.map.on('singleclick', (event) => {
-      this.updateMarkerAndForm(event.coordinate);
-    });
-  }
+  setTimeout(() => {
+    this.map?.updateSize();
+  }, 100);
+
+}
 
   // 🔷 NEW: CORE ADDRESS SEARCH METRIC
   searchAddress(query: string) {
@@ -411,5 +459,31 @@ export class AddCustomerMasterComponent implements OnInit {
     return this.customerForm.controls;
 
   }
+
+  submitLocation() {
+
+  if (
+    !this.customerForm.get('latitude')?.value ||
+    !this.customerForm.get('longitude')?.value
+  ) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Select Location',
+      text: 'Please select a location on the map first.'
+    });
+    return;
+  }
+
+  this.showMapModal = false;
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Location Selected',
+    text: 'Location has been saved successfully.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+
+}
 
 }

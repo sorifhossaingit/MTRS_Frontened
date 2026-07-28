@@ -7,6 +7,8 @@ import { MrOrderMasterComponent } from './pages/mr-order-master/mr-order-master.
 import { MrAttendanceComponent } from './pages/mr-attendance/mr-attendance.component';
 import { MrDashboardComponent } from './pages/mr-dashboard/mr-dashboard.component';
 import { MrVisitDashboardComponent } from './pages/mr-visit-dashboard/mr-visit-dashboard.component';
+import { AddCustomerMasterComponent } from '../customer-master/pages/add-customer-master/add-customer-master.component';
+import { CustomerMasterDashboardComponent } from '../customer-master/pages/customer-master-dashboard/customer-master-dashboard.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,15 @@ const routes: Routes = [
         path: 'mr-visit-dashboard',
         component: MrVisitDashboardComponent
       },
+      {
+        path: 'customer-dashboard',
+        component: CustomerMasterDashboardComponent
+      },
+      {
+        path: 'add-customer',
+        component: AddCustomerMasterComponent
+      },
+
       {
         path: '',
         redirectTo: 'medical-representative-master',
