@@ -406,36 +406,61 @@ loadMap() {
     const formValue =
       this.customerForm.value;
 
-    const payload = {
-      agencyId: this.agencyId,
-      name: formValue.name,
-      type: formValue.type,
-      registrationNo: formValue.registrationNo,
+    // const payload = {
+    //   agencyId: this.agencyId,
+    //   name: formValue.name,
+    //   type: formValue.type,
+    //   registrationNo: formValue.registrationNo,
 
-      contactPerson: formValue.contactPerson,
-      mobile: formValue.mobile,
-      email: formValue.email,
+    //   contactPerson: formValue.contactPerson,
+    //   mobile: formValue.mobile,
+    //   email: formValue.email,
 
-      address: formValue.address,
-      city: formValue.city,
-      state: formValue.state,
-      pincode: formValue.pincode,
+    //   address: formValue.address,
+    //   city: formValue.city,
+    //   state: formValue.state,
+    //   pincode: formValue.pincode,
 
-      gstNo: formValue.gstNo,
-      drugLicenseNo: formValue.drugLicenseNo,
-      panNo: formValue.panNo,
+    //   gstNo: formValue.gstNo,
+    //   drugLicenseNo: formValue.drugLicenseNo,
+    //   panNo: formValue.panNo,
 
-      assignedAreaManager: Number(formValue.assignedAreaManager),
-      region: formValue.region,
-      landline: formValue.landline,
+    //   assignedAreaManager: Number(formValue.assignedAreaManager),
+    //   region: formValue.region,
+    //   landline: formValue.landline,
 
-      // 🔥 NEW
-      latitude: formValue.latitude,
-      longitude: formValue.longitude,
-      isActive:true,
-      routeId: Number(formValue.routeId),
-      createdBy: this.createdBy
-    };
+    //   // 🔥 NEW
+    //   latitude: formValue.latitude,
+    //   longitude: formValue.longitude,
+    //   isActive:true,
+    //   routeId: Number(formValue.routeId),
+    //   createdBy: this.createdBy
+    // };
+
+const payload = {
+  agencyId: Number(this.agencyId),
+  name: formValue.name,
+  type: Number(formValue.type),
+  registrationNo: formValue.registrationNo,
+  contactPerson: formValue.contactPerson,
+  mobile: formValue.mobile,
+  email: formValue.email,
+  address: formValue.address,
+  city: formValue.city,
+  state: formValue.state,
+  pincode: formValue.pincode,
+  gstNo: formValue.gstNo,
+  drugLicenseNo: formValue.drugLicenseNo,
+  panNo: formValue.panNo,
+  isActive: true,
+  assignedAreaManager: Number(formValue.assignedAreaManager),
+  createdBy: Number(this.createdBy),
+  region: formValue.region,
+  landline: formValue.landline,
+  latitude: Number(formValue.latitude),
+  longitude: Number(formValue.longitude),
+  routeId: Number(formValue.routeId)
+};
 
     this.customerService
       .addcustomer(payload)
