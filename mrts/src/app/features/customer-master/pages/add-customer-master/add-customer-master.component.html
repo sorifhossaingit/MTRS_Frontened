@@ -5,7 +5,8 @@
       <lucide-icon [img]="UserPlus"></lucide-icon>
       Add Customer
     </h1>
-    <button routerLink="/customer-master/customer-master-dashboard" class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
+    <button routerLink="/customer-master/customer-master-dashboard"
+      class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
       Back
     </button>
@@ -26,19 +27,50 @@
           </p>
         </div>
         <div>
-          <select formControlName="type" class="input">
-            <option value="">Customer Type</option>
-            <option value="Hospital">Hospital</option>
-            <option value="Clinic">Clinic</option>
-            <option value="Pharmacy">Pharmacy</option>
-          </select>
+          <div>
+            <label class="block text-sm font-medium mb-1">
+              Customer Type
+            </label>
+
+            <div class="flex gap-2">
+
+              <select formControlName="type" class="input flex-1">
+
+                <option value="">Select Customer Type</option>
+
+                <option *ngFor="let item of customerTypeList" [value]="item.customerTypeId">
+
+                  {{ item.customerType }}
+
+                </option>
+
+              </select>
+
+              <button type="button"
+                class="w-10 h-10 rounded-lg bg-green-600 text-white flex items-center justify-center"
+                (click)="openCustomerTypeModal()">
+
+                <lucide-icon [img]="Plus"></lucide-icon>
+
+              </button>
+
+            </div>
+
+            <p *ngIf="f['type'].touched && f['type'].errors?.['required']" class="text-red-500 text-sm mt-1">
+
+              Customer Type is required
+
+            </p>
+          </div>
+
           <p *ngIf="f['type'].touched && f['type'].errors?.['required']" class="text-red-500 text-sm mt-1">
             Customer Type is required
           </p>
         </div>
         <div>
           <input type="text" placeholder="Registration Number" formControlName="registrationNo" class="input">
-          <p *ngIf="f['registrationNo'].touched && f['registrationNo'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p *ngIf="f['registrationNo'].touched && f['registrationNo'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
             Registration Number is required
           </p>
         </div>
@@ -53,7 +85,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <input type="text" placeholder="Contact Person" formControlName="contactPerson" class="input">
-          <p *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']" class="text-red-500 text-sm mt-1">
+          <p *ngIf="f['contactPerson'].touched && f['contactPerson'].errors?.['required']"
+            class="text-red-500 text-sm mt-1">
             Contact Person is required
           </p>
         </div>
@@ -132,42 +165,28 @@
     </div> -->
 
     <div class="bg-white p-5 rounded-2xl shadow">
-  <h2 class="font-semibold mb-4 flex items-center gap-2">
-    <lucide-icon [img]="MapPin"></lucide-icon>
-    Location Coordinates
-  </h2>
+      <h2 class="font-semibold mb-4 flex items-center gap-2">
+        <lucide-icon [img]="MapPin"></lucide-icon>
+        Location Coordinates
+      </h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <input
-      type="text"
-      placeholder="Latitude"
-      formControlName="latitude"
-      class="input"
-      readonly>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Latitude" formControlName="latitude" class="input" readonly>
 
-    <input
-      type="text"
-      placeholder="Longitude"
-      formControlName="longitude"
-      class="input"
-      readonly>
-  </div>
+        <input type="text" placeholder="Longitude" formControlName="longitude" class="input" readonly>
+      </div>
 
-  <div class="mt-4">
-    <button
-      type="button"
-      (click)="openMap()"
-      class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">
-      Get Current Location & Open Map
-    </button>
-  </div>
+      <div class="mt-4">
+        <button type="button" (click)="openMap()"
+          class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+          Get Current Location & Open Map
+        </button>
+      </div>
 
-  <p
-    *ngIf="f['latitude'].touched && f['latitude'].errors?.['required']"
-    class="text-red-500 text-sm mt-2">
-    Location is required.
-  </p>
-</div>
+      <p *ngIf="f['latitude'].touched && f['latitude'].errors?.['required']" class="text-red-500 text-sm mt-2">
+        Location is required.
+      </p>
+    </div>
 
     <div class="bg-white p-5 rounded-2xl shadow">
       <h2 class="font-semibold mb-4 flex items-center gap-2">
@@ -204,10 +223,12 @@
     </div>
 
     <div class="bg-white p-4 rounded-2xl shadow flex flex-col sm:flex-row justify-end gap-3">
-      <button type="button" routerLink="/customer-master/customer-master-dashboard" class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
+      <button type="button" routerLink="/customer-master/customer-master-dashboard"
+        class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
         Cancel
       </button>
-      <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+      <button type="submit"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
         <lucide-icon [img]="Save"></lucide-icon>
         Save Customer
       </button>
@@ -216,32 +237,82 @@
   </form>
 </div>
 
+
+<div
+  *ngIf="showCustomerTypeModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+  <div class="bg-white w-[450px] rounded-xl p-5">
+
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold">
+        Customer Types
+      </h3>
+
+      <button
+        class="text-red-600"
+        (click)="showCustomerTypeModal=false">
+
+        ✕
+
+      </button>
+    </div>
+
+    <div class="flex gap-2 mb-4">
+
+      <input
+        class="input flex-1"
+        [(ngModel)]="newCustomerType"
+        placeholder="Customer Type">
+
+      <button
+        class="bg-blue-600 text-white px-4 rounded"
+        (click)="addCustomerType()">
+
+        Add
+
+      </button>
+
+    </div>
+
+    <div
+      *ngFor="let item of customerTypeList"
+      class="flex justify-between items-center border rounded p-2 mb-2">
+
+      <span>{{item.customerType}}</span>
+
+      <button
+        class="bg-red-600 text-white px-3 py-1 rounded"
+        (click)="deleteCustomerType(item.customerTypeId)">
+
+        Delete
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <div *ngIf="showMapModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white w-11/12 md:w-3/4 h-[550px] rounded-lg p-4 relative flex flex-col">
-    
+
     <div class="flex justify-between items-center mb-3">
       <h3 class="text-lg font-semibold text-gray-800">Search & Select Location</h3>
-<button
-  type="button"
-  class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
-  (click)="submitLocation()">
-  Submit
-</button>
+      <button type="button" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+        (click)="submitLocation()">
+        Submit
+      </button>
     </div>
 
     <div class="mb-3 flex gap-2">
-      <input 
-        type="text" 
-        #searchBox
-        (keyup.enter)="searchAddress(searchBox.value)"
-        placeholder="Search for an address, city, or landmark..." 
-        class="border border-gray-300 p-2 rounded-lg flex-1 outline-none focus:ring-2 focus:ring-blue-400"
-      >
-      <button 
-        type="button" 
-        (click)="searchAddress(searchBox.value)" 
-        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-      >
+      <input type="text" #searchBox (keyup.enter)="searchAddress(searchBox.value)"
+        placeholder="Search for an address, city, or landmark..."
+        class="border border-gray-300 p-2 rounded-lg flex-1 outline-none focus:ring-2 focus:ring-blue-400">
+      <button type="button" (click)="searchAddress(searchBox.value)"
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
         Search
       </button>
     </div>

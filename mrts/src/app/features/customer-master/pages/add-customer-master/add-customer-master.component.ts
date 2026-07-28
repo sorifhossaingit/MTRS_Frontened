@@ -7,7 +7,8 @@ import {
   MapPin,
   FileText,
   Users,
-  Save
+  Save,
+  Plus
 } from 'lucide-angular';
 import {
   FormBuilder,
@@ -54,6 +55,16 @@ export class AddCustomerMasterComponent implements OnInit {
   // 🔷 VARIABLES
   // =========================================================
 
+Plus = Plus;
+
+showCustomerTypeModal = false;
+
+newCustomerType = '';
+
+
+
+  customerTypeList: any[] = [];
+
   customerForm!: FormGroup;
 
   submitted = false;
@@ -88,6 +99,8 @@ export class AddCustomerMasterComponent implements OnInit {
     this.initializeForm();
 
     this.getAreaManagerList();
+
+    this.getCustomerTypeList();
 
   }
 
@@ -485,5 +498,145 @@ loadMap() {
   });
 
 }
+getCustomerTypeList() {
 
+  this.http.get<any[]>(
+    'https://localhost:7078/api/v1/admin/customer/get-customertype'
+  ).subscribe({
+
+    next: (res) => {
+
+      this.customerTypeList = res;
+
+    },
+
+    error: (err) => {
+
+      console.log(err);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Unable to load customer types.'
+      });
+
+    }
+
+  });
+
+}
+
+openCustomerTypeModal(){
+
+  this.showCustomerTypeModal=true;
+
+}
+
+addCustomerType(){
+
+  if(!this.newCustomerType.trim()){
+
+    Swal.fire(
+      'Validation',
+      'Enter Customer Type',
+      'warning'
+    );
+
+    return;
+  }
+
+  const payload={
+
+    customerType:this.newCustomerType,
+
+    createdby:this.createdBy
+
+  };
+
+  this.http.post(
+    'https://localhost:7078/api/v1/admin/customer/create-customertype',
+    payload
+  ).subscribe({
+
+    next:()=>{
+
+      Swal.fire(
+        'Success',
+        'Customer Type Added',
+        'success'
+      );
+
+      this.newCustomerType='';
+
+      this.getCustomerTypeList();
+
+    },
+
+    error:(err)=>{
+
+      console.log(err);
+
+      Swal.fire(
+        'Error',
+        'Unable to add customer type',
+        'error'
+      );
+
+    }
+
+  });
+
+}
+
+deleteCustomerType(id:number){
+
+  Swal.fire({
+
+    title:'Delete Customer Type?',
+
+    icon:'warning',
+
+    showCancelButton:true,
+
+    confirmButtonText:'Delete'
+
+  }).then(result=>{
+
+    if(result.isConfirmed){
+
+      this.http.delete(
+        `https://localhost:7078/api/v1/admin/customer/delete-customertype/${id}`
+      ).subscribe({
+
+        next:()=>{
+
+          Swal.fire(
+            'Deleted',
+            'Customer Type Deleted',
+            'success'
+          );
+
+          this.getCustomerTypeList();
+
+        },
+
+        error:(err)=>{
+
+          console.log(err);
+
+          Swal.fire(
+            'Error',
+            'Unable to delete customer type',
+            'error'
+          );
+
+        }
+
+      });
+
+    }
+
+  });
+
+}
 }

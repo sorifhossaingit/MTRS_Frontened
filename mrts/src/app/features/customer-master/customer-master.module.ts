@@ -37,7 +37,8 @@ import { FormsModule , ReactiveFormsModule } from '@angular/forms';
       Upload,
       CheckCircle,
       XCircle,
-      TrendingUp
+      TrendingUp,
+      
     })
   ]
 })
