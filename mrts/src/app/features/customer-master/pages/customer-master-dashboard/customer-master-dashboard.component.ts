@@ -1,4 +1,532 @@
+// import { Component, OnInit } from '@angular/core';
+// import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+// import { jwtDecode } from 'jwt-decode';
+// import Swal from 'sweetalert2';
+
+// import {
+//   Users,
+//   CheckCircle,
+//   XCircle,
+//   TrendingUp,
+//   Plus,
+//   Upload,
+//   Eye,
+//   Pencil,
+//   Trash2,
+//   X
+// } from 'lucide-angular';
+
+// import { CustomerService } from '../../services/customer.service';
+
+// @Component({
+//   selector: 'app-customer-master-dashboard',
+//   templateUrl: './customer-master-dashboard.component.html',
+//   styleUrl: './customer-master-dashboard.component.css'
+// })
+// export class CustomerMasterDashboardComponent implements OnInit {
+
+//   // =========================================================
+//   // 🔷 ICONS
+//   // =========================================================
+
+//   readonly Users = Users;
+//   readonly CheckCircle = CheckCircle;
+//   readonly XCircle = XCircle;
+//   readonly TrendingUp = TrendingUp;
+//   readonly Plus = Plus;
+//   readonly Upload = Upload;
+//   readonly Eye = Eye;
+//   readonly Pencil = Pencil;
+//   readonly Trash2 = Trash2;
+//   readonly X = X;
+
+//   // =========================================================
+//   // 🔷 VARIABLES
+//   // =========================================================
+
+//   agencyId: string | null = localStorage.getItem('aid');
+//   updatedBy: number = 0;
+
+//   submitted = false;
+//   showEditModal = false;
+
+//   customerForm!: FormGroup;
+
+//   customerList: any[] = [];
+//   areaManagerList: any[] = [];
+//   customerTypeList: any[] = [];
+//   routeList: any[] = [];
+
+//   typeFilter: number | null = null;
+//   routeFilter: number | null = null;
+//   statusFilter: boolean | null = null;
+
+//   // =========================================================
+//   // 🔷 DASHBOARD
+//   // =========================================================
+
+//   totalCustomer = 0;
+//   activeCustomer = 0;
+//   inactiveCustomer = 0;
+//   newCustomer = 0;
+
+//   // =========================================================
+//   // 🔷 FILTERS
+//   // =========================================================
+
+//   searchText = '';
+//   stateFilter = '';
+
+//   // =========================================================
+//   // 🔷 PAGINATION
+//   // =========================================================
+
+//   pageNumber = 1;
+//   pageSize = 10;
+//   totalRecords = 0;
+//   totalPages = 0;
+
+//   constructor(
+//     private customerService: CustomerService,
+//     private fb: FormBuilder
+//   ) { }
+
+//   // =========================================================
+//   // 🔷 INIT
+//   // =========================================================
+
+//   ngOnInit(): void {
+//     this.getUserIdFromToken();
+//     this.decodeToken();
+//     this.initializeForm();
+//     this.getDashboardDetails();
+//     this.getCustomerTypeList();
+//     this.getRouteList();
+//     this.getCustomerDetails();
+//     this.getAreaManagerList();
+//   }
+
+//   // =========================================================
+//   // 🔷 FORM INIT
+//   // =========================================================
+
+//   initializeForm(): void {
+//     this.customerForm = this.fb.group({
+//       customerId: [0],
+//       agencyId: [this.agencyId],
+//       name: ['', Validators.required],
+//       type: ['', Validators.required],
+//       registrationNo: [''],
+//       contactPerson: ['', Validators.required],
+//       mobile: [
+//         '',
+//         [
+//           Validators.required,
+//           Validators.pattern(/^[0-9]{10}$/)
+//         ]
+//       ],
+//       email: [
+//         '',
+//         [
+//           Validators.required,
+//           Validators.email
+//         ]
+//       ],
+//       address: ['', Validators.required],
+//       city: ['', Validators.required],
+//       state: ['', Validators.required],
+//       pincode: ['', Validators.required],
+//       gstNo: [''],
+//       drugLicenseNo: [''],
+//       panNo: [''],
+//       assignedAreaManager: ['', Validators.required],
+//       region: [''],
+//       landline: [''],
+//       isActive: [true],
+//       updatedBy: [0]
+//     });
+//   }
+
+//   // Helper getter for form controls
+//   get f() {
+//     return this.customerForm.controls;
+//   }
+
+
+//     decodeToken() {
+
+//     const token = localStorage.getItem('token');
+
+//     if (token) {
+
+//       const decoded: any = jwtDecode(token);
+
+//       this.updatedBy =
+//         decoded?.userId ||
+//         decoded?.UserId ||
+//         decoded?.id ||
+//         0;
+//     }
+
+//   }
+
+  
+
+//   // =========================================================
+//   // 🔷 TOKEN DECODE
+//   // =========================================================
+
+//   getUserIdFromToken(): void {
+//     const token = localStorage.getItem('token');
+
+//     if (!token) return;
+
+//     try {
+//       const decodedToken: any = jwtDecode(token);
+//       this.updatedBy =
+//         decodedToken?.userId ||
+//         decodedToken?.UserId ||
+//         decodedToken?.id ||
+//         null;
+//     } catch (err) {
+//       console.error('Invalid or corrupted JWT token:', err);
+//     }
+//   }
+
+//   // =========================================================
+//   // 🔷 AREA MANAGER LIST
+//   // =========================================================
+
+//   getAreaManagerList(): void {
+//     this.customerService
+//       .getAreamanagerlist(this.agencyId)
+//       .subscribe({
+//         next: (res: any) => {
+//           this.areaManagerList = res.data || [];
+//         },
+//         error: (err: any) => {
+//           console.error('Failed to fetch Area Managers:', err);
+//         }
+//       });
+//   }
+
+//   // =========================================================
+//   // 🔷 ROUTE LIST
+//   // =========================================================
+
+//   getRouteList(): void {
+//     this.customerService
+//       .getRouteList()
+//       .subscribe({
+//         next: (res: any) => {
+//           this.routeList = res || [];
+//         },
+//         error: (err: any) => {
+//           console.error('Failed to fetch Route List:', err);
+//         }
+//       });
+//   }
+
+//   // =========================================================
+//   // 🔷 CUSTOMER TYPE LIST
+//   // =========================================================
+
+//   getCustomerTypeList(): void {
+//     this.customerService
+//       .getCustomerTypeList()
+//       .subscribe({
+//         next: (res: any) => {
+//           this.customerTypeList = res || [];
+//         },
+//         error: (err: any) => {
+//           console.error('Failed to fetch Customer Types:', err);
+//         }
+//       });
+//   }
+
+//   // =========================================================
+//   // 🔷 DASHBOARD DETAILS
+//   // =========================================================
+
+//   getDashboardDetails(): void {
+//     const params = {
+//       agencyId: this.agencyId
+//     };
+
+//     this.customerService
+//       .getcustomerdashboarddetails(params)
+//       .subscribe({
+//         next: (res: any) => {
+//           this.totalCustomer = res?.totalCustomers || 0;
+//           this.activeCustomer = res?.activeCustomers || 0;
+//           this.inactiveCustomer = res?.inactiveCustomers || 0;
+//           this.newCustomer = res?.newCustomersThisMonth || 0;
+//         },
+//         error: (err: any) => {
+//           console.error('Failed to fetch Dashboard Details:', err);
+//         }
+//       });
+//   }
+
+//   // =========================================================
+//   // 🔷 CUSTOMER DETAILS
+//   // =========================================================
+
+// // =========================================================
+// // 🔷 CUSTOMER DETAILS (FIXED)
+// // =========================================================
+
+// getCustomerDetails(): void {
+//   // Construct raw params
+//   const rawParams: Record<string, any> = {
+//     agencyId: this.agencyId,
+//     pageNumber: this.pageNumber,
+//     search: this.searchText.trim() || null,
+//     type: this.typeFilter,
+//     state: this.stateFilter.trim() || null,
+//     isActive: this.statusFilter,
+//     routeId: this.routeFilter,
+//     createdBy: this.updatedBy
+//   };
+
+//   // Build clean HttpParams by stripping null, undefined, and empty strings
+//   let params: any = {};
+//   Object.keys(rawParams).forEach(key => {
+//     const val = rawParams[key];
+//     if (val !== null && val !== undefined && val !== '') {
+//       params[key] = val;
+//     }
+//   });
+
+//   this.customerService
+//     .getcustomerdetails(params)
+//     .subscribe({
+//       next: (res: any) => {
+//         this.customerList = res.data || [];
+//         this.totalRecords = res.totalCount || 0;
+//         this.pageSize = res.pageSize || 10;
+//         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+//       },
+//       error: (err: any) => {
+//         console.error('Failed to fetch Customer Details:', err);
+//       }
+//     });
+// }
+//   // =========================================================
+//   // 🔷 RESET FILTER
+//   // =========================================================
+
+//   resetFilter(): void {
+//     this.searchText = '';
+//     this.typeFilter = null;
+//     this.routeFilter = null;
+//     this.statusFilter = null;
+//     this.stateFilter = '';
+//     this.pageNumber = 1;
+
+//     this.getCustomerDetails();
+//   }
+
+//   // =========================================================
+//   // 🔷 EDIT CUSTOMER
+//   // =========================================================
+
+//   editCustomer(data: any): void {
+//     this.showEditModal = true;
+
+//     this.customerForm.patchValue({
+//       customerId: data.customerId,
+//       agencyId: this.agencyId,
+//       name: data.name,
+//       type: data.type,
+//       registrationNo: data.registrationNo,
+//       contactPerson: data.contactPerson,
+//       mobile: data.mobile,
+//       email: data.email,
+//       address: data.address,
+//       city: data.city,
+//       state: data.state,
+//       pincode: data.pincode,
+//       gstNo: data.gstNo,
+//       drugLicenseNo: data.drugLicenseNo,
+//       panNo: data.panNo,
+//       assignedAreaManager: data.assignedAreaManager,
+//       region: data.region,
+//       landline: data.landline,
+//       isActive: data.isActive,
+//       updatedBy: this.updatedBy
+//     });
+//   }
+
+//   // =========================================================
+//   // 🔷 UPDATE CUSTOMER
+//   // =========================================================
+
+//   updateCustomer(): void {
+//     this.submitted = true;
+
+//     if (this.customerForm.invalid) {
+//       this.customerForm.markAllAsTouched();
+
+//       Swal.fire({
+//         icon: 'warning',
+//         title: 'Validation Error',
+//         text: 'Please fill all required fields correctly.',
+//         confirmButtonColor: '#f59e0b'
+//       });
+
+//       return;
+//     }
+
+//     const payload = {
+//       ...this.customerForm.value,
+//       agencyId: this.agencyId,
+//       assignedAreaManager: Number(this.customerForm.value.assignedAreaManager),
+//       updatedBy: this.updatedBy
+//     };
+
+//     this.customerService
+//       .updatecustomerdetails(payload)
+//       .subscribe({
+//         next: (res: any) => {
+//           Swal.fire({
+//             icon: 'success',
+//             title: 'Success',
+//             text: 'Customer Updated Successfully',
+//             confirmButtonColor: '#16a34a'
+//           });
+
+//           this.closeModal();
+//           this.getCustomerDetails();
+//           this.getDashboardDetails();
+//         },
+//         error: (err: any) => {
+//           console.error('Update Failed:', err);
+
+//           Swal.fire({
+//             icon: 'error',
+//             title: 'Update Failed',
+//             text: err?.error?.message || 'Something went wrong',
+//             confirmButtonColor: '#dc2626'
+//           });
+//         }
+//       });
+//   }
+
+//   // =========================================================
+//   // 🔷 CLOSE MODAL
+//   // =========================================================
+
+//   closeModal(): void {
+//     this.showEditModal = false;
+//     this.submitted = false;
+//     this.customerForm.reset({
+//       customerId: 0,
+//       agencyId: this.agencyId,
+//       isActive: true,
+//       updatedBy: this.updatedBy
+//     });
+//   }
+
+//   // =========================================================
+//   // 🔷 PAGINATION
+//   // =========================================================
+
+//   nextPage(): void {
+//     if (this.pageNumber < this.totalPages) {
+//       this.pageNumber++;
+//       this.getCustomerDetails();
+//     }
+//   }
+
+//   previousPage(): void {
+//     if (this.pageNumber > 1) {
+//       this.pageNumber--;
+//       this.getCustomerDetails();
+//     }
+//   }
+
+//   changePageSize(event: Event): void {
+//     const target = event.target as HTMLSelectElement;
+//     this.pageSize = Number(target.value);
+//     this.pageNumber = 1;
+//     this.getCustomerDetails();
+//   }
+
+//   // =========================================================
+//   // 🔷 DELETE CUSTOMER
+//   // =========================================================
+
+//   deleteCustomer(item: any): void {
+//     Swal.fire({
+//       title: 'Delete Customer?',
+//       text: `Are you sure you want to delete ${item.name}?`,
+//       icon: 'warning',
+//       showCancelButton: true,
+//       confirmButtonText: 'Yes, Delete',
+//       cancelButtonText: 'Cancel',
+//       confirmButtonColor: '#dc2626',
+//       cancelButtonColor: '#6b7280'
+//     }).then((result) => {
+//       if (!result.isConfirmed) {
+//         return;
+//       }
+
+//       const payload = {
+//         ...item,
+//         agencyId: this.agencyId,
+//         assignedAreaManager: Number(item.assignedAreaManager || 0),
+//         updatedBy: this.updatedBy,
+//         isActive: false
+//       };
+
+//       Swal.fire({
+//         title: 'Deleting...',
+//         text: 'Please wait',
+//         allowOutsideClick: false,
+//         allowEscapeKey: false,
+//         didOpen: () => {
+//           Swal.showLoading();
+//         }
+//       });
+
+//       this.customerService
+//         .updatecustomerdetails(payload)
+//         .subscribe({
+//           next: (res: any) => {
+//             Swal.fire({
+//               icon: 'success',
+//               title: 'Deleted',
+//               text: 'Customer Deleted Successfully',
+//               confirmButtonColor: '#16a34a'
+//             });
+
+//             this.getCustomerDetails();
+//             this.getDashboardDetails();
+//           },
+//           error: (err: any) => {
+//             console.error('Delete Failed:', err);
+
+//             Swal.fire({
+//               icon: 'error',
+//               title: 'Delete Failed',
+//               text:
+//                 err?.error?.message ||
+//                 'Something went wrong',
+//               confirmButtonColor: '#dc2626'
+//             });
+//           }
+//         });
+//     });
+//   }
+// }
+
+
+
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
 import {
   Users,
@@ -13,14 +541,6 @@ import {
   X
 } from 'lucide-angular';
 
-import { jwtDecode } from 'jwt-decode';
-import Swal from 'sweetalert2';
-
-import {
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
 
 @Component({
@@ -34,45 +554,45 @@ export class CustomerMasterDashboardComponent implements OnInit {
   // 🔷 ICONS
   // =========================================================
 
-  Users = Users;
-  CheckCircle = CheckCircle;
-  XCircle = XCircle;
-  TrendingUp = TrendingUp;
-  Plus = Plus;
-  Upload = Upload;
-  Eye = Eye;
-  Pencil = Pencil;
-  Trash2 = Trash2;
-  X = X;
+  readonly Users = Users;
+  readonly CheckCircle = CheckCircle;
+  readonly XCircle = XCircle;
+  readonly TrendingUp = TrendingUp;
+  readonly Plus = Plus;
+  readonly Upload = Upload;
+  readonly Eye = Eye;
+  readonly Pencil = Pencil;
+  readonly Trash2 = Trash2;
+  readonly X = X;
 
   // =========================================================
   // 🔷 VARIABLES
   // =========================================================
 
-  agencyId: any = localStorage.getItem('aid');
-
-  updatedBy: any;
-
+  agencyId: string | null = localStorage.getItem('aid');
+  updatedBy: number = 0;
+  rid : string | null = localStorage.getItem('rid');
   submitted = false;
-
   showEditModal = false;
 
   customerForm!: FormGroup;
 
   customerList: any[] = [];
-
   areaManagerList: any[] = [];
+  customerTypeList: any[] = [];
+  routeList: any[] = [];
+
+  typeFilter: string | null = null;
+  routeFilter: number | null = null;
+  statusFilter: boolean | null = null;
 
   // =========================================================
   // 🔷 DASHBOARD
   // =========================================================
 
   totalCustomer = 0;
-
   activeCustomer = 0;
-
   inactiveCustomer = 0;
-
   newCustomer = 0;
 
   // =========================================================
@@ -80,11 +600,6 @@ export class CustomerMasterDashboardComponent implements OnInit {
   // =========================================================
 
   searchText = '';
-
-  typeFilter = '';
-
-  statusFilter = '';
-
   stateFilter = '';
 
   // =========================================================
@@ -92,11 +607,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
   // =========================================================
 
   pageNumber = 1;
-
   pageSize = 10;
-
   totalRecords = 0;
-
   totalPages = 0;
 
   constructor(
@@ -109,48 +621,28 @@ export class CustomerMasterDashboardComponent implements OnInit {
   // =========================================================
 
   ngOnInit(): void {
-
     this.getUserIdFromToken();
-
     this.initializeForm();
-
     this.getDashboardDetails();
-
+    this.getCustomerTypeList();
+    this.getRouteList();
     this.getCustomerDetails();
-
     this.getAreaManagerList();
-
   }
 
   // =========================================================
   // 🔷 FORM INIT
   // =========================================================
 
-  initializeForm() {
-
+  initializeForm(): void {
     this.customerForm = this.fb.group({
-
       customerId: [0],
-
-      agencyId: [this.agencyId],
-
-      name: [
-        '',
-        Validators.required
-      ],
-
-      type: [
-        '',
-        Validators.required
-      ],
-
+      agencyId: [Number(this.agencyId || 0)],
+      name: ['', Validators.required],
+      type: ['', Validators.required],
+      routeId: [0],
       registrationNo: [''],
-
-      contactPerson: [
-        '',
-        Validators.required
-      ],
-
+      contactPerson: ['', Validators.required],
       mobile: [
         '',
         [
@@ -158,7 +650,6 @@ export class CustomerMasterDashboardComponent implements OnInit {
           Validators.pattern(/^[0-9]{10}$/)
         ]
       ],
-
       email: [
         '',
         [
@@ -166,571 +657,434 @@ export class CustomerMasterDashboardComponent implements OnInit {
           Validators.email
         ]
       ],
-
-      address: [
-        '',
-        Validators.required
-      ],
-
-      city: [
-        '',
-        Validators.required
-      ],
-
-      state: [
-        '',
-        Validators.required
-      ],
-
-      pincode: [
-        '',
-        Validators.required
-      ],
-
+      address: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      pincode: ['', Validators.required],
       gstNo: [''],
-
       drugLicenseNo: [''],
-
       panNo: [''],
-
-      assignedAreaManager: [
-        '',
-        Validators.required
-      ],
-
+      assignedAreaManager: [0, Validators.required],
       region: [''],
-
       landline: [''],
-
+      latitude: [0],
+      longitude: [0],
       isActive: [true],
-
-
-      updatedBy: [0]
-
+      updatedBy: [this.updatedBy]
     });
+  }
 
+  // Helper getter for form controls
+  get f() {
+    return this.customerForm.controls;
   }
 
   // =========================================================
   // 🔷 TOKEN DECODE
   // =========================================================
 
-  getUserIdFromToken() {
+  getUserIdFromToken(): void {
+    const token = localStorage.getItem('token');
 
-    const token =
-      localStorage.getItem('token');
+    if (!token) return;
 
-    if (token) {
-
-      const decodedToken: any =
-        jwtDecode(token);
-
-      this.updatedBy =
+    try {
+      const decodedToken: any = jwtDecode(token);
+      this.updatedBy = Number(
         decodedToken?.userId ||
         decodedToken?.UserId ||
-        decodedToken?.id;
-
+        decodedToken?.id ||
+        0
+      );
+    } catch (err) {
+      console.error('Invalid or corrupted JWT token:', err);
     }
-
   }
+
 
   // =========================================================
   // 🔷 AREA MANAGER LIST
   // =========================================================
 
-  getAreaManagerList() {
-
+  getAreaManagerList(): void {
     this.customerService
       .getAreamanagerlist(this.agencyId)
       .subscribe({
-
         next: (res: any) => {
-
-          this.areaManagerList =
-            res.data || [];
-
+          this.areaManagerList = res.data || [];
         },
-
         error: (err: any) => {
-
-          console.log(err);
-
+          console.error('Failed to fetch Area Managers:', err);
         }
-
       });
+  }
 
+  // =========================================================
+  // 🔷 ROUTE LIST
+  // =========================================================
+
+  getRouteList(): void {
+    this.customerService
+      .getRouteList()
+      .subscribe({
+        next: (res: any) => {
+          this.routeList = res.data || res || [];
+        },
+        error: (err: any) => {
+          console.error('Failed to fetch Route List:', err);
+        }
+      });
+  }
+
+  // =========================================================
+  // 🔷 CUSTOMER TYPE LIST
+  // =========================================================
+
+  getCustomerTypeList(): void {
+    this.customerService
+      .getCustomerTypeList()
+      .subscribe({
+        next: (res: any) => {
+          this.customerTypeList = res.data || res || [];
+        },
+        error: (err: any) => {
+          console.error('Failed to fetch Customer Types:', err);
+        }
+      });
   }
 
   // =========================================================
   // 🔷 DASHBOARD DETAILS
   // =========================================================
 
-  getDashboardDetails() {
-
+  getDashboardDetails(): void {
     const params = {
-
       agencyId: this.agencyId
-
     };
 
     this.customerService
       .getcustomerdashboarddetails(params)
       .subscribe({
-
         next: (res: any) => {
-
-          this.totalCustomer =
-            res?.totalCustomers || 0;
-
-          this.activeCustomer =
-            res?.activeCustomers || 0;
-
-          this.inactiveCustomer =
-            res?.inactiveCustomers || 0;
-
-          this.newCustomer =
-            res?.newCustomersThisMonth || 0;
-
+          this.totalCustomer = res?.totalCustomers || 0;
+          this.activeCustomer = res?.activeCustomers || 0;
+          this.inactiveCustomer = res?.inactiveCustomers || 0;
+          this.newCustomer = res?.newCustomersThisMonth || 0;
         },
-
         error: (err: any) => {
-
-          console.log(err);
-
+          console.error('Failed to fetch Dashboard Details:', err);
         }
-
       });
-
   }
 
   // =========================================================
   // 🔷 CUSTOMER DETAILS
   // =========================================================
 
-  getCustomerDetails() {
-
-    const params = {
-
+  getCustomerDetails(): void {
+    const rawParams: Record<string, any> = {
       agencyId: this.agencyId,
-
-      search: this.searchText,
-
-      type: this.typeFilter,
-
-      status: this.statusFilter,
-
-      state: this.stateFilter,
-
       pageNumber: this.pageNumber,
-
-      pageSize: this.pageSize
-
+      search: this.searchText.trim() || null,
+      type: this.typeFilter,
+      state: this.stateFilter.trim() || null,
+      isActive: this.statusFilter,
+      routeId: this.routeFilter,
+      createdBy: this.rid === 'a5fabfee-5506-4e12-bfec-c898fc5af3ae' ? null : this.updatedBy
     };
+
+    let params: any = {};
+    Object.keys(rawParams).forEach(key => {
+      const val = rawParams[key];
+      if (val !== null && val !== undefined && val !== '') {
+        params[key] = val;
+      }
+    });
 
     this.customerService
       .getcustomerdetails(params)
       .subscribe({
-
         next: (res: any) => {
-
-          this.customerList =
-            res?.data || [];
-
-          this.totalRecords =
-            res?.totalRecords || 0;
-
-          this.totalPages =
-            res?.totalPages || 0;
-
+          this.customerList = res.data || [];
+          this.totalRecords = res.totalCount || 0;
+          this.pageSize = res.pageSize || 10;
+          this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         },
-
         error: (err: any) => {
-
-          console.log(err);
-
+          console.error('Failed to fetch Customer Details:', err);
         }
-
       });
-
   }
 
   // =========================================================
   // 🔷 RESET FILTER
   // =========================================================
 
-  resetFilter() {
-
+  resetFilter(): void {
     this.searchText = '';
-
-    this.typeFilter = '';
-
-    this.statusFilter = '';
-
+    this.typeFilter = null;
+    this.routeFilter = null;
+    this.statusFilter = null;
     this.stateFilter = '';
-
     this.pageNumber = 1;
 
     this.getCustomerDetails();
-
   }
 
   // =========================================================
   // 🔷 EDIT CUSTOMER
   // =========================================================
 
-  editCustomer(data: any) {
+editCustomer(data: any): void {
+  this.showEditModal = true;
 
-    this.showEditModal = true;
+  // Find ID from customerTypeList if the record only contains the string name
+  let typeId = Number(data.customerTypeId || data.typeId || 0);
 
-    this.customerForm.patchValue({
-
-      customerId: data.customerId,
-
-      agencyId: this.agencyId,
-
-      name: data.name,
-
-      type: data.type,
-
-      registrationNo: data.registrationNo,
-
-      contactPerson: data.contactPerson,
-
-      mobile: data.mobile,
-
-      email: data.email,
-
-      address: data.address,
-
-      city: data.city,
-
-      state: data.state,
-
-      pincode: data.pincode,
-
-      gstNo: data.gstNo,
-
-      drugLicenseNo: data.drugLicenseNo,
-
-      panNo: data.panNo,
-
-      assignedAreaManager:
-        data.assignedAreaManager,
-
-      region: data.region,
-
-      landline: data.landline,
-
-      isActive: data.isActive,
-
-      updatedBy: this.updatedBy
-
-    });
-
+  if (!typeId && (data.type || data.customerType)) {
+    const matchedType = this.customerTypeList.find(
+      (item) => item.customerType === (data.type || data.customerType)
+    );
+    if (matchedType) {
+      typeId = Number(matchedType.customerTypeId);
+    }
   }
 
+  this.customerForm.patchValue({
+    customerId: Number(data.customerId || 0),
+    agencyId: Number(this.agencyId || 0),
+    name: data.name || '',
+    type: typeId, // Sets integer ID (e.g. 13)
+    routeId: Number(data.routeId || 0),
+    registrationNo: data.registrationNo || '',
+    contactPerson: data.contactPerson || '',
+    mobile: data.mobile || '',
+    email: data.email || '',
+    address: data.address || '',
+    city: data.city || '',
+    state: data.state || '',
+    pincode: data.pincode || '',
+    gstNo: data.gstNo || '',
+    drugLicenseNo: data.drugLicenseNo || '',
+    panNo: data.panNo || '',
+    assignedAreaManager: Number(data.assignedAreaManager || 0),
+    region: data.region || '',
+    landline: data.landline || '',
+    latitude: Number(data.latitude || 0),
+    longitude: Number(data.longitude || 0),
+    isActive: data.isActive ?? true,
+    updatedBy: this.updatedBy
+  });
+}
   // =========================================================
   // 🔷 UPDATE CUSTOMER
   // =========================================================
+updateCustomer(): void {
+  this.submitted = true;
 
-  updateCustomer() {
+  if (this.customerForm.invalid || this.customerForm.value.type === 0) {
+    this.customerForm.markAllAsTouched();
 
-    this.submitted = true;
+    Swal.fire({
+      icon: 'warning',
+      title: 'Validation Error',
+      text: 'Please select a valid Customer Type and complete all required fields.',
+      confirmButtonColor: '#f59e0b'
+    });
 
-    if (this.customerForm.invalid) {
+    return;
+  }
 
-      this.customerForm.markAllAsTouched();
+  const formValues = this.customerForm.value;
+
+  const payload = {
+    customerId: Number(formValues.customerId || 0),
+    agencyId: Number(this.agencyId || 0),
+    name: formValues.name,
+    type: Number(formValues.type || 0), // Converts ID to Number for SQL Server
+    registrationNo: formValues.registrationNo,
+    contactPerson: formValues.contactPerson,
+    mobile: formValues.mobile,
+    email: formValues.email,
+    address: formValues.address,
+    city: formValues.city,
+    state: formValues.state,
+    pincode: formValues.pincode,
+    gstNo: formValues.gstNo,
+    drugLicenseNo: formValues.drugLicenseNo,
+    panNo: formValues.panNo,
+    assignedAreaManager: Number(formValues.assignedAreaManager || 0),
+    updatedBy: this.updatedBy,
+    region: formValues.region,
+    landline: formValues.landline,
+    latitude: Number(formValues.latitude || 0),
+    longitude: Number(formValues.longitude || 0),
+    routeId: Number(formValues.routeId || 0)
+  };
+
+  this.customerService.updatecustomerdetails(payload).subscribe({
+    next: (res: any) => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Customer Updated Successfully',
+        confirmButtonColor: '#16a34a'
+      });
+
+      this.closeModal();
+      this.getCustomerDetails();
+      this.getDashboardDetails();
+    },
+    error: (err: any) => {
+      console.error('Update Failed:', err);
 
       Swal.fire({
-        icon: 'warning',
-        title: 'Validation Error',
-        text: 'Please fill all required fields correctly.',
-        confirmButtonColor: '#f59e0b'
+        icon: 'error',
+        title: 'Update Failed',
+        text: err?.error?.message || 'Something went wrong',
+        confirmButtonColor: '#dc2626'
       });
-
-      return;
-
     }
-
-    const formValue =
-      this.customerForm.value;
-
-    const payload = {
-
-      customerId:
-        formValue.customerId,
-
-      agencyId:
-        this.agencyId,
-
-      name:
-        formValue.name,
-
-      type:
-        formValue.type,
-
-      registrationNo:
-        formValue.registrationNo,
-
-      contactPerson:
-        formValue.contactPerson,
-
-      mobile:
-        formValue.mobile,
-
-      email:
-        formValue.email,
-
-      address:
-        formValue.address,
-
-      city:
-        formValue.city,
-
-      state:
-        formValue.state,
-
-      pincode:
-        formValue.pincode,
-
-      gstNo:
-        formValue.gstNo,
-
-      drugLicenseNo:
-        formValue.drugLicenseNo,
-
-      panNo:
-        formValue.panNo,
-
-      assignedAreaManager:
-        Number(
-          formValue.assignedAreaManager
-        ),
-
-      region: formValue.region,
-
-      landline:
-        formValue.landline,
-
-      isActive: formValue.isActive,
-
-      updatedBy:
-        this.updatedBy
-
-    };
-
-    this.customerService
-      .updatecustomerdetails(payload)
-      .subscribe({
-
-        next: (res: any) => {
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Customer Updated Successfully',
-            confirmButtonColor: '#16a34a'
-          });
-
-          this.showEditModal = false;
-
-          this.getCustomerDetails();
-          this.getDashboardDetails();
-
-        },
-
-        error: (err: any) => {
-
-          console.log(err);
-
-          Swal.fire({
-            icon: 'error',
-            title: 'Update Failed',
-            text: err?.error?.message || 'Something went wrong',
-            confirmButtonColor: '#dc2626'
-          });
-
-        }
-
-      });
-
-  }
+  });
+}
 
   // =========================================================
   // 🔷 CLOSE MODAL
   // =========================================================
 
-  closeModal() {
-
+  closeModal(): void {
     this.showEditModal = false;
-
     this.submitted = false;
-
+    this.customerForm.reset({
+      customerId: 0,
+      agencyId: Number(this.agencyId || 0),
+      routeId: 0,
+      assignedAreaManager: 0,
+      latitude: 0,
+      longitude: 0,
+      isActive: true,
+      updatedBy: this.updatedBy
+    });
   }
 
   // =========================================================
   // 🔷 PAGINATION
   // =========================================================
 
-  nextPage() {
-
+  nextPage(): void {
     if (this.pageNumber < this.totalPages) {
-
       this.pageNumber++;
-
       this.getCustomerDetails();
-
     }
-
   }
 
-  previousPage() {
-
+  previousPage(): void {
     if (this.pageNumber > 1) {
-
       this.pageNumber--;
-
       this.getCustomerDetails();
-
     }
-
   }
 
-  changePageSize(event: any) {
-
-    this.pageSize = +event.target.value;
-
+  changePageSize(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.pageSize = Number(target.value);
     this.pageNumber = 1;
-
     this.getCustomerDetails();
-
   }
-
 
   // =========================================================
   // 🔷 DELETE CUSTOMER
   // =========================================================
 
-  deleteCustomer(item: any) {
+ deleteCustomer(item: any): void {
+  Swal.fire({
+    title: 'Delete Customer?',
+    text: `Are you sure you want to delete ${item.name}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#dc2626',
+    cancelButtonColor: '#6b7280'
+  }).then((result) => {
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    // Resolve Customer Type ID
+    let typeId = item.customerTypeId || item.typeId || item.type || '';
+
+    // If type is a string name (e.g. "ABC"), resolve its numeric ID from customerTypeList
+    if (isNaN(Number(typeId))) {
+      const matchedType = this.customerTypeList.find(
+        (t: any) => t.customerType === typeId
+      );
+      if (matchedType) {
+        typeId = matchedType.customerTypeId;
+      }
+    }
+
+    const payload = {
+      customerId: Number(item.customerId || 0),
+      agencyId: Number(this.agencyId || 0),
+      name: item.name || '',
+       type: Number(item.type || 0), // API requires type as String (e.g. "14")
+      registrationNo: item.registrationNo || '',
+      contactPerson: item.contactPerson || '',
+      mobile: item.mobile || '',
+      email: item.email || '',
+      address: item.address || '',
+      city: item.city || '',
+      state: item.state || '',
+      pincode: item.pincode || '',
+      gstNo: item.gstNo || '',
+      drugLicenseNo: item.drugLicenseNo || '',
+      panNo: item.panNo || '',
+      assignedAreaManager: Number(item.assignedAreaManager || 0),
+      updatedBy: this.updatedBy,
+      region: item.region || '',
+      landline: item.landline || '',
+      latitude: Number(item.latitude || 0),
+      longitude: Number(item.longitude || 0),
+      routeId: Number(item.routeId || 0),
+      isActive: false // Explicitly mark as deleted/inactive
+    };
 
     Swal.fire({
-      title: 'Delete Customer?',
-      text: `Are you sure you want to delete ${item.name}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, Delete',
-      cancelButtonText: 'Cancel',
-      confirmButtonColor: '#dc2626',
-      cancelButtonColor: '#6b7280'
-    }).then((result) => {
-
-      if (!result.isConfirmed) {
-        return;
+      title: 'Deleting...',
+      text: 'Please wait',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        Swal.showLoading();
       }
-
-      const payload = {
-
-        customerId: item.customerId,
-
-        agencyId: this.agencyId,
-
-        name: item.name,
-
-        type: item.type,
-
-        registrationNo: item.registrationNo,
-
-        contactPerson: item.contactPerson,
-
-        mobile: item.mobile,
-
-        email: item.email,
-
-        address: item.address,
-
-        city: item.city,
-
-        state: item.state,
-
-        pincode: item.pincode,
-
-        gstNo: item.gstNo,
-
-        drugLicenseNo: item.drugLicenseNo,
-
-        panNo: item.panNo,
-
-        assignedAreaManager:
-          Number(item.assignedAreaManager || 0),
-
-        region: item.region,
-
-        landline: item.landline,
-
-        updatedBy: this.updatedBy,
-
-        isActive: false
-
-      };
-
-      Swal.fire({
-        title: 'Deleting...',
-        text: 'Please wait',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
-
-      this.customerService
-        .updatecustomerdetails(payload)
-        .subscribe({
-
-          next: (res: any) => {
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Deleted',
-              text: 'Customer Deleted Successfully',
-              confirmButtonColor: '#16a34a'
-            });
-
-            this.getCustomerDetails();
-
-            this.getDashboardDetails();
-
-          },
-
-          error: (err: any) => {
-
-            console.log(err);
-
-            Swal.fire({
-              icon: 'error',
-              title: 'Delete Failed',
-              text:
-                err?.error?.message ||
-                'Something went wrong',
-              confirmButtonColor: '#dc2626'
-            });
-
-          }
-
-        });
-
     });
 
-  }
+    this.customerService
+      .updatecustomerdetails(payload)
+      .subscribe({
+        next: (res: any) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted',
+            text: 'Customer Deleted Successfully',
+            confirmButtonColor: '#16a34a'
+          });
 
-  // =========================================================
-  // 🔷 FORM CONTROLS
-  // =========================================================
+          this.getCustomerDetails();
+          this.getDashboardDetails();
+        },
+        error: (err: any) => {
+          console.error('Delete Failed:', err);
 
-  get f() {
-
-    return this.customerForm.controls;
-
-  }
-
+          Swal.fire({
+            icon: 'error',
+            title: 'Delete Failed',
+            text: err?.error?.message || err?.error?.title || 'Something went wrong',
+            confirmButtonColor: '#dc2626'
+          });
+        }
+      });
+  });
+}
 }

@@ -112,47 +112,50 @@
 
   <!-- FILTER -->
 
-  <div class="bg-white p-4 rounded-2xl shadow mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+  <div class="bg-white p-4 rounded-2xl shadow mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
 
+    <!-- Search -->
     <input type="text" [(ngModel)]="searchText" (keyup)="getCustomerDetails()" placeholder="Search name/mobile"
       class="border p-2 rounded-lg sm:col-span-2" />
 
+    <!-- Customer Type -->
     <select [(ngModel)]="typeFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
 
-      <option value="">
-        Type
-      </option>
+      <option [ngValue]="null">Type</option>
 
-      <option>
-        Hospital
-      </option>
+      <option *ngFor="let item of customerTypeList" [ngValue]="item.customerTypeId">
 
-      <option>
-        Clinic
-      </option>
+        {{ item.customerType }}
 
-      <option>
-        Pharmacy
       </option>
 
     </select>
 
+    <!-- Route -->
+    <select [(ngModel)]="routeFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
+
+      <option [ngValue]="null">Route</option>
+
+      <option *ngFor="let item of routeList" [ngValue]="item.routeId">
+
+        {{ item.routeName }}
+
+      </option>
+
+    </select>
+
+    <!-- Status -->
     <select [(ngModel)]="statusFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
 
-      <option value="">
-        Status
-      </option>
+      <option [ngValue]="null">Status</option>
 
-      <option value=ture>
-        Active
-      </option>
+      <option [ngValue]="true">Active</option>
 
-      <option value=false>
-        Inactive
-      </option>
+      <option [ngValue]="false">Inactive</option>
 
     </select>
 
+    <!-- State -->
     <input type="text" [(ngModel)]="stateFilter" (keyup)="getCustomerDetails()" placeholder="State"
       class="border p-2 rounded-lg" />
 
@@ -174,10 +177,12 @@
         <thead class="bg-gray-100 text-left">
           <tr>
             <th class="px-6 py-4">Name</th>
-            <th class="px-6 py-4">Type</th>
+            <th class="px-6 py-4">Customer Type</th>
             <th class="px-6 py-4">Contact</th>
             <th class="px-6 py-4">Location</th>
+            <th class="px-6 py-4">Route</th>
             <th class="px-6 py-4">Area Manager</th>
+            <th class="px-6 py-4">Is Active</th>
             <th class="px-6 py-4">Status</th>
             <th class="px-6 py-4 text-center">Actions</th>
           </tr>
@@ -186,14 +191,17 @@
         <tbody>
           <tr *ngFor="let item of customerList" class="border-t hover:bg-gray-50 h-20">
 
+            <!-- Name -->
             <td class="px-6 py-4 font-medium">
               {{ item.name }}
             </td>
 
+            <!-- Customer Type -->
             <td class="px-6 py-4">
-              {{ item.type }}
+              {{ item.customerType || item.type || '-' }}
             </td>
 
+            <!-- Contact -->
             <td class="px-6 py-4">
               <div>{{ item.mobile }}</div>
               <div class="text-gray-500 text-xs mt-1">
@@ -201,23 +209,47 @@
               </div>
             </td>
 
+            <!-- Location -->
             <td class="px-6 py-4">
               {{ item.city }}
             </td>
 
+            <!-- Route -->
+            <td class="px-6 py-4">
+              {{ item.routeName || item.route || '-' }}
+            </td>
+
+            <!-- Area Manager -->
             <td class="px-6 py-4">
               {{ item.assignedAreaManagerName }}
             </td>
 
+            <!-- Is Active (Boolean) -->
             <td class="px-6 py-4">
-              <span class="px-3 py-1.5 rounded-full text-xs font-medium" [ngClass]="item.isActive
-                ? 'bg-green-100 text-green-700'
-                : 'bg-red-100 text-red-700'">
-
+              <span class="px-3 py-1.5 rounded-full text-xs font-medium"
+                [ngClass]="item.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
                 {{ item.isActive ? 'Active' : 'Inactive' }}
               </span>
             </td>
 
+            <!-- Status (1 = Created by MR, 2 = Approved) -->
+            <td class="px-6 py-4">
+              <span class="px-3 py-1.5 rounded-full text-xs font-medium inline-block" [ngClass]="{
+                'bg-amber-100 text-amber-700': item.status === 1,
+                'bg-blue-100 text-blue-700': item.status === 2,
+                'bg-gray-100 text-gray-700': item.status !== 1 && item.status !== 2
+              }">
+
+                <ng-container [ngSwitch]="item.status">
+                  <span *ngSwitchCase="1">Created by MR</span>
+                  <span *ngSwitchCase="2">Approved</span>
+                  <span *ngSwitchDefault>-</span>
+                </ng-container>
+
+              </span>
+            </td>
+
+            <!-- Actions -->
             <td class="px-6 py-4 text-center">
               <div class="flex justify-center items-center gap-4">
 
@@ -225,8 +257,11 @@
                   <lucide-icon [img]="Pencil"></lucide-icon>
                 </button>
 
-                <button (click)="deleteCustomer(item)" class="text-red-600 hover:scale-110 transition">
+                <button *ngIf="rid === 'a5fabfee-5506-4e12-bfec-c898fc5af3ae'" (click)="deleteCustomer(item)"
+                  class="text-red-600 hover:scale-110 transition">
+
                   <lucide-icon [img]="Trash2"></lucide-icon>
+
                 </button>
 
               </div>
@@ -239,7 +274,6 @@
 
     </div>
   </div>
-
   <!-- PAGINATION -->
 
   <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 p-4 bg-white rounded-2xl shadow">
@@ -329,287 +363,255 @@
   <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl">
 
     <!-- HEADER -->
-
-    <div class="flex justify-between items-center border-b px-6 py-4 sticky top-0 bg-white">
-
-      <h2 class="text-2xl font-bold">
+    <div class="flex justify-between items-center border-b px-6 py-4 sticky top-0 bg-white z-10">
+      <h2 class="text-2xl font-bold text-gray-800">
         Update Customer
       </h2>
-
-      <button (click)="closeModal()" class="text-gray-500 hover:text-red-500">
-
+      <button (click)="closeModal()" class="text-gray-500 hover:text-red-500 transition-colors">
         <lucide-icon [img]="X"></lucide-icon>
-
       </button>
-
     </div>
 
     <!-- FORM -->
-
     <form [formGroup]="customerForm" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
       <!-- CUSTOMER NAME -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          Customer Name
+        <label class="text-sm font-medium text-gray-700">
+          Customer Name <span class="text-red-500">*</span>
         </label>
-
-        <input type="text" formControlName="name" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="name"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['name'].errors}">
+        <div *ngIf="submitted && f['name'].errors" class="text-red-500 text-xs mt-1">
+          Customer Name is required.
+        </div>
       </div>
 
-      <!-- TYPE -->
 
+      <!-- TYPE (DYNAMIC DROPDOWN) -->
       <div>
-
-        <label class="text-sm font-medium">
-          Customer Type
+        <label class="text-sm font-medium text-gray-700">
+          Customer Type <span class="text-red-500">*</span>
         </label>
-
-        <select formControlName="type" class="w-full border rounded-xl p-3 mt-1">
-
-          <option value="">
-            Select Type
+        <select formControlName="type"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['type'].errors}">
+          <option [ngValue]="0">Select Type</option>
+          <!-- Send ID to backend, display name in dropdown -->
+          <option *ngFor="let type of customerTypeList" [ngValue]="type.customerTypeId">
+            {{ type.customerType }}
           </option>
-
-          <option value="Hospital">
-            Hospital
-          </option>
-
-          <option value="Clinic">
-            Clinic
-          </option>
-
-          <option value="Pharmacy">
-            Pharmacy
-          </option>
-
         </select>
+        <div *ngIf="submitted && f['type'].errors" class="text-red-500 text-xs mt-1">
+          Customer Type is required.
+        </div>
+      </div>
 
+
+      <!-- ROUTE (DYNAMIC DROPDOWN) -->
+      <div>
+        <label class="text-sm font-medium text-gray-700">
+          Route
+        </label>
+        <select formControlName="routeId"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option [value]="0">Select Route</option>
+          <option *ngFor="let route of routeList" [value]="route.routeId">
+            {{ route.routeName }}
+          </option>
+        </select>
       </div>
 
       <!-- CONTACT PERSON -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          Contact Person
+        <label class="text-sm font-medium text-gray-700">
+          Contact Person <span class="text-red-500">*</span>
         </label>
-
-        <input type="text" formControlName="contactPerson" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="contactPerson"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['contactPerson'].errors}">
+        <div *ngIf="submitted && f['contactPerson'].errors" class="text-red-500 text-xs mt-1">
+          Contact Person is required.
+        </div>
       </div>
 
       <!-- MOBILE -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          Mobile Number
+        <label class="text-sm font-medium text-gray-700">
+          Mobile Number <span class="text-red-500">*</span>
         </label>
-
-        <input type="text" formControlName="mobile" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="mobile"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['mobile'].errors}">
+        <div *ngIf="submitted && f['mobile'].errors" class="text-red-500 text-xs mt-1">
+          <span *ngIf="f['mobile'].errors['required']">Mobile number is required.</span>
+          <span *ngIf="f['mobile'].errors['pattern']">Enter a valid 10-digit mobile number.</span>
+        </div>
       </div>
 
       <!-- EMAIL -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          Email
+        <label class="text-sm font-medium text-gray-700">
+          Email <span class="text-red-500">*</span>
         </label>
-
-        <input type="email" formControlName="email" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="email" formControlName="email"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['email'].errors}">
+        <div *ngIf="submitted && f['email'].errors" class="text-red-500 text-xs mt-1">
+          <span *ngIf="f['email'].errors['required']">Email address is required.</span>
+          <span *ngIf="f['email'].errors['email']">Enter a valid email address.</span>
+        </div>
       </div>
 
       <!-- ADDRESS -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          Address
+        <label class="text-sm font-medium text-gray-700">
+          Address <span class="text-red-500">*</span>
         </label>
-
-        <input type="text" formControlName="address" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="address"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['address'].errors}">
+        <div *ngIf="submitted && f['address'].errors" class="text-red-500 text-xs mt-1">
+          Address is required.
+        </div>
       </div>
 
       <!-- CITY -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          City
+        <label class="text-sm font-medium text-gray-700">
+          City <span class="text-red-500">*</span>
         </label>
-
-        <input type="text" formControlName="city" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="city"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['city'].errors}">
+        <div *ngIf="submitted && f['city'].errors" class="text-red-500 text-xs mt-1">
+          City is required.
+        </div>
       </div>
 
       <!-- STATE -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          State
+        <label class="text-sm font-medium text-gray-700">
+          State <span class="text-red-500">*</span>
         </label>
-
-        <input type="text" formControlName="state" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="state"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['state'].errors}">
+        <div *ngIf="submitted && f['state'].errors" class="text-red-500 text-xs mt-1">
+          State is required.
+        </div>
       </div>
 
       <!-- PINCODE -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          Pincode
+        <label class="text-sm font-medium text-gray-700">
+          Pincode <span class="text-red-500">*</span>
         </label>
-
-        <input type="text" formControlName="pincode" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="pincode"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['pincode'].errors}">
+        <div *ngIf="submitted && f['pincode'].errors" class="text-red-500 text-xs mt-1">
+          Pincode is required.
+        </div>
       </div>
 
       <!-- GST -->
-
       <div>
-
-        <label class="text-sm font-medium">
+        <label class="text-sm font-medium text-gray-700">
           GST Number
         </label>
-
-        <input type="text" formControlName="gstNo" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="gstNo"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
 
       <!-- DRUG LICENSE -->
-
       <div>
-
-        <label class="text-sm font-medium">
+        <label class="text-sm font-medium text-gray-700">
           Drug License No
         </label>
-
-        <input type="text" formControlName="drugLicenseNo" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="drugLicenseNo"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
 
       <!-- PAN -->
-
       <div>
-
-        <label class="text-sm font-medium">
+        <label class="text-sm font-medium text-gray-700">
           PAN Number
         </label>
-
-        <input type="text" formControlName="panNo" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="panNo"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
 
       <!-- ASSIGNED AREA MANAGER -->
-
       <div>
-
-        <label class="text-sm font-medium">
-          Assigned Area Manager
+        <label class="text-sm font-medium text-gray-700">
+          Assigned Area Manager <span class="text-red-500">*</span>
         </label>
-
-        <select formControlName="assignedAreaManager" class="w-full border rounded-xl p-3 mt-1">
-
-          <option value="">
-            Select Area Manager
-          </option>
-
+        <select formControlName="assignedAreaManager"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [ngClass]="{'border-red-500': submitted && f['assignedAreaManager'].errors}">
+          <option [value]="0">Select Area Manager</option>
           <option *ngFor="let am of areaManagerList" [value]="am.areaManagerId">
-
             {{ am.name }} ({{ am.assignedArea }})
-
           </option>
-
         </select>
-
+        <div *ngIf="submitted && f['assignedAreaManager'].errors" class="text-red-500 text-xs mt-1">
+          Area Manager assignment is required.
+        </div>
       </div>
 
       <!-- STATUS -->
-
       <div>
-        <label class="text-sm font-medium">
+        <label class="text-sm font-medium text-gray-700">
           Status
         </label>
-
-        <select formControlName="isActive" class="w-full border rounded-xl p-3 mt-1">
-
-          <option [ngValue]="true">
-            Active
-          </option>
-
-          <option [ngValue]="false">
-            Inactive
-          </option>
-
+        <select formControlName="isActive"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
         </select>
       </div>
 
       <!-- REGION -->
-
       <div>
-
-        <label class="text-sm font-medium">
+        <label class="text-sm font-medium text-gray-700">
           Region
         </label>
-
-        <input type="text" formControlName="region" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="region"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
 
       <!-- LANDLINE -->
-
       <div>
-
-        <label class="text-sm font-medium">
+        <label class="text-sm font-medium text-gray-700">
           Landline
         </label>
-
-        <input type="text" formControlName="landline" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="landline"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
 
       <!-- REGISTRATION -->
-
       <div>
-
-        <label class="text-sm font-medium">
+        <label class="text-sm font-medium text-gray-700">
           Registration Number
         </label>
-
-        <input type="text" formControlName="registrationNo" class="w-full border rounded-xl p-3 mt-1">
-
+        <input type="text" formControlName="registrationNo"
+          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
 
     </form>
 
     <!-- FOOTER -->
-
-    <div class="flex justify-end gap-3 border-t px-6 py-4">
-
+    <div class="flex justify-end gap-3 border-t px-6 py-4 bg-gray-50 rounded-b-2xl">
       <button type="button" (click)="closeModal()"
-        class="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-xl">
-
+        class="bg-gray-400 hover:bg-gray-500 text-white font-medium px-5 py-2.5 rounded-xl transition-colors">
         Cancel
-
       </button>
-
       <button type="button" (click)="updateCustomer()"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl">
-
+        class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors">
         Update Customer
-
       </button>
-
     </div>
 
   </div>

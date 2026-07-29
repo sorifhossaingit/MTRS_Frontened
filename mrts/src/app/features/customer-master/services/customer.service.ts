@@ -38,6 +38,20 @@ private apiUrl = environment.apiUrl;
       `${this.apiUrl}/admin/area-manager/dropdown/active-area-managers/${agencyId}`);
   }
   
-  
+  getCustomerTypeList() {
+
+  return this.http.get(
+    `${environment.apiUrl}/admin/customer/get-customertype`
+  );
+
+}
+
+getRouteList() {
+
+  return this.http.get(
+    `${environment.apiUrl}/admin/customer/get-route`
+  );
+
+}
 
 }
