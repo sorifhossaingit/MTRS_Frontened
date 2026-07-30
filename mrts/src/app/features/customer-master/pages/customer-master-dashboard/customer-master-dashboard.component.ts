@@ -170,7 +170,7 @@
 
 //   }
 
-  
+
 
 //   // =========================================================
 //   // 🔷 TOKEN DECODE
@@ -538,7 +538,8 @@ import {
   Eye,
   Pencil,
   Trash2,
-  X
+  X,
+  Check
 } from 'lucide-angular';
 
 import { CustomerService } from '../../services/customer.service';
@@ -564,6 +565,7 @@ export class CustomerMasterDashboardComponent implements OnInit {
   readonly Pencil = Pencil;
   readonly Trash2 = Trash2;
   readonly X = X;
+  readonly Check = Check;
 
   // =========================================================
   // 🔷 VARIABLES
@@ -571,7 +573,7 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
   agencyId: string | null = localStorage.getItem('aid');
   updatedBy: number = 0;
-  rid : string | null = localStorage.getItem('rid');
+  rid: string | null = localStorage.getItem('rid');
   submitted = false;
   showEditModal = false;
 
@@ -835,118 +837,122 @@ export class CustomerMasterDashboardComponent implements OnInit {
   // 🔷 EDIT CUSTOMER
   // =========================================================
 
-editCustomer(data: any): void {
-  this.showEditModal = true;
+  editCustomer(data: any): void {
+    this.showEditModal = true;
 
-  // Find ID from customerTypeList if the record only contains the string name
-  let typeId = Number(data.customerTypeId || data.typeId || 0);
+    // Find ID from customerTypeList if the record only contains the string name
+    let typeId = Number(data.customerTypeId || data.typeId || 0);
 
-  if (!typeId && (data.type || data.customerType)) {
-    const matchedType = this.customerTypeList.find(
-      (item) => item.customerType === (data.type || data.customerType)
-    );
-    if (matchedType) {
-      typeId = Number(matchedType.customerTypeId);
+    if (!typeId && (data.type || data.customerType)) {
+      const matchedType = this.customerTypeList.find(
+        (item) => item.customerType === (data.type || data.customerType)
+      );
+      if (matchedType) {
+        typeId = Number(matchedType.customerTypeId);
+      }
     }
-  }
 
-  this.customerForm.patchValue({
-    customerId: Number(data.customerId || 0),
-    agencyId: Number(this.agencyId || 0),
-    name: data.name || '',
-    type: typeId, // Sets integer ID (e.g. 13)
-    routeId: Number(data.routeId || 0),
-    registrationNo: data.registrationNo || '',
-    contactPerson: data.contactPerson || '',
-    mobile: data.mobile || '',
-    email: data.email || '',
-    address: data.address || '',
-    city: data.city || '',
-    state: data.state || '',
-    pincode: data.pincode || '',
-    gstNo: data.gstNo || '',
-    drugLicenseNo: data.drugLicenseNo || '',
-    panNo: data.panNo || '',
-    assignedAreaManager: Number(data.assignedAreaManager || 0),
-    region: data.region || '',
-    landline: data.landline || '',
-    latitude: Number(data.latitude || 0),
-    longitude: Number(data.longitude || 0),
-    isActive: data.isActive ?? true,
-    updatedBy: this.updatedBy
-  });
-}
+    this.customerForm.patchValue({
+      customerId: Number(data.customerId || 0),
+      agencyId: Number(this.agencyId || 0),
+      name: data.name || '',
+      type: typeId, // Sets integer ID (e.g. 13)
+      routeId: Number(data.routeId || 0),
+      registrationNo: data.registrationNo || '',
+      contactPerson: data.contactPerson || '',
+      mobile: data.mobile || '',
+      email: data.email || '',
+      address: data.address || '',
+      city: data.city || '',
+      state: data.state || '',
+      pincode: data.pincode || '',
+      gstNo: data.gstNo || '',
+      drugLicenseNo: data.drugLicenseNo || '',
+      panNo: data.panNo || '',
+      assignedAreaManager: Number(data.assignedAreaManager || 0),
+      region: data.region || '',
+      landline: data.landline || '',
+      latitude: Number(data.latitude || 0),
+      longitude: Number(data.longitude || 0),
+      isActive: data.isActive ?? true,
+      updatedBy: this.updatedBy
+    });
+  }
   // =========================================================
   // 🔷 UPDATE CUSTOMER
   // =========================================================
-updateCustomer(): void {
-  this.submitted = true;
+  updateCustomer(): void {
+    this.submitted = true;
 
-  if (this.customerForm.invalid || this.customerForm.value.type === 0) {
-    this.customerForm.markAllAsTouched();
-
-    Swal.fire({
-      icon: 'warning',
-      title: 'Validation Error',
-      text: 'Please select a valid Customer Type and complete all required fields.',
-      confirmButtonColor: '#f59e0b'
-    });
-
-    return;
-  }
-
-  const formValues = this.customerForm.value;
-
-  const payload = {
-    customerId: Number(formValues.customerId || 0),
-    agencyId: Number(this.agencyId || 0),
-    name: formValues.name,
-    type: Number(formValues.type || 0), // Converts ID to Number for SQL Server
-    registrationNo: formValues.registrationNo,
-    contactPerson: formValues.contactPerson,
-    mobile: formValues.mobile,
-    email: formValues.email,
-    address: formValues.address,
-    city: formValues.city,
-    state: formValues.state,
-    pincode: formValues.pincode,
-    gstNo: formValues.gstNo,
-    drugLicenseNo: formValues.drugLicenseNo,
-    panNo: formValues.panNo,
-    assignedAreaManager: Number(formValues.assignedAreaManager || 0),
-    updatedBy: this.updatedBy,
-    region: formValues.region,
-    landline: formValues.landline,
-    latitude: Number(formValues.latitude || 0),
-    longitude: Number(formValues.longitude || 0),
-    routeId: Number(formValues.routeId || 0)
-  };
-
-  this.customerService.updatecustomerdetails(payload).subscribe({
-    next: (res: any) => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Customer Updated Successfully',
-        confirmButtonColor: '#16a34a'
-      });
-
-      this.closeModal();
-      this.getCustomerDetails();
-      this.getDashboardDetails();
-    },
-    error: (err: any) => {
-      console.error('Update Failed:', err);
+    if (this.customerForm.invalid || this.customerForm.value.type === 0) {
+      this.customerForm.markAllAsTouched();
 
       Swal.fire({
-        icon: 'error',
-        title: 'Update Failed',
-        text: err?.error?.message || 'Something went wrong',
-        confirmButtonColor: '#dc2626'
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please select a valid Customer Type and complete all required fields.',
+        confirmButtonColor: '#f59e0b'
       });
+
+      return;
     }
-  });
-}
+
+    const formValues = this.customerForm.value;
+
+    const payload = {
+      customerId: Number(formValues.customerId || 0),
+      agencyId: Number(this.agencyId || 0),
+      name: formValues.name,
+      type: Number(formValues.type || 0),
+      routeId: Number(formValues.routeId || 0),
+      registrationNo: formValues.registrationNo,
+      contactPerson: formValues.contactPerson,
+      mobile: formValues.mobile,
+      email: formValues.email,
+      address: formValues.address,
+      city: formValues.city,
+      state: formValues.state,
+      pincode: formValues.pincode,
+      gstNo: formValues.gstNo,
+      drugLicenseNo: formValues.drugLicenseNo,
+      panNo: formValues.panNo,
+      assignedAreaManager: Number(formValues.assignedAreaManager || 0),
+
+      // Add this
+      isActive: formValues.isActive,
+
+      updatedBy: this.updatedBy,
+      region: formValues.region,
+      landline: formValues.landline,
+      latitude: Number(formValues.latitude || 0),
+      longitude: Number(formValues.longitude || 0)
+    };
+
+    this.customerService.updatecustomerdetails(payload).subscribe({
+      next: (res: any) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Customer Updated Successfully',
+          confirmButtonColor: '#16a34a'
+        });
+
+        this.closeModal();
+        this.getCustomerDetails();
+        this.getDashboardDetails();
+      },
+      error: (err: any) => {
+        console.error('Update Failed:', err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: err?.error?.message || 'Something went wrong',
+          confirmButtonColor: '#dc2626'
+        });
+      }
+    });
+  }
 
   // =========================================================
   // 🔷 CLOSE MODAL
@@ -996,95 +1002,147 @@ updateCustomer(): void {
   // 🔷 DELETE CUSTOMER
   // =========================================================
 
- deleteCustomer(item: any): void {
-  Swal.fire({
-    title: 'Delete Customer?',
-    text: `Are you sure you want to delete ${item.name}?`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, Delete',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: '#dc2626',
-    cancelButtonColor: '#6b7280'
-  }).then((result) => {
-    if (!result.isConfirmed) {
-      return;
-    }
-
-    // Resolve Customer Type ID
-    let typeId = item.customerTypeId || item.typeId || item.type || '';
-
-    // If type is a string name (e.g. "ABC"), resolve its numeric ID from customerTypeList
-    if (isNaN(Number(typeId))) {
-      const matchedType = this.customerTypeList.find(
-        (t: any) => t.customerType === typeId
-      );
-      if (matchedType) {
-        typeId = matchedType.customerTypeId;
+  deleteCustomer(item: any): void {
+    Swal.fire({
+      title: 'Delete Customer?',
+      text: `Are you sure you want to delete ${item.name}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280'
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
       }
-    }
+
+      // Resolve Customer Type ID
+      let typeId = item.customerTypeId || item.typeId || item.type || '';
+
+      // If type is a string name (e.g. "ABC"), resolve its numeric ID from customerTypeList
+      if (isNaN(Number(typeId))) {
+        const matchedType = this.customerTypeList.find(
+          (t: any) => t.customerType === typeId
+        );
+        if (matchedType) {
+          typeId = matchedType.customerTypeId;
+        }
+      }
+
+      const payload = {
+        customerId: Number(item.customerId || 0),
+        agencyId: Number(this.agencyId || 0),
+        name: item.name || '',
+        type: Number(item.type || 0), // API requires type as String (e.g. "14")
+        registrationNo: item.registrationNo || '',
+        contactPerson: item.contactPerson || '',
+        mobile: item.mobile || '',
+        email: item.email || '',
+        address: item.address || '',
+        city: item.city || '',
+        state: item.state || '',
+        pincode: item.pincode || '',
+        gstNo: item.gstNo || '',
+        drugLicenseNo: item.drugLicenseNo || '',
+        panNo: item.panNo || '',
+        assignedAreaManager: Number(item.assignedAreaManager || 0),
+        updatedBy: this.updatedBy,
+        region: item.region || '',
+        landline: item.landline || '',
+        latitude: Number(item.latitude || 0),
+        longitude: Number(item.longitude || 0),
+        routeId: Number(item.routeId || 0),
+        isActive: false // Explicitly mark as deleted/inactive
+      };
+
+      Swal.fire({
+        title: 'Deleting...',
+        text: 'Please wait',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      this.customerService
+        .updatecustomerdetails(payload)
+        .subscribe({
+          next: (res: any) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted',
+              text: 'Customer Deleted Successfully',
+              confirmButtonColor: '#16a34a'
+            });
+
+            this.getCustomerDetails();
+            this.getDashboardDetails();
+          },
+          error: (err: any) => {
+            console.error('Delete Failed:', err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed',
+              text: err?.error?.message || err?.error?.title || 'Something went wrong',
+              confirmButtonColor: '#dc2626'
+            });
+          }
+        });
+    });
+
+  }
+
+  updateCustomerStatus(item: any, status: number): void {
+
+  const action = status === 2 ? 'Approve' : 'Reject';
+
+  Swal.fire({
+    title: `${action} Customer?`,
+    text: `Are you sure you want to ${action.toLowerCase()} this customer?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No',
+    confirmButtonColor: status === 2 ? '#16a34a' : '#dc2626'
+  }).then((result) => {
+
+    if (!result.isConfirmed) return;
 
     const payload = {
-      customerId: Number(item.customerId || 0),
-      agencyId: Number(this.agencyId || 0),
-      name: item.name || '',
-       type: Number(item.type || 0), // API requires type as String (e.g. "14")
-      registrationNo: item.registrationNo || '',
-      contactPerson: item.contactPerson || '',
-      mobile: item.mobile || '',
-      email: item.email || '',
-      address: item.address || '',
-      city: item.city || '',
-      state: item.state || '',
-      pincode: item.pincode || '',
-      gstNo: item.gstNo || '',
-      drugLicenseNo: item.drugLicenseNo || '',
-      panNo: item.panNo || '',
-      assignedAreaManager: Number(item.assignedAreaManager || 0),
-      updatedBy: this.updatedBy,
-      region: item.region || '',
-      landline: item.landline || '',
-      latitude: Number(item.latitude || 0),
-      longitude: Number(item.longitude || 0),
-      routeId: Number(item.routeId || 0),
-      isActive: false // Explicitly mark as deleted/inactive
+      customerId: item.customerId,
+      agencyId: this.agencyId,
+      status: status,
+      approvedBy: this.updatedBy
     };
 
-    Swal.fire({
-      title: 'Deleting...',
-      text: 'Please wait',
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => {
-        Swal.showLoading();
+    this.customerService.updateCustomerStatus(payload).subscribe({
+      next: () => {
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: `Customer ${action.toLowerCase()}d successfully.`,
+          confirmButtonColor: '#16a34a'
+        });
+
+        this.getCustomerDetails();
+        this.getDashboardDetails();
+      },
+      error: (err: any) => {
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: err?.error?.message || 'Something went wrong.'
+        });
+
+        console.error(err);
       }
     });
 
-    this.customerService
-      .updatecustomerdetails(payload)
-      .subscribe({
-        next: (res: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Deleted',
-            text: 'Customer Deleted Successfully',
-            confirmButtonColor: '#16a34a'
-          });
-
-          this.getCustomerDetails();
-          this.getDashboardDetails();
-        },
-        error: (err: any) => {
-          console.error('Delete Failed:', err);
-
-          Swal.fire({
-            icon: 'error',
-            title: 'Delete Failed',
-            text: err?.error?.message || err?.error?.title || 'Something went wrong',
-            confirmButtonColor: '#dc2626'
-          });
-        }
-      });
   });
 }
 }

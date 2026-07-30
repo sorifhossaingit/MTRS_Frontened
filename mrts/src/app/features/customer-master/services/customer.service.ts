@@ -54,4 +54,11 @@ getRouteList() {
 
 }
 
+updateCustomerStatus(payload: any) {
+  return this.http.post(
+   `${environment.apiUrl}/admin/customer/update-customer-status`,
+    payload
+  );
+}
+
 }

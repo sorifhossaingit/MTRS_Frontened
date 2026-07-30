@@ -243,6 +243,7 @@
                 <ng-container [ngSwitch]="item.status">
                   <span *ngSwitchCase="1">Created by MR</span>
                   <span *ngSwitchCase="2">Approved</span>
+                  <span *ngSwitchCase="3">Reject by Admin</span>
                   <span *ngSwitchDefault>-</span>
                 </ng-container>
 
@@ -257,12 +258,21 @@
                   <lucide-icon [img]="Pencil"></lucide-icon>
                 </button>
 
-                <button *ngIf="rid === 'a5fabfee-5506-4e12-bfec-c898fc5af3ae'" (click)="deleteCustomer(item)"
-                  class="text-red-600 hover:scale-110 transition">
+                <div *ngIf="rid === 'a5fabfee-5506-4e12-bfec-c898fc5af3ae'" class="flex items-center gap-2">
 
-                  <lucide-icon [img]="Trash2"></lucide-icon>
+                  <!-- Approve -->
+                  <button (click)="updateCustomerStatus(item, 2)" class="text-green-600 hover:scale-110 transition"
+                    title="Approve">
+                    <lucide-icon [img]="Check"></lucide-icon>
+                  </button>
 
-                </button>
+                  <!-- Reject -->
+                  <button (click)="updateCustomerStatus(item, 3)" class="text-red-600 hover:scale-110 transition"
+                    title="Reject">
+                    <lucide-icon [img]="X"></lucide-icon>
+                  </button>
+
+                </div>
 
               </div>
             </td>
@@ -562,7 +572,7 @@
       </div>
 
       <!-- STATUS -->
-      <div>
+      <div *ngIf="rid === 'a5fabfee-5506-4e12-bfec-c898fc5af3ae'">
         <label class="text-sm font-medium text-gray-700">
           Status
         </label>
