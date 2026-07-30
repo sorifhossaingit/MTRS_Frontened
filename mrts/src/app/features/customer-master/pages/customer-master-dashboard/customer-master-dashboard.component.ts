@@ -725,36 +725,35 @@ export class CustomerMasterDashboardComponent implements OnInit {
   // 🔷 ROUTE LIST
   // =========================================================
 
-  getRouteList(): void {
-    this.customerService
-      .getRouteList()
-      .subscribe({
-        next: (res: any) => {
-          this.routeList = res.data || res || [];
-        },
-        error: (err: any) => {
-          console.error('Failed to fetch Route List:', err);
-        }
-      });
-  }
+getRouteList(): void {
+  this.customerService
+    .getRouteList(this.agencyId)
+    .subscribe({
+      next: (res: any) => {
+        this.routeList = res.data || [];
+      },
+      error: (err: any) => {
+        console.error('Failed to fetch Route List:', err);
+      }
+    });
+}
 
   // =========================================================
   // 🔷 CUSTOMER TYPE LIST
   // =========================================================
 
-  getCustomerTypeList(): void {
-    this.customerService
-      .getCustomerTypeList()
-      .subscribe({
-        next: (res: any) => {
-          this.customerTypeList = res.data || res || [];
-        },
-        error: (err: any) => {
-          console.error('Failed to fetch Customer Types:', err);
-        }
-      });
-  }
+getCustomerTypeList(): void {
+  const agencyId = Number(this.agencyId);
 
+  this.customerService.getCustomerTypeList(agencyId).subscribe({
+    next: (res: any) => {
+      this.customerTypeList = res.data || res || [];
+    },
+    error: (err: any) => {
+      console.error('Failed to fetch Customer Types:', err);
+    }
+  });
+}
   // =========================================================
   // 🔷 DASHBOARD DETAILS
   // =========================================================

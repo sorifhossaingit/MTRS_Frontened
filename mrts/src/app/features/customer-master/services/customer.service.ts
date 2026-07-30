@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -38,21 +39,30 @@ private apiUrl = environment.apiUrl;
       `${this.apiUrl}/admin/area-manager/dropdown/active-area-managers/${agencyId}`);
   }
   
-  getCustomerTypeList() {
 
+  // --------------------------------------------------
+getCustomerTypeList(agencyId: number) {
   return this.http.get(
-    `${environment.apiUrl}/admin/customer/get-customertype`
+    `${this.apiUrl}/admin/customer/get-all-customertype?agencyId=${agencyId}`
   );
-
+}
+createCustomerType(payload: any) {
+  return this.http.post(
+    `${this.apiUrl}/admin/customer/create-customertype`,
+    payload
+  );
 }
 
-getRouteList() {
-
+// -----------------------------------
+getRouteList(agencyId: any) {
   return this.http.get(
-    `${environment.apiUrl}/admin/customer/get-route`
+    `${this.apiUrl}/admin/customer/get-route?agencyId=${agencyId}`
   );
-
 }
+
+createRoute(payload: any): Observable<any> {
+    return this.http.post( `${this.apiUrl}/admin/customer/create-route`, payload);
+  }
 
 updateCustomerStatus(payload: any) {
   return this.http.post(

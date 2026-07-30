@@ -537,43 +537,30 @@ const payload = {
   });
 
 }
-getCustomerTypeList() {
 
-  this.http.get<any[]>(
-    'https://localhost:7078/api/v1/admin/customer/get-customertype'
-  ).subscribe({
 
-    next: (res) => {
+getCustomerTypeList(): void {
+  const agencyId = Number(this.agencyId);
 
-      this.customerTypeList = res;
-
+  this.customerService.getCustomerTypeList(agencyId).subscribe({
+    next: (res: any) => {
+      this.customerTypeList = res.data || res || [];
     },
-
-    error: (err) => {
-
-      console.log(err);
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Unable to load customer types.'
-      });
-
+    error: (err: any) => {
+      console.error('Failed to fetch Customer Types:', err);
     }
-
   });
-
 }
+
 
 openCustomerTypeModal(){
 
   this.showCustomerTypeModal=true;
 
 }
+addCustomerType() {
 
-addCustomerType(){
-
-  if(!this.newCustomerType.trim()){
+  if (!this.newCustomerType.trim()) {
 
     Swal.fire(
       'Validation',
@@ -584,20 +571,15 @@ addCustomerType(){
     return;
   }
 
-  const payload={
-
-    customerType:this.newCustomerType,
-
-    createdby:this.createdBy
-
+  const payload = {
+    agencyId: Number(this.agencyId),
+    customerType: this.newCustomerType.trim(),
+    createdby: Number(this.createdBy)
   };
 
-  this.http.post(
-    'https://localhost:7078/api/v1/admin/customer/create-customertype',
-    payload
-  ).subscribe({
+  this.customerService.createCustomerType(payload).subscribe({
 
-    next:()=>{
+    next: () => {
 
       Swal.fire(
         'Success',
@@ -605,19 +587,19 @@ addCustomerType(){
         'success'
       );
 
-      this.newCustomerType='';
+      this.newCustomerType = '';
 
       this.getCustomerTypeList();
 
     },
 
-    error:(err)=>{
+    error: (err: any) => {
 
-      console.log(err);
+      console.error(err);
 
       Swal.fire(
         'Error',
-        'Unable to add customer type',
+        err?.error?.message || 'Unable to add customer type',
         'error'
       );
 
@@ -626,7 +608,6 @@ addCustomerType(){
   });
 
 }
-
 deleteCustomerType(id:number){
 
   Swal.fire({
@@ -679,26 +660,17 @@ deleteCustomerType(id:number){
 
 }
 
-getRouteList() {
-
-  this.http.get<any[]>(
-    'https://localhost:7078/api/v1/admin/customer/get-route'
-  ).subscribe({
-
-    next: (res) => {
-
-      this.routeList = res;
-
-    },
-
-    error: (err) => {
-
-      console.log(err);
-
-    }
-
-  });
-
+getRouteList(): void {
+  this.customerService
+    .getRouteList(this.agencyId)
+    .subscribe({
+      next: (res: any) => {
+        this.routeList = res.data || [];
+      },
+      error: (err: any) => {
+        console.error('Failed to fetch Route List:', err);
+      }
+    });
 }
 
 openRouteModal() {
@@ -706,58 +678,49 @@ openRouteModal() {
   this.showRouteModal = true;
 
 }
-addRoute() {
+addRoute(): void {
 
   if (!this.newRouteName.trim()) {
-
     Swal.fire(
       'Validation',
       'Route Name is required.',
       'warning'
     );
-
     return;
-
   }
 
   const payload = {
-
-    createdby: this.createdBy,
-
-    routeName: this.newRouteName,
-
-    description: this.newRouteDescription
-
+    agencyId: Number(this.agencyId),
+    routeName: this.newRouteName.trim(),
+    description: this.newRouteDescription?.trim() || '',
+    createdby: Number(this.createdBy)
   };
 
-  this.http.post(
-    'https://localhost:7078/api/v1/admin/customer/create-route',
-    payload
-  ).subscribe({
+  console.log('Payload:', payload);
 
-    next: () => {
+  this.customerService.createRoute(payload).subscribe({
+
+    next: (res: any) => {
 
       Swal.fire(
         'Success',
-        'Route Added Successfully',
+        res.message || 'Route Added Successfully.',
         'success'
       );
 
       this.newRouteName = '';
-
       this.newRouteDescription = '';
 
       this.getRouteList();
-
     },
 
-    error: (err) => {
+    error: (err: any) => {
 
-      console.log(err);
+      console.error(err);
 
       Swal.fire(
         'Error',
-        'Unable to add route.',
+        err.error?.message || 'Unable to add route.',
         'error'
       );
 
@@ -766,6 +729,8 @@ addRoute() {
   });
 
 }
+
+
 deleteRoute(id: number) {
 
   Swal.fire({
