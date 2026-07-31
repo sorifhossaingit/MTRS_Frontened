@@ -111,4 +111,10 @@ export class MrService {
       `${this.apiUrl}/medicalpresentativeown/attendence-dashboard/attendance-calendar/${mrid}`);
   }
 
+getMedicalRepresentativeId(userId: number) {
+  return this.http.get<any>(
+     `${this.apiUrl}/medicalpresentativeown/medicalrepresentative-get-id/${userId}`
+  );
+}
+
 }

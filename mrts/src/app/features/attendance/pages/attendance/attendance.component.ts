@@ -37,7 +37,7 @@ export class AttendanceComponent implements OnInit {
 
   // Filters
   filter: any = {
-    date: new Date().toISOString().split('T')[0],
+date: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`,
     status: '',
     name: '',
     mobile: '',
@@ -105,19 +105,31 @@ export class AttendanceComponent implements OnInit {
 
   loadAttendanceList(): void {
 
+    // const payload = {
+    //   agencyId: this.agencyId,
+    //   areaManagerId: this.areaManagerId,
+    //   date: this.filter.date
+    //     ? new Date(this.filter.date).toISOString()
+    //     : null,
+    //   status: this.filter.status || null,
+    //   name: this.filter.name || null,
+    //   mobile: this.filter.mobile || null,
+    //   email: this.filter.email || null,
+    //   pageNumber: this.pageNumber,
+    //   pageSize: this.pageSize
+    // };
+
     const payload = {
-      agencyId: this.agencyId,
-      areaManagerId: this.areaManagerId,
-      date: this.filter.date
-        ? new Date(this.filter.date).toISOString()
-        : null,
-      status: this.filter.status || null,
-      name: this.filter.name || null,
-      mobile: this.filter.mobile || null,
-      email: this.filter.email || null,
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize
-    };
+  agencyId: this.agencyId,
+  areaManagerId: this.areaManagerId,
+  date: this.filter.date || null,
+  status: this.filter.status || null,
+  name: this.filter.name || null,
+  mobile: this.filter.mobile || null,
+  email: this.filter.email || null,
+  pageNumber: this.pageNumber,
+  pageSize: this.pageSize
+};
 
     this.attendanceService
       .get_attendance_list(payload)
