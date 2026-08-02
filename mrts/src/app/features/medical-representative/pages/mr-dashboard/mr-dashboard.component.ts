@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, HostListener, ElementRef, ViewChild, DestroyRef, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import {
   Users,
@@ -19,6 +22,8 @@ import { MrService } from '../../services/mr.service';
 })
 export class MrDashboardComponent implements OnInit {
 
+  @ViewChild('routeDropdownContainer') routeDropdownContainer!: ElementRef;
+
   // Lucide Icons
   Users = Users;
   UserCheck = UserCheck;
@@ -31,7 +36,14 @@ export class MrDashboardComponent implements OnInit {
   // Data Arrays
   mrList: any[] = [];
   routeList: any[] = [];
-  stockietList: any[] = [];
+  filteredRoutes: any[] = [];
+  stockistList: any[] = [];
+
+  // Multi-Select Searchable Dropdown State
+  selectedRouteIds: number[] = [];
+  showRouteDropdown = false;
+  routeSearch = '';
+  private routeSearch$ = new Subject<string>();
 
   // Reactive Forms
   filterForm!: FormGroup;
@@ -49,6 +61,8 @@ export class MrDashboardComponent implements OnInit {
   agencyId = Number(localStorage.getItem('aid'));
   managerId = Number(localStorage.getItem('mid'));
 
+  private destroyRef = inject(DestroyRef);
+
   constructor(
     private fb: FormBuilder,
     private mrService: MrService
@@ -56,9 +70,18 @@ export class MrDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForms();
+    this.setupDebounceFilter();
     this.getMrList();
     this.getRouteList();
-    this.getStockiestList();
+    this.getStockistList();
+  }
+
+  // Close route dropdown when clicking anywhere outside the dropdown container
+  @HostListener('document:click', ['$event'])
+  clickout(event: Event): void {
+    if (this.routeDropdownContainer && !this.routeDropdownContainer.nativeElement.contains(event.target)) {
+      this.showRouteDropdown = false;
+    }
   }
 
   initializeForms(): void {
@@ -71,7 +94,7 @@ export class MrDashboardComponent implements OnInit {
 
     this.updateForm = this.fb.group({
       medicalRepresentativeId: [0],
-      name: [''],
+      name: ['', Validators.required],
       contactPerson: [''],
       mobile: [''],
       email: [''],
@@ -80,32 +103,55 @@ export class MrDashboardComponent implements OnInit {
       state: [''],
       pincode: [''],
       region: [''],
-      routeId: [0],
       stockistId: [0],
+      routeIds: [[]],
       isActive: [true]
     });
   }
 
-  getRouteList(): void {
-    this.mrService.getRouteList(this.agencyId).subscribe({
-      next: (res: any) => {
-        this.routeList = res.data || [];
-      },
-      error: (err: any) => {
-        console.error('Failed to fetch Route List:', err);
-      }
-    });
+  setupDebounceFilter(): void {
+    this.routeSearch$
+      .pipe(debounceTime(200), takeUntilDestroyed(this.destroyRef))
+      .subscribe((search) => {
+        if (!search) {
+          this.filteredRoutes = [...this.routeList];
+        } else {
+          this.filteredRoutes = this.routeList.filter(r =>
+            r.routeName?.toLowerCase().includes(search)
+          );
+        }
+      });
   }
 
-  getStockiestList(): void {
-    this.mrService.getStockiestList(this.agencyId).subscribe({
-      next: (res: any) => {
-        this.stockietList = res.data || [];
-      },
-      error: (err: any) => {
-        console.error('Failed to fetch Stockist List:', err);
-      }
-    });
+  onRouteSearchChange(): void {
+    this.routeSearch$.next(this.routeSearch.toLowerCase().trim());
+  }
+
+  getRouteList(): void {
+    this.mrService.getRouteList(this.agencyId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          this.routeList = res.data || [];
+          this.filteredRoutes = [...this.routeList];
+        },
+        error: (err: any) => {
+          console.error('Failed to fetch Route List:', err);
+        }
+      });
+  }
+
+  getStockistList(): void {
+    this.mrService.getStockiestList(this.agencyId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          this.stockistList = res.data || [];
+        },
+        error: (err: any) => {
+          console.error('Failed to fetch Stockist List:', err);
+        }
+      });
   }
 
   getMrList(): void {
@@ -120,23 +166,59 @@ export class MrDashboardComponent implements OnInit {
       pageSize: this.pageSize
     };
 
-    this.mrService.get_mr(payload).subscribe({
-      next: (res: any) => {
-        if (res?.success) {
-          this.mrList = res.data || [];
-          this.totalRecords = res.totalRecords || 0;
+    this.mrService.get_mr(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          if (res?.success) {
+            this.mrList = res.data || [];
+            this.totalRecords = res.totalRecords || 0;
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load MR list'
+          });
         }
-      },
-      error: (err: any) => {
-        console.error(err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load MR list'
-        });
-      }
-    });
+      });
   }
+
+  // --- Multi-Select Searchable Dropdown Logic ---
+
+  toggleRouteDropdown(event?: Event): void {
+    if (event) event.stopPropagation();
+    this.showRouteDropdown = !this.showRouteDropdown;
+  }
+
+  isSelected(routeId: number): boolean {
+    return this.selectedRouteIds.includes(routeId);
+  }
+
+  toggleRoute(item: any): void {
+    const index = this.selectedRouteIds.indexOf(item.routeId);
+    if (index > -1) {
+      this.selectedRouteIds.splice(index, 1);
+    } else {
+      this.selectedRouteIds.push(item.routeId);
+    }
+    this.updateForm.patchValue({ routeIds: [...this.selectedRouteIds] });
+    this.updateForm.markAsDirty();
+  }
+
+  get selectedRouteLabels(): string {
+    if (this.selectedRouteIds.length === 0) {
+      return 'Select Route(s)';
+    }
+    const selectedNames = this.routeList
+      .filter(r => this.selectedRouteIds.includes(r.routeId))
+      .map(r => r.routeName);
+    return selectedNames.join(', ');
+  }
+
+  // --- Form & Action Handlers ---
 
   applyFilter(): void {
     this.pageNumber = 1;
@@ -144,7 +226,7 @@ export class MrDashboardComponent implements OnInit {
   }
 
   resetFilter(): void {
-    this.filterForm.patchValue({
+    this.filterForm.reset({
       name: '',
       email: '',
       mobile: '',
@@ -167,6 +249,24 @@ export class MrDashboardComponent implements OnInit {
   }
 
   editMr(mr: any): void {
+    // Populate routeIds array or fallback to routeNames mapping
+    if (Array.isArray(mr.routeIds) && mr.routeIds.length > 0) {
+      this.selectedRouteIds = [...mr.routeIds];
+    } else if (mr.routeNames && this.routeList.length > 0) {
+      const names = mr.routeNames.split(',').map((n: string) => n.trim().toLowerCase());
+      this.selectedRouteIds = this.routeList
+        .filter(r => names.includes(r.routeName?.trim().toLowerCase()))
+        .map(r => r.routeId);
+    } else {
+      this.selectedRouteIds = mr.routeId ? [mr.routeId] : [];
+    }
+
+    // Reset dropdown search state
+    this.routeSearch = '';
+    this.filteredRoutes = [...this.routeList];
+    this.showRouteDropdown = false;
+
+    // Patch Form Values
     this.updateForm.patchValue({
       medicalRepresentativeId: mr.medicalRepresentativeId,
       name: mr.name,
@@ -178,8 +278,8 @@ export class MrDashboardComponent implements OnInit {
       state: mr.state,
       pincode: mr.pincode,
       region: mr.region,
-      routeId: mr.routeId || 0,
       stockistId: mr.stockistId || 0,
+      routeIds: [...this.selectedRouteIds],
       isActive: mr.isActive
     });
 
@@ -188,9 +288,15 @@ export class MrDashboardComponent implements OnInit {
 
   closeModal(): void {
     this.showUpdateModal = false;
+    this.showRouteDropdown = false;
   }
 
   updateMr(): void {
+    if (this.updateForm.invalid) {
+      this.updateForm.markAllAsTouched();
+      return;
+    }
+
     const formValue = this.updateForm.value;
 
     const payload = {
@@ -205,33 +311,35 @@ export class MrDashboardComponent implements OnInit {
       pincode: formValue.pincode,
       region: formValue.region,
       assignedAreaManager: this.managerId,
-      routeId: Number(formValue.routeId) || 0,
       stockistId: Number(formValue.stockistId) || 0,
+      routeIds: formValue.routeIds || [],
       isActive: formValue.isActive,
       updatedBy: this.managerId
     };
 
-    this.mrService.update_mr(payload).subscribe({
-      next: (res: any) => {
-        if (res?.success) {
+    this.mrService.update_mr(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: any) => {
+          if (res?.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'MR updated successfully'
+            });
+            this.showUpdateModal = false;
+            this.getMrList();
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
           Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'MR updated successfully'
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update MR'
           });
-          this.showUpdateModal = false;
-          this.getMrList();
         }
-      },
-      error: (err: any) => {
-        console.error(err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to update MR'
-        });
-      }
-    });
+      });
   }
 
   deleteMr(mr: any): void {
@@ -246,6 +354,13 @@ export class MrDashboardComponent implements OnInit {
     }).then((result) => {
       if (!result.isConfirmed) return;
 
+      let currentRouteIds: number[] = [];
+      if (Array.isArray(mr.routeIds)) {
+        currentRouteIds = mr.routeIds;
+      } else if (mr.routeId) {
+        currentRouteIds = [mr.routeId];
+      }
+
       const payload = {
         medicalRepresentativeId: mr.medicalRepresentativeId,
         name: mr.name,
@@ -258,32 +373,34 @@ export class MrDashboardComponent implements OnInit {
         pincode: mr.pincode,
         region: mr.region,
         assignedAreaManager: this.managerId,
-        routeId: Number(mr.routeId) || 0,
         stockistId: Number(mr.stockistId) || 0,
+        routeIds: currentRouteIds,
         isActive: false,
         updatedBy: this.managerId
       };
 
-      this.mrService.update_mr(payload).subscribe({
-        next: (res: any) => {
-          if (res?.success) {
+      this.mrService.update_mr(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (res: any) => {
+            if (res?.success) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Deleted',
+                text: 'MR marked as inactive successfully.'
+              });
+              this.getMrList();
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
             Swal.fire({
-              icon: 'success',
-              title: 'Deleted',
-              text: 'MR marked as inactive successfully.'
+              icon: 'error',
+              title: 'Error',
+              text: 'Failed to delete MR.'
             });
-            this.getMrList();
           }
-        },
-        error: (err: any) => {
-          console.error(err);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to delete MR.'
-          });
-        }
-      });
+        });
     });
   }
 

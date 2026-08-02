@@ -25,7 +25,7 @@
         <div class="bg-white rounded-xl shadow-sm border p-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <p class="text-gray-500 text-sm">Active MRs</p>
+                    <p class="text-gray-500 text-sm">Active MRs (Current Page)</p>
                     <h2 class="text-3xl font-bold mt-2">{{ activeCount }}</h2>
                 </div>
                 <div class="bg-green-100 p-3 rounded-full">
@@ -37,7 +37,7 @@
         <div class="bg-white rounded-xl shadow-sm border p-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <p class="text-gray-500 text-sm">Inactive MRs</p>
+                    <p class="text-gray-500 text-sm">Inactive MRs (Current Page)</p>
                     <h2 class="text-3xl font-bold mt-2">{{ inactiveCount }}</h2>
                 </div>
                 <div class="bg-red-100 p-3 rounded-full">
@@ -87,7 +87,7 @@
                         <th class="px-4 py-3 text-left">City</th>
                         <th class="px-4 py-3 text-left">State</th>
                         <th class="px-4 py-3 text-left">Region</th>
-                        <th class="px-4 py-3 text-left">Route</th>
+                        <th class="px-4 py-3 text-left">Route(s)</th>
                         <th class="px-4 py-3 text-left">Status</th>
                         <th class="px-4 py-3 text-center">Actions</th>
                     </tr>
@@ -102,7 +102,7 @@
                         <td class="px-4 py-4">{{ mr.city }}</td>
                         <td class="px-4 py-4">{{ mr.state }}</td>
                         <td class="px-4 py-4">{{ mr.region }}</td>
-                        <td class="px-4 py-4">{{ mr.routeName || '-' }}</td>
+                        <td class="px-4 py-4">{{ mr.routeNames || '-' }}</td>
                         <td class="px-4 py-4">
                             <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
                                   'bg-green-100 text-green-700': mr.isActive,
@@ -113,10 +113,10 @@
                         </td>
                         <td class="px-4 py-4">
                             <div class="flex justify-center gap-2">
-                                <button (click)="editMr(mr)" class="p-2 rounded-lg bg-blue-100 hover:bg-blue-200">
+                                <button (click)="editMr(mr)" class="p-2 rounded-lg bg-blue-100 hover:bg-blue-200" title="Edit">
                                     <lucide-icon [img]="Pencil" class="text-blue-600"></lucide-icon>
                                 </button>
-                                <button (click)="deleteMr(mr)" class="p-2 rounded-lg bg-red-100 hover:bg-red-200">
+                                <button (click)="deleteMr(mr)" class="p-2 rounded-lg bg-red-100 hover:bg-red-200" title="Delete">
                                     <lucide-icon [img]="Trash2" class="text-red-600"></lucide-icon>
                                 </button>
                             </div>
@@ -141,12 +141,12 @@
 
         <div class="flex gap-2 items-center">
             <button (click)="changePage(pageNumber - 1)" [disabled]="pageNumber === 1"
-                class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
+                class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300">
                 Previous
             </button>
             <span class="px-4 py-2">{{ pageNumber }} / {{ totalPages }}</span>
             <button (click)="changePage(pageNumber + 1)" [disabled]="pageNumber === totalPages"
-                class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
+                class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300">
                 Next
             </button>
         </div>
@@ -157,7 +157,7 @@
         <div class="bg-white w-full max-w-5xl rounded-xl shadow-xl p-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold">Update Medical Representative</h2>
-                <button (click)="closeModal()" class="text-red-600 text-2xl">✕</button>
+                <button type="button" (click)="closeModal()" class="text-gray-500 hover:text-red-600 text-2xl">✕</button>
             </div>
 
             <form [formGroup]="updateForm">
@@ -208,15 +208,45 @@
                         <input formControlName="region" class="w-full border rounded-lg p-3" placeholder="Enter Region">
                     </div>
 
-                    <!-- Route Dropdown -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Route</label>
-                        <select formControlName="routeId" class="w-full border rounded-lg p-3">
-                            <option [ngValue]="0" disabled>Select Route</option>
-                            <option *ngFor="let route of routeList" [ngValue]="route.routeId">
-                                {{ route.routeName }}
-                            </option>
-                        </select>
+                    <!-- SEARCHABLE MULTI-SELECT ROUTE DROPDOWN -->
+                    <div class="relative" #routeDropdownContainer>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Routes</label>
+                        
+                        <!-- Trigger Field -->
+                        <div (click)="toggleRouteDropdown($event)"
+                             class="w-full border rounded-lg p-3 bg-white cursor-pointer flex justify-between items-center text-sm text-gray-700 min-h-[48px]">
+                            <span class="truncate" [class.text-gray-400]="selectedRouteIds.length === 0">
+                                {{ selectedRouteLabels }}
+                            </span>
+                            <span class="text-xs text-gray-400 ml-2">▼</span>
+                        </div>
+
+                        <!-- Dropdown Overlay -->
+                        <div *ngIf="showRouteDropdown"
+                             class="absolute left-0 right-0 w-full bg-white border rounded-xl shadow-xl mt-1 z-50 overflow-hidden">
+
+                            <!-- Search Box -->
+                            <div class="p-2 border-b bg-gray-50">
+                                <input type="text" [(ngModel)]="routeSearch" (input)="onRouteSearchChange()"
+                                       [ngModelOptions]="{standalone: true}" placeholder="Search route..."
+                                       class="w-full bg-white border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+
+                            <!-- Options List -->
+                            <div class="max-h-56 overflow-y-auto p-1 space-y-0.5 custom-scrollbar">
+                                <label *ngFor="let item of filteredRoutes"
+                                       class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer text-sm text-gray-700 transition">
+                                    <input type="checkbox" [checked]="isSelected(item.routeId)" (change)="toggleRoute(item)"
+                                           class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer">
+                                    <span>{{ item.routeName }}</span>
+                                </label>
+
+                                <!-- Empty Search State -->
+                                <div *ngIf="filteredRoutes.length === 0" class="text-xs text-gray-400 p-4 text-center">
+                                    No routes found matching "{{ routeSearch }}"
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Stockist Dropdown -->
@@ -224,7 +254,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Stockist</label>
                         <select formControlName="stockistId" class="w-full border rounded-lg p-3">
                             <option [ngValue]="0" disabled>Select Stockist</option>
-                            <option *ngFor="let stockist of stockietList" [ngValue]="stockist.stockistId">
+                            <option *ngFor="let stockist of stockistList" [ngValue]="stockist.stockistId">
                                 {{ stockist.name }} - {{ stockist.city }} ({{ stockist.firmType }})
                             </option>
                         </select>
