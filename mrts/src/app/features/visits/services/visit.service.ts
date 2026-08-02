@@ -56,4 +56,17 @@ export class VisitService {
       `${this.apiUrl}/mrvisit/tracking-of-mr/${visitplanid}`);
   }
 
+  // ---------------------------------visit---
+  getRoutesByMedicalRepresentative(mrId: number) {
+  return this.http.get(
+    `${this.apiUrl}/mrvisit/get-routes-by-medicalrepresentative/${mrId}`
+  );
+}
+
+getCustomersByRoute(routeId: number) {
+  return this.http.get(
+    `${this.apiUrl}/mrvisit/get-customers-by-route/${routeId}`
+  );
+}
+
 }

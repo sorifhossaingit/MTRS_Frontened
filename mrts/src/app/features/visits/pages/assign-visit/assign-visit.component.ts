@@ -14,7 +14,6 @@ import {
 } from 'lucide-angular';
 import { VisitService } from '../../services/visit.service';
 
-
 @Component({
   selector: 'app-assign-visit',
   templateUrl: './assign-visit.component.html',
@@ -38,6 +37,7 @@ export class AssignVisitComponent implements OnInit {
   assignVisit: any = {
     agencyId: Number(localStorage.getItem('aid')),
     mrId: null,
+    routeId: null,
     assignedBy: Number(localStorage.getItem('mid')),
     visitDate: '',
     remarks: '',
@@ -46,7 +46,8 @@ export class AssignVisitComponent implements OnInit {
 
   // Dropdown Data
   mrList: any[] = [];
-  customerList: any[] = [];
+  routeList: any[] = [];      // Route list for MR
+  customerList: any[] = [];   // Customer list based on Route
   products: any[] = [];
 
   // Modals
@@ -66,6 +67,8 @@ export class AssignVisitComponent implements OnInit {
 
   isSubmitting = false;
   loadingProducts = false;
+  loadingRoutes = false;
+  loadingCustomers = false;
 
   constructor(
     private visitService: VisitService
@@ -73,62 +76,85 @@ export class AssignVisitComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMRs();
-    this.loadCustomers();
   }
 
   // =====================================
   // LOAD MRS
   // =====================================
-
   loadMRs(): void {
-
     const params = {
-      assignedAreaManager:Number(localStorage.getItem('mid')),
+      assignedAreaManager: Number(localStorage.getItem('mid')),
       agencyId: Number(localStorage.getItem('aid'))
     };
 
     this.visitService.get_mrs(params).subscribe({
       next: (res: any) => {
-
         this.mrList = res?.data || [];
-
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error fetching MRs:', err);
       }
     });
-
   }
 
   // =====================================
-  // LOAD CUSTOMERS
+  // ON MR CHANGE -> LOAD ROUTES
   // =====================================
+  onMrChange(mrId: number): void {
+    this.routeList = [];
+    this.customerList = [];
+    this.assignVisit.routeId = null;
+    this.assignVisit.places = []; // Reset places if MR changes
 
-  loadCustomers(): void {
+    if (!mrId) return;
 
-    const params = {
-      assignedAreaManager:Number(localStorage.getItem('mid')),
-      agencyId: Number(localStorage.getItem('aid'))
-    };
-
-    this.visitService.get_customers(params).subscribe({
+    this.loadingRoutes = true;
+    this.visitService.getRoutesByMedicalRepresentative(mrId).subscribe({
       next: (res: any) => {
-
-        this.customerList = res?.data || [];
-
+        this.routeList = res?.data || [];
+        this.loadingRoutes = false;
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error fetching routes:', err);
+        this.loadingRoutes = false;
       }
     });
+  }
 
+  // =====================================
+  // ON ROUTE CHANGE -> LOAD CUSTOMERS
+  // =====================================
+  onRouteChange(routeId: number): void {
+    this.customerList = [];
+
+    if (!routeId) return;
+
+    this.loadingCustomers = true;
+    this.visitService.getCustomersByRoute(routeId).subscribe({
+      next: (res: any) => {
+        this.customerList = res?.data || [];
+        this.loadingCustomers = false;
+      },
+      error: (err) => {
+        console.error('Error fetching customers by route:', err);
+        this.loadingCustomers = false;
+      }
+    });
   }
 
   // =====================================
   // CUSTOMER VISIT MODAL
   // =====================================
-
   openCustomerModal(): void {
+    if (!this.assignVisit.mrId) {
+      Swal.fire('Validation', 'Please select a Medical Representative first', 'warning');
+      return;
+    }
+
+    if (!this.assignVisit.routeId) {
+      Swal.fire('Validation', 'Please select a Route first', 'warning');
+      return;
+    }
 
     this.currentPlace = {
       customerId: null,
@@ -137,50 +163,37 @@ export class AssignVisitComponent implements OnInit {
       plannedTime: '',
       sequenceNo: this.assignVisit.places.length + 1,
       remarks: '',
-      productIds: [],
-      selectedProducts: []
+      productIds: [],        // Default to empty array (optional)
+      selectedProducts: []   // Default to empty array (optional)
     };
 
     this.selectedProducts = [];
-
     this.showCustomerModal = true;
   }
 
   closeCustomerModal(): void {
-
     this.showCustomerModal = false;
-
   }
 
   // =====================================
-  // PRODUCT MODAL
+  // PRODUCT MODAL & SELECTION (OPTIONAL)
   // =====================================
-
   openProductModal(): void {
-
-    this.selectedProducts = [
-      ...(this.currentPlace?.selectedProducts || [])
-    ];
-
+    // Safely copy existing products if present, else fallback to empty array
+    this.selectedProducts = Array.isArray(this.currentPlace?.selectedProducts)
+      ? [...this.currentPlace.selectedProducts]
+      : [];
+      
     this.showProductModal = true;
-
     this.loadProducts();
   }
 
   closeProductModal(): void {
-
     this.showProductModal = false;
-
   }
 
-  // =====================================
-  // PRODUCT SEARCH
-  // =====================================
-
   loadProducts(): void {
-
     this.loadingProducts = true;
-
     const params = {
       AgencyId: Number(localStorage.getItem('aid')),
       Name: this.productSearch.name || '',
@@ -191,151 +204,72 @@ export class AssignVisitComponent implements OnInit {
 
     this.visitService.getproductdetails(params).subscribe({
       next: (res: any) => {
-
         this.products = res?.data || [];
-
         this.loadingProducts = false;
-
       },
       error: (err) => {
-
-        console.error(err);
-
+        console.error('Error fetching products:', err);
         this.loadingProducts = false;
-
       }
     });
-
   }
 
   searchProducts(): void {
-
     this.loadProducts();
-
   }
 
   clearProductSearch(): void {
-
-    this.productSearch = {
-      name: '',
-      brandName: ''
-    };
-
+    this.productSearch = { name: '', brandName: '' };
     this.loadProducts();
-
   }
 
-  // =====================================
-  // PRODUCT SELECTION
-  // =====================================
-
   toggleProduct(product: any): void {
-
-    const index = this.selectedProducts.findIndex(
-      x => x.productId === product.productId
-    );
-
+    const index = this.selectedProducts.findIndex(x => x.productId === product.productId);
     if (index > -1) {
-
       this.selectedProducts.splice(index, 1);
-
     } else {
-
       this.selectedProducts.push(product);
-
     }
-
   }
 
   isSelected(productId: number): boolean {
-
-    return this.selectedProducts.some(
-      x => x.productId === productId
-    );
-
+    return this.selectedProducts.some(x => x.productId === productId);
   }
 
   saveProducts(): void {
-
-    this.currentPlace.selectedProducts = [
-      ...this.selectedProducts
-    ];
-
-    this.currentPlace.productIds =
-      this.selectedProducts.map(
-        (x: any) => x.productId
-      );
-
+    if (this.currentPlace) {
+      this.currentPlace.selectedProducts = [...this.selectedProducts];
+      this.currentPlace.productIds = this.selectedProducts.map((x: any) => x.productId);
+    }
     this.showProductModal = false;
-
   }
 
   // =====================================
-  // SAVE CUSTOMER VISIT
+  // SAVE / REMOVE CUSTOMER VISIT
   // =====================================
-
   saveCustomerVisit(): void {
-
     if (!this.currentPlace.customerId) {
-
-      Swal.fire(
-        'Validation',
-        'Please select customer',
-        'warning'
-      );
-
+      Swal.fire('Validation', 'Please select a customer', 'warning');
       return;
     }
 
     if (!this.currentPlace.plannedTime) {
-
-      Swal.fire(
-        'Validation',
-        'Please select planned time',
-        'warning'
-      );
-
+      Swal.fire('Validation', 'Please select a planned time', 'warning');
       return;
     }
 
-    if (
-      !this.currentPlace.productIds ||
-      this.currentPlace.productIds.length === 0
-    ) {
+    // Optional Products Guard: Ensure product arrays are initialized even if no products were selected
+    this.currentPlace.productIds = this.currentPlace.productIds || [];
+    this.currentPlace.selectedProducts = this.currentPlace.selectedProducts || [];
 
-      Swal.fire(
-        'Validation',
-        'Please select at least one product',
-        'warning'
-      );
+    const customer = this.customerList.find((x: any) => x.customerId === this.currentPlace.customerId);
+    this.currentPlace.customerName = customer?.name || customer?.customerName || customer?.fullName || '';
 
-      return;
-    }
-
-    const customer = this.customerList.find(
-      (x: any) =>
-        x.customerId === this.currentPlace.customerId
-    );
-
-    this.currentPlace.customerName =
-      customer?.name ||
-      customer?.customerName ||
-      customer?.fullName ||
-      '';
-
-    this.assignVisit.places.push({
-      ...this.currentPlace
-    });
-
+    this.assignVisit.places.push({ ...this.currentPlace });
     this.showCustomerModal = false;
   }
 
-  // =====================================
-  // REMOVE CUSTOMER VISIT
-  // =====================================
-
   removePlace(index: number): void {
-
     Swal.fire({
       title: 'Remove Visit?',
       text: 'Do you want to remove this customer visit?',
@@ -343,206 +277,91 @@ export class AssignVisitComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: 'Remove'
     }).then((result) => {
-
       if (result.isConfirmed) {
-
         this.assignVisit.places.splice(index, 1);
-
+        // Recalculate sequence numbers after removal
+        this.assignVisit.places.forEach((place: any, i: number) => {
+          place.sequenceNo = i + 1;
+        });
       }
-
     });
-
   }
 
   // =====================================
-  // HELPERS
+  // SUBMIT VISIT & RESET
   // =====================================
-
-  getCustomerName(customerId: number): string {
-
-    const customer = this.customerList.find(
-      (x: any) => x.customerId === customerId
-    );
-
-    return (
-      customer?.name ||
-      customer?.customerName ||
-      customer?.fullName ||
-      'Customer'
-    );
-
-  }
-
-  getMrName(mrId: number): string {
-
-    const mr = this.mrList.find(
-      (x: any) => x.mrId === mrId
-    );
-
-    return (
-      mr?.name ||
-      mr?.mrName ||
-      ''
-    );
-
-  }
-
-  // =====================================
-  // SUBMIT VISIT
-  // =====================================
-
   submitVisit(): void {
-
     if (!this.assignVisit.mrId) {
-
-      Swal.fire(
-        'Validation',
-        'Please select MR',
-        'warning'
-      );
-
+      Swal.fire('Validation', 'Please select MR', 'warning');
       return;
     }
 
     if (!this.assignVisit.visitDate) {
-
-      Swal.fire(
-        'Validation',
-        'Please select visit date',
-        'warning'
-      );
-
+      Swal.fire('Validation', 'Please select visit date', 'warning');
       return;
     }
 
-    if (
-      !this.assignVisit.places ||
-      this.assignVisit.places.length === 0
-    ) {
-
-      Swal.fire(
-        'Validation',
-        'Please add at least one customer visit',
-        'warning'
-      );
-
+    if (!this.assignVisit.places || this.assignVisit.places.length === 0) {
+      Swal.fire('Validation', 'Please add at least one customer visit', 'warning');
       return;
     }
 
     const payload = {
-
-      agencyId:
-        Number(localStorage.getItem('aid')),
-
-      mrId:
-        this.assignVisit.mrId,
-
-      assignedBy:
-        Number(localStorage.getItem('mid')),
-
-      visitDate:
-        this.assignVisit.visitDate,
-
-      remarks:
-        this.assignVisit.remarks,
-
-      places:
-        this.assignVisit.places.map(
-          (place: any) => ({
-
-            customerId:
-              place.customerId,
-
-            doctorId:
-              null,
-
-            plannedTime:
-              place.plannedTime,
-
-            sequenceNo:
-              Number(place.sequenceNo),
-
-            remarks:
-              place.remarks,
-
-            productIds:
-              place.productIds
-
-          })
-        )
-
+      agencyId: Number(localStorage.getItem('aid')),
+      mrId: this.assignVisit.mrId,
+      assignedBy: Number(localStorage.getItem('mid')),
+      visitDate: this.assignVisit.visitDate,
+      remarks: this.assignVisit.remarks,
+      places: this.assignVisit.places.map((place: any) => ({
+        customerId: place.customerId,
+        doctorId: null,
+        plannedTime: place.plannedTime,
+        sequenceNo: Number(place.sequenceNo),
+        remarks: place.remarks || '',
+        productIds: place.productIds || [] // Defaults to empty array [] when no products are picked
+      }))
     };
-
-    console.log(
-      'Assign Visit Payload',
-      payload
-    );
 
     this.isSubmitting = true;
 
-    this.visitService
-      .assign_visit(payload)
-      .subscribe({
-
-        next: (res: any) => {
-
-          this.isSubmitting = false;
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Visit Assigned Successfully'
-          });
-
-          this.resetForm();
-
-        },
-
-        error: (err: any) => {
-
-          console.error(err);
-
-          this.isSubmitting = false;
-
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text:
-              err?.error?.message ||
-              'Failed to assign visit'
-          });
-
-        }
-
-      });
-
+    this.visitService.assign_visit(payload).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Visit Assigned Successfully'
+        });
+        this.resetForm();
+      },
+      error: (err: any) => {
+        console.error('Error assigning visit:', err);
+        this.isSubmitting = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err?.error?.message || 'Failed to assign visit'
+        });
+      }
+    });
   }
 
-  // =====================================
-  // RESET
-  // =====================================
-
   resetForm(): void {
-
     this.assignVisit = {
       agencyId: Number(localStorage.getItem('aid')),
       mrId: null,
+      routeId: null,
       assignedBy: Number(localStorage.getItem('mid')),
       visitDate: '',
       remarks: '',
       places: []
     };
-
+    this.routeList = [];
+    this.customerList = [];
     this.currentPlace = null;
-
     this.selectedProducts = [];
-
     this.products = [];
-
     this.showCustomerModal = false;
-
     this.showProductModal = false;
-
   }
-
 }
