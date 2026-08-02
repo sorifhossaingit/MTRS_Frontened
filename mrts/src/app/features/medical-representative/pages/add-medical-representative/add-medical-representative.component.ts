@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -61,6 +61,12 @@ export class AddMedicalRepresentativeComponent implements OnInit {
   routeList: any[] = [];
   stockietList: any[] = [];
 
+  // Multi-Select Route Dropdown State
+  showRouteDropdown = false;
+  routeSearch = '';
+  filteredRoutes: any[] = [];
+  selectedRoutes: any[] = [];
+
   agencyId = Number(localStorage.getItem('aid'));
   managerId = Number(localStorage.getItem('mid'));
 
@@ -82,6 +88,8 @@ export class AddMedicalRepresentativeComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.routeList = res.data || [];
+          this.filteredRoutes = [...this.routeList];
+          this.syncSelectedRoutesFromForm();
         },
         error: (err: any) => {
           console.error('Failed to fetch Route List:', err);
@@ -113,15 +121,72 @@ export class AddMedicalRepresentativeComponent implements OnInit {
       state: ['', Validators.required],
       pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
       region: ['', Validators.required],
-      routeId: [null, Validators.required],
-      stockistId: [null, Validators.required], // FIXED: Added stockistId
-      // coverArea: ['', Validators.required]     // FIXED: Restored coverArea
+      routeIds: [[], Validators.required],
+      stockistId: [null, Validators.required]
     });
   }
 
   get f() {
     return this.mrForm.controls;
   }
+
+  // --- Searchable Multi-Select Route Logic ---
+
+  filterRoutes(): void {
+    const search = this.routeSearch.trim().toLowerCase();
+    if (!search) {
+      this.filteredRoutes = [...this.routeList];
+    } else {
+      this.filteredRoutes = this.routeList.filter((item) =>
+        item.routeName.toLowerCase().includes(search)
+      );
+    }
+  }
+
+  isSelected(routeId: number): boolean {
+    const currentIds: number[] = this.mrForm.get('routeIds')?.value || [];
+    return currentIds.includes(routeId);
+  }
+
+  toggleRoute(item: any): void {
+    const currentIds: number[] = [...(this.mrForm.get('routeIds')?.value || [])];
+    const index = currentIds.indexOf(item.routeId);
+
+    if (index > -1) {
+      currentIds.splice(index, 1);
+      this.selectedRoutes = this.selectedRoutes.filter((r) => r.routeId !== item.routeId);
+    } else {
+      currentIds.push(item.routeId);
+      this.selectedRoutes.push(item);
+    }
+
+    this.mrForm.get('routeIds')?.setValue(currentIds.length ? currentIds : null);
+    this.mrForm.get('routeIds')?.markAsTouched();
+  }
+
+  removeRoute(routeId: number): void {
+    const currentIds: number[] = [...(this.mrForm.get('routeIds')?.value || [])];
+    const updatedIds = currentIds.filter((id) => id !== routeId);
+
+    this.selectedRoutes = this.selectedRoutes.filter((r) => r.routeId !== routeId);
+    this.mrForm.get('routeIds')?.setValue(updatedIds.length ? updatedIds : null);
+    this.mrForm.get('routeIds')?.markAsTouched();
+  }
+
+  private syncSelectedRoutesFromForm(): void {
+    const currentIds: number[] = this.mrForm.get('routeIds')?.value || [];
+    this.selectedRoutes = this.routeList.filter((r) => currentIds.includes(r.routeId));
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const targetElement = event.target as HTMLElement;
+    if (targetElement && !targetElement.closest('.relative')) {
+      this.showRouteDropdown = false;
+    }
+  }
+
+  // --- Save & Reset Operations ---
 
   saveMr(): void {
     this.submitted = true;
@@ -136,6 +201,9 @@ export class AddMedicalRepresentativeComponent implements OnInit {
       return;
     }
 
+    const rawRouteIds = this.mrForm.value.routeIds || [];
+    const formattedRouteIds = rawRouteIds.map((id: any) => Number(id));
+
     const payload = {
       agencyId: this.agencyId,
       name: this.mrForm.value.name,
@@ -147,10 +215,9 @@ export class AddMedicalRepresentativeComponent implements OnInit {
       state: this.mrForm.value.state,
       pincode: this.mrForm.value.pincode,
       region: this.mrForm.value.region,
-      routeId: this.mrForm.value.routeId,
       assignedAreaManager: this.managerId,
-      // coverArea: this.mrForm.value.coverArea,
-      stockistId: this.mrForm.value.stockistId, // FIXED: Dynamic stockistId binding
+      stockistId: Number(this.mrForm.value.stockistId),
+      routeIds: formattedRouteIds,
       createdBy: this.managerId
     };
 
@@ -186,5 +253,9 @@ export class AddMedicalRepresentativeComponent implements OnInit {
   resetForm(): void {
     this.submitted = false;
     this.mrForm.reset();
+    this.selectedRoutes = [];
+    this.routeSearch = '';
+    this.showRouteDropdown = false;
+    this.filterRoutes();
   }
 }
