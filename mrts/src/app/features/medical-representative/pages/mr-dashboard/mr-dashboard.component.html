@@ -2,475 +2,255 @@
 
     <!-- HEADER -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">
-                MR Dashboard
-            </h1>
-            <p class="text-gray-500 mt-1">
-                Manage Medical Representatives
-            </p>
+            <h1 class="text-3xl font-bold text-gray-800">MR Dashboard</h1>
+            <p class="text-gray-500 mt-1">Manage Medical Representatives</p>
         </div>
-
     </div>
 
     <!-- STATS -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
         <div class="bg-white rounded-xl shadow-sm border p-6">
             <div class="flex justify-between items-center">
-
                 <div>
-                    <p class="text-gray-500 text-sm">
-                        Total MRs
-                    </p>
-
-                    <h2 class="text-3xl font-bold mt-2">
-                        {{ totalRecords }}
-                    </h2>
+                    <p class="text-gray-500 text-sm">Total MRs</p>
+                    <h2 class="text-3xl font-bold mt-2">{{ totalRecords }}</h2>
                 </div>
-
                 <div class="bg-blue-100 p-3 rounded-full">
-                    <lucide-icon [img]="Users" class="text-blue-600">
-                    </lucide-icon>
+                    <lucide-icon [img]="Users" class="text-blue-600"></lucide-icon>
                 </div>
-
             </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border p-6">
             <div class="flex justify-between items-center">
-
                 <div>
-                    <p class="text-gray-500 text-sm">
-                        Active MRs
-                    </p>
-
-                    <h2 class="text-3xl font-bold mt-2">
-                        {{ activeCount }}
-                    </h2>
+                    <p class="text-gray-500 text-sm">Active MRs</p>
+                    <h2 class="text-3xl font-bold mt-2">{{ activeCount }}</h2>
                 </div>
-
                 <div class="bg-green-100 p-3 rounded-full">
-                    <lucide-icon [img]="UserCheck" class="text-green-600">
-                    </lucide-icon>
+                    <lucide-icon [img]="UserCheck" class="text-green-600"></lucide-icon>
                 </div>
-
             </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border p-6">
             <div class="flex justify-between items-center">
-
                 <div>
-                    <p class="text-gray-500 text-sm">
-                        Inactive MRs
-                    </p>
-
-                    <h2 class="text-3xl font-bold mt-2">
-                        {{ inactiveCount }}
-                    </h2>
+                    <p class="text-gray-500 text-sm">Inactive MRs</p>
+                    <h2 class="text-3xl font-bold mt-2">{{ inactiveCount }}</h2>
                 </div>
-
                 <div class="bg-red-100 p-3 rounded-full">
-                    <lucide-icon [img]="UserX" class="text-red-600">
-                    </lucide-icon>
+                    <lucide-icon [img]="UserX" class="text-red-600"></lucide-icon>
                 </div>
-
             </div>
         </div>
-
     </div>
 
     <!-- FILTER -->
     <form [formGroup]="filterForm" class="bg-white p-5 rounded-xl shadow border mb-6">
-
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
             <input type="text" formControlName="name" placeholder="Search By Name" class="border rounded-lg px-4 py-3">
-
-            <input type="text" formControlName="email" placeholder="Search By Email"
-                class="border rounded-lg px-4 py-3">
-
-            <input type="text" formControlName="mobile" placeholder="Search By Mobile"
-                class="border rounded-lg px-4 py-3">
-
+            <input type="text" formControlName="email" placeholder="Search By Email" class="border rounded-lg px-4 py-3">
+            <input type="text" formControlName="mobile" placeholder="Search By Mobile" class="border rounded-lg px-4 py-3">
             <select formControlName="isActive" class="border rounded-lg px-4 py-3">
-
-                <option [ngValue]="null">
-                    All
-                </option>
-
-                <option [ngValue]="true">
-                    Active
-                </option>
-
-                <option [ngValue]="false">
-                    Inactive
-                </option>
-
+                <option [ngValue]="null">All</option>
+                <option [ngValue]="true">Active</option>
+                <option [ngValue]="false">Inactive</option>
             </select>
-
         </div>
 
         <div class="flex gap-3 mt-4">
-
-            <button type="button" (click)="applyFilter()"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
-
+            <button type="button" (click)="applyFilter()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
                 Search
-
             </button>
-
-            <button type="button" (click)="resetFilter()"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
-
+            <button type="button" (click)="resetFilter()" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
                 Reset
-
             </button>
-
         </div>
-
     </form>
 
     <!-- TABLE -->
     <div class="bg-white rounded-xl shadow border overflow-hidden">
-
         <div class="px-6 py-4 border-b">
-            <h2 class="text-lg font-semibold">
-                Medical Representative List
-            </h2>
+            <h2 class="text-lg font-semibold">Medical Representative List</h2>
         </div>
 
         <div class="overflow-x-auto">
-
             <table class="w-full min-w-[1400px]">
-
                 <thead class="bg-gray-50">
-
                     <tr>
-
-                        <th class="px-4 py-3 text-left">
-                            Name
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            Contact Person
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            Mobile
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            Email
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            City
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            State
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            Region
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            Cover Area
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            Status
-                        </th>
-
-                        <th class="px-4 py-3 text-center">
-                            Actions
-                        </th>
-
+                        <th class="px-4 py-3 text-left">Name</th>
+                        <th class="px-4 py-3 text-left">Contact Person</th>
+                        <th class="px-4 py-3 text-left">Mobile</th>
+                        <th class="px-4 py-3 text-left">Email</th>
+                        <th class="px-4 py-3 text-left">City</th>
+                        <th class="px-4 py-3 text-left">State</th>
+                        <th class="px-4 py-3 text-left">Region</th>
+                        <th class="px-4 py-3 text-left">Route</th>
+                        <th class="px-4 py-3 text-left">Status</th>
+                        <th class="px-4 py-3 text-center">Actions</th>
                     </tr>
-
                 </thead>
 
                 <tbody>
-
                     <tr *ngFor="let mr of mrList" class="border-t hover:bg-gray-50">
-
-                        <td class="px-4 py-4 font-medium">
-                            {{ mr.name }}
-                        </td>
-
+                        <td class="px-4 py-4 font-medium">{{ mr.name }}</td>
+                        <td class="px-4 py-4">{{ mr.contactPerson }}</td>
+                        <td class="px-4 py-4">{{ mr.mobile }}</td>
+                        <td class="px-4 py-4">{{ mr.email }}</td>
+                        <td class="px-4 py-4">{{ mr.city }}</td>
+                        <td class="px-4 py-4">{{ mr.state }}</td>
+                        <td class="px-4 py-4">{{ mr.region }}</td>
+                        <td class="px-4 py-4">{{ mr.routeName || '-' }}</td>
                         <td class="px-4 py-4">
-                            {{ mr.contactPerson }}
-                        </td>
-
-                        <td class="px-4 py-4">
-                            {{ mr.mobile }}
-                        </td>
-
-                        <td class="px-4 py-4">
-                            {{ mr.email }}
-                        </td>
-
-                        <td class="px-4 py-4">
-                            {{ mr.city }}
-                        </td>
-
-                        <td class="px-4 py-4">
-                            {{ mr.state }}
-                        </td>
-
-                        <td class="px-4 py-4">
-                            {{ mr.region }}
-                        </td>
-
-                        <td class="px-4 py-4">
-                            {{ mr.coverArea }}
-                        </td>
-
-                        <td class="px-4 py-4">
-
                             <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
-                  'bg-green-100 text-green-700': mr.isActive,
-                  'bg-red-100 text-red-700': !mr.isActive
-                }">
-
+                                  'bg-green-100 text-green-700': mr.isActive,
+                                  'bg-red-100 text-red-700': !mr.isActive
+                                }">
                                 {{ mr.isActive ? 'Active' : 'Inactive' }}
-
                             </span>
-
                         </td>
-
                         <td class="px-4 py-4">
-
                             <div class="flex justify-center gap-2">
-
-                                <!-- Edit -->
-
                                 <button (click)="editMr(mr)" class="p-2 rounded-lg bg-blue-100 hover:bg-blue-200">
-
-                                    <lucide-icon [img]="Pencil" class="text-blue-600">
-                                    </lucide-icon>
-
+                                    <lucide-icon [img]="Pencil" class="text-blue-600"></lucide-icon>
                                 </button>
-
-                                <!-- Delete -->
-
                                 <button (click)="deleteMr(mr)" class="p-2 rounded-lg bg-red-100 hover:bg-red-200">
-
-                                    <lucide-icon [img]="Trash2" class="text-red-600">
-                                    </lucide-icon>
-
+                                    <lucide-icon [img]="Trash2" class="text-red-600"></lucide-icon>
                                 </button>
-
                             </div>
-
                         </td>
-
                     </tr>
 
                     <tr *ngIf="mrList.length === 0">
-
                         <td colspan="10" class="text-center py-10 text-gray-500">
-
                             No Medical Representatives Found
-
                         </td>
-
                     </tr>
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
     <!-- PAGINATION -->
     <div class="flex flex-col md:flex-row justify-between items-center mt-5 gap-4">
-
         <div class="text-sm text-gray-600">
-
-            Total Records :
-            <span class="font-semibold">
-                {{ totalRecords }}
-            </span>
-
+            Total Records : <span class="font-semibold">{{ totalRecords }}</span>
         </div>
 
         <div class="flex gap-2 items-center">
-
             <button (click)="changePage(pageNumber - 1)" [disabled]="pageNumber === 1"
                 class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
-
                 Previous
-
             </button>
-
-            <span class="px-4 py-2">
-
-                {{ pageNumber }}
-                /
-                {{ totalPages }}
-
-            </span>
-
+            <span class="px-4 py-2">{{ pageNumber }} / {{ totalPages }}</span>
             <button (click)="changePage(pageNumber + 1)" [disabled]="pageNumber === totalPages"
                 class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
-
                 Next
-
             </button>
-
         </div>
-
     </div>
 
     <!-- UPDATE MODAL -->
     <div *ngIf="showUpdateModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-
         <div class="bg-white w-full max-w-5xl rounded-xl shadow-xl p-6 max-h-[90vh] overflow-y-auto">
-
             <div class="flex justify-between items-center mb-6">
-
-                <h2 class="text-xl font-bold">
-                    Update Medical Representative
-                </h2>
-
-                <button (click)="closeModal()" class="text-red-600 text-2xl">
-
-                    ✕
-
-                </button>
-
+                <h2 class="text-xl font-bold">Update Medical Representative</h2>
+                <button (click)="closeModal()" class="text-red-600 text-2xl">✕</button>
             </div>
 
             <form [formGroup]="updateForm">
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Agency Name
-                        </label>
-                        <input formControlName="name" class="w-full border rounded-lg p-3"
-                            placeholder="Enter Agency Name">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input formControlName="name" class="w-full border rounded-lg p-3" placeholder="Enter Name">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Contact Person
-                        </label>
-                        <input formControlName="contactPerson" class="w-full border rounded-lg p-3"
-                            placeholder="Enter Contact Person">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Contact Person</label>
+                        <input formControlName="contactPerson" class="w-full border rounded-lg p-3" placeholder="Enter Contact Person">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Mobile Number
-                        </label>
-                        <input formControlName="mobile" class="w-full border rounded-lg p-3"
-                            placeholder="Enter Mobile Number">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                        <input formControlName="mobile" class="w-full border rounded-lg p-3" placeholder="Enter Mobile Number">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Email Address
-                        </label>
-                        <input formControlName="email" class="w-full border rounded-lg p-3"
-                            placeholder="Enter Email Address">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input formControlName="email" class="w-full border rounded-lg p-3" placeholder="Enter Email Address">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Address
-                        </label>
-                        <input formControlName="address" class="w-full border rounded-lg p-3"
-                            placeholder="Enter Address">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                        <input formControlName="address" class="w-full border rounded-lg p-3" placeholder="Enter Address">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            City
-                        </label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
                         <input formControlName="city" class="w-full border rounded-lg p-3" placeholder="Enter City">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            State
-                        </label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
                         <input formControlName="state" class="w-full border rounded-lg p-3" placeholder="Enter State">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Pincode
-                        </label>
-                        <input formControlName="pincode" class="w-full border rounded-lg p-3"
-                            placeholder="Enter Pincode">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
+                        <input formControlName="pincode" class="w-full border rounded-lg p-3" placeholder="Enter Pincode">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Region
-                        </label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Region</label>
                         <input formControlName="region" class="w-full border rounded-lg p-3" placeholder="Enter Region">
                     </div>
 
+                    <!-- Route Dropdown -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Cover Area
-                        </label>
-                        <input formControlName="coverArea" class="w-full border rounded-lg p-3"
-                            placeholder="Enter Cover Area">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Route</label>
+                        <select formControlName="routeId" class="w-full border rounded-lg p-3">
+                            <option [ngValue]="0" disabled>Select Route</option>
+                            <option *ngFor="let route of routeList" [ngValue]="route.routeId">
+                                {{ route.routeName }}
+                            </option>
+                        </select>
                     </div>
 
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Status
-                        </label>
+                    <!-- Stockist Dropdown -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Stockist</label>
+                        <select formControlName="stockistId" class="w-full border rounded-lg p-3">
+                            <option [ngValue]="0" disabled>Select Stockist</option>
+                            <option *ngFor="let stockist of stockietList" [ngValue]="stockist.stockistId">
+                                {{ stockist.name }} - {{ stockist.city }} ({{ stockist.firmType }})
+                            </option>
+                        </select>
+                    </div>
 
+                    <!-- Status -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                         <select formControlName="isActive" class="w-full border rounded-lg p-3">
-
-                            <option [ngValue]="true">
-                                Active
-                            </option>
-
-                            <option [ngValue]="false">
-                                Inactive
-                            </option>
-
+                            <option [ngValue]="true">Active</option>
+                            <option [ngValue]="false">Inactive</option>
                         </select>
                     </div>
 
                 </div>
 
                 <div class="flex justify-end gap-3 mt-6">
-
-                    <button type="button" (click)="closeModal()"
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
-
+                    <button type="button" (click)="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
                         Cancel
-
                     </button>
-
-                    <button type="button" (click)="updateMr()"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
-
+                    <button type="button" (click)="updateMr()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
                         Update MR
-
                     </button>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
 
 </div>

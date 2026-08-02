@@ -28,10 +28,12 @@ export class MrDashboardComponent implements OnInit {
   Trash2 = Trash2;
   Plus = Plus;
 
-  // Data
+  // Data Arrays
   mrList: any[] = [];
+  routeList: any[] = [];
+  stockietList: any[] = [];
 
-  // Forms
+  // Reactive Forms
   filterForm!: FormGroup;
   updateForm!: FormGroup;
 
@@ -40,10 +42,10 @@ export class MrDashboardComponent implements OnInit {
   pageSize = 10;
   totalRecords = 0;
 
-  // Modal
+  // Modal Control
   showUpdateModal = false;
 
-  // Local Storage
+  // Local Storage Data
   agencyId = Number(localStorage.getItem('aid'));
   managerId = Number(localStorage.getItem('mid'));
 
@@ -53,14 +55,13 @@ export class MrDashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.initializeForms();
     this.getMrList();
-
+    this.getRouteList();
+    this.getStockiestList();
   }
 
   initializeForms(): void {
-
     this.filterForm = this.fb.group({
       name: [''],
       email: [''],
@@ -79,110 +80,93 @@ export class MrDashboardComponent implements OnInit {
       state: [''],
       pincode: [''],
       region: [''],
-      coverArea: [''],
+      routeId: [0],
       stockistId: [0],
       isActive: [true]
     });
-
   }
 
-  // ==========================
-  // GET MR LIST
-  // ==========================
-  getMrList(): void {
+  getRouteList(): void {
+    this.mrService.getRouteList(this.agencyId).subscribe({
+      next: (res: any) => {
+        this.routeList = res.data || [];
+      },
+      error: (err: any) => {
+        console.error('Failed to fetch Route List:', err);
+      }
+    });
+  }
 
+  getStockiestList(): void {
+    this.mrService.getStockiestList(this.agencyId).subscribe({
+      next: (res: any) => {
+        this.stockietList = res.data || [];
+      },
+      error: (err: any) => {
+        console.error('Failed to fetch Stockist List:', err);
+      }
+    });
+  }
+
+  getMrList(): void {
     const payload = {
       agencyId: this.agencyId,
       assignedAreaManager: this.managerId,
       name: this.filterForm?.value?.name || null,
       email: this.filterForm?.value?.email || null,
       mobile: this.filterForm?.value?.mobile || null,
-      isActive:
-        this.filterForm?.value?.isActive === null
-          ? null
-          : this.filterForm?.value?.isActive,
+      isActive: this.filterForm?.value?.isActive ?? null,
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };
 
     this.mrService.get_mr(payload).subscribe({
       next: (res: any) => {
-
         if (res?.success) {
-
           this.mrList = res.data || [];
           this.totalRecords = res.totalRecords || 0;
-
         }
-
       },
       error: (err: any) => {
-
         console.error(err);
-
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Failed to load MR list'
         });
-
       }
     });
-
   }
 
-  // ==========================
-  // FILTER
-  // ==========================
   applyFilter(): void {
-
     this.pageNumber = 1;
     this.getMrList();
-
   }
 
   resetFilter(): void {
-
     this.filterForm.patchValue({
       name: '',
       email: '',
       mobile: '',
       isActive: null
     });
-
     this.pageNumber = 1;
-
     this.getMrList();
-
   }
 
-  // ==========================
-  // PAGINATION
-  // ==========================
   changePage(page: number): void {
-
-    const totalPages = this.totalPages;
-
-    if (page < 1 || page > totalPages) {
+    if (page < 1 || page > this.totalPages) {
       return;
     }
-
     this.pageNumber = page;
     this.getMrList();
-
   }
 
   get totalPages(): number {
-
-    return Math.ceil(this.totalRecords / this.pageSize);
-
+    return Math.ceil(this.totalRecords / this.pageSize) || 1;
   }
 
-  // ==========================
-  // OPEN UPDATE MODAL
-  // ==========================
   editMr(mr: any): void {
-
     this.updateForm.patchValue({
       medicalRepresentativeId: mr.medicalRepresentativeId,
       name: mr.name,
@@ -194,26 +178,19 @@ export class MrDashboardComponent implements OnInit {
       state: mr.state,
       pincode: mr.pincode,
       region: mr.region,
-      coverArea: mr.coverArea,
+      routeId: mr.routeId || 0,
       stockistId: mr.stockistId || 0,
       isActive: mr.isActive
     });
 
     this.showUpdateModal = true;
-
   }
 
   closeModal(): void {
-
     this.showUpdateModal = false;
-
   }
 
-  // ==========================
-  // UPDATE MR
-  // ==========================
   updateMr(): void {
-
     const formValue = this.updateForm.value;
 
     const payload = {
@@ -228,50 +205,36 @@ export class MrDashboardComponent implements OnInit {
       pincode: formValue.pincode,
       region: formValue.region,
       assignedAreaManager: this.managerId,
-      coverArea: formValue.coverArea,
-      stockistId: formValue.stockistId || null,
+      routeId: Number(formValue.routeId) || 0,
+      stockistId: Number(formValue.stockistId) || 0,
       isActive: formValue.isActive,
       updatedBy: this.managerId
     };
 
     this.mrService.update_mr(payload).subscribe({
       next: (res: any) => {
-
         if (res?.success) {
-
           Swal.fire({
             icon: 'success',
             title: 'Success',
             text: 'MR updated successfully'
           });
-
           this.showUpdateModal = false;
-
           this.getMrList();
-
         }
-
       },
       error: (err: any) => {
-
         console.error(err);
-
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Failed to update MR'
         });
-
       }
     });
-
   }
 
-  // ==========================
-  // SOFT DELETE MR
-  // ==========================
   deleteMr(mr: any): void {
-
     Swal.fire({
       title: 'Delete MR?',
       text: 'This MR will be marked as inactive.',
@@ -281,10 +244,7 @@ export class MrDashboardComponent implements OnInit {
       confirmButtonText: 'Yes, Delete',
       cancelButtonText: 'Cancel'
     }).then((result) => {
-
-      if (!result.isConfirmed) {
-        return;
-      }
+      if (!result.isConfirmed) return;
 
       const payload = {
         medicalRepresentativeId: mr.medicalRepresentativeId,
@@ -298,46 +258,33 @@ export class MrDashboardComponent implements OnInit {
         pincode: mr.pincode,
         region: mr.region,
         assignedAreaManager: this.managerId,
-        coverArea: mr.coverArea,
-        stockistId: mr.stockistId || 0,
-
-        // Soft Delete
+        routeId: Number(mr.routeId) || 0,
+        stockistId: Number(mr.stockistId) || 0,
         isActive: false,
-
         updatedBy: this.managerId
       };
 
       this.mrService.update_mr(payload).subscribe({
         next: (res: any) => {
-
           if (res?.success) {
-
             Swal.fire({
               icon: 'success',
               title: 'Deleted',
               text: 'MR marked as inactive successfully.'
             });
-
             this.getMrList();
-
           }
-
         },
         error: (err: any) => {
-
           console.error(err);
-
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: 'Failed to delete MR.'
           });
-
         }
       });
-
     });
-
   }
 
   get activeCount(): number {
@@ -347,5 +294,4 @@ export class MrDashboardComponent implements OnInit {
   get inactiveCount(): number {
     return this.mrList.filter(x => !x.isActive).length;
   }
-
 }
