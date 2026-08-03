@@ -171,12 +171,10 @@
                   Route
                 </button>
 
-            <button 
-  *ngIf="canEndVisit(visit)" 
-  (click)="initiateEndVisit(visit)" 
-  class="bg-purple-100 text-purple-700 hover:bg-purple-200 px-2 py-1 rounded transition-colors">
-  End
-</button>
+                <button *ngIf="canEndVisit(visit)" (click)="initiateEndVisit(visit)"
+                  class="bg-purple-100 text-purple-700 hover:bg-purple-200 px-2 py-1 rounded transition-colors">
+                  End
+                </button>
 
               </div>
             </td>
@@ -413,17 +411,14 @@
               </span>
             </div>
 
-            <!-- ✅ COMPLETE BUTTON PER CUSTOMER -->
+            <!-- Complete Visit Button per Customer -->
             <div class="flex items-end justify-end">
-
-              <button *ngIf="selectedVisit?.status === 'Accepted' || selectedVisit?.status === 'InProgress'"
+              <button
+                *ngIf="(selectedVisit?.status === 'Accepted' || selectedVisit?.status === 'InProgress') && place.status !== 'Completed'"
                 (click)="openCompleteForPlace(selectedVisit, place)"
-                class="bg-emerald-600 text-white px-3 py-2 rounded text-xs">
-
+                class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded text-xs transition-colors">
                 Complete Visit
-
               </button>
-
             </div>
 
           </div>

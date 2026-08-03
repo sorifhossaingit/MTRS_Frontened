@@ -2004,59 +2004,71 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  completeVisitForPlace(remarks: string): void {
-    if (!this.selectedVisit || !this.selectedPlace) return;
+completeVisitForPlace(remarks: string): void {
+  if (!this.selectedVisit || !this.selectedPlace) return;
 
-    this.getCurrentLocation().then(location => {
-      const shownProductIds = (this.selectedPlace.products || [])
-        .filter((p: any) => p.showProduct)
-        .map((p: any) => p.productId);
+  this.getCurrentLocation().then(location => {
+    const shownProductIds = (this.selectedPlace.products || [])
+      .filter((p: any) => p.showProduct)
+      .map((p: any) => p.productId);
 
-      const payload = {
-        visitPlanId: this.selectedVisit.visitPlanId,
-        visitPlanDetailId: this.selectedPlace.visitPlanDetailId,
-        currentLatitude: location.latitude,
-        currentLongitude: location.longitude,
-        visitRemarks: remarks,
-        shownProductIds
-      };
+    const payload = {
+      visitPlanId: this.selectedVisit.visitPlanId,
+      visitPlanDetailId: this.selectedPlace.visitPlanDetailId,
+      currentLatitude: location.latitude,
+      currentLongitude: location.longitude,
+      visitRemarks: remarks,
+      shownProductIds
+    };
 
-      this.mrService.complete_visit(payload)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res: any) => {
-            if (!res.success) {
-              Swal.fire('Error', res.message, 'error');
-              return;
-            }
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Customer Visit Completed',
-              text: res.message,
-              timer: 1500,
-              showConfirmButton: false
-            });
-
-            this.selectedPlace = null;
-            this.loadVisits();
-          },
-          error: (err) => {
-            Swal.fire(
-              'Error',
-              err?.error?.message || 'Something went wrong',
-              'error'
-            );
+    this.mrService.complete_visit(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          if (!res.success) {
+            Swal.fire('Error', res.message, 'error');
+            return;
           }
-        });
-    }).catch(() => {
-      Swal.fire(
-        'Location Error',
-        'Enable GPS to complete visit',
-        'warning'
-      );
-    });
-  }
+
+          // 1. Immediately update status locally so UI reacts instantly
+          this.selectedPlace.status = 'Completed';
+
+          // 2. Check if all places in this visit are completed, update parent status if so
+          const allCompleted = this.selectedVisit.places.every(
+            (p: any) => p.status === 'Completed'
+          );
+          if (allCompleted) {
+            this.selectedVisit.status = 'Completed';
+          }
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Customer Visit Completed',
+            text: res.message,
+            timer: 1500,
+            showConfirmButton: false
+          }).then(() => {
+            this.selectedPlace = null;
+            // 3. Re-fetch full data from server in background
+            this.loadVisits();
+          });
+        },
+        error: (err) => {
+          Swal.fire(
+            'Error',
+            err?.error?.message || 'Something went wrong',
+            'error'
+          );
+        }
+      });
+  }).catch(() => {
+    Swal.fire(
+      'Location Error',
+      'Enable GPS to complete visit',
+      'warning'
+    );
+  });
+}
 
   // ======================================================
   // PAGINATION
