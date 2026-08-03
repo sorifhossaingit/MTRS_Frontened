@@ -98,6 +98,11 @@ export class MrService {
       `${this.apiUrl}/mrvisit/ar-dropown-customers`, { params });
   }
 
+  get_active_session(visitPlanId: number) {
+  return this.http.get(
+    `${this.apiUrl}/mrvisit/get-active-session/${visitPlanId}`
+  );
+}
 
   //Mr attendance APIs
 

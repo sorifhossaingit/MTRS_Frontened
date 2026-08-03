@@ -171,9 +171,12 @@
                   Route
                 </button>
 
-                <button *ngIf="canEndVisit(visit)" (click)="endVisit(visit)" class="bg-purple-100 px-2 py-1 rounded">
-                  End
-                </button>
+            <button 
+  *ngIf="canEndVisit(visit)" 
+  (click)="initiateEndVisit(visit)" 
+  class="bg-purple-100 text-purple-700 hover:bg-purple-200 px-2 py-1 rounded transition-colors">
+  End
+</button>
 
               </div>
             </td>
