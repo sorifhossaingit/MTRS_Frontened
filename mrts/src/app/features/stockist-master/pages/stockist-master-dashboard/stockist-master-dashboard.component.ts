@@ -11,7 +11,8 @@ import {
   X,
   KeyRound,
   XCircle,
-  TrendingUp
+  TrendingUp,
+  Upload
 } from 'lucide-angular';
 
 import {
@@ -47,46 +48,39 @@ export class StockistMasterDashboardComponent implements OnInit {
   KeyRound = KeyRound;
   XCircle = XCircle;
   TrendingUp = TrendingUp;
+  Upload = Upload;
+
   // =====================================================
   // VARIABLES
   // =====================================================
 
   searchText = '';
-
   filterType = '';
-
   filterStatus: any = '';
 
   stockists: any[] = [];
-
   areaManagerList: any[] = [];
 
   totalStockists = 0;
-
   activeStockists = 0;
-
   inactivestockist = 0;
-
   newstockist = 0;
 
   pageNumber = 1;
-
   pageSize = 10;
-
   totalPages = 0;
 
   showEditModal = false;
-
   selectedStockistId: any;
-
   stockistForm!: FormGroup;
-
   submitted = false;
 
-  agencyId =
-    localStorage.getItem('aid');
-
+  agencyId = localStorage.getItem('aid');
   updatedBy: any;
+
+  // File Upload State
+  selectedImageFile: File | null = null;
+  imagePreviewUrl: string | ArrayBuffer | null = null;
 
   // =====================================================
   // CONSTRUCTOR
@@ -102,17 +96,11 @@ export class StockistMasterDashboardComponent implements OnInit {
   // =====================================================
 
   ngOnInit(): void {
-
     this.decodeToken();
-
     this.initializeForm();
-
     this.getAreaManagers();
-
     this.getStockists();
-
     this.loadStockistDashboardSummary();
-
   }
 
   // =====================================================
@@ -120,77 +108,23 @@ export class StockistMasterDashboardComponent implements OnInit {
   // =====================================================
 
   initializeForm() {
-
     this.stockistForm = this.fb.group({
-
-      name: [
-        '',
-        Validators.required
-      ],
-
-      firmType: [
-        '',
-        Validators.required
-      ],
-
-      contactPerson: [
-        '',
-        Validators.required
-      ],
-
-      mobile: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[0-9]{10}$/)
-        ]
-      ],
-
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
-
-      address: [
-        '',
-        Validators.required
-      ],
-
-      city: [
-        '',
-        Validators.required
-      ],
-
-      state: [
-        '',
-        Validators.required
-      ],
-
-      pincode: [
-        '',
-        Validators.required
-      ],
-
+      name: ['', Validators.required],
+      firmType: ['', Validators.required],
+      contactPerson: ['', Validators.required],
+      mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      pincode: ['', Validators.required],
       gstNo: [''],
-
       drugLicenseNo: [''],
-
       region: [''],
-
-      assignedAreaManager: [
-        '',
-        Validators.required
-      ],
-
+      assignedAreaManager: ['', Validators.required],
       coverArea: [''],
-
       isActive: [true]
-
     });
-
   }
 
   // =====================================================
@@ -198,22 +132,11 @@ export class StockistMasterDashboardComponent implements OnInit {
   // =====================================================
 
   decodeToken() {
-
-    const token =
-      localStorage.getItem('token');
-
+    const token = localStorage.getItem('token');
     if (token) {
-
-      const decoded: any =
-        jwtDecode(token);
-
-      this.updatedBy =
-        decoded?.userId ||
-        decoded?.UserId ||
-        decoded?.id;
-
+      const decoded: any = jwtDecode(token);
+      this.updatedBy = decoded?.userId || decoded?.UserId || decoded?.id;
     }
-
   }
 
   // =====================================================
@@ -221,149 +144,104 @@ export class StockistMasterDashboardComponent implements OnInit {
   // =====================================================
 
   getAreaManagers() {
-
     this.stockistService
       .getAreamanagerlist(this.agencyId)
       .subscribe({
-
         next: (res: any) => {
-
-          this.areaManagerList =
-            res?.data || res || [];
-
+          this.areaManagerList = res?.data || res || [];
         },
-
         error: (err: any) => {
-
           console.log(err);
-
         }
-
       });
-
   }
 
-loadStockistDashboardSummary() {
-
+  loadStockistDashboardSummary() {
     this.stockistService
       .getstockistdashboarddetails(this.agencyId)
       .subscribe({
-
         next: (res: any) => {
-
-          this.totalStockists =
-            res.data.totalStockists || 0;
-
-          this.activeStockists =
-            res.data.activeStockists || 0;
-
-          this.inactivestockist =
-            res.data.inactiveStockists || 0;
-
-          this.newstockist =
-            res.data.newStockistsThisMonth || 0;
-
+          this.totalStockists = res?.data?.totalStockists || 0;
+          this.activeStockists = res?.data?.activeStockists || 0;
+          this.inactivestockist = res?.data?.inactiveStockists || 0;
+          this.newstockist = res?.data?.newStockistsThisMonth || 0;
         },
-
         error: (err: any) => {
-
           console.log(err);
-
         }
-
       });
-
   }
-
 
   // =====================================================
   // GET STOCKISTS
   // =====================================================
 
   getStockists() {
-
     const params = {
-
       AgencyId: this.agencyId,
-
       Search: this.searchText,
-
       FirmType: this.filterType,
-
       IsActive: this.filterStatus,
-
       PageNumber: this.pageNumber,
-
       PageSize: this.pageSize
-
     };
 
     this.stockistService
       .getstockistdetails(params)
       .subscribe({
-
         next: (res: any) => {
-
-          this.stockists =
-            res?.data?.data || [];
-
-          this.totalPages = Math.ceil(
-            this.totalStockists /
-            this.pageSize
-          );
-
+          this.stockists = res?.data?.data || [];
+          this.totalPages = Math.ceil(this.totalStockists / this.pageSize) || 1;
         },
-
         error: (err: any) => {
-
           console.log(err);
-
         }
-
       });
-
   }
 
   // =====================================================
-  // FILTER
+  // FILTER & PAGINATION
   // =====================================================
 
   applyFilter() {
-
     this.pageNumber = 1;
-
     this.getStockists();
-
   }
 
-  // =====================================================
-  // PAGINATION
-  // =====================================================
-
   nextPage() {
-
-    if (
-      this.pageNumber < this.totalPages
-    ) {
-
+    if (this.pageNumber < this.totalPages) {
       this.pageNumber++;
-
       this.getStockists();
-
     }
-
   }
 
   previousPage() {
-
     if (this.pageNumber > 1) {
-
       this.pageNumber--;
-
       this.getStockists();
-
     }
+  }
 
+  // =====================================================
+  // FILE UPLOAD HANDLERS
+  // =====================================================
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImageFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage() {
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = null;
   }
 
   // =====================================================
@@ -371,51 +249,30 @@ loadStockistDashboardSummary() {
   // =====================================================
 
   editStockist(stockist: any) {
-
-    this.selectedStockistId =
-      stockist.stockistId;
-
+    this.selectedStockistId = stockist.stockistId;
     this.showEditModal = true;
 
+    // Reset file uploads
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = stockist.drugLicenseImage || stockist.imageUrl || stockist.drugLicensePhoto || null;
+
     this.stockistForm.patchValue({
-
       name: stockist.name,
-
       firmType: stockist.firmType,
-
-      contactPerson:
-        stockist.contactPerson,
-
+      contactPerson: stockist.contactPerson,
       mobile: stockist.mobile,
-
       email: stockist.email,
-
       address: stockist.address,
-
       city: stockist.city,
-
       state: stockist.state,
-
       pincode: stockist.pincode,
-
       gstNo: stockist.gstNo,
-
-      drugLicenseNo:
-        stockist.drugLicenseNo,
-
+      drugLicenseNo: stockist.drugLicenseNo,
       region: stockist.region,
-
-      assignedAreaManager:
-        stockist.assignedAreaManager,
-
-      coverArea:
-        stockist.coverArea,
-
-      isActive:
-        stockist.isActive
-
+      assignedAreaManager: stockist.assignedAreaManager,
+      coverArea: stockist.coverArea,
+      isActive: stockist.isActive
     });
-
   }
 
   // =====================================================
@@ -423,13 +280,11 @@ loadStockistDashboardSummary() {
   // =====================================================
 
   closeModal() {
-
     this.showEditModal = false;
-
     this.stockistForm.reset();
-
     this.submitted = false;
-
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = null;
   }
 
   // =====================================================
@@ -437,88 +292,45 @@ loadStockistDashboardSummary() {
   // =====================================================
 
   updateStockist() {
-
     this.submitted = true;
 
     if (this.stockistForm.invalid) {
-
       this.stockistForm.markAllAsTouched();
-
       Swal.fire({
         icon: 'warning',
         title: 'Validation Error',
         text: 'Please fill all required fields correctly.',
         confirmButtonColor: '#f59e0b'
       });
-
       return;
-
     }
 
-    const payload = {
-
-      stockistId:
-        this.selectedStockistId,
-
-      agencyId:
-        Number(this.agencyId),
-
-      name:
-        this.stockistForm.value.name,
-
-      firmType:
-        this.stockistForm.value.firmType,
-
-      contactPerson:
-        this.stockistForm.value.contactPerson,
-
-      mobile:
-        this.stockistForm.value.mobile,
-
-      email:
-        this.stockistForm.value.email,
-
-      address:
-        this.stockistForm.value.address,
-
-      city:
-        this.stockistForm.value.city,
-
-      state:
-        this.stockistForm.value.state,
-
-      pincode:
-        this.stockistForm.value.pincode,
-
-      gstNo:
-        this.stockistForm.value.gstNo,
-
-      drugLicenseNo:
-        this.stockistForm.value.drugLicenseNo,
-
-      region:
-        this.stockistForm.value.region,
-
-      assignedAreaManager:
-        Number(
-          this.stockistForm.value.assignedAreaManager
-        ),
-
-      coverArea:
-        this.stockistForm.value.coverArea,
-
-      isActive:
-        this.stockistForm.value.isActive,
-
-      updatedBy:
-        this.updatedBy
-
+    const payload: any = {
+      stockistId: this.selectedStockistId,
+      agencyId: Number(this.agencyId),
+      name: this.stockistForm.value.name,
+      firmType: this.stockistForm.value.firmType,
+      contactPerson: this.stockistForm.value.contactPerson,
+      mobile: this.stockistForm.value.mobile,
+      email: this.stockistForm.value.email,
+      address: this.stockistForm.value.address,
+      city: this.stockistForm.value.city,
+      state: this.stockistForm.value.state,
+      pincode: this.stockistForm.value.pincode,
+      gstNo: this.stockistForm.value.gstNo,
+      drugLicenseNo: this.stockistForm.value.drugLicenseNo,
+      region: this.stockistForm.value.region,
+      assignedAreaManager: Number(this.stockistForm.value.assignedAreaManager),
+      coverArea: this.stockistForm.value.coverArea,
+      isActive: this.stockistForm.value.isActive,
+      updatedBy: this.updatedBy,
+      // Attached image data string if Base64 format is used by backend
+      drugLicenseImage: this.imagePreviewUrl ? String(this.imagePreviewUrl) : ''
     };
 
     this.stockistService
       .updatestockistdetails(payload)
       .subscribe({
-
         next: (res: any) => {
           Swal.fire({
             icon: 'success',
@@ -528,30 +340,24 @@ loadStockistDashboardSummary() {
           });
 
           this.closeModal();
-
           this.getStockists();
           this.loadStockistDashboardSummary();
-
         },
-
         error: (err: any) => {
-
           console.log(err);
-
           Swal.fire({
             icon: 'error',
             title: 'Update Failed',
-            text:
-              err?.error?.message ||
-              'Something went wrong',
+            text: err?.error?.message || 'Something went wrong',
             confirmButtonColor: '#dc2626'
           });
-
         }
-
       });
-
   }
+
+  // =====================================================
+  // RESET PASSWORD & DELETE
+  // =====================================================
 
   reset_password(data: any): void {
     Swal.fire({
@@ -563,11 +369,9 @@ loadStockistDashboardSummary() {
       cancelButtonText: 'Cancel',
       confirmButtonColor: '#2563eb'
     }).then((result) => {
-
       if (result.isConfirmed) {
-
         const payload = {
-          userId: data.userId, // change if your API expects another field
+          userId: data.userId,
           updatedBy: this.updatedBy
         };
 
@@ -583,20 +387,15 @@ loadStockistDashboardSummary() {
             Swal.fire({
               icon: 'error',
               title: 'Failed',
-              text:
-                err?.error?.message ||
-                'Unable to reset password. Please try again.'
+              text: err?.error?.message || 'Unable to reset password. Please try again.'
             });
           }
         });
-
       }
-
     });
   }
 
   deleteStockist(stockist: any) {
-
     Swal.fire({
       title: 'Delete Stockist?',
       text: `Are you sure you want to delete ${stockist.name}?`,
@@ -607,50 +406,27 @@ loadStockistDashboardSummary() {
       confirmButtonColor: '#dc2626',
       cancelButtonColor: '#6b7280'
     }).then((result) => {
-
-      if (!result.isConfirmed) {
-        return;
-      }
+      if (!result.isConfirmed) return;
 
       const payload = {
-
         stockistId: stockist.stockistId,
-
         agencyId: Number(this.agencyId),
-
         name: stockist.name,
-
         firmType: stockist.firmType,
-
         contactPerson: stockist.contactPerson,
-
         mobile: stockist.mobile,
-
         email: stockist.email,
-
         address: stockist.address,
-
         city: stockist.city,
-
         state: stockist.state,
-
         pincode: stockist.pincode,
-
         gstNo: stockist.gstNo,
-
         drugLicenseNo: stockist.drugLicenseNo,
-
         region: stockist.region,
-
-        assignedAreaManager:
-          Number(stockist.assignedAreaManager),
-
+        assignedAreaManager: Number(stockist.assignedAreaManager),
         coverArea: stockist.coverArea,
-
         isActive: false,
-
         updatedBy: this.updatedBy
-
       };
 
       Swal.fire({
@@ -666,9 +442,7 @@ loadStockistDashboardSummary() {
       this.stockistService
         .updatestockistdetails(payload)
         .subscribe({
-
           next: (res: any) => {
-
             Swal.fire({
               icon: 'success',
               title: 'Deleted',
@@ -679,26 +453,17 @@ loadStockistDashboardSummary() {
             this.getStockists();
             this.loadStockistDashboardSummary();
           },
-
           error: (err: any) => {
-
             console.log(err);
-
             Swal.fire({
               icon: 'error',
               title: 'Delete Failed',
-              text:
-                err?.error?.message ||
-                'Something went wrong',
+              text: err?.error?.message || 'Something went wrong',
               confirmButtonColor: '#dc2626'
             });
-
           }
-
         });
-
     });
-
   }
 
   // =====================================================
@@ -706,9 +471,6 @@ loadStockistDashboardSummary() {
   // =====================================================
 
   get f() {
-
     return this.stockistForm.controls;
-
   }
-
 }

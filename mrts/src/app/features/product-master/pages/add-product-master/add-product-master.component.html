@@ -20,7 +20,7 @@
         <lucide-icon [img]="Package"></lucide-icon>
         Basic Information
       </h2>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <!-- PRODUCT NAME -->
         <div>
           <input class="input" placeholder="Product Name" formControlName="name" />
@@ -95,15 +95,16 @@
       </div>
     </div>
 
-    <!-- 🟩 PRICING -->
+    <!-- 🟩 PRICING, TAX & DISCOUNT -->
     <div class="card">
       <h2 class="section-title">
         <lucide-icon [img]="DollarSign"></lucide-icon>
-        Pricing Details
+        Pricing, Tax & Discount Details
       </h2>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <!-- MRP -->
         <div>
+          <label class="mb-1 block text-sm font-medium text-gray-600">MRP</label>
           <input type="number" class="input" placeholder="MRP" formControlName="mrp" />
           <p *ngIf="submitted && f['mrp'].errors?.['required']" class="mt-1 text-sm text-red-500">
             MRP is required
@@ -112,6 +113,7 @@
 
         <!-- PTR -->
         <div>
+          <label class="mb-1 block text-sm font-medium text-gray-600">PTR</label>
           <input type="number" class="input" placeholder="PTR" formControlName="ptr" />
           <p *ngIf="submitted && f['ptr'].errors?.['required']" class="mt-1 text-sm text-red-500">
             PTR is required
@@ -120,10 +122,39 @@
 
         <!-- PTS -->
         <div>
+          <label class="mb-1 block text-sm font-medium text-gray-600">PTS</label>
           <input type="number" class="input" placeholder="PTS" formControlName="pts" />
           <p *ngIf="submitted && f['pts'].errors?.['required']" class="mt-1 text-sm text-red-500">
             PTS is required
           </p>
+        </div>
+
+        <!-- TAX PERCENT -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-gray-600">Tax (%)</label>
+          <input type="number" class="input" placeholder="Tax % (e.g. 18)" formControlName="taxPercent" min="0" max="100" />
+          <ng-container *ngIf="submitted && f['taxPercent']?.invalid">
+            <p *ngIf="f['taxPercent']?.errors?.['required']" class="mt-1 text-sm text-red-500">
+              Tax Percent is required
+            </p>
+            <p *ngIf="f['taxPercent']?.errors?.['min'] || f['taxPercent']?.errors?.['max']" class="mt-1 text-sm text-red-500">
+              Tax Percent must be between 0 and 100
+            </p>
+          </ng-container>
+        </div>
+
+        <!-- DISCOUNT PERCENT -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-gray-600">Discount (%)</label>
+          <input type="number" class="input" placeholder="Discount % (e.g. 10)" formControlName="discountPercent" min="0" max="100" />
+          <ng-container *ngIf="submitted && f['discountPercent']?.invalid">
+            <p *ngIf="f['discountPercent']?.errors?.['required']" class="mt-1 text-sm text-red-500">
+              Discount Percent is required
+            </p>
+            <p *ngIf="f['discountPercent']?.errors?.['min'] || f['discountPercent']?.errors?.['max']" class="mt-1 text-sm text-red-500">
+              Discount Percent must be between 0 and 100
+            </p>
+          </ng-container>
         </div>
       </div>
     </div>

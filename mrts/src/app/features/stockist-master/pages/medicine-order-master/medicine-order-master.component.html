@@ -2,348 +2,258 @@
 
   <!-- HEADER -->
   <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
-
     <div>
-      <h1 class="text-2xl font-bold flex items-center gap-2">
+      <h1 class="text-2xl font-bold flex items-center gap-2 text-gray-800">
         <lucide-icon [img]="Package"></lucide-icon>
         Medicine Order Portal
       </h1>
-
       <p class="text-sm text-gray-500">
         Create and manage stock orders efficiently
       </p>
     </div>
 
-    <div class="bg-white px-4 py-2 rounded-xl shadow">
-      <p class="text-sm text-gray-500">Cart Items</p>
-      <p class="font-bold text-lg">
-        {{ totalItems }}
-      </p>
+    <div class="bg-white px-4 py-2 rounded-xl shadow flex items-center gap-3">
+      <div>
+        <p class="text-xs text-gray-500 font-medium">Cart Summary</p>
+        <p class="font-bold text-base text-gray-800">
+          {{ totalItems }} Items | ₹{{ totalAmount | number:'1.2-2' }}
+        </p>
+      </div>
     </div>
-
   </div>
 
   <!-- FILTER SECTION -->
-  <div
-    class="bg-white rounded-xl shadow p-4 mb-6"
-    [formGroup]="filterForm">
-
+  <div class="bg-white rounded-xl shadow p-4 mb-6" [formGroup]="filterForm">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-
       <input
         type="text"
         formControlName="name"
+        (keyup.enter)="applyFilters()"
         placeholder="Medicine Name"
-        class="border rounded-lg px-3 py-2 w-full">
+        class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
 
       <input
         type="text"
         formControlName="brandName"
+        (keyup.enter)="applyFilters()"
         placeholder="Brand Name"
-        class="border rounded-lg px-3 py-2 w-full">
+        class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
 
       <input
         type="text"
         formControlName="category"
+        (keyup.enter)="applyFilters()"
         placeholder="Category"
-        class="border rounded-lg px-3 py-2 w-full">
+        class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
 
       <button
+        type="button"
         (click)="applyFilters()"
-        class="bg-blue-600 text-white rounded-lg py-2 px-4">
-
+        class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg py-2 px-4 transition">
         Search
-
       </button>
 
       <button
+        type="button"
         (click)="resetFilters()"
-        class="bg-gray-200 rounded-lg py-2 px-4">
-
+        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg py-2 px-4 transition">
         Reset
-
       </button>
-
     </div>
-
   </div>
 
   <!-- MAIN CONTENT -->
   <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
 
-    <!-- PRODUCTS -->
+    <!-- PRODUCTS GRID -->
     <div class="xl:col-span-3">
 
-      <div
-        *ngIf="isLoading"
-        class="text-center py-10">
-
-        Loading products...
-
+      <!-- LOADING STATE -->
+      <div *ngIf="isLoading" class="text-center py-16 bg-white rounded-xl shadow">
+        <p class="text-gray-500 font-medium text-lg">Loading products...</p>
       </div>
 
-      <div
-        *ngIf="!isLoading"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-
+      <!-- PRODUCTS CONTENT -->
+      <div *ngIf="!isLoading && products.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <div
           *ngFor="let product of products"
           class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
 
           <!-- IMAGE -->
           <img
-            [src]="product.imageUrl"
+            [src]="product.imageUrl || 'assets/placeholder.png'"
             [alt]="product.name"
-            class="h-48 w-full object-cover">
+            class="h-48 w-full object-cover bg-gray-50">
 
           <!-- BODY -->
           <div class="p-4 flex flex-col flex-1">
-
-            <h3 class="font-bold text-lg">
+            <h3 class="font-bold text-lg text-gray-800 line-clamp-1" [title]="product.name">
               {{ product.name }}
             </h3>
 
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-500 font-medium mb-2">
               {{ product.brandName }}
             </p>
 
-            <div class="mt-3 space-y-1 text-sm">
-
-              <p>
-                <span class="font-medium">Category:</span>
-                {{ product.category }}
-              </p>
-
-              <p>
-                <span class="font-medium">Dosage:</span>
-                {{ product.dosageForm }}
-              </p>
-
-              <p>
-                <span class="font-medium">Strength:</span>
-                {{ product.strength }}
-              </p>
-
-              <p>
-                <span class="font-medium">Pack:</span>
-                {{ product.packSize }}
-              </p>
-
+            <div class="mt-1 space-y-1 text-sm text-gray-600">
+              <p><span class="font-semibold text-gray-700">Category:</span> {{ product.category }}</p>
+              <p><span class="font-semibold text-gray-700">Dosage:</span> {{ product.dosageForm }}</p>
+              <p><span class="font-semibold text-gray-700">Strength:</span> {{ product.strength }}</p>
+              <p><span class="font-semibold text-gray-700">Pack:</span> {{ product.packSize }}</p>
             </div>
 
             <!-- PRICE SECTION -->
-            <div class="grid grid-cols-3 gap-2 mt-4">
-
-              <div class="bg-gray-50 p-2 rounded-lg text-center">
-
-                <p class="text-xs text-gray-500">MRP</p>
-
-                <p class="font-bold text-red-600">
-                  ₹{{ product.mrp }}
-                </p>
-
+            <div class="grid grid-cols-1 gap-2 mt-4">
+              <div class="bg-gray-50 p-2 rounded-lg text-center border">
+                <p class="text-xs text-gray-500 font-medium">MRP</p>
+                <p class="font-bold text-red-600">₹{{ product.mrp | number:'1.2-2' }}</p>
               </div>
-
-
             </div>
 
-            <!-- QTY -->
-            <div class="mt-4 flex gap-2">
-
+            <!-- QUANTITY AND ADD TO CART -->
+            <div class="mt-4 flex gap-2 pt-2 border-t">
               <input
                 type="number"
                 min="1"
                 [(ngModel)]="product.orderQty"
-                class="border rounded-lg px-3 py-2 w-24">
+                class="border border-gray-300 rounded-lg px-3 py-2 w-20 text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
 
               <button
+                type="button"
                 (click)="addToCart(product)"
-                class="flex-1 bg-blue-600 text-white rounded-lg px-4 py-2 flex items-center justify-center gap-2">
-
-                <lucide-icon [img]="ShoppingCart"></lucide-icon>
-
+                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-3 py-2 flex items-center justify-center gap-2 transition">
+                <lucide-icon [img]="ShoppingCart" class="w-4 h-4"></lucide-icon>
                 Add To Cart
-
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
 
-      <!-- NO DATA -->
-      <div
-        *ngIf="!isLoading && products.length === 0"
-        class="bg-white rounded-xl p-10 text-center text-gray-500">
-
-        No products found
-
+      <!-- NO DATA STATE -->
+      <div *ngIf="!isLoading && products.length === 0" class="bg-white rounded-xl p-12 text-center text-gray-500 shadow">
+        No products found matching your search criteria.
       </div>
 
       <!-- PAGINATION -->
-      <div
-        class="bg-white rounded-xl shadow mt-6 p-4 flex items-center justify-between">
-
+      <div *ngIf="!isLoading && totalPages > 0" class="bg-white rounded-xl shadow mt-6 p-4 flex items-center justify-between">
         <button
+          type="button"
           (click)="previousPage()"
           [disabled]="pageNumber === 1"
-          class="px-4 py-2 border rounded-lg disabled:opacity-50 flex items-center gap-2">
-
+          class="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50 flex items-center gap-2 font-medium transition">
           <lucide-icon [img]="ChevronLeft"></lucide-icon>
-
           Previous
-
         </button>
 
-        <div class="font-medium">
-
+        <div class="font-medium text-gray-700">
           Page {{ pageNumber }} of {{ totalPages }}
-
         </div>
 
         <button
+          type="button"
           (click)="nextPage()"
           [disabled]="pageNumber === totalPages"
-          class="px-4 py-2 border rounded-lg disabled:opacity-50 flex items-center gap-2">
-
+          class="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50 flex items-center gap-2 font-medium transition">
           Next
-
           <lucide-icon [img]="ChevronRight"></lucide-icon>
-
         </button>
-
       </div>
 
     </div>
 
-    <!-- CART -->
+    <!-- CART SIDEBAR -->
     <div>
-
-      <div class="bg-white rounded-2xl shadow sticky top-4">
-
-        <div class="p-4 border-b">
-
-          <h2 class="text-lg font-bold flex items-center gap-2">
-
+      <div class="bg-white rounded-2xl shadow sticky top-4 overflow-hidden border">
+        <div class="p-4 border-b bg-gray-50 flex items-center justify-between">
+          <h2 class="text-lg font-bold flex items-center gap-2 text-gray-800">
             <lucide-icon [img]="ShoppingCart"></lucide-icon>
-
             Order Cart
-
           </h2>
-
+          <span class="text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold">
+            {{ cartItems.length }} Types
+          </span>
         </div>
 
-        <!-- CART ITEMS -->
-        <div
-          class="max-h-[450px] overflow-y-auto">
-
-          <div
-            *ngFor="let item of cartItems"
-            class="p-4 border-b">
-
-            <div class="flex gap-3">
-
+ <!-- CART ITEMS LIST -->
+        <div class="max-h-[400px] overflow-y-auto divide-y">
+          <div *ngFor="let item of cartItems" class="p-4 hover:bg-gray-50 transition">
+            <div class="flex gap-3 items-center">
               <img
-                [src]="item.imageUrl"
-                class="w-14 h-14 rounded-lg object-cover">
+                [src]="item.imageUrl || 'assets/placeholder.png'"
+                [alt]="item.productName"
+                class="w-12 h-12 rounded-lg object-cover bg-gray-100 border flex-shrink-0">
 
-              <div class="flex-1">
-
-                <h4 class="font-medium">
+              <div class="flex-1 min-w-0">
+                <h4 class="font-semibold text-sm text-gray-800 truncate" [title]="item.productName">
                   {{ item.productName }}
                 </h4>
 
-                <p class="text-sm text-gray-500">
-                  Qty : {{ item.quantity }}
+                <p class="text-xs text-gray-500 mt-0.5">
+                  Qty: <span class="font-medium text-gray-700">{{ item.quantity }}</span>
                 </p>
 
-                <p class="text-sm font-semibold text-green-600">
-                  ₹{{ item.mrp }}
+                <!-- Line Item Total Display (e.g., 3 × ₹50.00 = ₹150.00) -->
+                <p class="text-sm font-semibold text-green-600 mt-0.5">
+                  {{ item.quantity }} × ₹{{ item.mrp | number:'1.2-2' }} = ₹{{ (item.quantity * item.mrp) | number:'1.2-2' }}
                 </p>
-
               </div>
 
               <button
+                type="button"
                 (click)="removeFromCart(item)"
-                class="text-red-600">
-
-                <lucide-icon [img]="Trash2"></lucide-icon>
-
+                class="text-red-500 hover:text-red-700 p-1 rounded transition"
+                title="Remove Item">
+                <lucide-icon [img]="Trash2" class="w-5 h-5"></lucide-icon>
               </button>
-
             </div>
-
           </div>
 
-          <div
-            *ngIf="cartItems.length === 0"
-            class="p-6 text-center text-gray-500">
-
+          <div *ngIf="cartItems.length === 0" class="p-8 text-center text-gray-400">
             Cart is empty
-
           </div>
-
         </div>
 
-        <!-- SUMMARY -->
-        <div class="p-4 border-t">
-
-          <div class="flex justify-between mb-2">
-
+        <!-- SUMMARY & ACTIONS -->
+        <div class="p-4 border-t bg-gray-50">
+          <div class="flex justify-between mb-2 text-sm text-gray-600">
             <span>Total Items</span>
-
-            <span class="font-semibold">
-              {{ totalItems }}
-            </span>
-
+            <span class="font-semibold text-gray-800">{{ totalItems }}</span>
           </div>
 
-          <div class="flex justify-between text-lg font-bold mb-4">
-
+          <div class="flex justify-between text-base font-bold mb-4 text-gray-800 pt-2 border-t">
             <span>Total Amount</span>
-
-            <span class="text-green-600">
-              ₹{{ totalAmount }}
-            </span>
-
+            <span class="text-green-600">₹{{ totalAmount | number:'1.2-2' }}</span>
           </div>
 
           <textarea
             [(ngModel)]="remarks"
-            rows="3"
-            placeholder="Remarks..."
-            class="w-full border rounded-lg px-3 py-2 mb-4"></textarea>
+            rows="2"
+            placeholder="Order remarks (optional)..."
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </textarea>
 
           <div class="flex gap-2">
-
             <button
+              type="button"
               (click)="clearCart()"
-              class="flex-1 bg-gray-200 py-2 rounded-lg">
-
+              [disabled]="cartItems.length === 0"
+              class="flex-1 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 text-gray-700 font-medium py-2 rounded-lg transition">
               Clear
-
             </button>
 
             <button
+              type="button"
               (click)="placeOrder()"
               [disabled]="cartItems.length === 0"
-              class="flex-1 bg-green-600 text-white py-2 rounded-lg disabled:opacity-50">
-
+              class="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg disabled:opacity-50 transition">
               Place Order
-
             </button>
-
           </div>
-
         </div>
 
       </div>
-
     </div>
 
   </div>
-
 </div>

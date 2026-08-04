@@ -11,7 +11,8 @@ import {
   TrendingUp,
   CheckCircle,
   Save,
-  Boxes
+  Boxes,
+  Percent
 } from 'lucide-angular';
 
 import {
@@ -48,6 +49,8 @@ export class AddProductMasterComponent implements OnInit {
   CheckCircle = CheckCircle;
   Save = Save;
   Boxes = Boxes;
+  Percent = Percent;
+
   // =========================================================
   // 🔷 VARIABLES
   // =========================================================
@@ -56,8 +59,7 @@ export class AddProductMasterComponent implements OnInit {
 
   submitted = false;
 
-  agencyId: any =
-    localStorage.getItem('aid');
+  agencyId: any = localStorage.getItem('aid');
 
   createdBy: any;
 
@@ -80,11 +82,8 @@ export class AddProductMasterComponent implements OnInit {
   // =========================================================
 
   ngOnInit(): void {
-
     this.getUserIdFromToken();
-
     this.initializeForm();
-
   }
 
   // =========================================================
@@ -92,101 +91,38 @@ export class AddProductMasterComponent implements OnInit {
   // =========================================================
 
   initializeForm() {
-
     this.productForm = this.fb.group({
-
       agencyId: [this.agencyId],
 
-      name: [
-        '',
-        Validators.required
-      ],
+      name: ['', Validators.required],
+      brandName: ['', Validators.required],
+      genericName: ['', Validators.required],
+      category: ['', Validators.required],
+      dosageForm: ['', Validators.required],
+      strength: ['', Validators.required],
 
-      brandName: [
-        '',
-        Validators.required
-      ],
+      mrp: ['', Validators.required],
+      ptr: ['', Validators.required],
+      pts: ['', Validators.required],
 
-      genericName: [
-        '',
-        Validators.required
-      ],
+      // Tax & Discount Controls
+      taxPercent: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      discountPercent: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
 
-      category: [
-        '',
-        Validators.required
-      ],
+      packSize: ['', Validators.required],
+      unitsPerBox: ['', Validators.required],
+      launchDate: ['', Validators.required],
+      division: ['', Validators.required],
+      manufacturingLicenseNumber: ['', Validators.required],
+      approvalDate: ['', Validators.required],
 
-      dosageForm: [
-        '',
-        Validators.required
-      ],
-
-      strength: [
-        '',
-        Validators.required
-      ],
-
-      mrp: [
-        '',
-        Validators.required
-      ],
-
-      ptr: [
-        '',
-        Validators.required
-      ],
-
-      pts: [
-        '',
-        Validators.required
-      ],
-
-      packSize: [
-        '',
-        Validators.required
-      ],
-
-      unitsPerBox: [
-        '',
-        Validators.required
-      ],
-
-      launchDate: [
-        '',
-        Validators.required
-      ],
-
-      division: [
-        '',
-        Validators.required
-      ],
-
-      manufacturingLicenseNumber: [
-        '',
-        Validators.required
-      ],
-
-      approvalDate: [
-        '',
-        Validators.required
-      ],
-
-      promotionPriority: [
-        1,
-        Validators.required
-      ],
-
+      promotionPriority: [1, Validators.required],
       quantity: [0, [Validators.required, Validators.min(0)]],
 
       createdBy: [0],
-
       imageUrl: [''],
-
       imageFile: [null]
-
     });
-
   }
 
   // =========================================================
@@ -194,22 +130,16 @@ export class AddProductMasterComponent implements OnInit {
   // =========================================================
 
   getUserIdFromToken() {
-
-    const token =
-      localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
     if (token) {
-
-      const decodedToken: any =
-        jwtDecode(token);
+      const decodedToken: any = jwtDecode(token);
 
       this.createdBy =
         decodedToken?.userId ||
         decodedToken?.UserId ||
         decodedToken?.id;
-
     }
-
   }
 
   // =========================================================
@@ -217,11 +147,9 @@ export class AddProductMasterComponent implements OnInit {
   // =========================================================
 
   onImageChange(event: any) {
-
     const file = event.target.files[0];
 
     if (file) {
-
       this.selectedImage = file;
 
       this.productForm.patchValue({
@@ -231,203 +159,98 @@ export class AddProductMasterComponent implements OnInit {
       const reader = new FileReader();
 
       reader.onload = () => {
-
         this.imagePreview = reader.result;
-
       };
 
       reader.readAsDataURL(file);
-
     }
-
   }
 
   // =========================================================
   // 🔷 SAVE PRODUCT
   // =========================================================
+saveProduct() {
+  this.submitted = true;
 
-  saveProduct() {
+  if (this.productForm.invalid) {
+    this.productForm.markAllAsTouched();
 
-    this.submitted = true;
+    Swal.fire({
+      icon: 'warning',
+      title: 'Validation Error',
+      text: 'Please fill all required fields correctly.',
+      confirmButtonColor: '#f59e0b'
+    });
 
-    if (this.productForm.invalid) {
+    return;
+  }
 
-      this.productForm.markAllAsTouched();
+  const formValue = this.productForm.value;
+  const formData = new FormData();
+
+  formData.append('AgencyId', this.agencyId);
+  formData.append('Name', formValue.name);
+  formData.append('BrandName', formValue.brandName);
+  formData.append('GenericName', formValue.genericName);
+  formData.append('Category', formValue.category);
+  formData.append('DosageForm', formValue.dosageForm);
+  formData.append('Strength', formValue.strength);
+
+  formData.append('Mrp', formValue.mrp);
+  formData.append('Ptr', formValue.ptr);
+  formData.append('Pts', formValue.pts);
+
+  formData.append('TaxPercent', formValue.taxPercent ?? 0);
+  formData.append('DiscountPercent', formValue.discountPercent ?? 0);
+
+  formData.append('PackSize', formValue.packSize);
+  formData.append('UnitsPerBox', formValue.unitsPerBox);
+  formData.append('LaunchDate', formValue.launchDate);
+  formData.append('Division', formValue.division);
+  formData.append('ManufacturingLicenseNumber', formValue.manufacturingLicenseNumber);
+  formData.append('ApprovalDate', formValue.approvalDate);
+  formData.append('Quantity', formValue.quantity);
+  formData.append('PromotionPriority', formValue.promotionPriority);
+  formData.append('CreatedBy', this.createdBy);
+
+  // FIX: Backend requires ImageUrl to not be empty.
+  // Passing a fallback value or the existing image path string prevents the 400 Bad Request validation error.
+  formData.append('ImageUrl', formValue.imageUrl?.trim() || 'N/A');
+
+  if (this.selectedImage) {
+    formData.append('imageFile', this.selectedImage);
+  }
+
+  this.productService.addproduct(formData).subscribe({
+    next: (res: any) => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Product Added Successfully',
+        confirmButtonColor: '#16a34a'
+      }).then(() => {
+        this.router.navigate(['/product-master/product-master-dashboard']);
+      });
+    },
+    error: (err: any) => {
+      console.log(err);
 
       Swal.fire({
-        icon: 'warning',
-        title: 'Validation Error',
-        text: 'Please fill all required fields correctly.',
-        confirmButtonColor: '#f59e0b'
+        icon: 'error',
+        title: 'Failed',
+        text: err?.error?.message || 'Something went wrong',
+        confirmButtonColor: '#dc2626'
       });
-
-      return;
-
     }
-
-    const formValue =
-      this.productForm.value;
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      'AgencyId',
-      this.agencyId
-    );
-
-    formData.append(
-      'Name',
-      formValue.name
-    );
-
-    formData.append(
-      'BrandName',
-      formValue.brandName
-    );
-
-    formData.append(
-      'GenericName',
-      formValue.genericName
-    );
-
-    formData.append(
-      'Category',
-      formValue.category
-    );
-
-    formData.append(
-      'DosageForm',
-      formValue.dosageForm
-    );
-
-    formData.append(
-      'Strength',
-      formValue.strength
-    );
-
-    formData.append(
-      'Mrp',
-      formValue.mrp
-    );
-
-    formData.append(
-      'Ptr',
-      formValue.ptr
-    );
-
-    formData.append(
-      'Pts',
-      formValue.pts
-    );
-
-    formData.append(
-      'PackSize',
-      formValue.packSize
-    );
-
-    formData.append(
-      'UnitsPerBox',
-      formValue.unitsPerBox
-    );
-
-    formData.append(
-      'LaunchDate',
-      formValue.launchDate
-    );
-
-    formData.append(
-      'Division',
-      formValue.division
-    );
-
-    formData.append(
-      'ManufacturingLicenseNumber',
-      formValue.manufacturingLicenseNumber
-    );
-
-    formData.append(
-      'ApprovalDate',
-      formValue.approvalDate
-    );
-
-    formData.append(
-  'Quantity',
-  formValue.quantity
-);
-
-    formData.append(
-      'PromotionPriority',
-      formValue.promotionPriority
-    );
-
-    formData.append(
-      'CreatedBy',
-      this.createdBy
-    );
-
-    formData.append(
-      'ImageUrl',
-      ''
-    );
-
-    if (this.selectedImage) {
-
-      formData.append(
-        'imageFile',
-        this.selectedImage
-      );
-
-    }
-
-    this.productService
-      .addproduct(formData)
-      .subscribe({
-
-        next: (res: any) => {
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Product Added Successfully',
-            confirmButtonColor: '#16a34a'
-          }).then(() => {
-
-            this.router.navigate([
-              '/product-master/product-master-dashboard'
-            ]);
-
-          });
-
-        },
-
-        error: (err: any) => {
-
-          console.log(err);
-
-          Swal.fire({
-            icon: 'error',
-            title: 'Failed',
-            text:
-              err?.error?.message ||
-              'Something went wrong',
-            confirmButtonColor: '#dc2626'
-          });
-
-        }
-
-      });
-
-  }
+  });
+}
 
   // =========================================================
   // 🔷 FORM CONTROLS
   // =========================================================
 
   get f() {
-
     return this.productForm.controls;
-
   }
 
 }

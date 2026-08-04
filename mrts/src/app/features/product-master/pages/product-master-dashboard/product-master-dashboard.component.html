@@ -140,6 +140,8 @@
             <th class="px-6 py-4">MRP</th>
             <th class="px-6 py-4">PTR</th>
             <th class="px-6 py-4">PTS</th>
+            <th class="px-6 py-4">Tax (%)</th>
+            <th class="px-6 py-4">Discount (%)</th>
             <th class="px-6 py-4">Status</th>
             <th class="px-6 py-4 text-center">Actions</th>
           </tr>
@@ -171,6 +173,12 @@
             </td>
             <td class="whitespace-nowrap px-6 py-4 text-slate-600">
               ₹{{ item.pts }}
+            </td>
+            <td class="whitespace-nowrap px-6 py-4 text-slate-600">
+              {{ item.taxPercent ?? item.tax ?? 0 }}%
+            </td>
+            <td class="whitespace-nowrap px-6 py-4 text-slate-600">
+              {{ item.discountPercent ?? item.discount ?? 0 }}%
             </td>
             <td class="px-6 py-4">
               <span 
@@ -292,7 +300,7 @@
           <p class="text-xs uppercase font-semibold text-slate-400">Division</p>
           <p class="font-medium text-slate-800">{{ selectedProduct?.division }}</p>
         </div>
-        <div class="col-span-2 grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-3 border border-slate-100 mt-2">
+        <div class="col-span-2 grid grid-cols-5 gap-2 rounded-xl bg-slate-50 p-3 border border-slate-100 mt-2">
           <div>
             <p class="text-xs text-slate-400 font-semibold">MRP</p>
             <p class="font-bold text-slate-900">₹{{ selectedProduct?.mrp }}</p>
@@ -304,6 +312,14 @@
           <div>
             <p class="text-xs text-slate-400 font-semibold">PTS</p>
             <p class="font-bold text-slate-900">₹{{ selectedProduct?.pts }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-semibold">Tax</p>
+            <p class="font-bold text-slate-900">{{ selectedProduct?.taxPercent ?? selectedProduct?.tax ?? 0 }}%</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-semibold">Discount</p>
+            <p class="font-bold text-slate-900">{{ selectedProduct?.discountPercent ?? selectedProduct?.discount ?? 0 }}%</p>
           </div>
         </div>
       </div>
@@ -375,6 +391,17 @@
           <input type="number" formControlName="pts" placeholder="PTS" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
         </div>
 
+        <!-- FIXED CONTROL NAMES BELOW -->
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Tax (%)</label>
+          <input type="number" formControlName="taxPercent" placeholder="Tax Rate (%)" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Discount (%)</label>
+          <input type="number" formControlName="discountPercent" placeholder="Discount (%)" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
         <div>
           <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Pack Size</label>
           <input type="text" formControlName="packSize" placeholder="Pack Size" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
@@ -423,31 +450,47 @@
 
       <!-- Image Management Section -->
       <div class="grid grid-cols-1 gap-4 border-t border-slate-100 pt-4 md:grid-cols-2">
-        <div>
-          <label class="mb-2 block text-xs font-semibold uppercase text-slate-500">Current Image</label>
-          <img 
-            *ngIf="selectedProduct?.imageUrl" 
-            [src]="selectedProduct?.imageUrl" 
-            class="h-28 w-28 rounded-xl border border-slate-200 object-cover"
-          >
+        <div class="current-image-container">
+          <label class="block text-sm font-medium text-gray-700 mb-1">CURRENT / PREVIEW IMAGE</label>
+          <div class="flex items-center justify-center border rounded-lg p-2 h-32 w-32 bg-gray-50">
+            <img 
+              *ngIf="imagePreviewUrl; else noImage" 
+              [src]="imagePreviewUrl" 
+              alt="Product Preview" 
+              class="max-h-full max-w-full object-contain rounded" 
+            />
+            <ng-template #noImage>
+              <span class="text-xs text-gray-400">No Image Available</span>
+            </ng-template>
+          </div>
         </div>
- <div class="form-group">
-  <label class="block text-sm font-medium text-gray-700 mb-1">UPLOAD NEW IMAGE</label>
-  <input 
-    type="file" 
-    accept="image/*" 
-    (change)="onFileChange($event)" 
-    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" 
-  />
 
-  <!-- 🔷 IMAGE PREVIEW CONTAINER -->
-  <div *ngIf="imagePreviewUrl" class="mt-3">
-    <p class="text-xs text-gray-500 mb-1">Preview:</p>
-    <img 
-      [src]="imagePreviewUrl" 
-      alt="Selected Product Image" 
-      class="h-32 w-32 object-cover rounded-lg border border-gray-300 shadow-sm" 
+<div class="grid grid-cols-1 gap-4 border-t border-slate-100 pt-4 md:grid-cols-2">
+  <!-- Upload Control -->
+  <div class="form-group">
+    <label class="block text-sm font-medium text-gray-700 mb-1">UPLOAD NEW IMAGE</label>
+    <input 
+      type="file" 
+      accept="image/*" 
+      (change)="onFileChange($event)" 
+      class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" 
     />
+  </div>
+
+  <!-- Dynamic Image Preview Container -->
+  <div class="current-image-container">
+    <label class="block text-sm font-medium text-gray-700 mb-1">IMAGE PREVIEW</label>
+    <div class="flex items-center justify-center border rounded-lg p-2 h-36 w-36 bg-gray-50 overflow-hidden">
+      <img 
+        *ngIf="imagePreviewUrl; else noImage" 
+        [src]="imagePreviewUrl" 
+        alt="Product Preview" 
+        class="max-h-full max-w-full object-contain rounded" 
+      />
+      <ng-template #noImage>
+        <span class="text-xs text-gray-400">No Image Selected</span>
+      </ng-template>
+    </div>
   </div>
 </div>
       </div>
