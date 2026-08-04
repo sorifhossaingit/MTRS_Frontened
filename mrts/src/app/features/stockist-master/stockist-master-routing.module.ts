@@ -6,6 +6,7 @@ import { OrderDetailsMasterComponent } from './pages/order-details-master/order-
 import { StockistProductDashboardComponent } from './pages/stockist-product-dashboard/stockist-product-dashboard.component';
 import { OrderMasterComponent } from './pages/order-master/order-master.component';
 import { MedicineOrderMasterComponent } from './pages/medicine-order-master/medicine-order-master.component';
+import { StockiestPersonalproductDashboardComponent } from './pages/stockiest-personalproduct-dashboard/stockiest-personalproduct-dashboard.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
       {
         path: 'stockist-product-dashboard',
         component: StockistProductDashboardComponent
+      },
+      {
+        path: 'stockiest-personal-product',
+        component: StockiestPersonalproductDashboardComponent
       },
       {
         path: 'order-master',

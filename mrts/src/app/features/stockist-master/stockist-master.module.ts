@@ -36,6 +36,7 @@ import { OrderDetailsMasterComponent } from './pages/order-details-master/order-
 import { StockistProductDashboardComponent } from './pages/stockist-product-dashboard/stockist-product-dashboard.component';
 import { OrderMasterComponent } from './pages/order-master/order-master.component';
 import { MedicineOrderMasterComponent } from './pages/medicine-order-master/medicine-order-master.component';
+import { StockiestPersonalproductDashboardComponent } from './pages/stockiest-personalproduct-dashboard/stockiest-personalproduct-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MedicineOrderMasterComponent } from './pages/medicine-order-master/medi
     OrderDetailsMasterComponent,
     StockistProductDashboardComponent,
     OrderMasterComponent,
-    MedicineOrderMasterComponent
+    MedicineOrderMasterComponent,
+    StockiestPersonalproductDashboardComponent
   ],
   imports: [
     CommonModule,

@@ -269,18 +269,19 @@ export class ProductMasterDashboardComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedImage = file;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result;
-        this.cdr.detectChanges(); // Trigger Angular UI refresh after file is read
-      };
-      reader.readAsDataURL(file);
-    }
+onFileChange(event: any) {
+  const file = event.target.files[0];
+  if (file) {
+    this.selectedImage = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreviewUrl = reader.result;
+      this.cdr.detectChanges(); // Ensures UI updates instantly
+    };
+    reader.readAsDataURL(file);
   }
+}
 
   updateProduct() {
     this.submitted = true;

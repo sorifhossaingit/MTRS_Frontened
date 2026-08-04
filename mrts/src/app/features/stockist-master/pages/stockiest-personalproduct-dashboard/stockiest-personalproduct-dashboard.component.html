@@ -1,0 +1,338 @@
+<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+    <div>
+      <h1 class="text-2xl font-bold flex items-center gap-2 text-gray-800">
+        <lucide-icon [img]="Package"></lucide-icon>
+        Personal Product Inventory
+      </h1>
+      <p class="text-sm text-gray-500">
+        Manage and add custom stock items directly to your inventory
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="openCreateModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl px-4 py-2.5 flex items-center gap-2 transition shadow">
+      <lucide-icon [img]="Plus" class="w-5 h-5"></lucide-icon>
+      Add New Product
+    </button>
+  </div>
+
+  <!-- FILTER SECTION -->
+  <div class="bg-white rounded-xl shadow p-4 mb-6" [formGroup]="filterForm">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <input
+        type="text"
+        formControlName="name"
+        (keyup.enter)="applyFilters()"
+        placeholder="Product Name"
+        class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+      <input
+        type="text"
+        formControlName="brandName"
+        (keyup.enter)="applyFilters()"
+        placeholder="Brand Name"
+        class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+      <input
+        type="text"
+        formControlName="category"
+        (keyup.enter)="applyFilters()"
+        placeholder="Category"
+        class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+      <button
+        type="button"
+        (click)="applyFilters()"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg py-2 px-4 flex items-center justify-center gap-2 transition">
+        <lucide-icon [img]="Search" class="w-4 h-4"></lucide-icon>
+        Search
+      </button>
+
+      <button
+        type="button"
+        (click)="resetFilters()"
+        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg py-2 px-4 flex items-center justify-center gap-2 transition">
+        <lucide-icon [img]="RefreshCw" class="w-4 h-4"></lucide-icon>
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- PRODUCTS GRID CONTAINER -->
+  <div class="w-full">
+
+    <!-- LOADING STATE -->
+    <div *ngIf="isLoading" class="text-center py-16 bg-white rounded-xl shadow">
+      <p class="text-gray-500 font-medium text-lg">Loading personal products...</p>
+    </div>
+
+    <!-- PRODUCTS GRID -->
+    <div *ngIf="!isLoading && products.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div
+        *ngFor="let product of products"
+        class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col justify-between border border-slate-100">
+
+        <div>
+          <!-- IMAGE CONTAINER -->
+          <div class="relative h-44 w-full bg-gray-50 overflow-hidden border-b">
+            <img
+              [src]="product.imageUrl || 'assets/placeholder.png'"
+              [alt]="product.name"
+              class="h-full w-full object-cover">
+            
+            <button 
+              type="button"
+              (click)="openEditModal(product)"
+              class="absolute top-2 right-2 bg-white/90 hover:bg-white text-gray-700 p-2 rounded-full shadow transition"
+              title="Edit Product">
+              <lucide-icon [img]="Pencil" class="w-4 h-4"></lucide-icon>
+            </button>
+          </div>
+
+          <!-- BODY DETAILS -->
+          <div class="p-4">
+            <h3 class="font-bold text-base text-gray-800 truncate" [title]="product.name">
+              {{ product.name }}
+            </h3>
+
+            <p class="text-xs text-gray-500 font-medium mb-2">
+              {{ product.brandName || 'No Brand' }}
+            </p>
+
+            <div class="mt-1 space-y-0.5 text-xs text-gray-600">
+              <p><span class="font-semibold text-gray-700">Category:</span> {{ product.category || 'N/A' }}</p>
+              <p><span class="font-semibold text-gray-700">Dosage:</span> {{ product.dosageForm || 'N/A' }}</p>
+              <p><span class="font-semibold text-gray-700">Strength:</span> {{ product.strength || 'N/A' }}</p>
+              <p><span class="font-semibold text-gray-700">Pack Size:</span> {{ product.packSize || 'N/A' }}</p>
+              <p><span class="font-semibold text-gray-700">Available Qty:</span> {{ product.quantity || 0 }}</p>
+            </div>
+
+            <!-- COMPACT RESPONSIVE PRICE BREAKDOWN -->
+            <div class="grid grid-cols-3 gap-1.5 mt-4">
+              <!-- MRP -->
+              <div class="bg-gray-50 p-1.5 rounded-lg text-center border overflow-hidden">
+                <p class="text-[10px] text-gray-500 font-medium">MRP</p>
+                <p class="font-semibold text-gray-400 line-through text-[11px] truncate" [title]="'₹' + (product.mrp | number:'1.2-2')">
+                  ₹{{ product.mrp | number:'1.2-2' }}
+                </p>
+              </div>
+
+              <!-- DISCOUNT -->
+              <div class="bg-gray-50 p-1.5 rounded-lg text-center border overflow-hidden">
+                <p class="text-[10px] text-gray-500 font-medium">Discount</p>
+                <p class="font-semibold text-blue-600 text-[10px] truncate">
+                  {{ product.discountPercent || 0 }}%
+                </p>
+              </div>
+
+              <!-- SELLING / FINAL PRICE -->
+              <div class="bg-emerald-50 p-1.5 rounded-lg text-center border border-emerald-200 overflow-hidden">
+                <p class="text-[10px] text-emerald-700 font-bold">Selling Price</p>
+                <p class="font-bold text-emerald-600 text-[11px] truncate" [title]="'₹' + ((product.sellingPrice || product.mrp) | number:'1.2-2')">
+                  ₹{{ (product.sellingPrice || product.mrp) | number:'1.2-2' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NO DATA STATE -->
+    <div *ngIf="!isLoading && products.length === 0" class="bg-white rounded-xl p-12 text-center text-gray-500 shadow">
+      No personal products found. Click "Add New Product" to create one.
+    </div>
+
+    <!-- PAGINATION -->
+    <div *ngIf="!isLoading && totalPages > 0" class="bg-white rounded-xl shadow mt-6 p-4 flex items-center justify-between">
+      <button
+        type="button"
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
+        class="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50 flex items-center gap-2 font-medium transition">
+        <lucide-icon [img]="ChevronLeft" class="w-4 h-4"></lucide-icon>
+        Previous
+      </button>
+
+      <div class="font-medium text-gray-700 text-sm">
+        Page {{ pageNumber }} of {{ totalPages }}
+      </div>
+
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="pageNumber === totalPages"
+        class="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50 flex items-center gap-2 font-medium transition">
+        Next
+        <lucide-icon [img]="ChevronRight" class="w-4 h-4"></lucide-icon>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- CREATE / EDIT MODAL -->
+<div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl overflow-hidden max-h-[90vh] flex flex-col">
+    
+    <!-- MODAL HEADER -->
+    <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+      <h2 class="text-lg font-bold text-gray-800">
+        {{ isEditMode ? 'Edit Personal Product' : 'Create Personal Product' }}
+      </h2>
+      <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+    </div>
+
+    <!-- MODAL BODY -->
+    <div class="p-6 overflow-y-auto flex-1" [formGroup]="productForm">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- Product Name (EDITABLE) -->
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-gray-700 mb-1">PRODUCT NAME *</label>
+          <input type="text" formControlName="name" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Brand Name (EDITABLE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">BRAND NAME</label>
+          <input type="text" formControlName="brandName" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Generic Name (EDITABLE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">GENERIC NAME</label>
+          <input type="text" formControlName="genericName" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Category (EDITABLE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">CATEGORY</label>
+          <input type="text" formControlName="category" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Dosage Form (EDITABLE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">DOSAGE FORM</label>
+          <input type="text" formControlName="dosageForm" placeholder="e.g. Syrup, Tablet" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Strength (EDITABLE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">STRENGTH</label>
+          <input type="text" formControlName="strength" placeholder="e.g. 500mg" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Pack Size (EDITABLE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">PACK SIZE</label>
+          <input type="text" formControlName="packSize" placeholder="e.g. 10x10" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Units Per Box (DISABLED IN EDIT MODE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">UNITS PER BOX</label>
+          <input type="number" formControlName="unitsPerBox" [disabled]="isEditMode" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed">
+        </div>
+
+        <!-- MRP (DISABLED IN EDIT MODE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">MRP (₹)</label>
+          <input type="number" formControlName="mrp" [disabled]="isEditMode" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed">
+        </div>
+
+        <!-- PTR (DISABLED IN EDIT MODE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">PTR (₹)</label>
+          <input type="number" formControlName="ptr" [disabled]="isEditMode" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed">
+        </div>
+
+        <!-- PTS (DISABLED IN EDIT MODE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">PTS (₹)</label>
+          <input type="number" formControlName="pts" [disabled]="isEditMode" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed">
+        </div>
+
+        <!-- Selling Price (DISABLED IN EDIT MODE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">SELLING PRICE (₹)</label>
+          <input type="number" formControlName="sellingPrice" [disabled]="isEditMode" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed">
+        </div>
+
+        <!-- Discount % (DISABLED IN EDIT MODE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">DISCOUNT %</label>
+          <input type="number" formControlName="discountPercent" [disabled]="isEditMode" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed">
+        </div>
+
+        <!-- Stock Quantity (DISABLED IN EDIT MODE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">STOCK QUANTITY</label>
+          <input type="number" formControlName="quantity" [disabled]="isEditMode" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed">
+        </div>
+
+        <!-- Division (EDITABLE) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">DIVISION</label>
+          <input type="text" formControlName="division" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- Mfg License (EDITABLE) -->
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-gray-700 mb-1">MANUFACTURING LICENSE NO.</label>
+          <input type="text" formControlName="manufacturingLicenseNumber" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <!-- FILE UPLOAD WITH DIRECT PREVIEW (EDITABLE) -->
+        <div class="md:col-span-3 border-t pt-4 mt-2">
+          <label class="block text-xs font-semibold text-gray-700 mb-2">PRODUCT IMAGE</label>
+          
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <input 
+              type="file" 
+              accept="image/*" 
+              (change)="onFileChange($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+
+            <div class="flex-shrink-0 flex items-center justify-center border rounded-lg h-24 w-24 bg-gray-50 overflow-hidden">
+              <img 
+                *ngIf="imagePreviewUrl; else noImg" 
+                [src]="imagePreviewUrl" 
+                alt="Preview" 
+                class="max-h-full max-w-full object-contain" />
+              <ng-template #noImg>
+                <span class="text-[10px] text-gray-400 text-center px-1">No Image Selected</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MODAL FOOTER -->
+    <div class="px-6 py-4 border-t bg-gray-50 flex justify-end gap-3">
+      <button 
+        type="button" 
+        (click)="closeModal()" 
+        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg text-sm transition">
+        Cancel
+      </button>
+      <button 
+        type="button" 
+        (click)="saveProduct()" 
+        [disabled]="isSubmitting"
+        class="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium rounded-lg text-sm transition flex items-center gap-2">
+        <lucide-icon *ngIf="isSubmitting" [img]="RefreshCw" class="w-4 h-4 animate-spin"></lucide-icon>
+        {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update Product' : 'Create Product') }}
+      </button>
+    </div>
+
+  </div>
+</div>

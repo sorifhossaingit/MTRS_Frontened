@@ -124,6 +124,12 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/stockist-master/stockist-product-dashboard',
         roles: ['Stockist']
       },
+            {
+        label: 'Stockist Personal Product',
+        icon: 'Pill',
+        route: '/stockist-master/stockiest-personal-product',
+        roles: ['Stockist']
+      },
       {
         label: 'Order Master',
         icon: 'package',
