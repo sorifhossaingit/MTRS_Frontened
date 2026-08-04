@@ -206,77 +206,62 @@
           </div>
 
           <!-- Route Selection (Multiple) -->
-       <div class="relative">
-  <label class="block text-sm font-medium text-gray-700 mb-2">
-    Routes <span class="text-red-500">*</span>
-  </label>
+          <div class="relative">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Routes <span class="text-red-500">*</span>
+            </label>
 
-  <!-- Selected Tags Container -->
-  <div
-    (click)="showRouteDropdown = !showRouteDropdown"
-    class="min-h-[48px] border rounded-xl px-3 py-2 bg-white cursor-pointer flex flex-wrap items-center gap-2 focus-within:ring-2 focus-within:ring-blue-400 transition-all">
+            <!-- Selected Tags Container -->
+            <div (click)="showRouteDropdown = !showRouteDropdown"
+              class="min-h-[48px] border rounded-xl px-3 py-2 bg-white cursor-pointer flex flex-wrap items-center gap-2 focus-within:ring-2 focus-within:ring-blue-400 transition-all">
 
-    <ng-container *ngIf="selectedRoutes.length; else placeholder">
-      <span
-        *ngFor="let route of selectedRoutes"
-        class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 shadow-sm">
-        {{ route.routeName }}
-        <button
-          type="button"
-          (click)="removeRoute(route.routeId); $event.stopPropagation()"
-          class="hover:text-blue-900 font-bold transition">
-          ×
-        </button>
-      </span>
-    </ng-container>
+              <ng-container *ngIf="selectedRoutes.length; else placeholder">
+                <span *ngFor="let route of selectedRoutes"
+                  class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 shadow-sm">
+                  {{ route.routeName }}
+                  <button type="button" (click)="removeRoute(route.routeId); $event.stopPropagation()"
+                    class="hover:text-blue-900 font-bold transition">
+                    ×
+                  </button>
+                </span>
+              </ng-container>
 
-    <ng-template #placeholder>
-      <span class="text-gray-400 text-sm">Select Routes...</span>
-    </ng-template>
-  </div>
+              <ng-template #placeholder>
+                <span class="text-gray-400 text-sm">Select Routes...</span>
+              </ng-template>
+            </div>
 
-  <!-- Searchable Dropdown Overlay -->
-  <div
-    *ngIf="showRouteDropdown"
-    class="absolute w-full bg-white border rounded-xl shadow-xl mt-1 z-50 overflow-hidden">
+            <!-- Searchable Dropdown Overlay -->
+            <div *ngIf="showRouteDropdown"
+              class="absolute w-full bg-white border rounded-xl shadow-xl mt-1 z-50 overflow-hidden">
 
-    <!-- Search Box -->
-    <div class="p-2 border-b bg-gray-50">
-      <input
-        type="text"
-        [(ngModel)]="routeSearch"
-        (input)="filterRoutes()"
-        [ngModelOptions]="{standalone: true}"
-        placeholder="Search route..."
-        class="w-full bg-white border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400">
-    </div>
+              <!-- Search Box -->
+              <div class="p-2 border-b bg-gray-50">
+                <input type="text" [(ngModel)]="routeSearch" (input)="filterRoutes()"
+                  [ngModelOptions]="{standalone: true}" placeholder="Search route..."
+                  class="w-full bg-white border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400">
+              </div>
 
-    <!-- Options List -->
-    <div class="max-h-56 overflow-y-auto p-1 space-y-0.5 custom-scrollbar">
-      <label
-        *ngFor="let item of filteredRoutes"
-        class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer text-sm text-gray-700 transition">
-        <input
-          type="checkbox"
-          [checked]="isSelected(item.routeId)"
-          (change)="toggleRoute(item)"
-          class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer">
-        <span>{{ item.routeName }}</span>
-      </label>
+              <!-- Options List -->
+              <div class="max-h-56 overflow-y-auto p-1 space-y-0.5 custom-scrollbar">
+                <label *ngFor="let item of filteredRoutes"
+                  class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer text-sm text-gray-700 transition">
+                  <input type="checkbox" [checked]="isSelected(item.routeId)" (change)="toggleRoute(item)"
+                    class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer">
+                  <span>{{ item.routeName }}</span>
+                </label>
 
-      <!-- Empty Search State -->
-      <div *ngIf="filteredRoutes.length === 0" class="text-xs text-gray-400 p-4 text-center">
-        No routes found matching "{{ routeSearch }}"
-      </div>
-    </div>
-  </div>
+                <!-- Empty Search State -->
+                <div *ngIf="filteredRoutes.length === 0" class="text-xs text-gray-400 p-4 text-center">
+                  No routes found matching "{{ routeSearch }}"
+                </div>
+              </div>
+            </div>
 
-  <small
-    *ngIf="submitted && f['routeIds'].errors?.['required']"
-    class="text-red-500 text-xs mt-1 block">
-    Select at least one route.
-  </small>
-</div>
+            <small *ngIf="submitted && f['routeIds'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+              Select at least one route.
+            </small>
+          </div>
 
           <!-- Stockist Selection -->
           <div>
