@@ -1,425 +1,474 @@
-<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
+<div class="min-h-screen bg-slate-50/50 p-4 sm:p-6 lg:p-8">
 
-  <!-- HEADER -->
+  <!-- 🔷 HEADER -->
+  <div class="mb-6 flex flex-col justify-between items-start gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="flex items-center gap-2.5 text-2xl font-bold text-slate-800 sm:text-3xl">
+        <lucide-icon [img]="Package" class="text-blue-600 h-7 w-7"></lucide-icon>
+        Product Dashboard
+      </h1>
+      <p class="mt-1 text-sm text-slate-500">Manage catalog inventory, pricing, and compliance details.</p>
+    </div>
 
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-
-    <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
-
-      <lucide-icon [img]="Package"></lucide-icon>
-
-      Product Dashboard
-
-    </h1>
-
-    <button routerLink="/product-master/add-product-master"
-      class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
-
-      <lucide-icon [img]="Plus"></lucide-icon>
-
+    <button 
+      routerLink="/product-master/add-product-master"
+      class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:shadow-md active:scale-95"
+    >
+      <lucide-icon [img]="Plus" class="h-4 w-4"></lucide-icon>
       Add Product
-
     </button>
-
   </div>
 
-  <!-- KPI -->
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="Package"></lucide-icon>
-
-      <div>
-        <p class="text-sm text-gray-500">
-          Total Products
-        </p>
-
-        <h2 class="text-xl font-bold">
-          {{ totalProducts }}
-        </h2>
+  <!-- 📊 KPI CARDS -->
+  <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- Total Products -->
+    <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+      <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ring-1 ring-blue-100">
+          <lucide-icon [img]="Package" class="h-6 w-6"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Products</p>
+          <h2 class="text-2xl font-extrabold text-slate-900">{{ totalProducts }}</h2>
+        </div>
       </div>
     </div>
 
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="CheckCircle"></lucide-icon>
-
-      <div>
-        <p class="text-sm text-gray-500">
-          Active
-        </p>
-
-        <h2 class="text-xl font-bold text-green-600">
-          {{ activeProducts }}
-        </h2>
+    <!-- Active -->
+    <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+      <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
+          <lucide-icon [img]="CheckCircle" class="h-6 w-6"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Active</p>
+          <h2 class="text-2xl font-extrabold text-emerald-600">{{ activeProducts }}</h2>
+        </div>
       </div>
     </div>
 
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="XCircle"></lucide-icon>
-
-      <div>
-        <p class="text-sm text-gray-500">
-          Inactive
-        </p>
-
-        <h2 class="text-xl font-bold text-red-600">
-          {{ inactiveProducts }}
-        </h2>
+    <!-- Inactive -->
+    <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+      <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-rose-600 ring-1 ring-rose-100">
+          <lucide-icon [img]="XCircle" class="h-6 w-6"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Inactive</p>
+          <h2 class="text-2xl font-extrabold text-rose-600">{{ inactiveProducts }}</h2>
+        </div>
       </div>
     </div>
 
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="TrendingUp"></lucide-icon>
-
-      <div>
-        <p class="text-sm text-gray-500">
-          Top Product
-        </p>
-
-        <h2 class="text-lg font-bold">
-          {{ topProduct?.productName || 'N/A' }}
-        </h2>
-
-        <p class="text-xs text-gray-500">
-          Ordered: {{ topProduct?.totalOrderedQuantity || 0 }}
-        </p>
+    <!-- Top Product -->
+    <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+      <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100">
+          <lucide-icon [img]="TrendingUp" class="h-6 w-6"></lucide-icon>
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Top Product</p>
+          <h2 class="truncate text-base font-bold text-slate-900" [title]="topProduct?.productName">
+            {{ topProduct?.productName || 'N/A' }}
+          </h2>
+          <p class="text-xs text-slate-500">
+            Ordered: <span class="font-semibold text-slate-700">{{ topProduct?.totalOrderedQuantity || 0 }}</span>
+          </p>
+        </div>
       </div>
     </div>
-
-  </div>
-  <!-- FILTER -->
-
-  <div class="card mb-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
-
-    <input type="text" [(ngModel)]="name" (keyup)="applyFilter()" placeholder="Product Name" class="input">
-
-    <input type="text" [(ngModel)]="brandName" (keyup)="applyFilter()" placeholder="Brand Name" class="input">
-
-    <input type="text" [(ngModel)]="genericName" (keyup)="applyFilter()" placeholder="Generic Name" class="input">
-
-    <input type="text" [(ngModel)]="category" (keyup)="applyFilter()" placeholder="Category" class="input">
-
-    <input type="text" [(ngModel)]="dosageForm" (keyup)="applyFilter()" placeholder="Dosage Form" class="input">
-
-    <button (click)="resetFilter()" class="bg-gray-200 rounded-lg py-2">
-
-      Reset
-
-    </button>
-
   </div>
 
-  <!-- TABLE -->
-
-  <div class="card overflow-hidden">
-
-  <div class="overflow-x-auto">
-
-    <table class="min-w-[1000px] w-full text-sm">
-
-      <thead class="bg-gray-100 text-left">
-        <tr>
-          <th class="px-6 py-4">Name</th>
-          <th class="px-6 py-4">Brand</th>
-          <th class="px-6 py-4">Category</th>
-          <th class="px-6 py-4">Dosage</th>
-          <th class="px-6 py-4">Strength</th>
-          <th class="px-6 py-4">MRP</th>
-          <th class="px-6 py-4">Price-To-Retail</th>
-          <th class="px-6 py-4">Price-To-Stockist</th>
-          <th class="px-6 py-4">Status</th>
-          <th class="px-6 py-4 text-center">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr
-          *ngFor="let item of productList"
-          class="border-t hover:bg-gray-50 h-20">
-
-          <td class="px-6 py-4 font-medium whitespace-nowrap">
-            {{ item.name }}
-          </td>
-
-          <td class="px-6 py-4 text-gray-600">
-            {{ item.brandName }}
-          </td>
-
-          <td class="px-6 py-4 text-gray-600">
-            {{ item.category }}
-          </td>
-
-          <td class="px-6 py-4 whitespace-nowrap">
-            {{ item.dosageForm }}
-          </td>
-
-          <td class="px-6 py-4 whitespace-nowrap">
-            {{ item.strength }}
-          </td>
-
-          <td class="px-6 py-4 font-semibold whitespace-nowrap">
-            ₹{{ item.mrp }}
-          </td>
-
-          <td class="px-6 py-4 whitespace-nowrap">
-            ₹{{ item.ptr }}
-          </td>
-
-          <td class="px-6 py-4 whitespace-nowrap">
-            ₹{{ item.pts }}
-          </td>
-
-          <td class="px-6 py-4">
-
-            <span
-              *ngIf="item.isActive"
-              class="bg-green-100 text-green-700 px-3 py-1.5 rounded-full text-xs font-medium">
-
-              Active
-
-            </span>
-
-            <span
-              *ngIf="!item.isActive"
-              class="bg-red-100 text-red-700 px-3 py-1.5 rounded-full text-xs font-medium">
-
-              Inactive
-
-            </span>
-
-          </td>
-
-          <td class="px-6 py-4">
-
-            <div class="flex justify-center items-center gap-4">
-
-              <button
-                (click)="viewProduct(item)"
-                class="text-blue-600 hover:scale-110 transition-transform duration-200">
-
-                <lucide-icon [img]="Eye"></lucide-icon>
-
-              </button>
-
-              <button
-                (click)="editProduct(item)"
-                class="text-yellow-600 hover:scale-110 transition-transform duration-200">
-
-                <lucide-icon [img]="Pencil"></lucide-icon>
-
-              </button>
-
-              <button
-                (click)="deleteProduct(item)"
-                class="text-red-600 hover:scale-110 transition-transform duration-200">
-
-                <lucide-icon [img]="Trash2"></lucide-icon>
-
-              </button>
-
-            </div>
-
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-</div>
-  <!-- PAGINATION -->
-
-  <div class="flex justify-between items-center mt-5">
-
-    <button (click)="previousPage()" class="px-4 py-2 bg-gray-200 rounded-lg">
-
-      <lucide-icon [img]="ChevronLeft"></lucide-icon>
-
-    </button>
-
-    <p>
-      Page {{ pageNumber }} of {{ totalPages }}
-    </p>
-
-    <button (click)="nextPage()" class="px-4 py-2 bg-gray-200 rounded-lg">
-
-      <lucide-icon [img]="ChevronRight"></lucide-icon>
-
-    </button>
-
-  </div>
-
-</div>
-
-<!-- VIEW MODAL -->
-
-<div *ngIf="showViewModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-
-  <div class="bg-white rounded-2xl w-full max-w-4xl p-6 relative">
-
-    <button (click)="closeViewModal()" class="absolute right-4 top-4">
-
-      <lucide-icon [img]="X"></lucide-icon>
-
-    </button>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-      <div>
-
-        <img [src]="selectedProduct?.imageUrl" class="w-full rounded-xl border">
-
-      </div>
-
-      <div class="space-y-3">
-
-        <h2 class="text-2xl font-bold">
-          {{ selectedProduct?.name }}
-        </h2>
-
-        <p><b>Brand:</b> {{ selectedProduct?.brandName }}</p>
-
-        <p><b>Generic:</b> {{ selectedProduct?.genericName }}</p>
-
-        <p><b>Category:</b> {{ selectedProduct?.category }}</p>
-
-        <p><b>Dosage:</b> {{ selectedProduct?.dosageForm }}</p>
-
-        <p><b>Strength:</b> {{ selectedProduct?.strength }}</p>
-
-        <p><b>MRP:</b> ₹{{ selectedProduct?.mrp }}</p>
-
-        <p><b>PTR:</b> ₹{{ selectedProduct?.ptr }}</p>
-
-        <p><b>PTS:</b> ₹{{ selectedProduct?.pts }}</p>
-
-        <p><b>Pack Size:</b> {{ selectedProduct?.packSize }}</p>
-
-        <p><b>Units/Box:</b> {{ selectedProduct?.unitsPerBox }}</p>
-
-        <p><b>Division:</b> {{ selectedProduct?.division }}</p>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- EDIT MODAL -->
-
-<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-
-  <div class="bg-white rounded-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto">
-
-    <div class="flex justify-between items-center border-b p-5">
-
-      <h2 class="text-2xl font-bold">
-        Update Product
-      </h2>
-
-      <button (click)="closeEditModal()">
-
-        <lucide-icon [img]="X"></lucide-icon>
-
+  <!-- 🔍 FILTER BAR -->
+  <div class="mb-6 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+      <input 
+        type="text" 
+        [(ngModel)]="name" 
+        (keyup)="applyFilter()" 
+        placeholder="Product Name" 
+        class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+      >
+      <input 
+        type="text" 
+        [(ngModel)]="brandName" 
+        (keyup)="applyFilter()" 
+        placeholder="Brand Name" 
+        class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+      >
+      <input 
+        type="text" 
+        [(ngModel)]="genericName" 
+        (keyup)="applyFilter()" 
+        placeholder="Generic Name" 
+        class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+      >
+      <input 
+        type="text" 
+        [(ngModel)]="category" 
+        (keyup)="applyFilter()" 
+        placeholder="Category" 
+        class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+      >
+      <input 
+        type="text" 
+        [(ngModel)]="dosageForm" 
+        (keyup)="applyFilter()" 
+        placeholder="Dosage Form" 
+        class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+      >
+      <button 
+        (click)="resetFilter()" 
+        class="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-200 active:scale-95"
+      >
+        Reset Filters
       </button>
+    </div>
+  </div>
 
+  <!-- 📋 DATA TABLE -->
+  <div class="rounded-2xl border border-slate-200/80 bg-white shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-600">
+        <thead class="border-b border-slate-200 bg-slate-50/80 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <tr>
+            <th class="px-6 py-4">Name</th>
+            <th class="px-6 py-4">Brand</th>
+            <th class="px-6 py-4">Category</th>
+            <th class="px-6 py-4">Dosage</th>
+            <th class="px-6 py-4">Strength</th>
+            <th class="px-6 py-4">MRP</th>
+            <th class="px-6 py-4">PTR</th>
+            <th class="px-6 py-4">PTS</th>
+            <th class="px-6 py-4">Status</th>
+            <th class="px-6 py-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr *ngFor="let item of productList" class="transition-colors duration-150 hover:bg-slate-50/80">
+            <td class="whitespace-nowrap px-6 py-4 font-semibold text-slate-900">
+              {{ item.name }}
+            </td>
+            <td class="px-6 py-4 text-slate-600">
+              {{ item.brandName }}
+            </td>
+            <td class="px-6 py-4 text-slate-600">
+              <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
+                {{ item.category }}
+              </span>
+            </td>
+            <td class="whitespace-nowrap px-6 py-4 text-slate-600">
+              {{ item.dosageForm }}
+            </td>
+            <td class="whitespace-nowrap px-6 py-4 text-slate-600">
+              {{ item.strength }}
+            </td>
+            <td class="whitespace-nowrap px-6 py-4 font-semibold text-slate-900">
+              ₹{{ item.mrp }}
+            </td>
+            <td class="whitespace-nowrap px-6 py-4 text-slate-600">
+              ₹{{ item.ptr }}
+            </td>
+            <td class="whitespace-nowrap px-6 py-4 text-slate-600">
+              ₹{{ item.pts }}
+            </td>
+            <td class="px-6 py-4">
+              <span 
+                *ngIf="item.isActive" 
+                class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-600/20"
+              >
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                Active
+              </span>
+              <span 
+                *ngIf="!item.isActive" 
+                class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 ring-1 ring-inset ring-rose-600/20"
+              >
+                <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
+                Inactive
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center justify-center gap-2">
+                <button 
+                  (click)="viewProduct(item)" 
+                  title="View Details"
+                  class="rounded-lg p-2 text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                >
+                  <lucide-icon [img]="Eye" class="h-4 w-4"></lucide-icon>
+                </button>
+                <button 
+                  (click)="editProduct(item)" 
+                  title="Edit Product"
+                  class="rounded-lg p-2 text-slate-400 hover:bg-amber-50 hover:text-amber-600 transition-colors"
+                >
+                  <lucide-icon [img]="Pencil" class="h-4 w-4"></lucide-icon>
+                </button>
+                <button 
+                  (click)="deleteProduct(item)" 
+                  title="Delete Product"
+                  class="rounded-lg p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                >
+                  <lucide-icon [img]="Trash2" class="h-4 w-4"></lucide-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <form [formGroup]="productForm" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-      <input type="text" formControlName="name" placeholder="Product Name" class="input">
-
-      <input type="text" formControlName="brandName" placeholder="Brand Name" class="input">
-
-      <input type="text" formControlName="genericName" placeholder="Generic Name" class="input">
-
-      <input type="text" formControlName="category" placeholder="Category" class="input">
-
-      <input type="text" formControlName="dosageForm" placeholder="Dosage Form" class="input">
-
-      <input type="text" formControlName="strength" placeholder="Strength" class="input">
-
-      <input type="number" formControlName="mrp" placeholder="MRP" class="input">
-
-      <input type="number" formControlName="ptr" placeholder="PTR" class="input">
-
-      <input type="number" formControlName="pts" placeholder="PTS" class="input">
-
-      <input type="text" formControlName="packSize" placeholder="Pack Size" class="input">
-
-      <input type="number" formControlName="unitsPerBox" placeholder="Units Per Box" class="input">
-
-      <input type="date" formControlName="launchDate" class="input">
-
-      <input type="text" formControlName="division" placeholder="Division" class="input">
-
-      <input type="text" formControlName="manufacturingLicenseNumber" placeholder="Manufacturing License Number"
-        class="input">
-
-      <input type="date" formControlName="approvalDate" class="input">
-
-      <input type="number" formControlName="promotionPriority" placeholder="Promotion Priority" class="input">
-
+    <!-- 📄 PAGINATION -->
+    <div class="flex items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+      <p class="text-sm font-medium text-slate-600">
+        Page <span class="font-bold text-slate-900">{{ pageNumber }}</span> of <span class="font-bold text-slate-900">{{ totalPages }}</span>
+      </p>
       <div class="flex items-center gap-2">
+        <button 
+          (click)="previousPage()" 
+          class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition-colors hover:bg-slate-50 disabled:opacity-50"
+        >
+          <lucide-icon [img]="ChevronLeft" class="h-5 w-5"></lucide-icon>
+        </button>
+        <button 
+          (click)="nextPage()" 
+          class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition-colors hover:bg-slate-50 disabled:opacity-50"
+        >
+          <lucide-icon [img]="ChevronRight" class="h-5 w-5"></lucide-icon>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <input type="checkbox" formControlName="isActive">
+</div>
 
-        <label>
-          Is Active
-        </label>
+<!-- 👁️ VIEW MODAL -->
+<div *ngIf="showViewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+  <div class="relative w-full max-w-3xl rounded-2xl bg-white p-6 shadow-2xl transition-all">
+    <button 
+      (click)="closeViewModal()" 
+      class="absolute right-4 top-4 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+    >
+      <lucide-icon [img]="X" class="h-5 w-5"></lucide-icon>
+    </button>
 
+    <h2 class="mb-6 text-xl font-bold text-slate-800">Product Details</h2>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="flex flex-col items-center justify-center rounded-xl border border-slate-100 bg-slate-50 p-4">
+        <img 
+          [src]="selectedProduct?.imageUrl || 'assets/placeholder.png'" 
+          class="h-48 w-48 rounded-xl object-cover shadow-sm"
+          alt="Product Image"
+        >
       </div>
 
-      <!-- EXISTING IMAGE -->
+      <div class="md:col-span-2 grid grid-cols-2 gap-4 text-sm text-slate-600">
+        <div class="col-span-2">
+          <p class="text-xs uppercase font-semibold text-slate-400">Product Name</p>
+          <p class="text-lg font-bold text-slate-900">{{ selectedProduct?.name }}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase font-semibold text-slate-400">Brand</p>
+          <p class="font-medium text-slate-800">{{ selectedProduct?.brandName }}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase font-semibold text-slate-400">Generic</p>
+          <p class="font-medium text-slate-800">{{ selectedProduct?.genericName }}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase font-semibold text-slate-400">Category</p>
+          <p class="font-medium text-slate-800">{{ selectedProduct?.category }}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase font-semibold text-slate-400">Dosage Form</p>
+          <p class="font-medium text-slate-800">{{ selectedProduct?.dosageForm }}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase font-semibold text-slate-400">Strength</p>
+          <p class="font-medium text-slate-800">{{ selectedProduct?.strength }}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase font-semibold text-slate-400">Division</p>
+          <p class="font-medium text-slate-800">{{ selectedProduct?.division }}</p>
+        </div>
+        <div class="col-span-2 grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-3 border border-slate-100 mt-2">
+          <div>
+            <p class="text-xs text-slate-400 font-semibold">MRP</p>
+            <p class="font-bold text-slate-900">₹{{ selectedProduct?.mrp }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-semibold">PTR</p>
+            <p class="font-bold text-slate-900">₹{{ selectedProduct?.ptr }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-semibold">PTS</p>
+            <p class="font-bold text-slate-900">₹{{ selectedProduct?.pts }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-      <div class="md:col-span-3">
+<!-- ✏️ EDIT MODAL -->
+<div *ngIf="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+  <div class="relative w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl bg-white shadow-2xl">
+    
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+      <h2 class="text-xl font-bold text-slate-800">Update Product Details</h2>
+      <button 
+        (click)="closeEditModal()" 
+        class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+      >
+        <lucide-icon [img]="X" class="h-5 w-5"></lucide-icon>
+      </button>
+    </div>
 
-        <label class="font-medium block mb-2">
-          Current Product Image
-        </label>
+    <!-- Modal Form Body -->
+    <form [formGroup]="productForm" class="overflow-y-auto p-6 space-y-6">
+      
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Product Name</label>
+          <input type="text" formControlName="name" placeholder="Product Name" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
 
-        <img *ngIf="selectedProduct?.imageUrl" [src]="selectedProduct?.imageUrl"
-          class="w-40 h-40 object-cover rounded-xl border">
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Brand Name</label>
+          <input type="text" formControlName="brandName" placeholder="Brand Name" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
 
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Generic Name</label>
+          <input type="text" formControlName="genericName" placeholder="Generic Name" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Category</label>
+          <input type="text" formControlName="category" placeholder="Category" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Dosage Form</label>
+          <input type="text" formControlName="dosageForm" placeholder="Dosage Form" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Strength</label>
+          <input type="text" formControlName="strength" placeholder="Strength" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">MRP</label>
+          <input type="number" formControlName="mrp" placeholder="MRP" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">PTR</label>
+          <input type="number" formControlName="ptr" placeholder="PTR" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">PTS</label>
+          <input type="number" formControlName="pts" placeholder="PTS" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Pack Size</label>
+          <input type="text" formControlName="packSize" placeholder="Pack Size" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Units Per Box</label>
+          <input type="number" formControlName="unitsPerBox" placeholder="Units Per Box" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Quantity / Stock</label>
+          <input type="number" formControlName="quantity" placeholder="Stock Quantity" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Launch Date</label>
+          <input type="date" formControlName="launchDate" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Division</label>
+          <input type="text" formControlName="division" placeholder="Division" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Mfg License Number</label>
+          <input type="text" formControlName="manufacturingLicenseNumber" placeholder="License Number" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Approval Date</label>
+          <input type="date" formControlName="approvalDate" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Promotion Priority</label>
+          <input type="number" formControlName="promotionPriority" placeholder="Priority" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+        <div class="flex items-center gap-2 pt-6">
+          <input type="checkbox" formControlName="isActive" id="isActiveCheck" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+          <label for="isActiveCheck" class="text-sm font-semibold text-slate-700">Product Is Active</label>
+        </div>
       </div>
 
-      <!-- FILE -->
+      <!-- Image Management Section -->
+      <div class="grid grid-cols-1 gap-4 border-t border-slate-100 pt-4 md:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-xs font-semibold uppercase text-slate-500">Current Image</label>
+          <img 
+            *ngIf="selectedProduct?.imageUrl" 
+            [src]="selectedProduct?.imageUrl" 
+            class="h-28 w-28 rounded-xl border border-slate-200 object-cover"
+          >
+        </div>
+ <div class="form-group">
+  <label class="block text-sm font-medium text-gray-700 mb-1">UPLOAD NEW IMAGE</label>
+  <input 
+    type="file" 
+    accept="image/*" 
+    (change)="onFileChange($event)" 
+    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" 
+  />
 
-      <div class="md:col-span-3">
-
-        <label class="font-medium block mb-2">
-          Change Product Image
-        </label>
-
-        <input type="file" (change)="onFileChange($event)" class="input">
-
+  <!-- 🔷 IMAGE PREVIEW CONTAINER -->
+  <div *ngIf="imagePreviewUrl" class="mt-3">
+    <p class="text-xs text-gray-500 mb-1">Preview:</p>
+    <img 
+      [src]="imagePreviewUrl" 
+      alt="Selected Product Image" 
+      class="h-32 w-32 object-cover rounded-lg border border-gray-300 shadow-sm" 
+    />
+  </div>
+</div>
       </div>
 
     </form>
 
-    <div class="flex justify-end gap-3 p-5 border-t">
-
-      <button (click)="closeEditModal()" class="bg-gray-300 px-5 py-2 rounded-lg">
-
+    <!-- Modal Footer -->
+    <div class="flex items-center justify-end gap-3 border-t border-slate-100 px-6 py-4">
+      <button 
+        (click)="closeEditModal()" 
+        class="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+      >
         Cancel
-
       </button>
-
-      <button (click)="updateProduct()" class="bg-blue-600 text-white px-5 py-2 rounded-lg">
-
+      <button 
+        (click)="updateProduct()" 
+        class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 shadow-sm"
+      >
         Update Product
-
       </button>
-
     </div>
 
   </div>
-
 </div>

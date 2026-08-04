@@ -10,7 +10,8 @@ import {
   FileCheck,
   TrendingUp,
   CheckCircle,
-  Save
+  Save,
+  Boxes
 } from 'lucide-angular';
 
 import {
@@ -46,7 +47,7 @@ export class AddProductMasterComponent implements OnInit {
   TrendingUp = TrendingUp;
   CheckCircle = CheckCircle;
   Save = Save;
-
+  Boxes = Boxes;
   // =========================================================
   // 🔷 VARIABLES
   // =========================================================

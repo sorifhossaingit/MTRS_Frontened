@@ -1,481 +1,270 @@
-<div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
-
+<div class="min-h-screen bg-gray-100 p-4 sm:p-6">
   <!-- 🔷 HEADER -->
-
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-
-    <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
-
+  <div class="mb-6 flex flex-col justify-between items-start gap-3 sm:flex-row sm:items-center">
+    <h1 class="flex items-center gap-2 text-xl font-bold sm:text-2xl">
       <lucide-icon [img]="PackagePlus"></lucide-icon>
-
       Add Product
-
     </h1>
-
     <button routerLink="/product-master/product-master-dashboard"
-      class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
-
+      class="flex items-center gap-2 rounded-lg bg-gray-200 px-4 py-2">
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
-
       Back
-
     </button>
-
   </div>
 
   <!-- 🔷 FORM -->
-
   <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="space-y-6">
-
     <!-- 🟦 BASIC INFO -->
-
     <div class="card">
-
       <h2 class="section-title">
-
         <lucide-icon [img]="Package"></lucide-icon>
-
         Basic Information
-
       </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <!-- PRODUCT NAME -->
-
         <div>
-
-          <input class="input" placeholder="Product Name" formControlName="name">
-
-          <p *ngIf="submitted && f['name'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input class="input" placeholder="Product Name" formControlName="name" />
+          <p *ngIf="submitted && f['name'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Product Name is required
-
           </p>
-
         </div>
 
         <!-- BRAND NAME -->
-
         <div>
-
-          <input class="input" placeholder="Brand Name" formControlName="brandName">
-
-          <p *ngIf="submitted && f['brandName'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input class="input" placeholder="Brand Name" formControlName="brandName" />
+          <p *ngIf="submitted && f['brandName'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Brand Name is required
-
           </p>
-
         </div>
 
         <!-- GENERIC NAME -->
-
         <div>
-
-          <input class="input" placeholder="Generic Name" formControlName="genericName">
-
-          <p *ngIf="submitted && f['genericName'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input class="input" placeholder="Generic Name" formControlName="genericName" />
+          <p *ngIf="submitted && f['genericName'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Generic Name is required
-
           </p>
-
         </div>
-
       </div>
-
     </div>
 
     <!-- 🟪 CLASSIFICATION -->
-
     <div class="card">
-
       <h2 class="section-title">
-
         <lucide-icon [img]="ClipboardList"></lucide-icon>
-
         Classification
-
       </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <!-- CATEGORY -->
-
         <div>
-
-          <input class="input" placeholder="Category" formControlName="category">
-
-          <p *ngIf="submitted && f['category'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input class="input" placeholder="Category" formControlName="category" />
+          <p *ngIf="submitted && f['category'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Category is required
-
           </p>
-
         </div>
 
         <!-- DIVISION -->
-
         <div>
-
-          <input class="input" placeholder="Division" formControlName="division">
-
-          <p *ngIf="submitted && f['division'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input class="input" placeholder="Division" formControlName="division" />
+          <p *ngIf="submitted && f['division'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Division is required
-
           </p>
-
         </div>
 
         <!-- DOSAGE FORM -->
-
         <div>
-
           <select class="input" formControlName="dosageForm">
-
-            <option value="">
-              Select Dosage Form
-            </option>
-
-            <option value="Tablet">
-              Tablet
-            </option>
-
-            <option value="Capsule">
-              Capsule
-            </option>
-
-            <option value="Syrup">
-              Syrup
-            </option>
-
-            <option value="Injection">
-              Injection
-            </option>
-
-            <option value="Cream">
-              Cream
-            </option>
-
+            <option value="">Select Dosage Form</option>
+            <option value="Tablet">Tablet</option>
+            <option value="Capsule">Capsule</option>
+            <option value="Syrup">Syrup</option>
+            <option value="Injection">Injection</option>
+            <option value="Cream">Cream</option>
           </select>
-
-          <p *ngIf="submitted && f['dosageForm'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <p *ngIf="submitted && f['dosageForm'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Dosage Form is required
-
           </p>
-
         </div>
 
         <!-- STRENGTH -->
-
         <div>
-
-          <input class="input" placeholder="Strength (500mg)" formControlName="strength">
-
-          <p *ngIf="submitted && f['strength'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input class="input" placeholder="Strength (500mg)" formControlName="strength" />
+          <p *ngIf="submitted && f['strength'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Strength is required
-
           </p>
-
         </div>
-
       </div>
-
     </div>
 
     <!-- 🟩 PRICING -->
-
     <div class="card">
-
       <h2 class="section-title">
-
         <lucide-icon [img]="DollarSign"></lucide-icon>
-
         Pricing Details
-
       </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <!-- MRP -->
-
         <div>
-
-          <input type="number" class="input" placeholder="MRP" formControlName="mrp">
-
-          <p *ngIf="submitted && f['mrp'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input type="number" class="input" placeholder="MRP" formControlName="mrp" />
+          <p *ngIf="submitted && f['mrp'].errors?.['required']" class="mt-1 text-sm text-red-500">
             MRP is required
-
           </p>
-
         </div>
 
         <!-- PTR -->
-
         <div>
-
-          <input type="number" class="input" placeholder="PTR" formControlName="ptr">
-
-          <p *ngIf="submitted && f['ptr'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input type="number" class="input" placeholder="PTR" formControlName="ptr" />
+          <p *ngIf="submitted && f['ptr'].errors?.['required']" class="mt-1 text-sm text-red-500">
             PTR is required
-
           </p>
-
         </div>
 
         <!-- PTS -->
-
         <div>
-
-          <input type="number" class="input" placeholder="PTS" formControlName="pts">
-
-          <p *ngIf="submitted && f['pts'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input type="number" class="input" placeholder="PTS" formControlName="pts" />
+          <p *ngIf="submitted && f['pts'].errors?.['required']" class="mt-1 text-sm text-red-500">
             PTS is required
-
           </p>
-
         </div>
-
       </div>
-
     </div>
 
     <!-- 🟨 PACKAGING -->
-
     <div class="card">
-
       <h2 class="section-title">
-
         <lucide-icon [img]="Box"></lucide-icon>
-
         Packaging
-
       </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <!-- PACK SIZE -->
-
         <div>
-
-          <input class="input" placeholder="Pack Size" formControlName="packSize">
-
-          <p *ngIf="submitted && f['packSize'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input class="input" placeholder="Pack Size" formControlName="packSize" />
+          <p *ngIf="submitted && f['packSize'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Pack Size is required
-
           </p>
-
         </div>
 
         <!-- UNITS PER BOX -->
-
         <div>
-
-          <input type="number" class="input" placeholder="Units Per Box" formControlName="unitsPerBox">
-
-          <p *ngIf="submitted && f['unitsPerBox'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input type="number" class="input" placeholder="Units Per Box" formControlName="unitsPerBox" />
+          <p *ngIf="submitted && f['unitsPerBox'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Units Per Box is required
-
           </p>
-
         </div>
-
       </div>
+    </div>
 
+    <!-- 📦 INVENTORY & STOCK -->
+    <div class="card">
+      <h2 class="section-title">
+        <lucide-icon [img]="Boxes"></lucide-icon>
+        Inventory & Stock
+      </h2>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <!-- QUANTITY -->
+        <div>
+          <label class="mb-1 block text-sm font-medium text-gray-600">
+            Stock Quantity
+          </label>
+          <input type="number" class="input" placeholder="e.g. 100" formControlName="quantity" min="0" />
+          <ng-container *ngIf="submitted && f['quantity']?.invalid">
+            <p *ngIf="f['quantity']?.errors?.['required']" class="mt-1 text-sm text-red-500">
+              Quantity is required
+            </p>
+            <p *ngIf="f['quantity']?.errors?.['min']" class="mt-1 text-sm text-red-500">
+              Quantity cannot be negative
+            </p>
+          </ng-container>
+        </div>
+      </div>
     </div>
 
     <!-- 🟫 COMPLIANCE -->
-
     <div class="card">
-
       <h2 class="section-title">
-
         <lucide-icon [img]="FileCheck"></lucide-icon>
-
         Compliance
-
       </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <!-- LICENSE NUMBER -->
-
         <div>
-
-          <input class="input" placeholder="Manufacturing License Number" formControlName="manufacturingLicenseNumber">
-
+          <input class="input" placeholder="Manufacturing License Number"
+            formControlName="manufacturingLicenseNumber" />
           <p *ngIf="submitted && f['manufacturingLicenseNumber'].errors?.['required']"
-            class="text-red-500 text-sm mt-1">
-
+            class="mt-1 text-sm text-red-500">
             Manufacturing License Number is required
-
           </p>
-
         </div>
 
         <!-- APPROVAL DATE -->
-
         <div>
-
-          <input type="date" class="input" formControlName="approvalDate">
-
-          <p *ngIf="submitted && f['approvalDate'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input type="date" class="input" formControlName="approvalDate" />
+          <p *ngIf="submitted && f['approvalDate'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Approval Date is required
-
           </p>
-
         </div>
-
       </div>
-
     </div>
 
     <!-- 🟥 MARKETING -->
-
     <div class="card">
-
       <h2 class="section-title">
-
         <lucide-icon [img]="TrendingUp"></lucide-icon>
-
         Marketing Details
-
       </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <!-- LAUNCH DATE -->
-
         <div>
-
-          <label class="text-sm font-medium text-gray-600 mb-1 block">
+          <label class="mb-1 block text-sm font-medium text-gray-600">
             Launch Date
           </label>
-
-          <input type="date" class="input" formControlName="launchDate">
-
-          <p *ngIf="submitted && f['launchDate'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <input type="date" class="input" formControlName="launchDate" />
+          <p *ngIf="submitted && f['launchDate'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Launch Date is required
-
           </p>
-
         </div>
 
- <!-- QUANTITY -->
-<div>
-  <label class="text-sm font-medium text-gray-600 mb-1 block">
-    Quantity
-  </label>
-
-  <input 
-    type="number" 
-    class="input" 
-    placeholder="e.g. 100" 
-    formControlName="quantity" 
-    min="0"
-  >
-
-  <!-- Error Container: Uses safe navigation (?.) to prevent template runtime errors -->
-  <ng-container *ngIf="submitted && f['quantity']?.invalid">
-    <p *ngIf="f['quantity']?.errors?.['required']" class="text-red-500 text-sm mt-1">
-      Quantity is required
-    </p>
-    <p *ngIf="f['quantity']?.errors?.['min']" class="text-red-500 text-sm mt-1">
-      Quantity cannot be negative
-    </p>
-  </ng-container>
-</div>
         <!-- PROMOTION PRIORITY -->
-
         <div>
-
+          <label class="mb-1 block text-sm font-medium text-gray-600">
+            Promotion Priority
+          </label>
           <select class="input" formControlName="promotionPriority">
-
-            <option [value]="1">
-              High
-            </option>
-
-            <option [value]="2">
-              Medium
-            </option>
-
-            <option [value]="3">
-              Low
-            </option>
-
+            <option [value]="1">High</option>
+            <option [value]="2">Medium</option>
+            <option [value]="3">Low</option>
           </select>
-
-          <p *ngIf="submitted && f['promotionPriority'].errors?.['required']" class="text-red-500 text-sm mt-1">
-
+          <p *ngIf="submitted && f['promotionPriority'].errors?.['required']" class="mt-1 text-sm text-red-500">
             Promotion Priority is required
-
           </p>
-
         </div>
-
       </div>
-
     </div>
 
     <!-- 🟦 PRODUCT IMAGE -->
-
     <div class="card">
-
       <h2 class="section-title">
-
         <lucide-icon [img]="Package"></lucide-icon>
-
         Product Image
-
       </h2>
-
       <div class="space-y-4">
-
-        <input type="file" accept="image/*" (change)="onImageChange($event)" class="input">
-
+        <input type="file" accept="image/*" (change)="onImageChange($event)" class="input" />
         <div *ngIf="imagePreview">
-
-          <img [src]="imagePreview" class="w-40 h-40 object-cover rounded-xl border">
-
+          <img [src]="imagePreview" class="h-40 w-40 rounded-xl border object-cover" />
         </div>
-
       </div>
-
     </div>
 
     <!-- 🔷 ACTION BUTTONS -->
-
-    <div class="flex flex-col sm:flex-row justify-end gap-3">
-
+    <div class="flex flex-col justify-end gap-3 sm:flex-row">
       <button type="button" routerLink="/product-master/product-master-dashboard"
-        class="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto">
-
+        class="w-full rounded-lg bg-gray-300 px-4 py-2 sm:w-auto">
         Cancel
-
       </button>
-
       <button type="submit"
-        class="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
-
+        class="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white sm:w-auto">
         <lucide-icon [img]="Save"></lucide-icon>
-
         Save Product
-
       </button>
-
     </div>
-
   </form>
-
 </div>
