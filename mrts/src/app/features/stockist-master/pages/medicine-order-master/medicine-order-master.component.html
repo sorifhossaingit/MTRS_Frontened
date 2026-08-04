@@ -102,11 +102,30 @@
               <p><span class="font-semibold text-gray-700">Pack:</span> {{ product.packSize }}</p>
             </div>
 
-            <!-- PRICE SECTION -->
-            <div class="grid grid-cols-1 gap-2 mt-4">
-              <div class="bg-gray-50 p-2 rounded-lg text-center border">
-                <p class="text-xs text-gray-500 font-medium">MRP</p>
-                <p class="font-bold text-red-600">₹{{ product.mrp | number:'1.2-2' }}</p>
+<!-- PRICE BREAKDOWN SECTION -->
+            <div class="grid grid-cols-3 gap-1.5 mt-4">
+              <!-- MRP -->
+              <div class="bg-gray-50 p-1.5 rounded-lg text-center border overflow-hidden">
+                <p class="text-[10px] text-gray-500 font-medium">MRP</p>
+                <p class="font-semibold text-gray-400 line-through text-[11px] truncate" [title]="'₹' + (product.mrp | number:'1.2-2')">
+                  ₹{{ product.mrp | number:'1.2-2' }}
+                </p>
+              </div>
+
+              <!-- DISCOUNT & TAX BREAKDOWN -->
+              <div class="bg-gray-50 p-1.5 rounded-lg text-center border overflow-hidden">
+                <p class="text-[10px] text-gray-500 font-medium">Disc/Tax</p>
+                <p class="font-semibold text-blue-600 text-[10px] truncate" [title]="'-' + product.discountPercent + '% / +' + product.taxPercent + '%'">
+                  -{{ product.discountPercent }}%/+{{ product.taxPercent }}%
+                </p>
+              </div>
+
+              <!-- FINAL PRICE -->
+              <div class="bg-emerald-50 p-1.5 rounded-lg text-center border border-emerald-200 overflow-hidden">
+                <p class="text-[10px] text-emerald-700 font-bold">Final Price</p>
+                <p class="font-bold text-emerald-600 text-[11px] truncate" [title]="'₹' + (product.finalPrice | number:'1.2-2')">
+                  ₹{{ product.finalPrice | number:'1.2-2' }}
+                </p>
               </div>
             </div>
 
@@ -175,7 +194,7 @@
           </span>
         </div>
 
- <!-- CART ITEMS LIST -->
+        <!-- CART ITEMS LIST -->
         <div class="max-h-[400px] overflow-y-auto divide-y">
           <div *ngFor="let item of cartItems" class="p-4 hover:bg-gray-50 transition">
             <div class="flex gap-3 items-center">
@@ -190,12 +209,13 @@
                 </h4>
 
                 <p class="text-xs text-gray-500 mt-0.5">
-                  Qty: <span class="font-medium text-gray-700">{{ item.quantity }}</span>
+                  Qty: <span class="font-medium text-gray-700">{{ item.quantity }}</span> | 
+                  Tax: {{ item.taxPercent }}% | Disc: {{ item.discountPercent }}%
                 </p>
 
-                <!-- Line Item Total Display (e.g., 3 × ₹50.00 = ₹150.00) -->
+                <!-- Line Item Total Display based on Final Price -->
                 <p class="text-sm font-semibold text-green-600 mt-0.5">
-                  {{ item.quantity }} × ₹{{ item.mrp | number:'1.2-2' }} = ₹{{ (item.quantity * item.mrp) | number:'1.2-2' }}
+                  {{ item.quantity }} × ₹{{ item.finalPrice | number:'1.2-2' }} = ₹{{ (item.quantity * item.finalPrice) | number:'1.2-2' }}
                 </p>
               </div>
 
