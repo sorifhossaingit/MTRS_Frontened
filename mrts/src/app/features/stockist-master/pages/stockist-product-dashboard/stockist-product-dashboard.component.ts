@@ -5,6 +5,7 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import {
+  LucideAngularModule,
   Package,
   Plus,
   Upload,
@@ -13,10 +14,16 @@ import {
   TrendingUp,
   Eye,
   Pencil,
-  Trash2,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
+  Search,
+  RotateCcw,
+  SlidersHorizontal,
+  Box,
+  Layers,
+  Tag,
+  XIcon
 } from 'lucide-angular';
 
 import Swal from 'sweetalert2';
@@ -31,18 +38,23 @@ import { StockistService } from '../../services/stockist.service';
 })
 export class StockistProductDashboardComponent implements OnInit {
 
-  Package = Package;
-  Plus = Plus;
-  Upload = Upload;
-  CheckCircle = CheckCircle;
-  XCircle = XCircle;
-  TrendingUp = TrendingUp;
-  Eye = Eye;
-  Pencil = Pencil;
-  Trash2 = Trash2;
-  ChevronLeft = ChevronLeft;
-  ChevronRight = ChevronRight;
-  X = X;
+readonly PackageIcon = Package;
+  readonly PlusIcon = Plus;
+  readonly UploadIcon = Upload;
+  readonly CheckCircleIcon = CheckCircle;
+  readonly XCircleIcon = XCircle;
+  readonly TrendingUpIcon = TrendingUp;
+  readonly EyeIcon = Eye;
+  readonly PencilIcon = Pencil;
+  readonly ChevronLeftIcon = ChevronLeft;
+  readonly ChevronRightIcon = ChevronRight;
+  readonly XIcon = X;
+  readonly SearchIcon = Search;
+  readonly RotateCcwIcon = RotateCcw;
+  readonly SlidersIcon = SlidersHorizontal;
+  readonly BoxIcon = Box;
+  readonly LayersIcon = Layers;
+  readonly TagIcon = Tag;
 
   filterForm!: FormGroup;
   editForm!: FormGroup;
@@ -77,12 +89,13 @@ export class StockistProductDashboardComponent implements OnInit {
       maxPrice: [null]
     });
 
-    this.editForm = this.fb.group({
-      quantity: [0],
-      sellingPrice: [0],
-      discountPercent: [0],
-      isAvailable: [true]
-    });
+this.editForm = this.fb.group({
+  quantity: [0],
+  sellingPrice: [0],
+  taxPercent: [0],
+  discountPercent: [0],
+  isAvailable: [true]
+});
 
     this.getProducts();
   }
@@ -186,19 +199,20 @@ export class StockistProductDashboardComponent implements OnInit {
     this.selectedProduct = null;
   }
 
-  openEditModal(product: any): void {
+openEditModal(product: any): void {
 
-    this.selectedInventoryId = product.inventoryId;
+  this.selectedInventoryId = product.inventoryId;
 
-    this.editForm.patchValue({
-      quantity: product.quantity,
-      sellingPrice: product.sellingPrice,
-      discountPercent: product.discountPercent,
-      isAvailable: product.isAvailable
-    });
+  this.editForm.patchValue({
+    quantity: 0, // Quantity to add
+    sellingPrice: product.sellingPrice,
+    taxPercent: product.taxPercent,
+    discountPercent: product.discountPercent,
+    isAvailable: product.isAvailable
+  });
 
-    this.showEditModal = true;
-  }
+  this.showEditModal = true;
+}
 
   closeEditModal(): void {
 
@@ -207,41 +221,41 @@ export class StockistProductDashboardComponent implements OnInit {
     this.selectedInventoryId = 0;
   }
 
-  updateProduct(): void {
+updateProduct(): void {
 
-    const payload = {
-      id: this.selectedInventoryId,
-      quantity: this.editForm.value.quantity,
-      sellingPrice: this.editForm.value.sellingPrice,
-      discountPercent: this.editForm.value.discountPercent,
-      isAvailable: this.editForm.value.isAvailable
-    };
+  const payload = {
+    id: this.selectedInventoryId,
+    quantity: this.editForm.value.quantity,
+    sellingPrice: this.editForm.value.sellingPrice,
+    taxPercent: this.editForm.value.taxPercent,
+    discountPercent: this.editForm.value.discountPercent,
+    isAvailable: this.editForm.value.isAvailable
+  };
 
-    this.stockistService
-      .update_stockist_product(payload)
-      .subscribe({
-        next: () => {
+  this.stockistService
+    .update_stockist_product(payload)
+    .subscribe({
+      next: () => {
 
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Product updated successfully'
-          });
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Product updated successfully'
+        });
 
-          this.closeEditModal();
+        this.closeEditModal();
+        this.getProducts();
+      },
+      error: (err) => {
 
-          this.getProducts();
-        },
-        error: (err) => {
-
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: err?.error?.message || 'Update failed'
-          });
-        }
-      });
-  }
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err?.error?.message || 'Update failed'
+        });
+      }
+    });
+}
 
   get activeProducts(): number {
     return this.products.filter(x => x.isAvailable).length;
