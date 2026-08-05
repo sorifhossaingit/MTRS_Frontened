@@ -1,504 +1,352 @@
 <div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
 
   <!-- HEADER -->
-  <div
-    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
     <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
       <lucide-icon [img]="ShoppingCart"></lucide-icon>
-      MY Orders To Stockist
+      My Orders To Stockist
     </h1>
-
   </div>
 
   <!-- KPI CARDS -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="ShoppingCart"></lucide-icon>
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-3">
+      <lucide-icon [img]="ShoppingCart" class="w-8 h-8 text-blue-600"></lucide-icon>
       <div>
         <p class="text-sm text-gray-500">Total Orders</p>
-        <h2 class="text-xl font-bold">
-          {{ totalOrders }}
-        </h2>
+        <h2 class="text-xl font-bold">{{ totalOrders }}</h2>
       </div>
     </div>
 
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="Clock"></lucide-icon>
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-3">
+      <lucide-icon [img]="Clock" class="w-8 h-8 text-yellow-600"></lucide-icon>
       <div>
         <p class="text-sm text-gray-500">Pending</p>
-        <h2 class="text-xl font-bold text-yellow-600">
-          {{ pendingOrders }}
-        </h2>
+        <h2 class="text-xl font-bold text-yellow-600">{{ pendingOrders }}</h2>
       </div>
     </div>
 
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="CheckCircle"></lucide-icon>
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-3">
+      <lucide-icon [img]="CheckCircle" class="w-8 h-8 text-green-600"></lucide-icon>
       <div>
         <p class="text-sm text-gray-500">Accepted</p>
-        <h2 class="text-xl font-bold text-green-600">
-          {{ acceptedOrders }}
-        </h2>
+        <h2 class="text-xl font-bold text-green-600">{{ acceptedOrders }}</h2>
       </div>
     </div>
 
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="XCircle"></lucide-icon>
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-3">
+      <lucide-icon [img]="XCircle" class="w-8 h-8 text-red-600"></lucide-icon>
       <div>
         <p class="text-sm text-gray-500">Rejected</p>
-        <h2 class="text-xl font-bold text-red-600">
-          {{ rejectedOrders }}
-        </h2>
+        <h2 class="text-xl font-bold text-red-600">{{ rejectedOrders }}</h2>
       </div>
     </div>
-
   </div>
 
   <!-- FILTERS -->
-  <div
-    class="card mb-6"
-    [formGroup]="filterForm">
-
+  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6" [formGroup]="filterForm">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+
+      <input
+        type="text"
+        formControlName="customerName"
+        placeholder="Customer Name"
+        class="border border-gray-300 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
       <select
         formControlName="status"
-        class="input">
-
-        <option value="">
-          All Status
-        </option>
-
-        <option value="Pending">
-          Pending
-        </option>
-
-        <option value="Accepted">
-          Accepted
-        </option>
-
-        <option value="Rejected">
-          Rejected
-        </option>
-
+        class="border border-gray-300 px-3 py-2 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Accepted">Accepted</option>
+        <option value="Rejected">Rejected</option>
       </select>
 
       <input
         type="number"
         formControlName="minAmount"
         placeholder="Min Amount"
-        class="input">
+        class="border border-gray-300 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
       <input
         type="number"
         formControlName="maxAmount"
         placeholder="Max Amount"
-        class="input">
+        class="border border-gray-300 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
       <button
         (click)="applyFilters()"
-        class="bg-blue-600 text-white rounded-lg py-2">
-
+        class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 text-sm font-medium transition-colors">
         Search
-
       </button>
 
       <button
         (click)="resetFilters()"
-        class="bg-gray-200 rounded-lg py-2">
-
+        class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg py-2 text-sm font-medium transition-colors">
         Reset
-
       </button>
 
     </div>
-
   </div>
 
-  <!-- TABLE -->
-  <div class="card overflow-hidden">
-
+  <!-- MAIN TABLE -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
-
-      <table class="min-w-[1200px] w-full text-sm">
-
-        <thead class="bg-gray-100 text-left">
-
+      <table class="min-w-[1300px] w-full text-sm">
+        <thead class="bg-gray-50 text-gray-700 text-left border-b border-gray-200">
           <tr>
-
             <th class="p-3">Order No</th>
-
             <th>Date</th>
-
+            <th>Customer Name</th>
+            <th>Customer Mobile</th>
+            <th>Route</th>
             <th>MR Name</th>
-
-            <th>Mobile</th>
-
-            <th>City</th>
-
-            <th>Region</th>
-
             <th>Amount</th>
-
             <th>Status</th>
-
-            <th class="text-center">
-              Action
-            </th>
-
+            <th class="text-center">Action</th>
           </tr>
-
         </thead>
 
-        <tbody>
-
-          <tr
-            *ngIf="isLoading">
-
-            <td
-              colspan="9"
-              class="text-center p-6">
-
-              Loading...
-
+        <tbody class="divide-y divide-gray-100">
+          <tr *ngIf="isLoading">
+            <td colspan="9" class="text-center p-6 text-gray-500">
+              <div class="inline-block animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent mr-2"></div>
+              Loading orders...
             </td>
-
           </tr>
 
-          <tr
-            *ngFor="let order of orders"
-            class="border-t hover:bg-gray-50">
-
-            <td class="p-3 font-medium">
+          <tr *ngFor="let order of orders" class="hover:bg-gray-50 transition-colors">
+            <td class="p-3 font-medium text-gray-900">
               {{ order.OrderNumber }}
             </td>
 
-            <td>
+            <td class="text-gray-600">
               {{ order.OrderDate | date:'dd MMM yyyy' }}
             </td>
 
-            <td>
+            <!-- Customer Details Columns -->
+            <td class="font-semibold text-gray-800">
+              {{ order.CustomerName || 'N/A' }}
+              <span *ngIf="order.CustomerType" class="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-normal ml-1">
+                
+              </span>
+            </td>
+
+            <td class="text-gray-600">
+              {{ order.CustomerMobile || 'N/A' }}
+            </td>
+
+            <td class="text-gray-600">
+              {{ order.RouteName || 'N/A' }}
+            </td>
+
+            <td class="text-gray-600">
               {{ order.MedicalRepresentativeName }}
             </td>
 
-            <td>
-              {{ order.Mobile }}
+            <td class="font-bold text-gray-900">
+              ₹{{ order.TotalAmount | number:'1.2-2' }}
             </td>
 
             <td>
-              {{ order.City }}
-            </td>
-
-            <td>
-              {{ order.Region }}
-            </td>
-
-            <td class="font-semibold">
-              ₹{{ order.TotalAmount }}
-            </td>
-
-            <td>
-
               <span
-                class="px-3 py-1 rounded-full text-xs font-medium"
+                class="px-3 py-1 rounded-full text-xs font-medium inline-block"
                 [ngClass]="{
-
-                  'bg-yellow-100 text-yellow-700':
-                  order.Status === 'Pending',
-
-                  'bg-green-100 text-green-700':
-                  order.Status === 'Accepted',
-
-                  'bg-red-100 text-red-700':
-                  order.Status === 'Rejected'
-
+                  'bg-yellow-100 text-yellow-700': order.Status === 'Pending',
+                  'bg-green-100 text-green-700': order.Status === 'Accepted',
+                  'bg-red-100 text-red-700': order.Status === 'Rejected'
                 }">
-
                 {{ order.Status }}
-
               </span>
-
             </td>
 
             <td class="text-center">
-
-              <div class="flex justify-center gap-2">
+              <div class="flex justify-center items-center gap-2">
                 <button
                   *ngIf="order.Status === 'Accepted'"
                   (click)="updateStatus(order.OrderId)"
-                  class="bg-red-600 text-white px-3 py-1 rounded">
-                  Update Status
+                  class="bg-red-600 hover:bg-red-700 text-white text-xs px-2.5 py-1 rounded transition-colors">
+                  Update
                 </button>
 
                 <button
                   (click)="viewOrder(order)"
-                  class="text-blue-600">
-                  <lucide-icon [img]="Eye"></lucide-icon>
+                  title="View Order Details"
+                  class="text-blue-600 hover:text-blue-800 p-1 rounded-lg hover:bg-blue-50 transition-colors">
+                  <lucide-icon [img]="Eye" class="w-5 h-5"></lucide-icon>
                 </button>
-
               </div>
-
             </td>
-
           </tr>
 
-          <tr
-            *ngIf="!isLoading && orders.length === 0">
-
-            <td
-              colspan="9"
-              class="text-center p-6 text-gray-500">
-
+          <tr *ngIf="!isLoading && orders.length === 0">
+            <td colspan="9" class="text-center p-8 text-gray-500">
               No Orders Found
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
-
   </div>
 
   <!-- PAGINATION -->
-  <div
-    class="flex justify-between items-center mt-4 bg-white rounded-lg p-4 shadow">
-
+  <div class="flex justify-between items-center mt-4 bg-white rounded-xl p-4 shadow-sm border border-gray-200">
     <button
       (click)="previousPage()"
       [disabled]="pageNumber === 1"
-      class="px-4 py-2 border rounded-lg disabled:opacity-50 flex items-center gap-2">
-
-      <lucide-icon [img]="ChevronLeft"></lucide-icon>
-
+      class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50 flex items-center gap-2">
+      <lucide-icon [img]="ChevronLeft" class="w-4 h-4"></lucide-icon>
       Previous
-
     </button>
 
-    <div>
-
-      Page {{ pageNumber }}
-      of
-      {{ totalPages }}
-
+    <div class="text-sm font-medium text-gray-700">
+      Page {{ pageNumber }} of {{ totalPages }}
     </div>
 
     <button
       (click)="nextPage()"
-      [disabled]="pageNumber === totalPages"
-      class="px-4 py-2 border rounded-lg disabled:opacity-50 flex items-center gap-2">
-
+      [disabled]="pageNumber === totalPages || totalPages === 0"
+      class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50 flex items-center gap-2">
       Next
-
-      <lucide-icon [img]="ChevronRight"></lucide-icon>
-
+      <lucide-icon [img]="ChevronRight" class="w-4 h-4"></lucide-icon>
     </button>
-
   </div>
 
 </div>
 
 <!-- ORDER PREVIEW MODAL -->
+<div *ngIf="showPreviewModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
-<div
-  *ngIf="showPreviewModal"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden">
 
-  <div
-    class="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
-
-    <!-- HEADER -->
-
-    <div
-      class="flex justify-between items-center p-5 border-b">
-
+    <!-- MODAL HEADER -->
+    <div class="flex justify-between items-center p-5 border-b border-gray-200 bg-gray-50">
       <div>
-
-        <h2 class="text-xl font-bold">
-          Order Preview
-        </h2>
-
-        <p class="text-sm text-gray-500">
-          {{ selectedOrder?.OrderNumber }}
-        </p>
-
+        <h2 class="text-lg font-bold text-gray-900">Order Preview</h2>
+        <p class="text-xs text-gray-500">Order No: <span class="font-semibold text-gray-800">{{ selectedOrder?.OrderNumber }}</span></p>
       </div>
 
-      <button
-        (click)="closePreviewModal()">
-
-        <lucide-icon [img]="X"></lucide-icon>
-
+      <button (click)="closePreviewModal()" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg">
+        <lucide-icon [img]="X" class="w-6 h-6"></lucide-icon>
       </button>
-
     </div>
 
-    <!-- BODY -->
+    <!-- MODAL BODY -->
+    <div class="overflow-y-auto p-5 space-y-6">
 
-    <div class="overflow-y-auto max-h-[70vh] p-5">
+      <!-- ORDER DETAILS CARDS GRID -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <!-- Stockist Details -->
+        <div class="bg-purple-50/60 p-4 rounded-xl border border-purple-100 text-xs space-y-1.5">
+          <h3 class="font-bold text-purple-900 text-sm flex items-center gap-1.5 mb-2">
+            <lucide-icon [img]="Building" class="w-4 h-4 text-purple-600"></lucide-icon>
+            Stockist Details
+          </h3>
+          <p><strong class="text-gray-700">Stockist:</strong> {{ previewProducts[0]?.stockistName || 'N/A' }}</p>
+          <p><strong class="text-gray-700">Contact Person:</strong> {{ previewProducts[0]?.stockistContactPerson || 'N/A' }}</p>
+          <p><strong class="text-gray-700">Mobile:</strong> {{ previewProducts[0]?.stockistMobile || 'N/A' }}</p>
+          <p><strong class="text-gray-700">Email:</strong> {{ previewProducts[0]?.stockistEmail || 'N/A' }}</p>
+        </div>
 
-        <div>
-          <p>
-            <strong>MR :</strong>
-            {{ selectedOrder?.MedicalRepresentativeName }}
-          </p>
+        <!-- 1. Customer Details -->
+        <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-100 text-xs space-y-1.5">
+          <h3 class="font-bold text-blue-900 text-sm flex items-center gap-1.5 mb-2">
+            <lucide-icon [img]="User" class="w-4 h-4 text-blue-600"></lucide-icon>
+            Customer Details
+          </h3>
+          <p><strong class="text-gray-700">Name:</strong> {{ selectedOrder?.CustomerName || 'N/A' }}</p>
+          <!-- <p><strong class="text-gray-700">Type:</strong> {{ selectedOrder?.CustomerType || 'N/A' }}</p> -->
+          <p><strong class="text-gray-700">Contact Person:</strong> {{ selectedOrder?.CustomerContactPerson || 'N/A' }}</p>
+          <p><strong class="text-gray-700">Mobile:</strong> {{ selectedOrder?.CustomerMobile || 'N/A' }}</p>
+          <p><strong class="text-gray-700">Route:</strong> {{ selectedOrder?.RouteName || 'N/A' }}</p>
+        </div>
 
-          <p>
-            <strong>Mobile :</strong>
-            {{ selectedOrder?.Mobile }}
-          </p>
-
-          <p>
-            <strong>Region :</strong>
-            {{ selectedOrder?.Region }}
+        <!-- 2. Customer Compliance & Address -->
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs space-y-1.5">
+          <h3 class="font-bold text-gray-900 text-sm flex items-center gap-1.5 mb-2">
+            <lucide-icon [img]="FileText" class="w-4 h-4 text-gray-600"></lucide-icon>
+            Customer Location
+          </h3>
+          <!-- <p><strong class="text-gray-700">GST No:</strong> {{ selectedOrder?.CustomerGSTNo || 'N/A' }}</p> -->
+          <!-- <p><strong class="text-gray-700">Drug License:</strong> {{ selectedOrder?.CustomerDrugLicenseNo || 'N/A' }}</p> -->
+          <!-- <p><strong class="text-gray-700">PAN No:</strong> {{ selectedOrder?.CustomerPANNo || 'N/A' }}</p> -->
+          <p><strong class="text-gray-700">City / State:</strong> {{ selectedOrder?.CustomerCity }}, {{ selectedOrder?.CustomerState }}</p>
+          <p class="truncate" [title]="selectedOrder?.CustomerAddress">
+            <strong class="text-gray-700">Address:</strong> {{ selectedOrder?.CustomerAddress || 'N/A' }}
           </p>
         </div>
 
-        <div>
-          <p>
-            <strong>City :</strong>
-            {{ selectedOrder?.City }}
-          </p>
-
-          <p>
-            <strong>Status :</strong>
-            {{ selectedOrder?.Status }}
-          </p>
-
-          <p>
-            <strong>Amount :</strong>
-            ₹{{ selectedOrder?.TotalAmount }}
-          </p>
+        <!-- 3. Representative & Order Summary -->
+        <div class="bg-emerald-50/60 p-4 rounded-xl border border-emerald-100 text-xs space-y-1.5">
+          <h3 class="font-bold text-emerald-900 text-sm flex items-center gap-1.5 mb-2">
+            <lucide-icon [img]="ShoppingCart" class="w-4 h-4 text-emerald-600"></lucide-icon>
+            Order Overview
+          </h3>
+          <p><strong class="text-gray-700">MR Name:</strong> {{ selectedOrder?.MedicalRepresentativeName }}</p>
+          <p><strong class="text-gray-700">MR Mobile:</strong> {{ selectedOrder?.MedicalRepresentativeMobile || 'N/A' }}</p>
+          <p><strong class="text-gray-700">Order Date:</strong> {{ selectedOrder?.OrderDate | date:'dd MMM yyyy, hh:mm a' }}</p>
+          <p><strong class="text-gray-700">Status:</strong> {{ selectedOrder?.Status }}</p>
+          <p><strong class="text-gray-700">Total Amount:</strong> <span class="font-bold text-emerald-700 text-sm">₹{{ selectedOrder?.TotalAmount | number:'1.2-2' }}</span></p>
         </div>
 
       </div>
 
-      <div class="overflow-x-auto">
+      <!-- PRODUCTS TABLE -->
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-[1000px] w-full text-xs">
+            <thead class="bg-gray-100 text-gray-700 text-left">
+              <tr>
+                <th class="p-3">Image</th>
+                <th>Product</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Dosage</th>
+                <th>Strength</th>
+                <th>Qty</th>
+                <th>Free</th>
+                <th>MRP</th>
+                <th>Total</th>
+              </tr>
+            </thead>
 
-        <table class="min-w-[1200px] w-full text-sm">
+            <tbody class="divide-y divide-gray-100">
+              <tr *ngFor="let item of previewProducts" class="hover:bg-gray-50">
+                <td class="p-2">
+                  <img
+                    [src]="item.imageUrl || 'assets/images/no-image.png'"
+                    class="w-12 h-12 rounded object-cover border border-gray-200">
+                </td>
 
-          <thead class="bg-gray-100">
-
-            <tr>
-
-              <th class="p-3">Image</th>
-
-              <th>Product</th>
-
-              <th>Brand</th>
-
-              <th>Category</th>
-
-              <th>Dosage</th>
-
-              <th>Strength</th>
-
-              <th>Qty</th>
-
-              <th>Free</th>
-
-              <th>MRP</th>
-
-              <th>PTR</th>
-
-              <th>Total</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            <tr
-              *ngFor="let item of previewProducts"
-              class="border-t">
-
-              <td class="p-3">
-
-                <img
-                  [src]="item.imageUrl"
-                  class="w-16 h-16 rounded object-cover">
-
-              </td>
-
-              <td>
-                {{ item.productName }}
-              </td>
-
-              <td>
-                {{ item.brandName }}
-              </td>
-
-              <td>
-                {{ item.category }}
-              </td>
-
-              <td>
-                {{ item.dosageForm }}
-              </td>
-
-              <td>
-                {{ item.strength }}
-              </td>
-
-              <td>
-                {{ item.quantity }}
-              </td>
-
-              <td>
-                {{ item.freeQuantity }}
-              </td>
-
-              <td>
-                ₹{{ item.mrp }}
-              </td>
-
-              <td>
-                ₹{{ item.ptr }}
-              </td>
-
-              <td class="font-semibold">
-                ₹{{ item.totalAmount }}
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
+                <td class="font-semibold text-gray-800">{{ item.productName }}</td>
+                <td>{{ item.brandName }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.dosageForm }}</td>
+                <td>{{ item.strength }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.freeQuantity || 0 }}</td>
+                <td>₹{{ item.mrp | number:'1.2-2' }}</td>
+                <td class="font-bold text-gray-900">₹{{ item.totalAmount | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>
 
-    <!-- FOOTER -->
-
-    <div
-      class="p-5 border-t flex justify-between items-center">
-
-      <div class="text-lg font-bold">
-
-        Total :
-        ₹{{ previewTotal }}
-
+    <!-- MODAL FOOTER -->
+    <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
+      <div class="text-base font-bold text-gray-900">
+        Grand Total: <span class="text-emerald-600">₹{{ previewTotal | number:'1.2-2' }}</span>
       </div>
 
       <button
         (click)="closePreviewModal()"
-        class="bg-gray-200 px-5 py-2 rounded-lg">
-
+        class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2 rounded-lg text-xs font-semibold transition-colors">
         Close
-
       </button>
-
     </div>
 
   </div>

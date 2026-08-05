@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { Observable } from 'rxjs';
 
 
 
@@ -139,5 +140,15 @@ export class MrService {
       `${this.apiUrl}/areamanager/stockist-list-for-mrcreate/${agencyId}`
     );
   }
+
+
+  // ------------------mr order----
+  get_routes_by_mr(mrId: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/mrvisit/get-routes-by-medicalrepresentative/${mrId}`);
+}
+
+get_customers_by_route(routeId: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route/${routeId}`);
+}
 
 }
