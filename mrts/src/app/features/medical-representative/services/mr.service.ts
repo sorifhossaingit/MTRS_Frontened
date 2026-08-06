@@ -85,6 +85,9 @@ export class MrService {
     return this.http.post(`${this.apiUrl}/mrvisit/end`, data);
   }
 
+  get_today_started_visit(agencyId: number, mrId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/mrvisit/today-started?agencyId=${agencyId}&mrId=${mrId}`);
+  }
   get_tracking_of_mr(visitplanid: any) {
     return this.http.get(
       `${this.apiUrl}/mrvisit/tracking-of-mr/${visitplanid}`);
