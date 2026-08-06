@@ -641,7 +641,7 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
     }
 
     if (!targetSessionId || targetSessionId <= 0) {
-      Swal.fire('Error', 'Invalid Session ID. Cannot end visit.', 'error');
+      Swal.fire('Error', 'No active visit session found. The visit may have already been ended', 'error');
       return;
     }
 
