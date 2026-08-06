@@ -33,16 +33,12 @@ export class OrderDetailsMasterComponent implements OnInit {
   filterForm!: FormGroup;
 
   orders: any[] = [];
-
   previewProducts: any[] = [];
-
   showPreviewModal = false;
-
   selectedOrder: any = null;
-
   isLoading = false;
 
-  // KPI
+  // KPI Counts
   totalOrders = 0;
   pendingOrders = 0;
   acceptedOrders = 0;
@@ -60,7 +56,6 @@ export class OrderDetailsMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.filterForm = this.fb.group({
       mobileNumber: [''],
       status: [''],
@@ -74,35 +69,19 @@ export class OrderDetailsMasterComponent implements OnInit {
   // ===========================
   // GET ORDERS
   // ===========================
-
   getOrders(): void {
-
     this.isLoading = true;
 
     const payload = {
-
       agencyId: Number(localStorage.getItem('aid')),
-
       stockistId: Number(localStorage.getItem('mid')),
-
       medicalRepresentativeId: null,
-
       medicalRepresentativeName: null,
-
-      mobileNumber:
-        this.filterForm.value.mobileNumber || null,
-
-      status:
-        this.filterForm.value.status || null,
-
-      minAmount:
-        this.filterForm.value.minAmount || null,
-
-      maxAmount:
-        this.filterForm.value.maxAmount || null,
-
+      mobileNumber: this.filterForm.value.mobileNumber || null,
+      status: this.filterForm.value.status || null,
+      minAmount: this.filterForm.value.minAmount || null,
+      maxAmount: this.filterForm.value.maxAmount || null,
       pageNumber: this.pageNumber,
-
       pageSize: this.pageSize
     };
 
@@ -110,164 +89,117 @@ export class OrderDetailsMasterComponent implements OnInit {
       .get_mr_order_list(payload)
       .subscribe({
         next: (res: any) => {
-
           const response = res.data;
 
           this.orders = response.data || [];
-
-          this.totalRecords =
-            response.totalCount || 0;
-
-          this.pageNumber =
-            response.pageNumber || 1;
-
-          this.pageSize =
-            response.pageSize || 10;
-
-          this.totalPages =
-            response.totalPages || 0;
+          this.totalRecords = response.totalCount || 0;
+          this.pageNumber = response.pageNumber || 1;
+          this.pageSize = response.pageSize || 10;
+          this.totalPages = response.totalPages || 0;
 
           this.calculateKpis();
-
           this.isLoading = false;
         },
         error: (err: any) => {
-
           this.isLoading = false;
-
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text:
-              err?.error?.message ||
-              'Failed to load orders'
+            text: err?.error?.message || 'Failed to load orders'
           });
         }
       });
   }
 
   // ===========================
-  // KPI
+  // KPI CALCULATIONS
   // ===========================
-
   calculateKpis(): void {
-
     this.totalOrders = this.totalRecords;
 
-    this.pendingOrders =
-      this.orders.filter(
-        x => x.Status === 'Pending'
-      ).length;
+    this.pendingOrders = this.orders.filter(
+      x => x.Status === 'Pending'
+    ).length;
 
-    this.acceptedOrders =
-      this.orders.filter(
-        x => x.Status === 'Accepted'
-      ).length;
+    // Treat both Accepted and Delivered as success state
+    this.acceptedOrders = this.orders.filter(
+      x => x.Status === 'Accepted' || x.Status === 'Delivered'
+    ).length;
 
-    this.rejectedOrders =
-      this.orders.filter(
-        x => x.Status === 'Rejected'
-      ).length;
+    this.rejectedOrders = this.orders.filter(
+      x => x.Status === 'Rejected'
+    ).length;
   }
 
   // ===========================
-  // FILTERS
+  // FILTERS & PAGINATION
   // ===========================
-
   applyFilters(): void {
-
     this.pageNumber = 1;
-
     this.getOrders();
   }
 
   resetFilters(): void {
-
     this.filterForm.reset({
       mobileNumber: '',
       status: '',
       minAmount: null,
       maxAmount: null
     });
-
     this.pageNumber = 1;
-
     this.getOrders();
   }
 
-  // ===========================
-  // PAGINATION
-  // ===========================
-
   previousPage(): void {
-
     if (this.pageNumber > 1) {
-
       this.pageNumber--;
-
       this.getOrders();
     }
   }
 
   nextPage(): void {
-
     if (this.pageNumber < this.totalPages) {
-
       this.pageNumber++;
-
       this.getOrders();
     }
   }
 
   // ===========================
-  // PREVIEW ORDER
+  // PREVIEW ORDER MODAL
   // ===========================
-
   viewOrder(order: any): void {
-
     this.selectedOrder = order;
 
     this.stockistService
       .get_mr_order_preview(order.OrderId)
       .subscribe({
         next: (res: any) => {
-
-          this.previewProducts =
-            res.data || [];
-
+          this.previewProducts = res.data || [];
           this.showPreviewModal = true;
         },
         error: (err: any) => {
-
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text:
-              err?.error?.message ||
-              'Unable to load order preview'
+            text: err?.error?.message || 'Unable to load order preview'
           });
         }
       });
   }
 
   closePreviewModal(): void {
-
     this.showPreviewModal = false;
-
     this.previewProducts = [];
-
     this.selectedOrder = null;
   }
 
   // ===========================
   // UPDATE STATUS
   // ===========================
-
   updateStatus(
     order: any,
     status: 'Accepted' | 'Rejected'
   ): void {
-
     Swal.fire({
       title: `Are you sure?`,
       text: `You want to ${status} this order`,
@@ -275,56 +207,42 @@ export class OrderDetailsMasterComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: 'Yes'
     }).then(result => {
-
       if (!result.isConfirmed) return;
 
       const payload = {
-
         orderId: order.OrderId,
-
         status: status,
-
-        updatedBy:
-          Number(localStorage.getItem('mid'))
+        updatedBy: Number(localStorage.getItem('mid'))
       };
 
       this.stockistService
         .update_mr_order_status(payload)
         .subscribe({
           next: () => {
-
             Swal.fire({
               icon: 'success',
               title: 'Success',
               text: `Order ${status}`
             });
-
             this.getOrders();
           },
           error: (err: any) => {
-
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text:
-                err?.error?.message ||
-                'Status update failed'
+              text: err?.error?.message || 'Status update failed'
             });
           }
         });
-
     });
   }
 
   // ===========================
-  // ORDER TOTAL
+  // ORDER TOTAL COMPUTED
   // ===========================
-
   get previewTotal(): number {
-
     return this.previewProducts.reduce(
-      (sum, item) =>
-        sum + Number(item.totalAmount),
+      (sum, item) => sum + Number(item.totalAmount || 0),
       0
     );
   }
