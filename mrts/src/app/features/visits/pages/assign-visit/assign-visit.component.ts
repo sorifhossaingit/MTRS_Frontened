@@ -311,6 +311,7 @@ export class AssignVisitComponent implements OnInit {
       mrId: this.assignVisit.mrId,
       assignedBy: Number(localStorage.getItem('mid')),
       visitDate: this.assignVisit.visitDate,
+      routeId: this.assignVisit.routeId,   // <-- Add this
       remarks: this.assignVisit.remarks,
       places: this.assignVisit.places.map((place: any) => ({
         customerId: place.customerId,
