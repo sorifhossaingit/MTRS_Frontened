@@ -208,7 +208,7 @@
                 </button>
 
                 <!-- END VISIT -->
-                <button *ngIf="isVisitInProgress(visit)" (click)="endVisit(visit)" title="End Active Session" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition shadow-sm">
+                <button *ngIf="isVisitCompleted(visit)" (click)="endVisit(visit)" title="End Active Session" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition shadow-sm">
                   <lucide-icon [img]="StopCircle" class="w-3.5 h-3.5"></lucide-icon>
                   <span>End Visit</span>
                 </button>
@@ -264,7 +264,7 @@
           <lucide-icon [img]="Navigation" class="w-3.5 h-3.5"></lucide-icon> Route
         </button>
 
-        <button *ngIf="isVisitInProgress(visit)" (click)="endVisit(visit)" class="flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">
+        <button *ngIf="isVisitCompleted(visit)" (click)="endVisit(visit)" class="flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">
           <lucide-icon [img]="StopCircle" class="w-3.5 h-3.5"></lucide-icon> End
         </button>
       </div>

@@ -379,6 +379,7 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   canReject(visit: any): boolean { return visit.status === 'Assigned'; }
   canStartVisit(visit: any): boolean { return visit.status === 'Accepted'; }
   isVisitInProgress(visit: any): boolean { return visit.status === 'InProgress' || visit.status === 'In Progress'; }
+  isVisitCompleted(visit: any): boolean { return visit.status === 'Completed' || visit.status === 'completed' || visit.status === 'InProgress' || visit.status === 'In Progress'; }
   canRoute(visit: any): boolean {
     return visit.status === 'Accepted' || visit.status === 'InProgress' || visit.status === 'In Progress' || visit.status === 'Completed';
   }
