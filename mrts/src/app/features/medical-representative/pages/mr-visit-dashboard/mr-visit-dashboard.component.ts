@@ -16,10 +16,12 @@ import {
   RotateCcw,
   StopCircle,
   BadgeCheck,
-  Package
+  Phone,
+  Package,
+  User
 } from 'lucide-angular';
 
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MrService } from '../../services/mr.service';
 
@@ -47,6 +49,8 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   StopCircle = StopCircle;
   BadgeCheck = BadgeCheck;
   Package = Package;
+  Phone = Phone;
+  User = User;
 
   // User Info
   agencyId: number = Number(localStorage.getItem('aid'));
@@ -632,7 +636,7 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
 
     if (!targetSessionId || targetSessionId <= 0) {
       try {
-        const res: any = await this.mrService.get_active_session(visit.visitPlanId).toPromise();
+        const res: any = await firstValueFrom(this.mrService.get_active_session(visit.visitPlanId));
         targetSessionId = res?.sessionId || res?.data?.sessionId;
       } catch {
         Swal.fire('Error', 'Could not retrieve active session to end visit.', 'error');
@@ -852,6 +856,11 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Close Map',
       didOpen: () => {
         setTimeout(() => this.loadTrackingMap(), 300);
+      },
+      willClose: () => {
+        if (this.map) {
+          this.map.remove();
+        }
       }
     });
   }
@@ -947,7 +956,7 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
 
   async getPublicIp(): Promise<string> {
     try {
-      const response: any = await this.http.get('https://api.ipify.org?format=json').toPromise();
+      const response: any = await firstValueFrom(this.http.get('https://api.ipify.org?format=json'));
       return response.ip;
     } catch {
       return '';
@@ -955,6 +964,9 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.map) {
+      this.map.remove();
+    }
     this.stopTracking();
     this.destroy$.next();
     this.destroy$.complete();
