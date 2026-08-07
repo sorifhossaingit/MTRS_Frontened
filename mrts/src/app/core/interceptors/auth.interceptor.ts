@@ -54,7 +54,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
         console.log(`401 Count: ${unauthorizedCount}`);
 
-        if (unauthorizedCount >= 3 && !isRedirecting) {
+        if (unauthorizedCount >= 1 && !isRedirecting) {
           isRedirecting = true;
 
           unauthorizedCount = 0;
