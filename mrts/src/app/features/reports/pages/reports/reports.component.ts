@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import {
@@ -14,6 +16,7 @@ import {
 
 import { environment } from '../../../../../environments/environment';
 
+// UPDATED INTERFACE to match the new API response schema
 interface MedicalRepresentative {
   medicalRepresentativeId: number;
   medicalRepresentativeUuid?: string;
@@ -36,34 +39,24 @@ interface ApiResponse {
 })
 export class ReportsComponent implements OnInit {
 
-  // =========================================================
-  // ICONS
-  // =========================================================
+  // Lucide icons
+  readonly FileText = FileText;
+  readonly AlertCircle = AlertCircle;
+  readonly User = User;
+  readonly Calendar = Calendar;
+  readonly IndianRupee = IndianRupee;
+  readonly Download = Download;
+  readonly FileDown = FileDown;
+  readonly Loader2 = Loader2;
 
-  FileText = FileText;
-  AlertCircle = AlertCircle;
-  User = User;
-  Calendar = Calendar;
-  IndianRupee = IndianRupee;
-  Download = Download;
-  FileDown = FileDown;
-  Loader2 = Loader2;
-
-  // =========================================================
-  // VARIABLES
-  // =========================================================
-
-  private apiUrl = environment.authurl;
+  private apiUrl = environment.apiUrl;
 
   agencyId = 0;
-
   mrList: MedicalRepresentative[] = [];
-
   selectedMrId: number | null = null;
 
   fromDate = '';
   toDate = '';
-
   ratePerKm: number | null = null;
 
   loadingMRs = false;
@@ -72,22 +65,10 @@ export class ReportsComponent implements OnInit {
 
   errorMessage = '';
 
-  // =========================================================
-  // CONSTRUCTOR
-  // =========================================================
-
-  constructor(
-    private http: HttpClient
-  ) {}
-
-  // =========================================================
-  // INIT
-  // =========================================================
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-
     const aid = localStorage.getItem('aid');
-
     this.agencyId = aid ? Number(aid) : 0;
 
     if (this.agencyId > 0) {
@@ -97,66 +78,44 @@ export class ReportsComponent implements OnInit {
     }
   }
 
-  // =========================================================
-  // LOAD ACTIVE MR LIST
-  // =========================================================
-
+  /**
+   * Load Active MR dropdown
+   */
   fetchMedicalRepresentatives(): void {
-
     this.loadingMRs = true;
     this.errorMessage = '';
 
     const params = new HttpParams()
       .set('agencyId', this.agencyId.toString());
 
+    // UPDATED ENDPOINT PATH HERE
     this.http.get<ApiResponse>(
       `${this.apiUrl}/VisitReport/admin-get-mrlist-active`,
       { params }
     ).subscribe({
-
       next: (response) => {
-
         this.loadingMRs = false;
-
         if (response.success) {
-
           this.mrList = response.data || [];
-
         } else {
-
           this.mrList = [];
-
-          this.errorMessage =
-            response.message || 'Failed to fetch MR list.';
+          this.errorMessage = response.message || 'Failed to fetch MR list.';
         }
       },
-
       error: (err) => {
-
         this.loadingMRs = false;
-
         this.mrList = [];
-
-        this.errorMessage =
-          'Error fetching MR data. Please try again.';
-
-        console.error(
-          'MR dropdown error:',
-          err
-        );
+        this.errorMessage = 'Error fetching MR data. Please try again.';
+        console.error('MR dropdown error:', err);
       }
     });
   }
 
-  // =========================================================
-  // VISIT REPORT PDF
-  // =========================================================
-
+  /**
+   * Generate Visit Report PDF
+   */
   generateVisitReportPdf(): void {
-
-    if (!this.validateVisitReport()) {
-      return;
-    }
+    if (!this.validateVisitReport()) return;
 
     this.downloadingVisitPdf = true;
     this.errorMessage = '';
@@ -169,47 +128,28 @@ export class ReportsComponent implements OnInit {
 
     this.http.get(
       `${this.apiUrl}/VisitReport/mr-visit-pdf`,
-      {
-        params,
-        responseType: 'blob'
-      }
+      { params, responseType: 'blob' }
     ).subscribe({
-
       next: (blob) => {
-
         this.downloadingVisitPdf = false;
-
         this.downloadFile(
           blob,
           `MR_Visit_Report_${this.selectedMrId}_${this.fromDate}_${this.toDate}.pdf`
         );
       },
-
       error: (err) => {
-
         this.downloadingVisitPdf = false;
-
-        console.error(
-          'Visit Report PDF error:',
-          err
-        );
-
-        alert(
-          'Failed to download Visit Report PDF.'
-        );
+        console.error('Visit Report PDF error:', err);
+        alert('Failed to download Visit Report PDF.');
       }
     });
   }
 
-  // =========================================================
-  // GENERAL MR PDF
-  // =========================================================
-
+  /**
+   * Generate MR Monthly/Date Range PDF
+   */
   generateMrPdf(): void {
-
-    if (!this.validateMrReport()) {
-      return;
-    }
+    if (!this.validateMrReport()) return;
 
     this.downloadingMrPdf = true;
     this.errorMessage = '';
@@ -220,148 +160,82 @@ export class ReportsComponent implements OnInit {
 
     this.http.get(
       `${this.apiUrl}/VisitReport/mr/${this.selectedMrId}/pdf`,
-      {
-        params,
-        responseType: 'blob'
-      }
+      { params, responseType: 'blob' }
     ).subscribe({
-
       next: (blob) => {
-
         this.downloadingMrPdf = false;
-
         this.downloadFile(
           blob,
           `MR_Report_${this.selectedMrId}_${this.fromDate}_${this.toDate}.pdf`
         );
       },
-
       error: (err) => {
-
         this.downloadingMrPdf = false;
-
-        console.error(
-          'MR PDF error:',
-          err
-        );
-
-        alert(
-          'Failed to download MR PDF.'
-        );
+        console.error('MR PDF error:', err);
+        alert('Failed to download MR PDF.');
       }
     });
   }
 
-  // =========================================================
-  // VISIT REPORT VALIDATION
-  // =========================================================
-
   private validateVisitReport(): boolean {
-
     if (!this.selectedMrId) {
       alert('Please select an MR.');
       return false;
     }
-
     if (!this.fromDate) {
       alert('Please select From Date.');
       return false;
     }
-
     if (!this.toDate) {
       alert('Please select To Date.');
       return false;
     }
-
     if (this.fromDate > this.toDate) {
-      alert(
-        'From Date cannot be greater than To Date.'
-      );
+      alert('From Date cannot be greater than To Date.');
       return false;
     }
-
-    if (
-      this.ratePerKm === null ||
-      this.ratePerKm === undefined ||
-      this.ratePerKm < 0
-    ) {
-      alert(
-        'Please enter a valid Rate Per KM.'
-      );
+    if (this.ratePerKm === null || this.ratePerKm === undefined || this.ratePerKm < 0) {
+      alert('Please enter a valid Rate Per KM.');
       return false;
     }
-
     return true;
   }
-
-  // =========================================================
-  // MR REPORT VALIDATION
-  // =========================================================
 
   private validateMrReport(): boolean {
-
     if (!this.selectedMrId) {
       alert('Please select an MR.');
       return false;
     }
-
     if (!this.fromDate) {
       alert('Please select From Date.');
       return false;
     }
-
     if (!this.toDate) {
       alert('Please select To Date.');
       return false;
     }
-
     if (this.fromDate > this.toDate) {
-      alert(
-        'From Date cannot be greater than To Date.'
-      );
+      alert('From Date cannot be greater than To Date.');
       return false;
     }
-
     return true;
   }
 
-  // =========================================================
-  // DOWNLOAD FILE
-  // =========================================================
-
-  private downloadFile(
-    blob: Blob,
-    filename: string
-  ): void {
-
+  private downloadFile(blob: Blob, filename: string): void {
     if (!blob || blob.size === 0) {
-
-      alert(
-        'Generated PDF is empty.'
-      );
-
+      alert('Generated PDF is empty.');
       return;
     }
-
-    const url =
-      window.URL.createObjectURL(blob);
-
-    const anchor =
-      document.createElement('a');
-
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = filename;
-
     document.body.appendChild(anchor);
-
     anchor.click();
-
     document.body.removeChild(anchor);
 
     setTimeout(() => {
-
       window.URL.revokeObjectURL(url);
-
     }, 100);
   }
 }

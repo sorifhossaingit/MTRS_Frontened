@@ -271,11 +271,5 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: 'clock',
     route: '/attendance',
     roles: ['Manager', 'Admin']
-  },
-    {
-    label: 'Report Dashboard',
-    icon: 'clock',
-    route: '/Report-dashboard',
-    roles: ['Admin']
   }
 ];
