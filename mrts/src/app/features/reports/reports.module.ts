@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { ReportsRoutingModule } from './reports-routing.module';
 import { ReportsComponent } from './pages/reports/reports.component';
+import { LucideAngularModule } from 'lucide-angular';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,6 +13,8 @@ import { ReportsComponent } from './pages/reports/reports.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    LucideAngularModule,
     ReportsRoutingModule
   ]
 })
