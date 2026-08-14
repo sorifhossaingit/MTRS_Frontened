@@ -1,52 +1,8 @@
-input {
-  transition: all 0.3s ease;
+/* Ensure SweetAlert always stays above Angular modals */
+div.swal2-container {
+  z-index: 100000 !important;
 }
 
-header {
-  backdrop-filter: blur(10px);
-  animation: slideDown 0.4s ease-out;
-}
-
-.navbar-header {
-  z-index: 35;
-}
-
-::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-button[type="button"] {
-  transition: all 0.2s ease;
-}
-
-button[type="button"]:active {
-  transform: scale(0.95);
-}
-
-/* Mobile optimizations */
-@media (max-width: 640px) {
-  header {
-    gap: 0.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  input {
-    display: none;
-  }
+::ng-deep .swal2-container {
+  z-index: 100000 !important;
 }
