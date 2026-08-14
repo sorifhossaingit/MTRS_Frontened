@@ -160,7 +160,13 @@ export class MrService {
 
   getMrDashboard(mrId: number): Observable<any> {
     return this.http.get(
-      `${this.apiUrl}/medicalpresentativeown/get-mr-dashboard8/${mrId}`
+      `${this.apiUrl}/medicalpresentativeown/get-mr-dashboard/${mrId}`
     );
   }
+
+  getTodayVisitsDashboard(mrId: number): Observable<any> {
+  return this.http.get(
+    `${this.apiUrl}/medicalpresentativeown/today-visits-dashboard/${mrId}`
+  );
+}
 }
