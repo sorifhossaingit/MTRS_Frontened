@@ -1,148 +1,273 @@
 <div class="p-4 md:p-6 bg-gray-100 min-h-screen">
-
   <div class="max-w-7xl mx-auto">
 
-    <!-- 🔷 Header -->
+    <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-        <lucide-icon [img]="UserCheck" class="text-blue-500"></lucide-icon>
-        MR Dashboard
-      </h1>
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
+          <lucide-icon [img]="UserCheck" class="text-blue-500"></lucide-icon>
+          MR Dashboard
+        </h1>
+        <p class="text-xs md:text-sm text-gray-500 mt-1">Overview for <span class="font-semibold text-blue-600">{{ currentMonthName }}</span></p>
+      </div>
 
-      <button
-        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center">
-        <lucide-icon [img]="Plus"></lucide-icon>
-        Add DCR
-      </button>
+      <div class="flex items-center gap-3 w-full md:w-auto">
+        <!-- Month Badge -->
+        <span class="hidden sm:inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-2 rounded-xl text-xs font-semibold border border-blue-100">
+          <lucide-icon [img]="Calendar" class="w-4 h-4"></lucide-icon>
+          This Month
+        </span>
+
+        <button
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center transition duration-200 shadow-sm text-sm font-medium">
+          <lucide-icon [img]="Plus"></lucide-icon>
+          Add Customer
+        </button>
+      </div>
     </div>
 
-    <!-- 🔷 Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-
-      <!-- DCR -->
-      <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
-        <div>
-          <p class="text-gray-500 text-sm">Today Calls</p>
-          <h2 class="text-xl font-bold text-blue-600">{{todayCalls}}</h2>
-        </div>
-        <lucide-icon [img]="ClipboardList" class="text-blue-500"></lucide-icon>
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="flex items-center justify-center py-10">
+      <div class="flex items-center gap-3 text-gray-500">
+        <div class="w-5 h-5 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+        <span class="text-sm">Loading dashboard...</span>
       </div>
-
-      <!-- Attendance -->
-      <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
-        <div>
-          <p class="text-gray-500 text-sm">Attendance</p>
-          <h2 class="text-xl font-bold text-green-600">{{attendanceStatus}}</h2>
-        </div>
-        <lucide-icon [img]="CheckCircle" class="text-green-500"></lucide-icon>
-      </div>
-
-      <!-- Visits -->
-      <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
-        <div>
-          <p class="text-gray-500 text-sm">Visits Done</p>
-          <h2 class="text-xl font-bold text-purple-600">{{visitsDone}}</h2>
-        </div>
-        <lucide-icon [img]="MapPin" class="text-purple-500"></lucide-icon>
-      </div>
-
-      <!-- Route -->
-      <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
-        <div>
-          <p class="text-gray-500 text-sm">Planned Route</p>
-          <h2 class="text-xl font-bold text-orange-500">{{routeCount}}</h2>
-        </div>
-        <lucide-icon [img]="Route" class="text-orange-500"></lucide-icon>
-      </div>
-
-      <!-- Samples -->
-      <div class="bg-white p-4 rounded-2xl shadow flex justify-between items-center">
-        <div>
-          <p class="text-gray-500 text-sm">Samples Given</p>
-          <h2 class="text-xl font-bold text-red-500">{{samplesGiven}}</h2>
-        </div>
-        <lucide-icon [img]="Package" class="text-red-500"></lucide-icon>
-      </div>
-
     </div>
 
-    <!-- 🔷 Main Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Dashboard Content -->
+    <div *ngIf="!isLoading">
 
-      <!-- 📋 Recent DCR -->
-      <div class="bg-white rounded-2xl shadow p-5 lg:col-span-2">
-        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-          <lucide-icon [img]="ClipboardList"></lucide-icon>
-          Recent DCR
-        </h2>
+      <!-- Top Stats Grid (5 Columns including This Month) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
 
-        <div class="space-y-3">
+        <!-- Attendance -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition duration-200">
+          <div>
+            <p class="text-gray-500 text-sm">Attendance</p>
+            <h2 class="text-xl font-bold text-green-600 mt-1">{{ attendanceStatus }}</h2>
+          </div>
+          <div class="p-3 rounded-xl bg-green-50">
+            <lucide-icon [img]="CheckCircle" class="text-green-500"></lucide-icon>
+          </div>
+        </div>
 
-          <div *ngFor="let dcr of dcrList"
-               class="flex justify-between items-center border p-3 rounded-xl hover:bg-gray-50">
+        <!-- Visits Done -->
+        <div class="relative group bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition duration-200 cursor-pointer">
+          <div>
+            <p class="text-gray-500 text-sm">Visits Done</p>
+            <h2 class="text-xl font-bold text-purple-600 mt-1">{{ visitsDone }}</h2>
+          </div>
+          <div class="p-3 rounded-xl bg-purple-50">
+            <lucide-icon [img]="MapPin" class="text-purple-500"></lucide-icon>
+          </div>
 
-            <div>
-              <p class="font-medium">{{dcr.doctor}}</p>
-              <p class="text-sm text-gray-500">{{dcr.time}}</p>
+          <!-- Visit Hover Tooltip -->
+          <div class="absolute z-50 hidden group-hover:block bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 bg-gray-900 text-white rounded-xl p-4 shadow-xl">
+            <p class="font-semibold text-sm border-b border-gray-700 pb-2 mb-3">Visit Details</p>
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-300">Completed</span>
+              <span class="font-semibold text-green-400">{{ completedVisits }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-300">In Progress</span>
+              <span class="font-semibold text-yellow-400">{{ inProgressVisits }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-gray-300">Rejected</span>
+              <span class="font-semibold text-red-400">{{ rejectedVisits }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Planned Route -->
+        <div class="relative group bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition duration-200 cursor-pointer">
+          <div>
+            <p class="text-gray-500 text-sm">Planned Route</p>
+            <h2 class="text-xl font-bold text-orange-500 mt-1">{{ routeCount }}</h2>
+          </div>
+          <div class="p-3 rounded-xl bg-orange-50">
+            <lucide-icon [img]="Route" class="text-orange-500"></lucide-icon>
+          </div>
+
+          <!-- Route Hover Tooltip -->
+          <div class="absolute z-50 hidden group-hover:block bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 bg-gray-900 text-white rounded-xl p-4 shadow-xl">
+            <p class="font-semibold text-sm border-b border-gray-700 pb-2 mb-3">Route Details</p>
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-300">With Route</span>
+              <span class="font-semibold text-orange-400">{{ plannedRouteVisits }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-gray-300">Without Route</span>
+              <span class="font-semibold text-gray-300">{{ withoutRouteVisits }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Samples Given -->
+        <div class="relative group bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition duration-200 cursor-pointer">
+          <div>
+            <p class="text-gray-500 text-sm">Samples Given</p>
+            <h2 class="text-xl font-bold text-red-500 mt-1">{{ samplesGiven }}</h2>
+          </div>
+          <div class="p-3 rounded-xl bg-red-50">
+            <lucide-icon [img]="Package" class="text-red-500"></lucide-icon>
+          </div>
+
+          <!-- Product Hover Tooltip -->
+          <div class="absolute z-50 hidden group-hover:block bottom-full right-0 mb-3 w-56 bg-gray-900 text-white rounded-xl p-4 shadow-xl">
+            <p class="font-semibold text-sm border-b border-gray-700 pb-2 mb-3">Product Details</p>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-gray-300">Shown Products</span>
+              <span class="font-semibold text-red-400">{{ totalShownProducts }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Summary Card -->
+        <div class="relative group bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition duration-200 cursor-pointer">
+          <div>
+            <p class="text-gray-500 text-sm">This Month</p>
+            <h2 class="text-xl font-bold text-teal-600 mt-1">{{ monthlyVisitsDone }} Visits</h2>
+          </div>
+          <div class="p-3 rounded-xl bg-teal-50">
+            <lucide-icon [img]="Calendar" class="text-teal-500"></lucide-icon>
+          </div>
+
+          <!-- Monthly Hover Tooltip -->
+          <div class="absolute z-50 hidden group-hover:block bottom-full right-0 mb-3 w-60 bg-gray-900 text-white rounded-xl p-4 shadow-xl">
+            <p class="font-semibold text-sm border-b border-gray-700 pb-2 mb-3">{{ currentMonthName }} Summary</p>
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-300">Total Visits</span>
+              <span class="font-semibold text-teal-400">{{ monthlyVisitsDone }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-300">Monthly Orders</span>
+              <span class="font-semibold text-indigo-400">{{ monthlyOrders }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-gray-300">Target Reached</span>
+              <span class="font-semibold text-green-400">{{ monthlyTargetPercentage }}%</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Orders Stats Section -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="relative group bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition duration-200 cursor-pointer">
+          <div>
+            <p class="text-gray-500 text-sm">Total Orders</p>
+            <h2 class="text-xl font-bold text-indigo-600 mt-1">{{ totalOrders }}</h2>
+          </div>
+          <div class="p-3 rounded-xl bg-indigo-50">
+            <lucide-icon [img]="ShoppingCart" class="text-indigo-500"></lucide-icon>
+          </div>
+
+          <!-- Order Hover Tooltip -->
+          <div class="absolute z-50 hidden group-hover:block bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 bg-gray-900 text-white rounded-xl p-4 shadow-xl">
+            <p class="font-semibold text-sm border-b border-gray-700 pb-2 mb-3">Order Details</p>
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-300">Pending</span>
+              <span class="font-semibold text-yellow-400">{{ pendingOrders }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm mb-2">
+              <span class="text-gray-300">Delivered</span>
+              <span class="font-semibold text-green-400">{{ deliveredOrders }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-gray-300">Rejected</span>
+              <span class="font-semibold text-red-400">{{ rejectedOrders }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Grid: Recent DCR & Live Location -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Recent DCR -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 lg:col-span-2">
+          <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <lucide-icon [img]="ClipboardList" class="text-blue-500"></lucide-icon>
+            Recent DCR
+          </h2>
+
+          <div class="space-y-3">
+            <div *ngFor="let dcr of dcrList" class="flex justify-between items-center border border-gray-100 p-3 rounded-xl hover:bg-gray-50 transition">
+              <div>
+                <p class="font-medium text-gray-800">{{ dcr.doctor }}</p>
+                <p class="text-sm text-gray-500">{{ dcr.time }}</p>
+              </div>
+              <span class="text-sm font-medium text-blue-500 bg-blue-50 px-3 py-1 rounded-lg">{{ dcr.status }}</span>
             </div>
 
-            <span class="text-sm text-blue-500">{{dcr.status}}</span>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- 📍 GPS Tracking -->
-      <div class="bg-white rounded-2xl shadow p-5">
-        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-          <lucide-icon [img]="MapPinned"></lucide-icon>
-          Live Location
-        </h2>
-
-        <div class="h-48 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400">
-          Map Placeholder
-        </div>
-
-        <p class="text-sm text-gray-500 mt-3">
-          Last updated: {{lastLocationTime}}
-        </p>
-      </div>
-
-    </div>
-
-    <!-- 🔷 Bottom Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-
-      <!-- 🗺 Route Plan -->
-      <div class="bg-white rounded-2xl shadow p-5">
-        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-          <lucide-icon [img]="Route"></lucide-icon>
-          Today's Route Plan
-        </h2>
-
-        <div class="space-y-3">
-          <div *ngFor="let r of routePlan"
-               class="flex justify-between border p-3 rounded-xl">
-            <span>{{r.location}}</span>
-            <span class="text-sm text-gray-500">{{r.time}}</span>
+            <div *ngIf="dcrList.length === 0" class="text-center py-6 text-gray-400 text-sm">
+              No recent DCR entries available.
+            </div>
           </div>
         </div>
+
+        <!-- GPS Tracking -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <lucide-icon [img]="MapPinned" class="text-red-500"></lucide-icon>
+            Live Location
+          </h2>
+
+          <div class="h-48 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 border border-dashed border-gray-300">
+            Map Placeholder
+          </div>
+
+          <p class="text-sm text-gray-500 mt-3 flex items-center justify-between">
+            <span>Last updated:</span>
+            <span class="font-medium text-gray-700">{{ lastLocationTime }}</span>
+          </p>
+        </div>
+
       </div>
 
-      <!-- 📦 Sample Distribution -->
-      <div class="bg-white rounded-2xl shadow p-5">
-        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-          <lucide-icon [img]="Package"></lucide-icon>
-          Sample Distribution
-        </h2>
+      <!-- Bottom Grid: Route Plan & Sample Distribution -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
 
-        <div class="space-y-3">
-          <div *ngFor="let s of samples"
-               class="flex justify-between border p-3 rounded-xl">
-            <span>{{s.product}}</span>
-            <span class="text-sm text-blue-500">{{s.qty}} units</span>
+        <!-- Route Plan -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <lucide-icon [img]="Route" class="text-orange-500"></lucide-icon>
+            Today's Route Plan
+          </h2>
+
+          <div class="space-y-3">
+            <div *ngFor="let r of routePlan" class="flex justify-between items-center border border-gray-100 p-3 rounded-xl">
+              <span class="font-medium text-gray-700">{{ r.location }}</span>
+              <span class="text-sm text-gray-500">{{ r.time }}</span>
+            </div>
+
+            <div *ngIf="routePlan.length === 0" class="text-center py-6 text-gray-400 text-sm">
+              No planned routes for today.
+            </div>
           </div>
         </div>
+
+        <!-- Sample Distribution -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <lucide-icon [img]="Package" class="text-purple-500"></lucide-icon>
+            Sample Distribution
+          </h2>
+
+          <div class="space-y-3">
+            <div *ngFor="let s of samples" class="flex justify-between items-center border border-gray-100 p-3 rounded-xl">
+              <span class="font-medium text-gray-700">{{ s.product }}</span>
+              <span class="text-sm font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">{{ s.qty }} units</span>
+            </div>
+
+            <div *ngIf="samples.length === 0" class="text-center py-6 text-gray-400 text-sm">
+              No samples distributed yet.
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>

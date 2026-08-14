@@ -103,10 +103,10 @@ export class MrService {
   }
 
   get_active_session(visitPlanId: number) {
-  return this.http.get(
-    `${this.apiUrl}/mrvisit/get-active-session/${visitPlanId}`
-  );
-}
+    return this.http.get(
+      `${this.apiUrl}/mrvisit/get-active-session/${visitPlanId}`
+    );
+  }
 
   //Mr attendance APIs
 
@@ -147,11 +147,20 @@ export class MrService {
 
   // ------------------mr order----
   get_routes_by_mr(mrId: number): Observable<any> {
-  return this.http.get(`${this.apiUrl}/mrvisit/get-routes-by-medicalrepresentative/${mrId}`);
-}
+    return this.http.get(`${this.apiUrl}/mrvisit/get-routes-by-medicalrepresentative/${mrId}`);
+  }
 
-get_customers_by_route(routeId: number): Observable<any> {
-  return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route/${routeId}`);
-}
+  get_customers_by_route(routeId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route/${routeId}`);
+  }
 
+
+
+  // --------------------- MR DASHBOARD ---------------------
+
+  getMrDashboard(mrId: number): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/medicalpresentativeown/get-mr-dashboard8/${mrId}`
+    );
+  }
 }
