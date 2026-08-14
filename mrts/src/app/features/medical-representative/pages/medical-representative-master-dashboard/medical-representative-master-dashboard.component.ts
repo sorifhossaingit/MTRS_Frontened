@@ -307,7 +307,7 @@ export class MedicalRepresentativeMasterDashboardComponent
 
         }
 
-      }, 60000);
+      }, 300000);
 
   }
 
