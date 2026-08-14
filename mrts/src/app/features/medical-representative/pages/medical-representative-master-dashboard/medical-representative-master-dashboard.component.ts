@@ -21,36 +21,41 @@ import { MrService } from '../../services/mr.service';
 
 import Swal from 'sweetalert2';
 
-// =====================================================
-// OpenLayers Imports
-// =====================================================
-
+// OpenLayers
 import Map from 'ol/Map';
 import View from 'ol/View';
-
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
-
 import VectorSource from 'ol/source/Vector';
 import OSM from 'ol/source/OSM';
-
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-
-import {
-  fromLonLat,
-  toLonLat
-} from 'ol/proj';
-
-import {
-  Style,
-  Icon
-} from 'ol/style';
+import { fromLonLat, toLonLat } from 'ol/proj';
+import { Style, Icon } from 'ol/style';
 
 
 // =====================================================
-// Interfaces
+// INTERFACES
 // =====================================================
+
+interface DcrItem {
+  doctor: string;
+  time: string;
+  status: string;
+}
+
+interface RouteItem {
+  location: string;
+  time: string;
+}
+
+interface SampleItem {
+  product: string;
+  qty: number;
+}
+
+
+// Today's Visit
 
 interface TodayVisit {
   visitPlanId: number;
@@ -65,20 +70,17 @@ interface TodayVisit {
   completedAt: string | null;
 }
 
-interface RouteItem {
-  location: string;
-  time: string;
+
+// Today's Visit Product
+
+interface TodayVisitProduct {
+  customerName: string | null;
+  customerMobile: string | null;
+  name: string | null;
+  brandName: string | null;
+  genericName: string | null;
 }
 
-interface SampleItem {
-  product: string;
-  qty: number;
-}
-
-
-// =====================================================
-// Component
-// =====================================================
 
 @Component({
   selector:
@@ -94,9 +96,9 @@ export class MedicalRepresentativeMasterDashboardComponent
   implements OnInit, OnDestroy {
 
 
-  // ===================================================
+  // =====================================================
   // ICONS
-  // ===================================================
+  // =====================================================
 
   UserCheck = UserCheck;
   Plus = Plus;
@@ -105,36 +107,28 @@ export class MedicalRepresentativeMasterDashboardComponent
   MapPin = MapPin;
   Route = Route;
   Package = Package;
-  ShoppingCart = ShoppingCart;
   MapPinned = MapPinned;
+  ShoppingCart = ShoppingCart;
   Calendar = Calendar;
 
 
-  // ===================================================
+  // =====================================================
   // MR ID
-  // ===================================================
+  // =====================================================
 
   mrmainidId: number | null = null;
 
 
-  // ===================================================
+  // =====================================================
   // LOADING
-  // ===================================================
+  // =====================================================
 
   isLoading = false;
 
-  todayVisits: TodayVisit[] = [];
-  // ===================================================
-  // AUTO REFRESH
-  // ===================================================
 
-  private refreshIntervalId:
-    ReturnType<typeof setInterval> | null = null;
-
-
-  // ===================================================
-  // DATE INFORMATION
-  // ===================================================
+  // =====================================================
+  // DATE
+  // =====================================================
 
   currentMonthName =
     new Date().toLocaleString(
@@ -146,9 +140,9 @@ export class MedicalRepresentativeMasterDashboardComponent
     );
 
 
-  // ===================================================
-  // OPENLAYERS MAP
-  // ===================================================
+  // =====================================================
+  // MAP
+  // =====================================================
 
   map: Map | null = null;
 
@@ -158,27 +152,18 @@ export class MedicalRepresentativeMasterDashboardComponent
   vectorLayer!:
     VectorLayer<VectorSource>;
 
+  currentLatitude = 22.5726;
 
-  // ===================================================
-  // CURRENT LOCATION
-  // ===================================================
+  currentLongitude = 88.3639;
 
-  currentLatitude: number =
-    22.5726;
-
-  currentLongitude: number =
-    88.3639;
-
-  lastLocationTime =
-    'N/A';
+  lastLocationTime = 'N/A';
 
 
-  // ===================================================
-  // PRIMARY METRICS
-  // ===================================================
+  // =====================================================
+  // DASHBOARD METRICS
+  // =====================================================
 
-  attendanceStatus =
-    'Present';
+  attendanceStatus = 'Present';
 
   visitsDone = 0;
 
@@ -189,9 +174,9 @@ export class MedicalRepresentativeMasterDashboardComponent
   totalOrders = 0;
 
 
-  // ===================================================
-  // MONTHLY METRICS
-  // ===================================================
+  // =====================================================
+  // MONTHLY
+  // =====================================================
 
   monthlyVisitsDone = 0;
 
@@ -200,9 +185,9 @@ export class MedicalRepresentativeMasterDashboardComponent
   monthlyTargetPercentage = 0;
 
 
-  // ===================================================
+  // =====================================================
   // VISIT BREAKDOWN
-  // ===================================================
+  // =====================================================
 
   completedVisits = 0;
 
@@ -211,18 +196,18 @@ export class MedicalRepresentativeMasterDashboardComponent
   rejectedVisits = 0;
 
 
-  // ===================================================
+  // =====================================================
   // ROUTE BREAKDOWN
-  // ===================================================
+  // =====================================================
 
   plannedRouteVisits = 0;
 
   withoutRouteVisits = 0;
 
 
-  // ===================================================
-  // PRODUCT / ORDER BREAKDOWN
-  // ===================================================
+  // =====================================================
+  // PRODUCT / ORDER
+  // =====================================================
 
   totalShownProducts = 0;
 
@@ -233,64 +218,114 @@ export class MedicalRepresentativeMasterDashboardComponent
   rejectedOrders = 0;
 
 
-  // ===================================================
+  // =====================================================
   // LIST DATA
-  // ===================================================
+  // =====================================================
 
+  dcrList: DcrItem[] = [];
 
   routePlan: RouteItem[] = [];
 
   samples: SampleItem[] = [];
 
 
-  // ===================================================
+  // =====================================================
+  // TODAY VISITS
+  // =====================================================
+
+  todayVisits: TodayVisit[] = [];
+
+
+  // =====================================================
+  // TODAY VISIT PRODUCTS
+  // =====================================================
+
+  todayVisitProducts:
+    TodayVisitProduct[] = [];
+
+
+  // =====================================================
+  // REFRESH TIMER
+  // =====================================================
+
+  private refreshInterval: any;
+
+
+  // =====================================================
   // CONSTRUCTOR
-  // ===================================================
+  // =====================================================
 
   constructor(
     private mrService: MrService
-  ) { }
+  ) {}
 
 
-  // ===================================================
+  // =====================================================
   // ON INIT
-  // ===================================================
+  // =====================================================
 
   ngOnInit(): void {
 
     this.mrmainidId =
-      Number(localStorage.getItem('mid')) || null;
+      Number(
+        localStorage.getItem('mid')
+      ) || null;
+
 
     if (this.mrmainidId) {
 
+      // Dashboard
       this.getMrDashboard();
 
+      // Today's Visits
       this.getTodayVisits();
+
+      // Today's Visit Products
+      this.getTodayVisitProducts();
 
     }
 
+
+    // Open Map
     this.openMap();
 
-    this.startAutoRefresh();
+
+    // =================================================
+    // REFRESH EVERY 1 MINUTE
+    // =================================================
+
+    this.refreshInterval =
+      setInterval(() => {
+
+        if (this.mrmainidId) {
+
+          this.getMrDashboard();
+
+          this.getTodayVisits();
+
+          this.getTodayVisitProducts();
+
+        }
+
+      }, 60000);
+
   }
 
 
-  // ===================================================
+  // =====================================================
   // ON DESTROY
-  // ===================================================
+  // =====================================================
 
   ngOnDestroy(): void {
 
-    // -----------------------------------------------
-    // Stop auto refresh
-    // -----------------------------------------------
+    if (this.refreshInterval) {
 
-    this.stopAutoRefresh();
+      clearInterval(
+        this.refreshInterval
+      );
 
+    }
 
-    // -----------------------------------------------
-    // Destroy OpenLayers map
-    // -----------------------------------------------
 
     if (this.map) {
 
@@ -299,78 +334,17 @@ export class MedicalRepresentativeMasterDashboardComponent
       );
 
       this.map = null;
+
     }
+
   }
 
 
-  // ===================================================
-  // START AUTO REFRESH
-  // ===================================================
-
-  private startAutoRefresh(): void {
-
-    // Prevent duplicate intervals
-    this.stopAutoRefresh();
-
-
-    this.refreshIntervalId =
-      setInterval(() => {
-
-        console.log(
-          'Refreshing MR dashboard...'
-        );
-
-
-        // -------------------------------------------
-        // Refresh dashboard
-        // -------------------------------------------
-
-        if (this.mrmainidId) {
-
-          this.getMrDashboard();
-
-        }
-
-
-        // -------------------------------------------
-        // Refresh GPS / Map
-        // -------------------------------------------
-
-        this.refreshMapLocation();
-
-
-      }, 60 * 1000);
-  }
-
-
-  // ===================================================
-  // STOP AUTO REFRESH
-  // ===================================================
-
-  private stopAutoRefresh(): void {
-
-    if (
-      this.refreshIntervalId !== null
-    ) {
-
-      clearInterval(
-        this.refreshIntervalId
-      );
-
-      this.refreshIntervalId = null;
-    }
-  }
-
-
-  // ===================================================
-  // OPEN MAP
-  // ===================================================
+  // =====================================================
+  // MAP
+  // =====================================================
 
   openMap(): void {
-
-    // -----------------------------------------------
-    // Check browser geolocation support
-    // -----------------------------------------------
 
     if (!navigator.geolocation) {
 
@@ -380,21 +354,14 @@ export class MedicalRepresentativeMasterDashboardComponent
         'error'
       );
 
-
       setTimeout(() => {
-
         this.loadMap();
-
       }, 300);
 
       return;
     }
 
 
-    // -----------------------------------------------
-    // Get current location
-    // -----------------------------------------------
-
     navigator.geolocation.getCurrentPosition(
 
       (position) => {
@@ -404,7 +371,6 @@ export class MedicalRepresentativeMasterDashboardComponent
 
         this.currentLongitude =
           position.coords.longitude;
-
 
         this.lastLocationTime =
           new Date().toLocaleTimeString(
@@ -416,10 +382,20 @@ export class MedicalRepresentativeMasterDashboardComponent
           );
 
 
-        console.log(
-          'Initial Location:',
-          this.currentLatitude,
-          this.currentLongitude
+        setTimeout(() => {
+
+          this.loadMap();
+
+        }, 300);
+
+      },
+
+
+      (error) => {
+
+        console.error(
+          'Location Error:',
+          error
         );
 
 
@@ -428,145 +404,6 @@ export class MedicalRepresentativeMasterDashboardComponent
           this.loadMap();
 
         }, 300);
-      },
-
-
-      (error) => {
-
-        console.warn(
-          'Initial location error:',
-          error
-        );
-
-
-        Swal.fire(
-          'Location Error',
-          'Unable to get your current location. Showing default location.',
-          'warning'
-        );
-
-
-        setTimeout(() => {
-
-          this.loadMap();
-
-        }, 300);
-      },
-
-
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
-    );
-  }
-
-
-  // ===================================================
-  // REFRESH MAP LOCATION
-  // ===================================================
-
-  refreshMapLocation(): void {
-
-    if (!navigator.geolocation) {
-
-      console.warn(
-        'Geolocation is not supported.'
-      );
-
-      return;
-    }
-
-
-    navigator.geolocation.getCurrentPosition(
-
-      (position) => {
-
-        // -------------------------------------------
-        // Update GPS coordinates
-        // -------------------------------------------
-
-        this.currentLatitude =
-          position.coords.latitude;
-
-        this.currentLongitude =
-          position.coords.longitude;
-
-
-        // -------------------------------------------
-        // Update location time
-        // -------------------------------------------
-
-        this.lastLocationTime =
-          new Date().toLocaleTimeString(
-            [],
-            {
-              hour: '2-digit',
-              minute: '2-digit'
-            }
-          );
-
-
-        console.log(
-          'Updated Location:',
-          this.currentLatitude,
-          this.currentLongitude
-        );
-
-
-        // -------------------------------------------
-        // Convert GPS to OpenLayers coordinate
-        // -------------------------------------------
-
-        const coordinate =
-          fromLonLat([
-            this.currentLongitude,
-            this.currentLatitude
-          ]);
-
-
-        // -------------------------------------------
-        // Update existing map
-        // -------------------------------------------
-
-        if (this.map) {
-
-          // Update marker
-          this.updateMarkerAndForm(
-            coordinate
-          );
-
-
-          // Move map to latest location
-          this.map
-            .getView()
-            .animate({
-
-              center: coordinate,
-
-              duration: 500
-
-            });
-
-        }
-        else {
-
-          // Map does not exist
-          // Create it
-
-          this.loadMap();
-
-        }
-      },
-
-
-      (error) => {
-
-        console.warn(
-          'Unable to refresh current location:',
-          error
-        );
 
       },
 
@@ -576,19 +413,17 @@ export class MedicalRepresentativeMasterDashboardComponent
         timeout: 10000,
         maximumAge: 0
       }
+
     );
+
   }
 
 
-  // ===================================================
+  // =====================================================
   // LOAD MAP
-  // ===================================================
+  // =====================================================
 
   loadMap(): void {
-
-    // -----------------------------------------------
-    // Destroy previous map if exists
-    // -----------------------------------------------
 
     if (this.map) {
 
@@ -597,12 +432,9 @@ export class MedicalRepresentativeMasterDashboardComponent
       );
 
       this.map = null;
+
     }
 
-
-    // -----------------------------------------------
-    // Fallback coordinates
-    // -----------------------------------------------
 
     const lat =
       this.currentLatitude ||
@@ -613,16 +445,8 @@ export class MedicalRepresentativeMasterDashboardComponent
       88.3639;
 
 
-    // -----------------------------------------------
-    // Clear markers
-    // -----------------------------------------------
-
     this.vectorSource.clear();
 
-
-    // -----------------------------------------------
-    // Vector Layer
-    // -----------------------------------------------
 
     this.vectorLayer =
       new VectorLayer({
@@ -642,8 +466,7 @@ export class MedicalRepresentativeMasterDashboardComponent
                 src:
                   'https://openlayers.org/en/latest/examples/data/icon.png',
 
-                scale:
-                  1
+                scale: 1
 
               })
 
@@ -652,19 +475,13 @@ export class MedicalRepresentativeMasterDashboardComponent
       });
 
 
-    // -----------------------------------------------
-    // Create Map
-    // -----------------------------------------------
-
     this.map =
       new Map({
 
-        target:
-          'map',
+        target: 'map',
 
         layers: [
 
-          // Base Map
           new TileLayer({
 
             source:
@@ -672,11 +489,9 @@ export class MedicalRepresentativeMasterDashboardComponent
 
           }),
 
-          // Marker Layer
           this.vectorLayer
 
         ],
-
 
         view:
           new View({
@@ -687,17 +502,12 @@ export class MedicalRepresentativeMasterDashboardComponent
                 lat
               ]),
 
-            zoom:
-              16
+            zoom: 16
 
           })
 
       });
 
-
-    // -----------------------------------------------
-    // Add initial marker
-    // -----------------------------------------------
 
     const coordinate =
       fromLonLat([
@@ -711,10 +521,6 @@ export class MedicalRepresentativeMasterDashboardComponent
     );
 
 
-    // -----------------------------------------------
-    // Map Click
-    // -----------------------------------------------
-
     this.map.on(
       'singleclick',
       (event) => {
@@ -727,36 +533,25 @@ export class MedicalRepresentativeMasterDashboardComponent
     );
 
 
-    // -----------------------------------------------
-    // Update map size
-    // -----------------------------------------------
-
     setTimeout(() => {
 
       this.map?.updateSize();
 
     }, 100);
+
   }
 
 
-  // ===================================================
-  // UPDATE MARKER
-  // ===================================================
+  // =====================================================
+  // UPDATE MAP MARKER
+  // =====================================================
 
   updateMarkerAndForm(
     coordinate: number[]
   ): void {
 
-    // -----------------------------------------------
-    // Remove old marker
-    // -----------------------------------------------
-
     this.vectorSource.clear();
 
-
-    // -----------------------------------------------
-    // Create new marker
-    // -----------------------------------------------
 
     const feature =
       new Feature({
@@ -769,18 +564,10 @@ export class MedicalRepresentativeMasterDashboardComponent
       });
 
 
-    // -----------------------------------------------
-    // Add marker
-    // -----------------------------------------------
-
     this.vectorSource.addFeature(
       feature
     );
 
-
-    // -----------------------------------------------
-    // Convert coordinate to GPS
-    // -----------------------------------------------
 
     const lonLat =
       toLonLat(
@@ -795,10 +582,6 @@ export class MedicalRepresentativeMasterDashboardComponent
       lonLat[1];
 
 
-    // -----------------------------------------------
-    // Update time
-    // -----------------------------------------------
-
     this.lastLocationTime =
       new Date().toLocaleTimeString(
         [],
@@ -807,17 +590,17 @@ export class MedicalRepresentativeMasterDashboardComponent
           minute: '2-digit'
         }
       );
+
   }
 
 
-  // ===================================================
-  // GET MR DASHBOARD
-  // ===================================================
+  // =====================================================
+  // MR MONTHLY DASHBOARD
+  // =====================================================
 
   getMrDashboard(): void {
 
     if (!this.mrmainidId) {
-
       return;
     }
 
@@ -831,14 +614,10 @@ export class MedicalRepresentativeMasterDashboardComponent
       )
       .subscribe({
 
-        // ===========================================
-        // SUCCESS
-        // ===========================================
-
         next: (response: any) => {
 
           console.log(
-            'MR Dashboard Response:',
+            'MR Dashboard:',
             response
           );
 
@@ -852,129 +631,80 @@ export class MedicalRepresentativeMasterDashboardComponent
               response.data;
 
 
-            // =======================================
-            // VISITS
-            // =======================================
+            // Visits
 
             this.visitsDone =
               data.completedVisits ?? 0;
 
-
             this.completedVisits =
               data.completedVisits ?? 0;
 
-
             this.inProgressVisits =
               data.inProgressVisits ?? 0;
-
 
             this.rejectedVisits =
               data.rejectedVisits ?? 0;
 
 
-            // =======================================
-            // ROUTES
-            // =======================================
+            // Routes
 
             this.routeCount =
               data.plannedRouteVisits ?? 0;
 
-
             this.plannedRouteVisits =
               data.plannedRouteVisits ?? 0;
-
 
             this.withoutRouteVisits =
               data.withoutRouteVisits ?? 0;
 
 
-            // =======================================
-            // PRODUCTS / SAMPLES
-            // =======================================
+            // Products
 
             this.samplesGiven =
               data.totalShownProducts ?? 0;
-
 
             this.totalShownProducts =
               data.totalShownProducts ?? 0;
 
 
-            // =======================================
-            // MONTHLY DATA
-            // =======================================
+            // Orders
+
+            this.totalOrders =
+              data.totalOrders ?? 0;
+
+            this.pendingOrders =
+              data.pendingOrders ?? 0;
+
+            this.deliveredOrders =
+              data.deliveredOrders ?? 0;
+
+            this.rejectedOrders =
+              data.rejectedOrders ?? 0;
+
+
+            // Monthly
 
             this.monthlyVisitsDone =
               data.monthlyVisitsDone ??
               data.completedVisits ??
               0;
 
-
             this.monthlyOrders =
               data.monthlyOrders ??
               data.totalOrders ??
               0;
 
-
             this.monthlyTargetPercentage =
               data.monthlyTargetPercentage ??
               0;
 
-
-            // =======================================
-            // ORDERS
-            // =======================================
-
-            this.totalOrders =
-              data.totalOrders ?? 0;
-
-
-            this.pendingOrders =
-              data.pendingOrders ?? 0;
-
-
-            this.deliveredOrders =
-              data.deliveredOrders ?? 0;
-
-
-            this.rejectedOrders =
-              data.rejectedOrders ?? 0;
-
-
-            // =======================================
-            // LIST DATA
-            // ========
-
-
-            this.routePlan =
-              data.routePlan ?? [];
-
-
-            this.samples =
-              data.samples ?? [];
-
-
-            // =======================================
-            // LAST LOCATION
-            // =======================================
-
-            if (
-              data.lastLocationTime
-            ) {
-
-              this.lastLocationTime =
-                data.lastLocationTime;
-            }
           }
 
 
           this.isLoading = false;
+
         },
 
-
-        // ===========================================
-        // ERROR
-        // ===========================================
 
         error: (error) => {
 
@@ -983,14 +713,18 @@ export class MedicalRepresentativeMasterDashboardComponent
             error
           );
 
-
           this.isLoading = false;
+
         }
 
       });
+
   }
 
 
+  // =====================================================
+  // TODAY VISITS
+  // =====================================================
 
   getTodayVisits(): void {
 
@@ -998,16 +732,20 @@ export class MedicalRepresentativeMasterDashboardComponent
       return;
     }
 
+
     this.mrService
-      .getTodayVisitsDashboard(this.mrmainidId)
+      .getTodayVisitsDashboard(
+        this.mrmainidId
+      )
       .subscribe({
 
         next: (response: any) => {
 
           console.log(
-            'Today Visits Response:',
+            'Today Visits:',
             response
           );
+
 
           if (
             response?.success &&
@@ -1017,13 +755,15 @@ export class MedicalRepresentativeMasterDashboardComponent
             this.todayVisits =
               response.data ?? [];
 
-          } else {
+          }
+          else {
 
             this.todayVisits = [];
 
           }
 
         },
+
 
         error: (error) => {
 
@@ -1037,5 +777,67 @@ export class MedicalRepresentativeMasterDashboardComponent
         }
 
       });
+
   }
+
+
+  // =====================================================
+  // TODAY VISIT PRODUCTS
+  // =====================================================
+
+  getTodayVisitProducts(): void {
+
+    if (!this.mrmainidId) {
+      return;
+    }
+
+
+    this.mrService
+      .getTodayVisitProductsDashboard(
+        this.mrmainidId
+      )
+      .subscribe({
+
+        next: (response: any) => {
+
+          console.log(
+            'Today Visit Products:',
+            response
+          );
+
+
+          if (
+            response?.success &&
+            response?.data
+          ) {
+
+            this.todayVisitProducts =
+              response.data ?? [];
+
+          }
+          else {
+
+            this.todayVisitProducts =
+              [];
+
+          }
+
+        },
+
+
+        error: (error) => {
+
+          console.error(
+            'Today Visit Products API Error:',
+            error
+          );
+
+          this.todayVisitProducts = [];
+
+        }
+
+      });
+
+  }
+
 }

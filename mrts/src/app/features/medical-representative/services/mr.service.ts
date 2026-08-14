@@ -169,4 +169,10 @@ export class MrService {
     `${this.apiUrl}/medicalpresentativeown/today-visits-dashboard/${mrId}`
   );
 }
+
+getTodayVisitProductsDashboard(mrId: number): Observable<any> {
+  return this.http.get(
+    `${this.apiUrl}/medicalpresentativeown/today-visit-products-dashboard/${mrId}`
+  );
+}
 }
