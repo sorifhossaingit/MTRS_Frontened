@@ -12,7 +12,10 @@ export class DashboardComponent implements OnInit {
   currentDate = new Date();
   visitStatus: any;
 
-  selectedDate: string = new Date().toISOString().split('T')[0];
+  selectedDate: string = (() => {
+    const today = new Date();
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
+  })();
 
   dashboard: AdminDashboard = {
     totalCurrentMonthVisits: 0,
@@ -24,23 +27,19 @@ export class DashboardComponent implements OnInit {
     inactiveAreaManagers: 0
   };
 
+  completedVisits: any[] = [];
+  topPerformers: any[] = [];
 
-completedVisits: any[] = [];
-topPerformers: any[] = [];
+  constructor(private dashboardService: AdminDashboardService) { }
 
-constructor(private dashboardService: AdminDashboardService) { }
+  agencyId: number = Number(localStorage.getItem('aid'));
 
-
-  
-agencyId: number = Number(localStorage.getItem('aid'));
-
-
-ngOnInit(): void {
-  this.loadDashboard();
-  this.loadVisitStatusDashboard();
-  this.loadCompletedVisits();
-  this.loadTopPerformers();
-}
+  ngOnInit(): void {
+    this.loadDashboard();
+    this.loadVisitStatusDashboard();
+    this.loadCompletedVisits();
+    this.loadTopPerformers();
+  }
 
   loadDashboard(): void {
     const agencyId = this.agencyId;
@@ -57,33 +56,30 @@ ngOnInit(): void {
     });
   }
 
-
   barChartType: ChartType = 'bar';
 
   barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: ['Assigned', 'In Progress', 'Completed'],
+    labels: ['Assigned', 'In Progress', 'Completed', 'Rejected'],
     datasets: [
       {
-        data: [0, 0, 0],
+        data: [0, 0, 0, 0],
         label: 'Visits'
       }
     ]
   };
 
-  // Doughnut Chart
   doughnutChartType: ChartType = 'doughnut';
 
   doughnutChartData: ChartConfiguration<'doughnut'>['data'] = {
-    labels: ['Assigned', 'In Progress', 'Completed'],
+    labels: ['Assigned', 'In Progress', 'Completed', 'Rejected'],
     datasets: [
       {
-        data: [0, 0, 0]
+        data: [0, 0, 0, 0]
       }
     ]
   };
 
   loadVisitStatusDashboard() {
-
     const payload = {
       agencyId: this.agencyId,
       selectedDate: this.selectedDate
@@ -92,32 +88,30 @@ ngOnInit(): void {
     this.dashboardService.getVisitStatusDashboard(payload)
       .subscribe({
         next: (res) => {
-
           this.visitStatus = res.data;
 
+          const chartValues = [
+            this.visitStatus?.totalAssignedVisits || 0,
+            this.visitStatus?.totalInProgressVisits || 0,
+            this.visitStatus?.totalCompletedVisits || 0,
+            this.visitStatus?.totalRejectedVisits || 0
+          ];
+
           this.barChartData = {
-            labels: ['Assigned', 'In Progress', 'Completed'],
+            labels: ['Assigned', 'In Progress', 'Completed', 'Rejected'],
             datasets: [
               {
-                data: [
-                  this.visitStatus.totalAssignedVisits,
-                  this.visitStatus.totalInProgressVisits,
-                  this.visitStatus.totalCompletedVisits
-                ],
+                data: chartValues,
                 label: 'Visits'
               }
             ]
           };
 
           this.doughnutChartData = {
-            labels: ['Assigned', 'In Progress', 'Completed'],
+            labels: ['Assigned', 'In Progress', 'Completed', 'Rejected'],
             datasets: [
               {
-                data: [
-                  this.visitStatus.totalAssignedVisits,
-                  this.visitStatus.totalInProgressVisits,
-                  this.visitStatus.totalCompletedVisits
-                ]
+                data: chartValues
               }
             ]
           };
@@ -126,28 +120,28 @@ ngOnInit(): void {
   }
 
   loadCompletedVisits(): void {
-  this.dashboardService
-    .getCompletedVisits(this.agencyId)
-    .subscribe({
-      next: (res) => {
-        this.completedVisits = res.data || [];
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-}
+    this.dashboardService
+      .getCompletedVisits(this.agencyId)
+      .subscribe({
+        next: (res) => {
+          this.completedVisits = res.data || [];
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
 
-loadTopPerformers(): void {
-  this.dashboardService
-    .getTopMedicalRepresentatives(this.agencyId)
-    .subscribe({
-      next: (res) => {
-        this.topPerformers = res.data || [];
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-}
+  loadTopPerformers(): void {
+    this.dashboardService
+      .getTopMedicalRepresentatives(this.agencyId)
+      .subscribe({
+        next: (res) => {
+          this.topPerformers = res.data || [];
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
 }
