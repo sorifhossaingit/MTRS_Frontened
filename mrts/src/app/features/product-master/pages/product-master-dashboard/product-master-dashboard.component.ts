@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { ProductService } from '../../services/product.service';
 import Swal from 'sweetalert2';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-master-dashboard',
@@ -83,9 +84,10 @@ export class ProductMasterDashboardComponent implements OnInit {
   showViewModal = false;
   showEditModal = false;
 
-  // Form & Image Preview
+  // Form, Image Preview & Submission State
   productForm!: FormGroup;
   submitted = false;
+  isSubmitting = false; // Prevents double submission
   selectedImage: File | null = null;
   imagePreviewUrl: string | ArrayBuffer | null = null;
 
@@ -269,19 +271,19 @@ export class ProductMasterDashboardComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-onFileChange(event: any) {
-  const file = event.target.files[0];
-  if (file) {
-    this.selectedImage = file;
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImage = file;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreviewUrl = reader.result;
-      this.cdr.detectChanges(); // Ensures UI updates instantly
-    };
-    reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result;
+        this.cdr.detectChanges(); // Ensures UI updates instantly
+      };
+      reader.readAsDataURL(file);
+    }
   }
-}
 
   updateProduct() {
     this.submitted = true;
@@ -296,6 +298,9 @@ onFileChange(event: any) {
       });
       return;
     }
+
+    // Lock button state to prevent duplicate submissions
+    this.isSubmitting = true;
 
     const formValue = this.productForm.value;
     const formData = new FormData();
@@ -318,6 +323,11 @@ onFileChange(event: any) {
 
     this.productService
       .updateproductdetails(formData)
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false; // Re-enable button when request completes
+        })
+      )
       .subscribe({
         next: () => {
           Swal.fire({
@@ -418,6 +428,7 @@ onFileChange(event: any) {
   closeEditModal() {
     this.showEditModal = false;
     this.submitted = false;
+    this.isSubmitting = false;
     this.selectedImage = null;
     this.imagePreviewUrl = null;
   }
