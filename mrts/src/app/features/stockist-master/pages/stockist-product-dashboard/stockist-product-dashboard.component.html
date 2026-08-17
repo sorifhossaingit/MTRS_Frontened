@@ -264,83 +264,135 @@
 
   <!-- VIEW MODAL -->
   <div *ngIf="showViewModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
-    <div class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-3xl bg-white p-6 sm:p-8 shadow-2xl">
-      <button (click)="closeViewModal()"
-        class="absolute right-5 top-5 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors">
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 sm:p-6 backdrop-blur-md transition-all duration-300">
+
+    <div
+      class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-3xl bg-white shadow-2xl ring-1 ring-slate-900/5 transition-all">
+
+      <!-- Header Controls -->
+      <button (click)="closeViewModal()" aria-label="Close modal"
+        class="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400">
         <lucide-icon [img]="XIcon" class="h-5 w-5"></lucide-icon>
       </button>
 
-      <div class="grid gap-8 md:grid-cols-12">
-        <div class="md:col-span-5">
-          <div class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-            <img [src]="selectedProduct?.imageUrl" class="h-full w-full object-cover">
-          </div>
-        </div>
+      <div class="p-6 sm:p-8">
+        <div class="grid gap-8 md:grid-cols-12">
 
-        <div class="md:col-span-7 space-y-4">
-          <div>
-            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">
-              {{ selectedProduct?.category }}
-            </span>
-            <h2 class="mt-2 text-2xl font-bold text-slate-900">{{ selectedProduct?.productName }}</h2>
-            <p class="text-sm text-slate-500">{{ selectedProduct?.genericName }}</p>
-          </div>
+          <!-- Left Column: Image & Quick Badge -->
+          <div class="md:col-span-5 flex flex-col gap-4">
+            <div
+              class="relative aspect-square w-full overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-inner group">
+              <img [src]="selectedProduct?.imageUrl" alt="{{ selectedProduct?.productName }}"
+                class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105">
 
-          <div class="grid grid-cols-2 gap-3 rounded-2xl bg-slate-50/80 p-4 text-xs">
-            <div>
-              <p class="text-slate-400 font-medium">Brand</p>
-              <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.brandName }}</p>
-            </div>
-            <div>
-              <p class="text-slate-400 font-medium">Dosage Form</p>
-              <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.dosageForm }}</p>
-            </div>
-            <div>
-              <p class="text-slate-400 font-medium">Strength</p>
-              <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.strength }}</p>
-            </div>
-            <div>
-              <p class="text-slate-400 font-medium">Pack Size</p>
-              <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.packSize }}</p>
-            </div>
-            <div>
-              <p class="text-slate-400 font-medium">Units / Box</p>
-              <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.unitsPerBox }}</p>
-            </div>
-            <div>
-              <p class="text-slate-400 font-medium">Division</p>
-              <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.division }}</p>
-            </div>
-          </div>
-
-          <div class="border-t border-slate-100 pt-4 space-y-2 text-xs">
-            <div class="flex justify-between py-1">
-              <span class="text-slate-500">Manufacturing License:</span>
-              <span class="font-medium text-slate-800">{{ selectedProduct?.manufacturingLicenseNumber }}</span>
-            </div>
-            <div class="flex justify-between py-1">
-              <span class="text-slate-500">Quantity:</span>
-              <span class="font-bold text-slate-900 text-sm">{{ selectedProduct?.quantity }}</span>
-            </div>
-            <div class="flex justify-between py-1">
-              <span class="text-slate-500">Selling Price:</span>
-              <span class="font-bold text-slate-900 text-sm">₹{{ selectedProduct?.sellingPrice }}</span>
-            </div>
-            <div class="flex justify-between py-1">
-              <span class="text-slate-500">Discount:</span>
-              <span class="font-semibold text-emerald-600">{{ selectedProduct?.discountPercent }}%</span>
-            </div>
-            <div class="flex justify-between py-1">
-              <span class="text-slate-500">Available:</span>
-              <span class="font-semibold"
-                [ngClass]="selectedProduct?.isAvailable ? 'text-emerald-600' : 'text-rose-600'">
-                {{ selectedProduct?.isAvailable ? 'Yes' : 'No' }}
+              <span *ngIf="selectedProduct?.isAvailable"
+                class="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 backdrop-blur-md px-3 py-1 text-xs font-medium text-white shadow-sm">
+                <span class="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></span>
+                In Stock
+              </span>
+              <span *ngIf="!selectedProduct?.isAvailable"
+                class="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-rose-500/90 backdrop-blur-md px-3 py-1 text-xs font-medium text-white shadow-sm">
+                Out of Stock
               </span>
             </div>
+
+            <div
+              class="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/80 p-3 text-xs text-slate-500">
+              <span>Mfg. License</span>
+              <span class="font-mono font-semibold text-slate-700">{{ selectedProduct?.manufacturingLicenseNumber ||
+                'N/A' }}</span>
+            </div>
+          </div>
+
+          <!-- Right Column: Product Details -->
+          <div class="md:col-span-7 flex flex-col justify-between space-y-6">
+
+            <!-- Header Info -->
+            <div>
+              <div class="flex items-center gap-2">
+                <span
+                  class="inline-flex items-center rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                  {{ selectedProduct?.category }}
+                </span>
+                <span class="text-xs text-slate-400">•</span>
+                <span class="text-xs font-medium text-slate-500">{{ selectedProduct?.division }}</span>
+              </div>
+
+              <h2 class="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+                {{ selectedProduct?.productName }}
+              </h2>
+              <p class="mt-1 text-sm font-medium text-slate-500 italic">
+                {{ selectedProduct?.genericName }}
+              </p>
+            </div>
+
+            <!-- Product Specs Grid -->
+            <div
+              class="grid grid-cols-2 sm:grid-cols-3 gap-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 text-xs">
+              <div>
+                <p class="text-slate-400 font-medium">Brand</p>
+                <p class="text-slate-800 font-semibold mt-0.5 truncate">{{ selectedProduct?.brandName }}</p>
+              </div>
+              <div>
+                <p class="text-slate-400 font-medium">Dosage Form</p>
+                <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.dosageForm }}</p>
+              </div>
+              <div>
+                <p class="text-slate-400 font-medium">Strength</p>
+                <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.strength }}</p>
+              </div>
+              <div>
+                <p class="text-slate-400 font-medium">Pack Size</p>
+                <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.packSize }}</p>
+              </div>
+              <div>
+                <p class="text-slate-400 font-medium">Units / Box</p>
+                <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.unitsPerBox }}</p>
+              </div>
+              <div>
+                <p class="text-slate-400 font-medium">Available Qty</p>
+                <p class="text-slate-800 font-semibold mt-0.5">{{ selectedProduct?.quantity }}</p>
+              </div>
+            </div>
+
+            <!-- Financial Breakdown Card -->
+            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm space-y-2 text-xs">
+
+              <div class="flex justify-between py-1 text-slate-600">
+                <span>Selling Price</span>
+                <span class="font-semibold text-slate-900">₹{{ selectedProduct?.sellingPrice | number:'1.2-2' }}</span>
+              </div>
+
+              <div class="flex justify-between py-1 text-slate-600">
+                <span>Discount</span>
+                <span
+                  class="inline-flex items-center gap-1 font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full text-[11px]">
+                  {{ selectedProduct?.discountPercent }}% OFF
+                </span>
+              </div>
+
+              <div class="flex justify-between py-1 text-slate-600">
+                <span>Tax Rate</span>
+                <span class="font-semibold text-slate-700">{{ selectedProduct?.taxPercent }}%</span>
+              </div>
+
+              <!-- Final MRP Highlight -->
+              <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-100">
+                <div>
+                  <span class="text-slate-900 font-bold text-sm block">Final MRP</span>
+                  <span class="text-[10px] text-slate-400">Inclusive of all taxes</span>
+                </div>
+                <span class="text-2xl font-extrabold tracking-tight text-blue-600">
+                  ₹{{ selectedProduct?.finalSellingPrice | number:'1.2-2' }}
+                </span>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -361,8 +413,8 @@
           <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
             More Quantity To Add
           </label>
-          <input type="number" formControlName="quantity"
-            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
+          <input type="number" formControlName="quantity" min="0" step="1"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -370,16 +422,16 @@
             <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
               Selling Price (₹)
             </label>
-            <input type="number" formControlName="sellingPrice"
-              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
+            <input type="number" formControlName="sellingPrice" min="0" step="0.01"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
           </div>
 
           <div>
             <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
               Discount (%)
             </label>
-            <input type="number" formControlName="discountPercent"
-              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
+            <input type="number" formControlName="discountPercent" min="0" max="100" step="0.01"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
           </div>
         </div>
 
@@ -387,8 +439,8 @@
           <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
             Tax (%)
           </label>
-          <input type="number" formControlName="taxPercent"
-            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
+          <input type="number" formControlName="taxPercent" min="0" max="100" step="0.01"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
         </div>
 
         <div class="pt-2">
