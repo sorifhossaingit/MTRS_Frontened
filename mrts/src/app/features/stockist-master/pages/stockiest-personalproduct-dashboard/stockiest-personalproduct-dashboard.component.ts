@@ -75,14 +75,13 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
   }
 
   private initForms(): void {
-    // Filter Form
     this.filterForm = this.fb.group({
       name: [''],
       brandName: [''],
       category: ['']
     });
 
-    // Create / Edit Product Form
+    // Added explicit Validators.required and min(0) to prevent null / negative numbers
     this.productForm = this.fb.group({
       productId: [0],
       name: ['', Validators.required],
@@ -92,13 +91,13 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
       dosageForm: [''],
       strength: [''],
       mrp: [0, [Validators.required, Validators.min(0)]],
-      ptr: [0],
-      pts: [0],
+      ptr: [0, [Validators.required, Validators.min(0)]],
+      pts: [0, [Validators.required, Validators.min(0)]],
       packSize: [''],
-      unitsPerBox: [1],
-      sellingPrice: [0],
-      discountPercent: [0],
-      quantity: [0],
+      unitsPerBox: [1, [Validators.required, Validators.min(1)]],
+      sellingPrice: [0, [Validators.required, Validators.min(0)]],
+      discountPercent: [0, [Validators.required, Validators.min(0)]],
+      quantity: [0, [Validators.required, Validators.min(0)]],
       division: [''],
       manufacturingLicenseNumber: [''],
       imageUrl: ['']
@@ -109,8 +108,8 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
     this.isLoading = true;
 
     const payload = {
-      agencyId: Number(localStorage.getItem('aid')),
-      createdBy: Number(localStorage.getItem('mid')),
+      agencyId: Number(localStorage.getItem('aid')) || 0,
+      createdBy: Number(localStorage.getItem('mid')) || 0,
       name: this.filterForm.value.name?.trim() || null,
       brandName: this.filterForm.value.brandName?.trim() || null,
       genericName: null,
@@ -188,7 +187,6 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
     this.selectedFile = null;
     this.imagePreviewUrl = null;
 
-    // Ensure pricing and stock controls are enabled in create mode
     this.setPricingFieldsState(false);
 
     this.productForm.reset({
@@ -219,40 +217,34 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
     this.selectedFile = null;
     this.imagePreviewUrl = product.imageUrl || null;
 
-    // Temporarily enable controls so patchValue writes cleanly
     this.setPricingFieldsState(false);
 
-    // Patch product values including primary key
+    // Fallbacks ensure no nulls are patched into numeric properties
     this.productForm.patchValue({
-      productId: product.personalProductId || 0,
-      name: product.name,
-      brandName: product.brandName,
-      genericName: product.genericName,
-      category: product.category,
-      dosageForm: product.dosageForm,
-      strength: product.strength,
-      mrp: product.mrp,
-      ptr: product.ptr,
-      pts: product.pts,
-      packSize: product.packSize,
-      unitsPerBox: product.unitsPerBox,
-      sellingPrice: product.sellingPrice,
-      discountPercent: product.discountPercent,
-      quantity: product.quantity,
-      division: product.division,
-      manufacturingLicenseNumber: product.manufacturingLicenseNumber,
-      imageUrl: product.imageUrl
+      productId: product.personalProductId ?? 0,
+      name: product.name ?? '',
+      brandName: product.brandName ?? '',
+      genericName: product.genericName ?? '',
+      category: product.category ?? '',
+      dosageForm: product.dosageForm ?? '',
+      strength: product.strength ?? '',
+      mrp: product.mrp ?? 0,
+      ptr: product.ptr ?? 0,
+      pts: product.pts ?? 0,
+      packSize: product.packSize ?? '',
+      unitsPerBox: product.unitsPerBox ?? 1,
+      sellingPrice: product.sellingPrice ?? 0,
+      discountPercent: product.discountPercent ?? 0,
+      quantity: product.quantity ?? 0,
+      division: product.division ?? '',
+      manufacturingLicenseNumber: product.manufacturingLicenseNumber ?? '',
+      imageUrl: product.imageUrl ?? ''
     });
 
-    // Disable pricing and inventory controls for edit mode
     this.setPricingFieldsState(true);
-
     this.showModal = true;
   }
 
-  /**
-   * Helper to switch enabled/disabled state of stock and pricing controls
-   */
   private setPricingFieldsState(disable: boolean): void {
     const pricingFields = ['unitsPerBox', 'mrp', 'ptr', 'pts', 'sellingPrice', 'discountPercent', 'quantity'];
     pricingFields.forEach(field => {
@@ -265,6 +257,17 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
 
   closeModal(): void {
     this.showModal = false;
+  }
+
+  /**
+   * Helper utility to safely convert any numeric string/null/undefined into a clean number string
+   */
+  private sanitizeNumber(val: any, fallback = 0): string {
+    if (val === null || val === undefined || val === '') {
+      return String(fallback);
+    }
+    const num = Number(val);
+    return isNaN(num) ? String(fallback) : String(num);
   }
 
   saveProduct(): void {
@@ -281,7 +284,7 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
 
     // 1. Audit & Primary Key Payload
     if (this.isEditMode) {
-      formData.append('ProductId', String(formVal.productId || 0));
+      formData.append('ProductId', this.sanitizeNumber(formVal.productId));
       formData.append('UpdatedBy', String(localStorage.getItem('mid') || '0'));
     } else {
       formData.append('AgencyId', String(localStorage.getItem('aid') || '0'));
@@ -289,29 +292,30 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
       formData.append('CreatedBy', String(localStorage.getItem('mid') || '0'));
     }
 
-    // 2. Product Fields
-    formData.append('Name', formVal.name || '');
-    formData.append('BrandName', formVal.brandName || '');
-    formData.append('GenericName', formVal.genericName || '');
-    formData.append('Category', formVal.category || '');
-    formData.append('DosageForm', formVal.dosageForm || '');
-    formData.append('Strength', formVal.strength || '');
-    formData.append('Mrp', String(formVal.mrp || 0));
-    formData.append('Ptr', String(formVal.ptr || 0));
-    formData.append('Pts', String(formVal.pts || 0));
-    formData.append('PackSize', formVal.packSize || '');
-    formData.append('UnitsPerBox', String(formVal.unitsPerBox || 1));
-    formData.append('SellingPrice', String(formVal.sellingPrice || 0));
-    formData.append('DiscountPercent', String(formVal.discountPercent || 0));
-    formData.append('Quantity', String(formVal.quantity || 0));
-    formData.append('Division', formVal.division || '');
-    formData.append('ManufacturingLicenseNumber', formVal.manufacturingLicenseNumber || '');
+    // 2. Product Text Fields
+    formData.append('Name', formVal.name?.trim() || '');
+    formData.append('BrandName', formVal.brandName?.trim() || '');
+    formData.append('GenericName', formVal.genericName?.trim() || '');
+    formData.append('Category', formVal.category?.trim() || '');
+    formData.append('DosageForm', formVal.dosageForm?.trim() || '');
+    formData.append('Strength', formVal.strength?.trim() || '');
+    formData.append('PackSize', formVal.packSize?.trim() || '');
+    formData.append('Division', formVal.division?.trim() || '');
+    formData.append('ManufacturingLicenseNumber', formVal.manufacturingLicenseNumber?.trim() || '');
 
-    // 3. Image URL Handling
+    // 3. Guaranteed Non-Null Numeric Fields
+    formData.append('Mrp', this.sanitizeNumber(formVal.mrp, 0));
+    formData.append('Ptr', this.sanitizeNumber(formVal.ptr, 0));
+    formData.append('Pts', this.sanitizeNumber(formVal.pts, 0));
+    formData.append('UnitsPerBox', this.sanitizeNumber(formVal.unitsPerBox, 1));
+    formData.append('SellingPrice', this.sanitizeNumber(formVal.sellingPrice, 0));
+    formData.append('DiscountPercent', this.sanitizeNumber(formVal.discountPercent, 0));
+    formData.append('Quantity', this.sanitizeNumber(formVal.quantity, 0));
+
+    // 4. Image Handling
     const imageUrlValue = formVal.imageUrl?.trim() || 'N/A';
     formData.append('ImageUrl', imageUrlValue);
 
-    // 4. File Attachment
     if (this.selectedFile) {
       formData.append('imageFile', this.selectedFile, this.selectedFile.name);
     }
