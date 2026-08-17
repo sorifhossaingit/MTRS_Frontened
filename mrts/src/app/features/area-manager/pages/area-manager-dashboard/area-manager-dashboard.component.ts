@@ -96,6 +96,10 @@ export class AreaManagerDashboardComponent implements OnInit {
   editForm!: FormGroup;
   submitted = false;
 
+  isUpdating = false;
+
+   today: string = '';
+
   constructor(
     private areaManagerService: AreaManagerService,
     private fb: FormBuilder
@@ -114,6 +118,12 @@ export class AreaManagerDashboardComponent implements OnInit {
     this.getManagers();
     
     this.loadManagerDashboardSummary();
+
+    const now = new Date();
+
+    this.today =
+      `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
   }
 
   // =====================================================
@@ -404,109 +414,129 @@ export class AreaManagerDashboardComponent implements OnInit {
 
   }
 
-  updateManager() {
+updateManager(): void {
 
-    this.submitted = true;
+  this.submitted = true;
 
-    if (this.editForm.invalid) {
+  // Validation
+  if (this.editForm.invalid) {
 
-      this.editForm.markAllAsTouched();
+    this.editForm.markAllAsTouched();
 
-      return;
+    return;
+  }
 
-    }
+  // Start loading
+  this.isUpdating = true;
 
-    const payload = {
+  const payload = {
 
-      areaManagerId:
-        this.selectedManagerId,
+    areaManagerId:
+      this.selectedManagerId,
 
-      agencyId:
-        this.agencyId,
+    agencyId:
+      this.agencyId,
 
-      updatedBy:
-        this.userId,
+    updatedBy:
+      this.userId,
 
-      name:
-        this.editForm.value.name,
+    name:
+      this.editForm.value.name,
 
-      email:
-        this.editForm.value.email,
+    email:
+      this.editForm.value.email,
 
-      gender:
-        this.editForm.value.gender,
+    gender:
+      this.editForm.value.gender,
 
-      dateOfBirth:
-        this.editForm.value.dateOfBirth
-          ? this.editForm.value.dateOfBirth + 'T00:00:00'
-          : '',
+    dateOfBirth:
+      this.editForm.value.dateOfBirth
+        ? this.editForm.value.dateOfBirth + 'T00:00:00'
+        : '',
 
-      joiningDate:
-        this.editForm.value.joiningDate
-          ? this.editForm.value.joiningDate + 'T00:00:00'
-          : '',
+    joiningDate:
+      this.editForm.value.joiningDate
+        ? this.editForm.value.joiningDate + 'T00:00:00'
+        : '',
 
-      mobile:
-        this.editForm.value.mobile,
+    mobile:
+      this.editForm.value.mobile,
 
-      region:
-        this.editForm.value.region,
+    region:
+      this.editForm.value.region,
 
-      assignedArea:
-        this.editForm.value.assignedArea,
+    assignedArea:
+      this.editForm.value.assignedArea,
 
-      address:
-        this.editForm.value.address,
+    address:
+      this.editForm.value.address,
 
-      city:
-        this.editForm.value.city,
+    city:
+      this.editForm.value.city,
 
-      state:
-        this.editForm.value.state,
+    state:
+      this.editForm.value.state,
 
-      isActive:
-        this.editForm.value.isActive
+    isActive:
+      this.editForm.value.isActive
 
-    };
+  };
 
-    this.areaManagerService
-      .update_area_manager_details(payload)
-      .subscribe({
+  this.areaManagerService
+    .update_area_manager_details(payload)
+    .subscribe({
 
-        next: () => {
+      // ==============================
+      // SUCCESS
+      // ==============================
+      next: (res: any) => {
 
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text:
-              'Area Manager Updated Successfully'
-          });
+        this.isUpdating = false;
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text:
+            res?.message ||
+            'Area Manager Updated Successfully',
+          confirmButtonColor: '#16a34a'
+        }).then(() => {
 
           this.closeModal();
 
+          // Reload manager list
           this.getManagers();
 
+          // Reload dashboard summary
           this.loadManagerDashboardSummary();
 
-        },
+        });
 
-        error: (err: any) => {
+      },
 
-          console.error(err);
+      // ==============================
+      // ERROR
+      // ==============================
+      error: (err: any) => {
 
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text:
-              'Failed To Update Manager'
-          });
+        this.isUpdating = false;
 
-        }
+        console.error(err);
 
-      });
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text:
+            err?.error?.message ||
+            'Failed To Update Manager',
+          confirmButtonColor: '#dc2626'
+        });
 
-  }
+      }
 
+    });
+
+}
   // =====================================================
   // SOFT DELETE
   // =====================================================

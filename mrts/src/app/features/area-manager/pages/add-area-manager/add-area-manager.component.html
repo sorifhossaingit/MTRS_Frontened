@@ -8,9 +8,7 @@
       Add Area Manager
     </h1>
 
-    <button
-      routerLink="/area-manager/area-manager-dashboard"
-      type="button"
+    <button routerLink="/area-manager/area-manager-dashboard" type="button"
       class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-xl flex items-center gap-2">
 
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
@@ -20,10 +18,7 @@
 
   </div>
 
-  <form
-    [formGroup]="areaManagerForm"
-    (ngSubmit)="saveAreaManager()"
-    class="space-y-6">
+  <form [formGroup]="areaManagerForm" (ngSubmit)="saveAreaManager()" class="space-y-6">
 
     <!-- PERSONAL INFORMATION -->
     <div class="bg-white rounded-2xl shadow p-6">
@@ -40,20 +35,13 @@
             Full Name *
           </label>
 
-          <input
-            type="text"
-            formControlName="name"
-            class="input">
+          <input type="text" formControlName="name" class="input">
 
-          <p
-            *ngIf="submitted && f['name'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['name'].hasError('required')" class="error">
             Name is required
           </p>
 
-          <p
-            *ngIf="submitted && f['name'].hasError('minlength')"
-            class="error">
+          <p *ngIf="submitted && f['name'].hasError('minlength')" class="error">
             Minimum 3 characters required
           </p>
         </div>
@@ -64,20 +52,13 @@
             Email *
           </label>
 
-          <input
-            type="email"
-            formControlName="email"
-            class="input">
+          <input type="email" formControlName="email" class="input">
 
-          <p
-            *ngIf="submitted && f['email'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['email'].hasError('required')" class="error">
             Email is required
           </p>
 
-          <p
-            *ngIf="submitted && f['email'].hasError('email')"
-            class="error">
+          <p *ngIf="submitted && f['email'].hasError('email')" class="error">
             Invalid email format
           </p>
         </div>
@@ -88,20 +69,13 @@
             Mobile Number *
           </label>
 
-          <input
-            type="text"
-            formControlName="mobile"
-            class="input">
+          <input type="text" formControlName="mobile" class="input">
 
-          <p
-            *ngIf="submitted && f['mobile'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['mobile'].hasError('required')" class="error">
             Mobile number is required
           </p>
 
-          <p
-            *ngIf="submitted && f['mobile'].hasError('pattern')"
-            class="error">
+          <p *ngIf="submitted && f['mobile'].hasError('pattern')" class="error">
             Enter valid 10 digit mobile number
           </p>
         </div>
@@ -112,9 +86,7 @@
             Gender *
           </label>
 
-          <select
-            formControlName="gender"
-            class="input">
+          <select formControlName="gender" class="input">
 
             <option value="">
               Select Gender
@@ -134,48 +106,60 @@
 
           </select>
 
-          <p
-            *ngIf="submitted && f['gender'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['gender'].hasError('required')" class="error">
             Gender is required
           </p>
         </div>
 
-        <!-- DOB -->
-        <div>
-          <label class="block mb-2 font-medium">
-            Date Of Birth *
-          </label>
+<!-- DOB -->
+<div>
+  <label class="block mb-2 font-medium">
+    Date Of Birth *
+  </label>
 
-          <input
-            type="date"
-            formControlName="dateOfBirth"
-            class="input">
+  <input
+    type="date"
+    formControlName="dateOfBirth"
+    [max]="today"
+    class="input">
 
-          <p
-            *ngIf="submitted && f['dateOfBirth'].hasError('required')"
-            class="error">
-            Date of Birth is required
-          </p>
-        </div>
+  <p
+    *ngIf="submitted && f['dateOfBirth'].hasError('required')"
+    class="error">
+    Date of Birth is required
+  </p>
 
-        <!-- Joining Date -->
-        <div>
-          <label class="block mb-2 font-medium">
-            Joining Date *
-          </label>
+  <p
+    *ngIf="submitted && f['dateOfBirth'].hasError('futureDate')"
+    class="error">
+    Date of Birth cannot be a future date
+  </p>
+</div>
 
-          <input
-            type="date"
-            formControlName="joiningDate"
-            class="input">
+<!-- Joining Date -->
+<div>
+  <label class="block mb-2 font-medium">
+    Joining Date *
+  </label>
 
-          <p
-            *ngIf="submitted && f['joiningDate'].hasError('required')"
-            class="error">
-            Joining Date is required
-          </p>
-        </div>
+  <input
+    type="date"
+    formControlName="joiningDate"
+    [max]="today"
+    class="input">
+
+  <p
+    *ngIf="submitted && f['joiningDate'].hasError('required')"
+    class="error">
+    Joining Date is required
+  </p>
+
+  <p
+    *ngIf="submitted && f['joiningDate'].hasError('futureDate')"
+    class="error">
+    Joining Date cannot be a future date
+  </p>
+</div>
 
       </div>
 
@@ -196,14 +180,9 @@
             Region *
           </label>
 
-          <input
-            type="text"
-            formControlName="region"
-            class="input">
+          <input type="text" formControlName="region" class="input">
 
-          <p
-            *ngIf="submitted && f['region'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['region'].hasError('required')" class="error">
             Region is required
           </p>
         </div>
@@ -214,14 +193,9 @@
             Assigned Area *
           </label>
 
-          <input
-            type="text"
-            formControlName="assignedArea"
-            class="input">
+          <input type="text" formControlName="assignedArea" class="input">
 
-          <p
-            *ngIf="submitted && f['assignedArea'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['assignedArea'].hasError('required')" class="error">
             Assigned Area is required
           </p>
         </div>
@@ -246,15 +220,10 @@
             Address *
           </label>
 
-          <textarea
-            rows="4"
-            formControlName="address"
-            class="input">
+          <textarea rows="4" formControlName="address" class="input">
           </textarea>
 
-          <p
-            *ngIf="submitted && f['address'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['address'].hasError('required')" class="error">
             Address is required
           </p>
 
@@ -267,14 +236,9 @@
             City *
           </label>
 
-          <input
-            type="text"
-            formControlName="city"
-            class="input">
+          <input type="text" formControlName="city" class="input">
 
-          <p
-            *ngIf="submitted && f['city'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['city'].hasError('required')" class="error">
             City is required
           </p>
 
@@ -287,14 +251,9 @@
             State *
           </label>
 
-          <input
-            type="text"
-            formControlName="state"
-            class="input">
+          <input type="text" formControlName="state" class="input">
 
-          <p
-            *ngIf="submitted && f['state'].hasError('required')"
-            class="error">
+          <p *ngIf="submitted && f['state'].hasError('required')" class="error">
             State is required
           </p>
 
@@ -307,21 +266,45 @@
     <!-- BUTTONS -->
     <div class="flex flex-col sm:flex-row justify-end gap-3">
 
-      <button
-        type="button"
-        class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-xl">
+      <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-xl">
 
         Cancel
 
       </button>
 
-      <button
-        type="submit"
-        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl flex items-center justify-center gap-2">
+      <button type="submit" [disabled]="isSaving" class="bg-blue-500 hover:bg-blue-600
+         disabled:bg-blue-300
+         disabled:cursor-not-allowed
+         text-white px-6 py-2 rounded-xl
+         flex items-center justify-center gap-2
+         min-w-[190px]">
 
-        <lucide-icon [img]="Save"></lucide-icon>
+        <!-- Loading -->
+        <ng-container *ngIf="isSaving; else saveAreaManagerButton">
 
-        Save Area Manager
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+            </circle>
+
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+            </path>
+
+          </svg>
+
+          Saving...
+
+        </ng-container>
+
+        <!-- Normal -->
+        <ng-template #saveAreaManagerButton>
+
+          <lucide-icon [img]="Save"></lucide-icon>
+
+          Save Area Manager
+
+        </ng-template>
 
       </button>
 

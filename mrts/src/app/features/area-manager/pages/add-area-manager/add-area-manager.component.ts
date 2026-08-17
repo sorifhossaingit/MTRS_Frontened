@@ -38,13 +38,15 @@ export class AddAreaManagerComponent implements OnInit {
   Save = Save;
 
   submitted = false;
-
+  isSaving = false;
   areaManagerForm: FormGroup;
 
   agencyId: number =
     Number(localStorage.getItem('aid')) || 0;
 
   userId: number = 0;
+
+  today: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -77,12 +79,18 @@ export class AddAreaManagerComponent implements OnInit {
 
       dateOfBirth: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          this.futureDateValidator.bind(this)
+        ]
       ],
 
       joiningDate: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          this.futureDateValidator.bind(this)
+        ]
       ],
 
       mobile: [
@@ -125,6 +133,10 @@ export class AddAreaManagerComponent implements OnInit {
   ngOnInit(): void {
 
     this.decodeToken();
+    const now = new Date();
+
+    this.today =
+      `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   }
 
@@ -157,23 +169,21 @@ export class AddAreaManagerComponent implements OnInit {
     if (this.areaManagerForm.invalid) {
 
       this.areaManagerForm.markAllAsTouched();
-
       return;
-
     }
+
+    // Start loading
+    this.isSaving = true;
 
     const payload = {
 
       agencyId: this.agencyId,
 
-      name:
-        this.areaManagerForm.value.name,
+      name: this.areaManagerForm.value.name,
 
-      email:
-        this.areaManagerForm.value.email,
+      email: this.areaManagerForm.value.email,
 
-      gender:
-        this.areaManagerForm.value.gender,
+      gender: this.areaManagerForm.value.gender,
 
       dateOfBirth:
         this.areaManagerForm.value.dateOfBirth + 'T00:00:00',
@@ -208,20 +218,18 @@ export class AddAreaManagerComponent implements OnInit {
       .add_area_manager(payload)
       .subscribe({
 
+        // API SUCCESS
         next: (res: any) => {
 
+          this.isSaving = false;
+
           Swal.fire({
-
             icon: 'success',
-
             title: 'Success',
-
             text: 'Area Manager Added Successfully'
-
           }).then(() => {
 
             this.areaManagerForm.reset();
-
             this.submitted = false;
 
             this.router.navigate([
@@ -232,23 +240,43 @@ export class AddAreaManagerComponent implements OnInit {
 
         },
 
+        // API ERROR
         error: (err: any) => {
+
+          this.isSaving = false;
 
           console.error(err);
 
           Swal.fire({
-
             icon: 'error',
-
             title: 'Error',
-
-            text: 'Failed To Add Area Manager'
-
+            text:
+              err?.error?.message ||
+              'Failed To Add Area Manager'
           });
 
         }
 
       });
 
+  }
+
+  futureDateValidator(control: any) {
+
+    if (!control.value) {
+      return null;
+    }
+
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
+      return { futureDate: true };
+    }
+
+    return null;
   }
 }

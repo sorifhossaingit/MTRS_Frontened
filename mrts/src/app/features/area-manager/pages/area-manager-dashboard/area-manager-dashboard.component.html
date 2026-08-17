@@ -288,76 +288,163 @@
 <!-- EDIT MODAL -->
 <!-- ===================================================== -->
 
-<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+<div *ngIf="showEditModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 
-  <div class="bg-white rounded-3xl w-full max-w-6xl max-h-[95vh] overflow-y-auto">
+  <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-100">
 
-    <div class="sticky top-0 bg-white border-b p-5 flex justify-between items-center">
+    <!-- Modal Header -->
+    <div class="bg-white border-b border-slate-100 p-6 flex justify-between items-center">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">
+          Update Area Manager
+        </h2>
+        <p class="text-xs text-slate-400 mt-0.5">Edit manager account details and assignments.</p>
+      </div>
 
-      <h2 class="text-2xl font-bold">
-        Update Area Manager
-      </h2>
-
-      <button (click)="closeModal()" class="w-10 h-10 rounded-full hover:bg-gray-100">
-
+      <button (click)="closeModal()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
         ✕
-
       </button>
-
     </div>
 
-    <form [formGroup]="editForm" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- Modal Content -->
+    <form [formGroup]="editForm" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto">
 
-      <input formControlName="name" placeholder="Name" class="border rounded-xl px-4 h-12">
-
-      <input formControlName="email" placeholder="Email" class="border rounded-xl px-4 h-12">
-
-      <input formControlName="mobile" placeholder="Mobile" class="border rounded-xl px-4 h-12">
-
-      <select formControlName="gender" class="border rounded-xl px-4 h-12">
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
-
-      <input type="date" formControlName="dateOfBirth" class="border rounded-xl px-4 h-12">
-
-      <input type="date" formControlName="joiningDate" class="border rounded-xl px-4 h-12">
-
-      <input formControlName="region" placeholder="Region" class="border rounded-xl px-4 h-12">
-
-      <input formControlName="assignedArea" placeholder="Assigned Area" class="border rounded-xl px-4 h-12">
-
-      <input formControlName="city" placeholder="City" class="border rounded-xl px-4 h-12">
-
-      <input formControlName="state" placeholder="State" class="border rounded-xl px-4 h-12">
-
-      <div class="md:col-span-2 lg:col-span-3">
-        <textarea rows="3" formControlName="address" placeholder="Address" class="w-full border rounded-xl p-4">
-        </textarea>
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Name</label>
+        <input formControlName="name" placeholder="Name" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all">
       </div>
 
       <div>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" formControlName="isActive">
-          Active
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Email</label>
+        <input formControlName="email" placeholder="Email" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Mobile</label>
+        <input formControlName="mobile" placeholder="Mobile" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Gender</label>
+        <select formControlName="gender" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all text-slate-700">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+
+<div>
+  <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+    Date of Birth
+  </label>
+
+  <input
+    type="date"
+    formControlName="dateOfBirth"
+    [max]="today"
+    class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all text-slate-700">
+</div>
+
+<div>
+  <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+    Joining Date
+  </label>
+
+  <input
+    type="date"
+    formControlName="joiningDate"
+    [max]="today"
+    class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all text-slate-700">
+</div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Region</label>
+        <input formControlName="region" placeholder="Region" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Assigned Area</label>
+        <input formControlName="assignedArea" placeholder="Assigned Area" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">City</label>
+        <input formControlName="city" placeholder="City" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all">
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">State</label>
+        <input formControlName="state" placeholder="State" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-4 h-11 text-sm outline-none transition-all">
+      </div>
+
+      <div class="md:col-span-2 lg:col-span-3">
+        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Address</label>
+        <textarea rows="3" formControlName="address" placeholder="Address" class="w-full bg-slate-50/50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl p-3 text-sm outline-none transition-all"></textarea>
+      </div>
+
+      <div class="md:col-span-2 lg:col-span-3 pt-2">
+        <label class="inline-flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
+          <input type="checkbox" formControlName="isActive" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300">
+          Active Manager Status
         </label>
       </div>
 
     </form>
 
-    <div class="border-t p-5 flex justify-end gap-3">
+    <!-- Modal Footer -->
+    <div class="border-t border-slate-100 p-5 bg-slate-50/50 flex justify-end gap-3">
 
-      <button (click)="closeModal()" class="px-5 py-2 rounded-xl bg-gray-200">
-
+      <button (click)="closeModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-sm font-medium transition-all">
         Cancel
-
       </button>
 
-      <button (click)="updateManager()" class="px-5 py-2 rounded-xl bg-blue-600 text-white">
+      <button
+  type="button"
+  (click)="updateManager()"
+  [disabled]="isUpdating"
+  class="px-5 py-2.5 rounded-xl
+         bg-blue-600 hover:bg-blue-700
+         disabled:bg-blue-300
+         disabled:cursor-not-allowed
+         text-white text-sm font-medium
+         shadow-sm shadow-blue-200
+         transition-all
+         min-w-[160px]
+         flex items-center justify-center gap-2">
 
-        Update Manager
+  <ng-container *ngIf="isUpdating; else updateButtonText">
 
-      </button>
+    <svg
+      class="animate-spin h-4 w-4 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24">
+
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4">
+      </circle>
+
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+
+    </svg>
+
+    Updating...
+
+  </ng-container>
+
+  <ng-template #updateButtonText>
+    Update Manager
+  </ng-template>
+
+</button>
 
     </div>
 
