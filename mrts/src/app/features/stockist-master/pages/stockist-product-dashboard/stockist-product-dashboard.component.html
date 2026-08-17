@@ -13,25 +13,25 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
-      <button 
-        routerLink="/product-master/add-product-master"
+      <button routerLink="/stockist-master/medicine-order-master"
         class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/20 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all">
         <lucide-icon [img]="PlusIcon" class="h-4 w-4"></lucide-icon>
-        <span>Add Product</span>
+        <span>Order Product</span>
       </button>
 
-      <button 
+      <!-- <button 
         class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all">
         <lucide-icon [img]="UploadIcon" class="h-4 w-4"></lucide-icon>
         <span>Bulk Upload</span>
-      </button>
+      </button> -->
     </div>
   </div>
 
   <!-- KPI CARDS -->
   <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-    
-    <div class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+
+    <div
+      class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Products</p>
@@ -43,7 +43,8 @@
       </div>
     </div>
 
-    <div class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+    <div
+      class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Available</p>
@@ -55,7 +56,8 @@
       </div>
     </div>
 
-    <div class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+    <div
+      class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Unavailable</p>
@@ -67,11 +69,13 @@
       </div>
     </div>
 
-    <div class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+    <div
+      class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Current Page</p>
-          <h3 class="mt-2 text-2xl font-bold text-slate-900">{{ pageNumber }} <span class="text-sm font-normal text-slate-400">/ {{ totalPages }}</span></h3>
+          <h3 class="mt-2 text-2xl font-bold text-slate-900">{{ pageNumber }} <span
+              class="text-sm font-normal text-slate-400">/ {{ totalPages }}</span></h3>
         </div>
         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
           <lucide-icon [img]="TrendingUpIcon" class="h-6 w-6"></lucide-icon>
@@ -87,50 +91,37 @@
       <lucide-icon [img]="SlidersIcon" class="h-4 w-4 text-slate-400"></lucide-icon>
       <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Filter Inventory</span>
     </div>
-    
+
     <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-5">
-<div class="relative">
-  <lucide-icon [img]="SearchIcon" class="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></lucide-icon>
-  <input 
-    type="text" 
-    formControlName="search" 
-    placeholder="Search Product / Brand" 
-    class="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-11 pr-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
-</div>
+      <div class="relative">
+        <lucide-icon [img]="SearchIcon"
+          class="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></lucide-icon>
+        <input type="text" formControlName="search" placeholder="Search Product / Brand"
+          class="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-11 pr-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
+      </div>
 
       <div>
-        <input 
-          type="text" 
-          formControlName="category" 
-          placeholder="Category" 
+        <input type="text" formControlName="category" placeholder="Category"
           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
       </div>
 
       <div>
-        <input 
-          type="number" 
-          formControlName="minPrice" 
-          placeholder="Min Price (₹)" 
+        <input type="number" formControlName="minPrice" placeholder="Min Price (₹)"
           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
       </div>
 
       <div>
-        <input 
-          type="number" 
-          formControlName="maxPrice" 
-          placeholder="Max Price (₹)" 
+        <input type="number" formControlName="maxPrice" placeholder="Max Price (₹)"
           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
       </div>
 
       <div class="flex items-center gap-2">
-        <button 
-          (click)="applyFilters()" 
+        <button (click)="applyFilters()"
           class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 py-2 text-sm font-semibold text-white transition-all hover:bg-slate-800">
           <span>Search</span>
         </button>
 
-        <button 
-          (click)="resetFilters()" 
+        <button (click)="resetFilters()"
           class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition-all hover:bg-slate-50 hover:text-slate-900"
           title="Reset Filters">
           <lucide-icon [img]="RotateCcwIcon" class="h-4 w-4"></lucide-icon>
@@ -143,7 +134,8 @@
   <div class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
     <div class="overflow-x-auto">
       <table class="w-full text-left text-sm text-slate-600 min-w-[1000px]">
-        <thead class="border-b border-slate-100 bg-slate-50/50 text-xs uppercase text-slate-400 font-semibold tracking-wider">
+        <thead
+          class="border-b border-slate-100 bg-slate-50/50 text-xs uppercase text-slate-400 font-semibold tracking-wider">
           <tr>
             <th class="p-4 pl-6">Product</th>
             <th class="p-4">Brand / Category</th>
@@ -179,9 +171,7 @@
           <tr *ngFor="let product of products" class="transition-colors hover:bg-slate-50/80">
             <td class="p-4 pl-6">
               <div class="flex items-center gap-3">
-                <img 
-                  [src]="product.imageUrl || 'assets/placeholder.png'" 
-                  [alt]="product.productName"
+                <img [src]="product.imageUrl || 'assets/placeholder.png'" [alt]="product.productName"
                   class="h-12 w-12 rounded-xl object-cover border border-slate-200/80 bg-slate-50 shrink-0">
                 <div>
                   <p class="font-semibold text-slate-900">{{ product.productName }}</p>
@@ -197,7 +187,8 @@
 
             <td class="p-4">
               <p class="text-slate-700">{{ product.dosageForm }}</p>
-              <span class="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500 font-mono">
+              <span
+                class="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500 font-mono">
                 {{ product.strength }}
               </span>
             </td>
@@ -211,7 +202,8 @@
             </td>
 
             <td class="p-4">
-              <span *ngIf="product.discountPercent > 0" class="inline-flex items-center rounded-lg bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700 border border-amber-200/60">
+              <span *ngIf="product.discountPercent > 0"
+                class="inline-flex items-center rounded-lg bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700 border border-amber-200/60">
                 {{ product.discountPercent }}% OFF
               </span>
               <span *ngIf="!product.discountPercent || product.discountPercent === 0" class="text-slate-400 text-xs">
@@ -220,25 +212,23 @@
             </td>
 
             <td class="p-4">
-              <span 
-                class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+              <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
                 [ngClass]="product.isAvailable ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-rose-50 text-rose-700 border border-rose-200/60'">
-                <span class="h-1.5 w-1.5 rounded-full" [ngClass]="product.isAvailable ? 'bg-emerald-500' : 'bg-rose-500'"></span>
+                <span class="h-1.5 w-1.5 rounded-full"
+                  [ngClass]="product.isAvailable ? 'bg-emerald-500' : 'bg-rose-500'"></span>
                 {{ product.isAvailable ? 'Available' : 'Unavailable' }}
               </span>
             </td>
 
             <td class="p-4 pr-6">
               <div class="flex items-center justify-center gap-1">
-                <button 
-                  (click)="openViewModal(product)" 
+                <button (click)="openViewModal(product)"
                   class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-blue-600 transition-colors"
                   title="View Details">
                   <lucide-icon [img]="EyeIcon" class="h-4 w-4"></lucide-icon>
                 </button>
 
-                <button 
-                  (click)="openEditModal(product)" 
+                <button (click)="openEditModal(product)"
                   class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-amber-600 transition-colors"
                   title="Edit Product">
                   <lucide-icon [img]="PencilIcon" class="h-4 w-4"></lucide-icon>
@@ -251,22 +241,20 @@
     </div>
 
     <!-- PAGINATION -->
-    <div class="flex flex-col items-center justify-between gap-3 border-t border-slate-100 bg-slate-50/30 p-4 sm:flex-row">
+    <div
+      class="flex flex-col items-center justify-between gap-3 border-t border-slate-100 bg-slate-50/30 p-4 sm:flex-row">
       <p class="text-xs font-medium text-slate-500">
-        Showing Page <strong class="text-slate-900">{{ pageNumber }}</strong> of <strong class="text-slate-900">{{ totalPages }}</strong>
+        Showing Page <strong class="text-slate-900">{{ pageNumber }}</strong> of <strong class="text-slate-900">{{
+          totalPages }}</strong>
       </p>
 
       <div class="flex items-center gap-2">
-        <button 
-          (click)="previousPage()" 
-          [disabled]="pageNumber === 1"
+        <button (click)="previousPage()" [disabled]="pageNumber === 1"
           class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white">
           <lucide-icon [img]="ChevronLeftIcon" class="h-4 w-4"></lucide-icon>
         </button>
 
-        <button 
-          (click)="nextPage()" 
-          [disabled]="pageNumber === totalPages"
+        <button (click)="nextPage()" [disabled]="pageNumber === totalPages"
           class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white">
           <lucide-icon [img]="ChevronRightIcon" class="h-4 w-4"></lucide-icon>
         </button>
@@ -275,10 +263,10 @@
   </div>
 
   <!-- VIEW MODAL -->
-  <div *ngIf="showViewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+  <div *ngIf="showViewModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
     <div class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-3xl bg-white p-6 sm:p-8 shadow-2xl">
-      <button 
-        (click)="closeViewModal()" 
+      <button (click)="closeViewModal()"
         class="absolute right-5 top-5 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors">
         <lucide-icon [img]="XIcon" class="h-5 w-5"></lucide-icon>
       </button>
@@ -345,7 +333,8 @@
             </div>
             <div class="flex justify-between py-1">
               <span class="text-slate-500">Available:</span>
-              <span class="font-semibold" [ngClass]="selectedProduct?.isAvailable ? 'text-emerald-600' : 'text-rose-600'">
+              <span class="font-semibold"
+                [ngClass]="selectedProduct?.isAvailable ? 'text-emerald-600' : 'text-rose-600'">
                 {{ selectedProduct?.isAvailable ? 'Yes' : 'No' }}
               </span>
             </div>
@@ -356,11 +345,13 @@
   </div>
 
   <!-- EDIT MODAL -->
-  <div *ngIf="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+  <div *ngIf="showEditModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
     <div class="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl">
       <div class="mb-6 flex items-center justify-between">
         <h2 class="text-xl font-bold text-slate-900">Update Product</h2>
-        <button (click)="closeEditModal()" class="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 transition-colors">
+        <button (click)="closeEditModal()"
+          class="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 transition-colors">
           <lucide-icon [img]="XIcon" class="h-5 w-5"></lucide-icon>
         </button>
       </div>
@@ -370,9 +361,7 @@
           <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
             More Quantity To Add
           </label>
-          <input 
-            type="number" 
-            formControlName="quantity" 
+          <input type="number" formControlName="quantity"
             class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
         </div>
 
@@ -381,9 +370,7 @@
             <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
               Selling Price (₹)
             </label>
-            <input 
-              type="number" 
-              formControlName="sellingPrice" 
+            <input type="number" formControlName="sellingPrice"
               class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
           </div>
 
@@ -391,9 +378,7 @@
             <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
               Discount (%)
             </label>
-            <input 
-              type="number" 
-              formControlName="discountPercent" 
+            <input type="number" formControlName="discountPercent"
               class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
           </div>
         </div>
@@ -402,34 +387,63 @@
           <label class="mb-1.5 block text-xs font-semibold text-slate-700 uppercase tracking-wider">
             Tax (%)
           </label>
-          <input 
-            type="number" 
-            formControlName="taxPercent" 
+          <input type="number" formControlName="taxPercent"
             class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10">
         </div>
 
         <div class="pt-2">
           <label class="inline-flex items-center gap-3 cursor-pointer">
-            <input 
-              type="checkbox" 
-              formControlName="isAvailable" 
+            <input type="checkbox" formControlName="isAvailable"
               class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500/20">
             <span class="text-sm font-medium text-slate-700">Available</span>
           </label>
         </div>
 
         <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-100">
-          <button 
-            type="button" 
-            (click)="closeEditModal()" 
+          <button type="button" (click)="closeEditModal()"
             class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
             Cancel
           </button>
 
-          <button 
-            type="submit" 
-            class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/20 hover:bg-blue-700 transition-colors">
-            Update
+          <button type="submit" [disabled]="isUpdating" class="rounded-xl
+         bg-blue-600
+         hover:bg-blue-700
+         disabled:bg-blue-300
+         disabled:cursor-not-allowed
+         px-5 py-2.5
+         text-sm
+         font-semibold
+         text-white
+         shadow-sm
+         shadow-blue-500/20
+         transition-colors
+         min-w-[110px]
+         flex
+         items-center
+         justify-center
+         gap-2">
+
+            <ng-container *ngIf="isUpdating; else updateText">
+
+              <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                </circle>
+
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+                </path>
+
+              </svg>
+
+              Updating...
+
+            </ng-container>
+
+            <ng-template #updateText>
+              Update
+            </ng-template>
+
           </button>
         </div>
       </form>

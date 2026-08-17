@@ -66,7 +66,10 @@ readonly PackageIcon = Package;
   totalRecords = 0;
   totalPages = 0;
 
+  // isLoading = false;
+
   isLoading = false;
+  isUpdating = false;
 
   selectedProduct: any = null;
 
@@ -223,6 +226,13 @@ openEditModal(product: any): void {
 
 updateProduct(): void {
 
+  // Prevent duplicate API calls
+  if (this.isUpdating) {
+    return;
+  }
+
+  this.isUpdating = true;
+
   const payload = {
     id: this.selectedInventoryId,
     quantity: this.editForm.value.quantity,
@@ -235,26 +245,51 @@ updateProduct(): void {
   this.stockistService
     .update_stockist_product(payload)
     .subscribe({
-      next: () => {
+
+      // =========================
+      // SUCCESS
+      // =========================
+      next: (res: any) => {
+
+        this.isUpdating = false;
 
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Product updated successfully'
+          text: res?.message || 'Product updated successfully',
+          confirmButtonColor: '#16a34a'
+        }).then(() => {
+
+          this.closeEditModal();
+
+          this.getProducts();
+
         });
 
-        this.closeEditModal();
-        this.getProducts();
       },
-      error: (err) => {
+
+      // =========================
+      // ERROR
+      // =========================
+      error: (err: any) => {
+
+        this.isUpdating = false;
+
+        console.error(err);
 
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err?.error?.message || 'Update failed'
+          text:
+            err?.error?.message ||
+            'Update failed',
+          confirmButtonColor: '#dc2626'
         });
+
       }
+
     });
+
 }
 
   get activeProducts(): number {
