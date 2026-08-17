@@ -1,248 +1,352 @@
-<div class="min-h-screen bg-gray-100 p-6">
+<div class="min-h-screen bg-slate-50/50 p-4 md:p-8">
 
     <!-- HEADER -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">MR Dashboard</h1>
-            <p class="text-gray-500 mt-1">Manage Medical Representatives</p>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">MR Dashboard</h1>
+            <p class="text-sm text-slate-500 mt-1 font-medium">Manage and monitor Medical Representatives</p>
         </div>
     </div>
 
-    <!-- STATS -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-white rounded-xl shadow-sm border p-6">
-            <div class="flex justify-between items-center">
+    <!-- STATS METRICS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+        
+        <!-- Total MRs -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Total MRs</p>
-                    <h2 class="text-3xl font-bold mt-2">{{ totalRecords }}</h2>
+                    <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Total MRs</p>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-1.5">{{ totalRecords }}</h2>
                 </div>
-                <div class="bg-blue-100 p-3 rounded-full">
-                    <lucide-icon [img]="Users" class="text-blue-600"></lucide-icon>
+                <div class="h-12 w-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 ring-1 ring-blue-600/10">
+                    <lucide-icon [img]="Users" class="w-6 h-6"></lucide-icon>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border p-6">
-            <div class="flex justify-between items-center">
+        <!-- Active MRs -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Active MRs (Current Page)</p>
-                    <h2 class="text-3xl font-bold mt-2">{{ activeCount }}</h2>
+                    <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Active (Current Page)</p>
+                    <h2 class="text-3xl font-bold text-emerald-600 mt-1.5">{{ activeCount }}</h2>
                 </div>
-                <div class="bg-green-100 p-3 rounded-full">
-                    <lucide-icon [img]="UserCheck" class="text-green-600"></lucide-icon>
+                <div class="h-12 w-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 ring-1 ring-emerald-600/10">
+                    <lucide-icon [img]="UserCheck" class="w-6 h-6"></lucide-icon>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border p-6">
-            <div class="flex justify-between items-center">
+        <!-- Inactive MRs -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all sm:col-span-2 lg:col-span-1">
+            <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Inactive MRs (Current Page)</p>
-                    <h2 class="text-3xl font-bold mt-2">{{ inactiveCount }}</h2>
+                    <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Inactive (Current Page)</p>
+                    <h2 class="text-3xl font-bold text-rose-600 mt-1.5">{{ inactiveCount }}</h2>
                 </div>
-                <div class="bg-red-100 p-3 rounded-full">
-                    <lucide-icon [img]="UserX" class="text-red-600"></lucide-icon>
+                <div class="h-12 w-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600 ring-1 ring-rose-600/10">
+                    <lucide-icon [img]="UserX" class="w-6 h-6"></lucide-icon>
                 </div>
             </div>
         </div>
+        
     </div>
 
-    <!-- FILTER -->
-    <form [formGroup]="filterForm" class="bg-white p-5 rounded-xl shadow border mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <input type="text" formControlName="name" placeholder="Search By Name" class="border rounded-lg px-4 py-3">
-            <input type="text" formControlName="email" placeholder="Search By Email" class="border rounded-lg px-4 py-3">
-            <input type="text" formControlName="mobile" placeholder="Search By Mobile" class="border rounded-lg px-4 py-3">
-            <select formControlName="isActive" class="border rounded-lg px-4 py-3">
-                <option [ngValue]="null">All</option>
-                <option [ngValue]="true">Active</option>
-                <option [ngValue]="false">Inactive</option>
-            </select>
+    <!-- FILTER BAR -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 mb-8">
+        <form [formGroup]="filterForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Name</label>
+                    <input type="text" formControlName="name" placeholder="Search by name..." 
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
+                    <input type="text" formControlName="email" placeholder="Search by email..." 
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Mobile</label>
+                    <input type="text" formControlName="mobile" placeholder="Search by mobile..." 
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
+                    <select formControlName="isActive" 
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                        <option [ngValue]="null">All Statuses</option>
+                        <option [ngValue]="true">Active</option>
+                        <option [ngValue]="false">Inactive</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
+                <button type="button" (click)="resetFilter()" 
+                        class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all active:scale-[0.98]">
+                    Reset Filters
+                </button>
+                <button type="button" (click)="applyFilter()" 
+                        class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 rounded-xl transition-all active:scale-[0.98]">
+                    Apply Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- TABLE CONTAINER -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="text-base font-bold text-slate-900">Medical Representatives</h2>
+            <span class="text-xs font-medium text-slate-400">Page {{ pageNumber }} of {{ totalPages }}</span>
         </div>
 
-        <div class="flex gap-3 mt-4">
-            <button type="button" (click)="applyFilter()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
-                Search
-            </button>
-            <button type="button" (click)="resetFilter()" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
-                Reset
-            </button>
-        </div>
-    </form>
-
-    <!-- TABLE -->
-    <div class="bg-white rounded-xl shadow border overflow-hidden">
-        <div class="px-6 py-4 border-b">
-            <h2 class="text-lg font-semibold">Medical Representative List</h2>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full min-w-[1400px]">
-                <thead class="bg-gray-50">
+        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200">
+            <table class="w-full min-w-[1200px] text-left text-sm text-slate-600">
+                
+                <thead class="bg-slate-50/70 border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400">
                     <tr>
-                        <th class="px-4 py-3 text-left">Name</th>
-                        <th class="px-4 py-3 text-left">Contact Person</th>
-                        <th class="px-4 py-3 text-left">Mobile</th>
-                        <th class="px-4 py-3 text-left">Email</th>
-                        <th class="px-4 py-3 text-left">City</th>
-                        <th class="px-4 py-3 text-left">State</th>
-                        <th class="px-4 py-3 text-left">Region</th>
-                        <th class="px-4 py-3 text-left">Route(s)</th>
-                        <th class="px-4 py-3 text-left">Status</th>
-                        <th class="px-4 py-3 text-center">Actions</th>
+                        <th class="px-6 py-3.5">Name</th>
+                        <th class="px-4 py-3.5">Contact Person</th>
+                        <th class="px-4 py-3.5">Mobile</th>
+                        <th class="px-4 py-3.5">Email</th>
+                        <th class="px-4 py-3.5">Location</th>
+                        <th class="px-4 py-3.5">Region</th>
+                        <th class="px-4 py-3.5">Route(s)</th>
+                        <th class="px-4 py-3.5">Status</th>
+                        <th class="px-6 py-3.5 text-center">Actions</th>
                     </tr>
                 </thead>
 
-                <tbody>
-                    <tr *ngFor="let mr of mrList" class="border-t hover:bg-gray-50">
-                        <td class="px-4 py-4 font-medium">{{ mr.name }}</td>
-                        <td class="px-4 py-4">{{ mr.contactPerson }}</td>
-                        <td class="px-4 py-4">{{ mr.mobile }}</td>
-                        <td class="px-4 py-4">{{ mr.email }}</td>
-                        <td class="px-4 py-4">{{ mr.city }}</td>
-                        <td class="px-4 py-4">{{ mr.state }}</td>
-                        <td class="px-4 py-4">{{ mr.region }}</td>
-                        <td class="px-4 py-4">{{ mr.routeNames || '-' }}</td>
-                        <td class="px-4 py-4">
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
-                                  'bg-green-100 text-green-700': mr.isActive,
-                                  'bg-red-100 text-red-700': !mr.isActive
-                                }">
+                <tbody class="divide-y divide-slate-100">
+                    <tr *ngFor="let mr of mrList" class="hover:bg-slate-50/80 transition-colors">
+                        
+                        <!-- Name -->
+                        <td class="px-6 py-4 font-semibold text-slate-900 whitespace-nowrap">
+                            {{ mr.name }}
+                        </td>
+
+                        <!-- Contact Person -->
+                        <td class="px-4 py-4 whitespace-nowrap">
+                            {{ mr.contactPerson || '-' }}
+                        </td>
+
+                        <!-- Mobile -->
+                        <td class="px-4 py-4 font-mono text-xs whitespace-nowrap text-slate-700">
+                            {{ mr.mobile }}
+                        </td>
+
+                        <!-- Email -->
+                        <td class="px-4 py-4 text-xs whitespace-nowrap text-slate-500">
+                            {{ mr.email }}
+                        </td>
+
+                        <!-- Location (City, State) -->
+                        <td class="px-4 py-4 whitespace-nowrap">
+                            <span class="font-medium text-slate-800">{{ mr.city }}</span>
+                            <span *ngIf="mr.state" class="text-xs text-slate-400 block">{{ mr.state }}</span>
+                        </td>
+
+                        <!-- Region -->
+                        <td class="px-4 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
+                                {{ mr.region || 'N/A' }}
+                            </span>
+                        </td>
+
+                        <!-- Routes -->
+                        <td class="px-4 py-4 max-w-[200px] truncate text-xs text-slate-500" [title]="mr.routeNames || '-'">
+                            {{ mr.routeNames || '-' }}
+                        </td>
+
+                        <!-- Status -->
+                        <td class="px-4 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+                                  [ngClass]="{
+                                    'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20': mr.isActive,
+                                    'bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/20': !mr.isActive
+                                  }">
+                                <span class="h-1.5 w-1.5 rounded-full" [ngClass]="mr.isActive ? 'bg-emerald-500' : 'bg-rose-500'"></span>
                                 {{ mr.isActive ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td class="px-4 py-4">
-                            <div class="flex justify-center gap-2">
-                                <button (click)="editMr(mr)" class="p-2 rounded-lg bg-blue-100 hover:bg-blue-200" title="Edit">
-                                    <lucide-icon [img]="Pencil" class="text-blue-600"></lucide-icon>
+
+                        <!-- Actions -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button (click)="editMr(mr)" 
+                                        class="p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all" 
+                                        title="Edit MR">
+                                    <lucide-icon [img]="Pencil" class="w-4 h-4"></lucide-icon>
                                 </button>
-                                <button (click)="deleteMr(mr)" class="p-2 rounded-lg bg-red-100 hover:bg-red-200" title="Delete">
-                                    <lucide-icon [img]="Trash2" class="text-red-600"></lucide-icon>
+                                <button (click)="deleteMr(mr)" 
+                                        class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all" 
+                                        title="Delete MR">
+                                    <lucide-icon [img]="Trash2" class="w-4 h-4"></lucide-icon>
                                 </button>
                             </div>
                         </td>
+
                     </tr>
 
+                    <!-- Empty State -->
                     <tr *ngIf="mrList.length === 0">
-                        <td colspan="10" class="text-center py-10 text-gray-500">
-                            No Medical Representatives Found
+                        <td colspan="9" class="text-center py-12 text-slate-400">
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
+                                    <lucide-icon [img]="UserX" class="w-6 h-6"></lucide-icon>
+                                </div>
+                                <p class="text-sm font-medium text-slate-600">No Medical Representatives found</p>
+                                <p class="text-xs text-slate-400 mt-1">Try adjusting your filters or search terms</p>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <!-- PAGINATION -->
-    <div class="flex flex-col md:flex-row justify-between items-center mt-5 gap-4">
-        <div class="text-sm text-gray-600">
-            Total Records : <span class="font-semibold">{{ totalRecords }}</span>
+        <!-- FOOTER PAGINATION -->
+        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-600">
+            <div>
+                Total Records: <strong class="text-slate-900 font-semibold">{{ totalRecords }}</strong>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button (click)="changePage(pageNumber - 1)" 
+                        [disabled]="pageNumber === 1"
+                        class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                    Previous
+                </button>
+
+                <span class="px-3 py-1 font-semibold text-slate-700 bg-slate-200/60 rounded-lg">
+                    {{ pageNumber }} / {{ totalPages }}
+                </span>
+
+                <button (click)="changePage(pageNumber + 1)" 
+                        [disabled]="pageNumber === totalPages"
+                        class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                    Next
+                </button>
+            </div>
         </div>
 
-        <div class="flex gap-2 items-center">
-            <button (click)="changePage(pageNumber - 1)" [disabled]="pageNumber === 1"
-                class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300">
-                Previous
-            </button>
-            <span class="px-4 py-2">{{ pageNumber }} / {{ totalPages }}</span>
-            <button (click)="changePage(pageNumber + 1)" [disabled]="pageNumber === totalPages"
-                class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300">
-                Next
-            </button>
-        </div>
     </div>
 
     <!-- UPDATE MODAL -->
-    <div *ngIf="showUpdateModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-        <div class="bg-white w-full max-w-5xl rounded-xl shadow-xl p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold">Update Medical Representative</h2>
-                <button type="button" (click)="closeModal()" class="text-gray-500 hover:text-red-600 text-2xl">✕</button>
+    <div *ngIf="showUpdateModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-h-[90vh] flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Update Medical Representative</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Modify profile, region, and assigned routes</p>
+                </div>
+                <button type="button" (click)="closeModal()" class="h-8 w-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-all">
+                    ✕
+                </button>
             </div>
 
-            <form [formGroup]="updateForm">
+            <!-- Modal Form -->
+            <form [formGroup]="updateForm" class="p-6 overflow-y-auto space-y-4 custom-scrollbar">
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                        <input formControlName="name" class="w-full border rounded-lg p-3" placeholder="Enter Name">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+                        <input formControlName="name" placeholder="Enter name"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Contact Person</label>
-                        <input formControlName="contactPerson" class="w-full border rounded-lg p-3" placeholder="Enter Contact Person">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Contact Person</label>
+                        <input formControlName="contactPerson" placeholder="Enter contact person"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-                        <input formControlName="mobile" class="w-full border rounded-lg p-3" placeholder="Enter Mobile Number">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Mobile Number</label>
+                        <input formControlName="mobile" placeholder="Enter mobile number"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input formControlName="email" class="w-full border rounded-lg p-3" placeholder="Enter Email Address">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+                        <input formControlName="email" placeholder="Enter email address"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Street Address</label>
+                        <input formControlName="address" placeholder="Enter full street address"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                        <input formControlName="address" class="w-full border rounded-lg p-3" placeholder="Enter Address">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">City</label>
+                        <input formControlName="city" placeholder="Enter city"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                        <input formControlName="city" class="w-full border rounded-lg p-3" placeholder="Enter City">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">State</label>
+                        <input formControlName="state" placeholder="Enter state"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
-                        <input formControlName="state" class="w-full border rounded-lg p-3" placeholder="Enter State">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Pincode</label>
+                        <input formControlName="pincode" placeholder="Enter pincode"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
-                        <input formControlName="pincode" class="w-full border rounded-lg p-3" placeholder="Enter Pincode">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Region</label>
-                        <input formControlName="region" class="w-full border rounded-lg p-3" placeholder="Enter Region">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Region</label>
+                        <input formControlName="region" placeholder="Enter region"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                     </div>
 
                     <!-- SEARCHABLE MULTI-SELECT ROUTE DROPDOWN -->
                     <div class="relative" #routeDropdownContainer>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Routes</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Assigned Routes</label>
                         
-                        <!-- Trigger Field -->
+                        <!-- Trigger Box -->
                         <div (click)="toggleRouteDropdown($event)"
-                             class="w-full border rounded-lg p-3 bg-white cursor-pointer flex justify-between items-center text-sm text-gray-700 min-h-[48px]">
-                            <span class="truncate" [class.text-gray-400]="selectedRouteIds.length === 0">
-                                {{ selectedRouteLabels }}
+                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 cursor-pointer flex justify-between items-center text-sm text-slate-800 min-h-[44px] hover:border-slate-300 transition-all">
+                            <span class="truncate font-medium" [class.text-slate-400]="selectedRouteIds.length === 0">
+                                {{ selectedRouteLabels || 'Select routes...' }}
                             </span>
-                            <span class="text-xs text-gray-400 ml-2">▼</span>
+                            <span class="text-[10px] text-slate-400 ml-2">▼</span>
                         </div>
 
-                        <!-- Dropdown Overlay -->
+                        <!-- Dropdown Menu -->
                         <div *ngIf="showRouteDropdown"
-                             class="absolute left-0 right-0 w-full bg-white border rounded-xl shadow-xl mt-1 z-50 overflow-hidden">
+                             class="absolute left-0 right-0 w-full bg-white border border-slate-200 rounded-2xl shadow-xl mt-1 z-50 overflow-hidden">
 
-                            <!-- Search Box -->
-                            <div class="p-2 border-b bg-gray-50">
+                            <!-- Search Input -->
+                            <div class="p-2 border-b border-slate-100 bg-slate-50/50">
                                 <input type="text" [(ngModel)]="routeSearch" (input)="onRouteSearchChange()"
                                        [ngModelOptions]="{standalone: true}" placeholder="Search route..."
-                                       class="w-full bg-white border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400">
+                                       class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs outline-none focus:border-blue-500 transition-all">
                             </div>
 
                             <!-- Options List -->
-                            <div class="max-h-56 overflow-y-auto p-1 space-y-0.5 custom-scrollbar">
+                            <div class="max-h-48 overflow-y-auto p-1.5 space-y-0.5 custom-scrollbar">
                                 <label *ngFor="let item of filteredRoutes"
-                                       class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer text-sm text-gray-700 transition">
+                                       class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 cursor-pointer text-xs text-slate-700 transition-colors">
                                     <input type="checkbox" [checked]="isSelected(item.routeId)" (change)="toggleRoute(item)"
-                                           class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer">
-                                    <span>{{ item.routeName }}</span>
+                                           class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer">
+                                    <span class="font-medium">{{ item.routeName }}</span>
                                 </label>
 
-                                <!-- Empty Search State -->
-                                <div *ngIf="filteredRoutes.length === 0" class="text-xs text-gray-400 p-4 text-center">
+                                <div *ngIf="filteredRoutes.length === 0" class="text-xs text-slate-400 p-4 text-center">
                                     No routes found matching "{{ routeSearch }}"
                                 </div>
                             </div>
@@ -251,8 +355,9 @@
 
                     <!-- Stockist Dropdown -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Stockist</label>
-                        <select formControlName="stockistId" class="w-full border rounded-lg p-3">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Stockist</label>
+                        <select formControlName="stockistId" 
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                             <option [ngValue]="0" disabled>Select Stockist</option>
                             <option *ngFor="let stockist of stockistList" [ngValue]="stockist.stockistId">
                                 {{ stockist.name }} - {{ stockist.city }} ({{ stockist.firmType }})
@@ -261,9 +366,10 @@
                     </div>
 
                     <!-- Status -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select formControlName="isActive" class="w-full border rounded-lg p-3">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Status</label>
+                        <select formControlName="isActive" 
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                             <option [ngValue]="true">Active</option>
                             <option [ngValue]="false">Inactive</option>
                         </select>
@@ -271,15 +377,20 @@
 
                 </div>
 
-                <div class="flex justify-end gap-3 mt-6">
-                    <button type="button" (click)="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
-                        Cancel
-                    </button>
-                    <button type="button" (click)="updateMr()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
-                        Update MR
-                    </button>
-                </div>
             </form>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3">
+                <button type="button" (click)="closeModal()" 
+                        class="px-4 py-2 text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-all">
+                    Cancel
+                </button>
+                <button type="button" (click)="updateMr()" 
+                        class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 rounded-xl transition-all">
+                    Update Representative
+                </button>
+            </div>
+
         </div>
     </div>
 
