@@ -12,7 +12,8 @@ import {
   KeyRound,
   XCircle,
   TrendingUp,
-  Upload
+  Upload,
+  RotateCcw
 } from 'lucide-angular';
 
 import {
@@ -49,6 +50,7 @@ export class StockistMasterDashboardComponent implements OnInit {
   XCircle = XCircle;
   TrendingUp = TrendingUp;
   Upload = Upload;
+  RotateCcw = RotateCcw;
 
   // =====================================================
   // VARIABLES
@@ -473,4 +475,19 @@ export class StockistMasterDashboardComponent implements OnInit {
   get f() {
     return this.stockistForm.controls;
   }
+
+  resetFilters(): void {
+
+  // Clear all filters
+  this.searchText = '';
+  this.filterType = '';
+  this.filterStatus = '';
+
+  // Reset to first page
+  this.pageNumber = 1;
+
+  // Reload complete stockist list
+  this.applyFilter();
+
+}
 }

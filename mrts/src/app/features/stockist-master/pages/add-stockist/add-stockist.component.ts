@@ -247,123 +247,88 @@ export class AddStockistComponent implements OnInit {
   // SAVE STOCKIST
   // =====================================================
 
-  saveStockist() {
+saveStockist() {
 
-    this.submitted = true;
+  this.submitted = true;
 
-    if (this.stockistForm.invalid) {
+  if (this.stockistForm.invalid) {
 
-      this.stockistForm.markAllAsTouched();
+    this.stockistForm.markAllAsTouched();
+
+    Swal.fire({
+      icon: 'warning',
+      title: 'Validation Error',
+      text: 'Please fill all required fields correctly.',
+      confirmButtonColor: '#f59e0b'
+    });
+
+    return;
+  }
+
+  this.isSaving = true;
+
+  const payload = {
+    agencyId: this.agencyId,
+    name: this.stockistForm.value.name,
+    firmType: this.stockistForm.value.firmType,
+    contactPerson: this.stockistForm.value.contactPerson,
+    mobile: this.stockistForm.value.mobile,
+    email: this.stockistForm.value.email,
+    address: this.stockistForm.value.address,
+    city: this.stockistForm.value.city,
+    state: this.stockistForm.value.state,
+    pincode: this.stockistForm.value.pincode,
+    gstNo: this.stockistForm.value.gstNo,
+    drugLicenseNo: this.stockistForm.value.drugLicenseNo,
+    region: this.stockistForm.value.region,
+    assignedAreaManager: Number(
+      this.stockistForm.value.assignedAreaManager
+    ),
+    coverArea: this.stockistForm.value.coverArea,
+    createdBy: this.createdBy
+  };
+
+  this.stockistService.addstockist(payload).subscribe({
+
+    next: (res: any) => {
+
+      this.isSaving = false;
 
       Swal.fire({
-        icon: 'warning',
-        title: 'Validation Error',
-        text: 'Please fill all required fields correctly.',
-        confirmButtonColor: '#f59e0b'
+        icon: 'success',
+        title: 'Success',
+        text: 'Stockist Added Successfully',
+        confirmButtonColor: '#16a34a'
+      }).then(() => {
+
+        this.router.navigate([
+          '/stockist-master/stockist-master-dashboard'
+        ]);
+
       });
 
-      return;
+    },
+
+    error: (err: any) => {
+
+      this.isSaving = false;
+
+      console.log(err);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed',
+        text:
+          err?.error?.message ||
+          'Failed To Add Stockist',
+        confirmButtonColor: '#dc2626'
+      });
 
     }
 
-    this.isSaving = true;
+  });
 
-    const payload = {
-
-      agencyId: this.agencyId,
-
-      name:
-        this.stockistForm.value.name,
-
-      firmType:
-        this.stockistForm.value.firmType,
-
-      contactPerson:
-        this.stockistForm.value.contactPerson,
-
-      mobile:
-        this.stockistForm.value.mobile,
-
-      email:
-        this.stockistForm.value.email,
-
-      address:
-        this.stockistForm.value.address,
-
-      city:
-        this.stockistForm.value.city,
-
-      state:
-        this.stockistForm.value.state,
-
-      pincode:
-        this.stockistForm.value.pincode,
-
-      gstNo:
-        this.stockistForm.value.gstNo,
-
-      drugLicenseNo:
-        this.stockistForm.value.drugLicenseNo,
-
-      region:
-        this.stockistForm.value.region,
-
-      assignedAreaManager:
-        Number(
-          this.stockistForm.value
-            .assignedAreaManager
-        ),
-
-      coverArea:
-        this.stockistForm.value.coverArea,
-
-      createdBy: this.createdBy
-
-    };
-
-    this.stockistService
-      .addstockist(payload)
-      .subscribe({
-
-        next: (res: any) => {
-
-          this.isSaving = false;
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Stockist Added Successfully',
-            confirmButtonColor: '#16a34a'
-          }).then(() => {
-
-            this.router.navigate([
-              '/stockist-master/stockist-master-dashboard'
-            ]);
-
-          });
-
-        },
-
-        error: (err: any) => {
-
-          this.isSaving = false;
-
-          console.log(err);
-
-          Swal.fire({
-            icon: 'error',
-            title: 'Failed',
-            text:
-              err?.error?.message ||
-              'Failed To Add Stockist',
-            confirmButtonColor: '#dc2626'
-          });
-
-        }
-
-      });
-
-  }
+}
 
   // =====================================================
   // FORM CONTROLS

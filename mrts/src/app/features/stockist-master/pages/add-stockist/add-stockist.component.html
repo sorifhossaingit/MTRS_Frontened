@@ -55,28 +55,41 @@
 
           </div>
 
-          <!-- Firm Type -->
-          <div>
+<div>
+  <label class="block text-sm font-medium mb-2">
+    Firm Type <span class="text-red-500">*</span>
+  </label>
 
-            <label class="block text-sm font-medium mb-2">
-              Firm Type <span class="text-red-500">*</span>
-            </label>
+  <select
+    formControlName="firmType"
+    class="w-full border rounded-xl px-4 h-12"
+  >
+    <option value="">Select firm type</option>
 
-            <select formControlName="firmType" class="w-full border rounded-xl px-4 h-12">
+    <option value="Manufacturer">Manufacturer</option>
+    <option value="Marketing Company">Marketing Company</option>
+    <option value="Third Party Manufacturer">Third Party Manufacturer</option>
+    <option value="PCD Pharma Franchise">PCD Pharma Franchise</option>
+    <option value="C&F Agent">C&amp;F Agent</option>
+    <option value="Super Stockist">Super Stockist</option>
+    <option value="Stockist">Stockist</option>
+    <option value="Distributor">Distributor</option>
+    <option value="Retailer / Pharmacy">Retailer / Pharmacy</option>
+    <option value="Hospital / Institution">Hospital / Institution</option>
+    <option value="Importer">Importer</option>
+    <option value="Exporter">Exporter</option>
+    <option value="API Manufacturer">API Manufacturer</option>
+    <option value="Nutraceutical Company">Nutraceutical Company</option>
+    <option value="Other">Other</option>
+  </select>
 
-              <option value="">Select firm type</option>
-              <option value="Distributor">Distributor</option>
-              <option value="Wholesaler">Wholesaler</option>
-
-            </select>
-
-            <p *ngIf="submitted && f['firmType'].errors" class="text-red-500 text-sm mt-1">
-
-              Firm type is required
-
-            </p>
-
-          </div>
+  <p
+    *ngIf="submitted && f['firmType'].errors"
+    class="text-red-500 text-sm mt-1"
+  >
+    Firm type is required
+  </p>
+</div>
 
           <!-- Contact Person -->
           <div>
@@ -408,14 +421,50 @@
 
         </button>
 
-        <button type="submit" [disabled]="isSaving"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2">
+      <button
+  type="submit"
+  [disabled]="isSaving"
+  class="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 min-w-[170px]">
 
-          <lucide-icon [img]="Save"></lucide-icon>
+  <!-- Loading -->
+  <ng-container *ngIf="isSaving; else saveButton">
 
-          {{ isSaving ? 'Saving...' : 'Save Stockist' }}
+    <svg
+      class="animate-spin h-5 w-5 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24">
 
-        </button>
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4">
+      </circle>
+
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+
+    </svg>
+
+    Saving...
+
+  </ng-container>
+
+  <!-- Normal -->
+  <ng-template #saveButton>
+
+    <lucide-icon [img]="Save"></lucide-icon>
+    Save Stockist
+
+  </ng-template>
+
+</button>
 
       </div>
 
