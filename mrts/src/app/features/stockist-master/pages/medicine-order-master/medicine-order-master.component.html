@@ -73,82 +73,112 @@
         <p class="text-gray-500 font-medium text-lg">Loading products...</p>
       </div>
 
-      <!-- PRODUCTS CONTENT -->
-      <div *ngIf="!isLoading && products.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div
-          *ngFor="let product of products"
-          class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
+<!-- PRODUCTS CONTENT -->
+<div *ngIf="!isLoading && products.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div
+    *ngFor="let product of products"
+    class="group relative flex flex-col rounded-3xl border border-slate-200/80 bg-white overflow-hidden shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:border-slate-300 transition-all duration-300">
 
-          <!-- IMAGE -->
-          <img
-            [src]="product.imageUrl || 'assets/placeholder.png'"
-            [alt]="product.name"
-            class="h-48 w-full object-cover bg-gray-50">
+    <!-- IMAGE CONTAINER -->
+    <div class="relative h-52 w-full overflow-hidden bg-slate-50 border-b border-slate-100">
+      <img
+        [src]="product.imageUrl || 'assets/placeholder.png'"
+        [alt]="product.name"
+        class="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out">
+      
+      <!-- BRAND BADGE OVERLAY -->
+      <span *ngIf="product.brandName" class="absolute top-3 left-3 rounded-full bg-slate-900/80 backdrop-blur-md px-3 py-1 text-[11px] font-medium text-white shadow-sm">
+        {{ product.brandName }}
+      </span>
 
-          <!-- BODY -->
-          <div class="p-4 flex flex-col flex-1">
-            <h3 class="font-bold text-lg text-gray-800 line-clamp-1" [title]="product.name">
-              {{ product.name }}
-            </h3>
+      <!-- DISCOUNT BADGE OVERLAY -->
+      <span *ngIf="product.discountPercent" class="absolute top-3 right-3 rounded-full bg-emerald-500/90 backdrop-blur-md px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+        {{ product.discountPercent }}% OFF
+      </span>
+    </div>
 
-            <p class="text-sm text-gray-500 font-medium mb-2">
-              {{ product.brandName }}
-            </p>
+    <!-- BODY -->
+    <div class="flex flex-col flex-1 p-5">
+      
+      <!-- PRODUCT TITLE -->
+      <h3 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-blue-600 transition-colors" [title]="product.name">
+        {{ product.name }}
+      </h3>
 
-            <div class="mt-1 space-y-1 text-sm text-gray-600">
-              <p><span class="font-semibold text-gray-700">Category:</span> {{ product.category }}</p>
-              <p><span class="font-semibold text-gray-700">Dosage:</span> {{ product.dosageForm }}</p>
-              <p><span class="font-semibold text-gray-700">Strength:</span> {{ product.strength }}</p>
-              <p><span class="font-semibold text-gray-700">Pack:</span> {{ product.packSize }}</p>
-            </div>
+      <!-- SPECIFICATION CHIPS -->
+      <div class="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-slate-600">
+        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 font-medium text-slate-700">
+          {{ product.category }}
+        </span>
+        <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 font-medium text-slate-700">
+          {{ product.dosageForm }}
+        </span>
+        <span class="inline-flex items-center rounded-md border border-slate-200 px-2 py-0.5 font-semibold text-slate-800">
+          {{ product.strength }}
+        </span>
+        <span class="inline-flex items-center rounded-md border border-slate-200 px-2 py-0.5 font-semibold text-slate-800">
+          {{ product.packSize }}
+        </span>
+      </div>
 
-<!-- PRICE BREAKDOWN SECTION -->
-            <div class="grid grid-cols-3 gap-1.5 mt-4">
-              <!-- MRP -->
-              <div class="bg-gray-50 p-1.5 rounded-lg text-center border overflow-hidden">
-                <p class="text-[10px] text-gray-500 font-medium">MRP</p>
-                <p class="font-semibold text-gray-400 line-through text-[11px] truncate" [title]="'₹' + (product.mrp | number:'1.2-2')">
-                  ₹{{ product.mrp | number:'1.2-2' }}
-                </p>
-              </div>
-
-              <!-- DISCOUNT & TAX BREAKDOWN -->
-              <div class="bg-gray-50 p-1.5 rounded-lg text-center border overflow-hidden">
-                <p class="text-[10px] text-gray-500 font-medium">Disc/Tax</p>
-                <p class="font-semibold text-blue-600 text-[10px] truncate" [title]="'-' + product.discountPercent + '% / +' + product.taxPercent + '%'">
-                  -{{ product.discountPercent }}%/+{{ product.taxPercent }}%
-                </p>
-              </div>
-
-              <!-- FINAL PRICE -->
-              <div class="bg-emerald-50 p-1.5 rounded-lg text-center border border-emerald-200 overflow-hidden">
-                <p class="text-[10px] text-emerald-700 font-bold">Final Price</p>
-                <p class="font-bold text-emerald-600 text-[11px] truncate" [title]="'₹' + (product.finalPrice | number:'1.2-2')">
-                  ₹{{ product.finalPrice | number:'1.2-2' }}
-                </p>
-              </div>
-            </div>
-
-            <!-- QUANTITY AND ADD TO CART -->
-            <div class="mt-4 flex gap-2 pt-2 border-t">
-              <input
-                type="number"
-                min="1"
-                [(ngModel)]="product.orderQty"
-                class="border border-gray-300 rounded-lg px-3 py-2 w-20 text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
-
-              <button
-                type="button"
-                (click)="addToCart(product)"
-                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-3 py-2 flex items-center justify-center gap-2 transition">
-                <lucide-icon [img]="ShoppingCart" class="w-4 h-4"></lucide-icon>
-                Add To Cart
-              </button>
-            </div>
+      <!-- PRICE BREAKDOWN SECTION -->
+      <div class="mt-auto pt-5">
+        <div class="grid grid-cols-3 gap-2 rounded-2xl bg-slate-50/80 border border-slate-200/60 p-2.5">
+          
+          <!-- MRP -->
+          <div class="flex flex-col justify-center text-center">
+            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">MRP</span>
+            <span class="text-xs font-bold text-slate-400 line-through truncate" [title]="'₹' + (product.mrp | number:'1.2-2')">
+              ₹{{ product.mrp | number:'1.2-2' }}
+            </span>
           </div>
+
+          <!-- TAX & DISCOUNT -->
+          <div class="flex flex-col justify-center text-center border-x border-slate-200/80 px-1">
+            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Tax</span>
+            <span class="text-xs font-semibold text-blue-600 truncate" [title]="'+' + product.taxPercent + '% GST'">
+              +{{ product.taxPercent }}%
+            </span>
+          </div>
+
+          <!-- FINAL PRICE -->
+          <div class="flex flex-col justify-center text-center">
+            <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Final</span>
+            <span class="text-xs font-extrabold text-emerald-600 truncate" [title]="'₹' + (product.finalPrice | number:'1.2-2')">
+              ₹{{ product.finalPrice | number:'1.2-2' }}
+            </span>
+          </div>
+
+        </div>
+
+        <!-- QUANTITY AND ADD TO CART -->
+        <div class="mt-4 flex items-center gap-2">
+          
+          <!-- Quantity Controls -->
+          <div class="relative flex items-center rounded-xl border border-slate-200 bg-white shadow-sm">
+            <input
+              type="number"
+              min="1"
+              [(ngModel)]="product.orderQty"
+              class="h-10 w-16 text-center text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-xl"
+              aria-label="Product quantity">
+          </div>
+
+          <!-- Add to Cart Button -->
+          <button
+            type="button"
+            (click)="addToCart(product)"
+            class="flex-1 h-10 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-xs font-semibold rounded-xl px-4 flex items-center justify-center gap-2 shadow-md shadow-blue-600/20 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <lucide-icon [img]="ShoppingCart" class="w-4 h-4"></lucide-icon>
+            <span>Add To Cart</span>
+          </button>
+
         </div>
       </div>
 
+    </div>
+  </div>
+</div>
       <!-- NO DATA STATE -->
       <div *ngIf="!isLoading && products.length === 0" class="bg-white rounded-xl p-12 text-center text-gray-500 shadow">
         No products found matching your search criteria.
@@ -180,100 +210,145 @@
       </div>
 
     </div>
-
-    <!-- CART SIDEBAR -->
-    <div>
-      <div class="bg-white rounded-2xl shadow sticky top-4 overflow-hidden border">
-        <div class="p-4 border-b bg-gray-50 flex items-center justify-between">
-          <h2 class="text-lg font-bold flex items-center gap-2 text-gray-800">
-            <lucide-icon [img]="ShoppingCart"></lucide-icon>
-            Order Cart
-          </h2>
-          <span class="text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold">
-            {{ cartItems.length }} Types
-          </span>
+<!-- CART SIDEBAR -->
+<aside class="sticky top-6 w-full">
+  <div class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/50 backdrop-blur-xl">
+    
+    <!-- HEADER -->
+    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-5 py-4">
+      <div class="flex items-center gap-2.5">
+        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/10">
+          <lucide-icon [img]="ShoppingCart" class="h-5 w-5"></lucide-icon>
         </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Order Cart</h2>
+          <p class="text-[11px] font-medium text-slate-400">Review selected items</p>
+        </div>
+      </div>
 
-        <!-- CART ITEMS LIST -->
-        <div class="max-h-[400px] overflow-y-auto divide-y">
-          <div *ngFor="let item of cartItems" class="p-4 hover:bg-gray-50 transition">
-            <div class="flex gap-3 items-center">
-              <img
-                [src]="item.imageUrl || 'assets/placeholder.png'"
-                [alt]="item.productName"
-                class="w-12 h-12 rounded-lg object-cover bg-gray-100 border flex-shrink-0">
+      <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+        {{ cartItems.length }} {{ cartItems.length === 1 ? 'Type' : 'Types' }}
+      </span>
+    </div>
 
-              <div class="flex-1 min-w-0">
-                <h4 class="font-semibold text-sm text-gray-800 truncate" [title]="item.productName">
-                  {{ item.productName }}
-                </h4>
+    <!-- CART ITEMS LIST -->
+    <div class="max-h-[380px] divide-y divide-slate-100 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
+      
+      <div *ngFor="let item of cartItems" class="group relative p-4 transition-colors hover:bg-slate-50/80">
+        <div class="flex items-start gap-3.5">
+          
+          <!-- Product Thumbnail -->
+          <div class="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl border border-slate-200/80 bg-slate-50">
+            <img
+              [src]="item.imageUrl || 'assets/placeholder.png'"
+              [alt]="item.productName"
+              class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105">
+          </div>
 
-                <p class="text-xs text-gray-500 mt-0.5">
-                  Qty: <span class="font-medium text-gray-700">{{ item.quantity }}</span> | 
-                  Tax: {{ item.taxPercent }}% | Disc: {{ item.discountPercent }}%
-                </p>
+          <!-- Product Details -->
+          <div class="flex-1 min-w-0 pr-6">
+            <h4 class="truncate text-sm font-semibold text-slate-900" [title]="item.productName">
+              {{ item.productName }}
+            </h4>
 
-                <!-- Line Item Total Display based on Final Price -->
-                <p class="text-sm font-semibold text-green-600 mt-0.5">
-                  {{ item.quantity }} × ₹{{ item.finalPrice | number:'1.2-2' }} = ₹{{ (item.quantity * item.finalPrice) | number:'1.2-2' }}
-                </p>
-              </div>
+            <!-- Meta Tags -->
+            <div class="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-slate-500">
+              <span class="rounded bg-slate-100 px-1.5 py-0.5 text-slate-700">
+                Qty: <strong class="text-slate-900">{{ item.quantity }}</strong>
+              </span>
+              <span *ngIf="item.discountPercent" class="rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-700 font-semibold">
+                {{ item.discountPercent }}% OFF
+              </span>
+              <span class="text-slate-400">Tax: {{ item.taxPercent }}%</span>
+            </div>
 
-              <button
-                type="button"
-                (click)="removeFromCart(item)"
-                class="text-red-500 hover:text-red-700 p-1 rounded transition"
-                title="Remove Item">
-                <lucide-icon [img]="Trash2" class="w-5 h-5"></lucide-icon>
-              </button>
+            <!-- Price Breakdown -->
+            <div class="mt-2 flex items-baseline justify-between text-xs">
+              <span class="text-slate-400">
+                {{ item.quantity }} × ₹{{ item.finalPrice | number:'1.2-2' }}
+              </span>
+              <span class="font-bold text-slate-900">
+                ₹{{ (item.quantity * item.finalPrice) | number:'1.2-2' }}
+              </span>
             </div>
           </div>
 
-          <div *ngIf="cartItems.length === 0" class="p-8 text-center text-gray-400">
-            Cart is empty
-          </div>
+          <!-- Remove Action Button -->
+          <button
+            type="button"
+            (click)="removeFromCart(item)"
+            class="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 opacity-80 transition-all hover:bg-rose-50 hover:text-rose-600 group-hover:opacity-100 focus:outline-none"
+            title="Remove Item">
+            <lucide-icon [img]="Trash2" class="h-4 w-4"></lucide-icon>
+          </button>
+
         </div>
-
-        <!-- SUMMARY & ACTIONS -->
-        <div class="p-4 border-t bg-gray-50">
-          <div class="flex justify-between mb-2 text-sm text-gray-600">
-            <span>Total Items</span>
-            <span class="font-semibold text-gray-800">{{ totalItems }}</span>
-          </div>
-
-          <div class="flex justify-between text-base font-bold mb-4 text-gray-800 pt-2 border-t">
-            <span>Total Amount</span>
-            <span class="text-green-600">₹{{ totalAmount | number:'1.2-2' }}</span>
-          </div>
-
-          <textarea
-            [(ngModel)]="remarks"
-            rows="2"
-            placeholder="Order remarks (optional)..."
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </textarea>
-
-          <div class="flex gap-2">
-            <button
-              type="button"
-              (click)="clearCart()"
-              [disabled]="cartItems.length === 0"
-              class="flex-1 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 text-gray-700 font-medium py-2 rounded-lg transition">
-              Clear
-            </button>
-
-            <button
-              type="button"
-              (click)="placeOrder()"
-              [disabled]="cartItems.length === 0"
-              class="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg disabled:opacity-50 transition">
-              Place Order
-            </button>
-          </div>
-        </div>
-
       </div>
+
+      <!-- EMPTY STATE -->
+      <div *ngIf="cartItems.length === 0" class="flex flex-col items-center justify-center px-4 py-12 text-center">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
+          <lucide-icon [img]="ShoppingCart" class="h-6 w-6"></lucide-icon>
+        </div>
+        <p class="text-sm font-medium text-slate-600">Your cart is empty</p>
+        <p class="text-xs text-slate-400 mt-1">Add items from the list to build your order</p>
+      </div>
+
     </div>
+
+    <!-- SUMMARY & ACTIONS -->
+    <div class="border-t border-slate-100 bg-slate-50/50 p-5 space-y-4">
+      
+      <!-- Financial Breakdown Card -->
+      <div class="rounded-2xl border border-slate-200/60 bg-white p-3.5 space-y-2 text-xs">
+        <div class="flex justify-between text-slate-500">
+          <span>Total Quantities</span>
+          <span class="font-semibold text-slate-800">{{ totalItems }} units</span>
+        </div>
+
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-sm font-bold text-slate-900">Total Amount</span>
+          <span class="text-xl font-extrabold tracking-tight text-emerald-600">
+            ₹{{ totalAmount | number:'1.2-2' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Order Remarks -->
+      <div>
+        <label for="order-remarks" class="sr-only">Order Remarks</label>
+        <textarea
+          id="order-remarks"
+          [(ngModel)]="remarks"
+          rows="2"
+          placeholder="Add order remarks or delivery instructions..."
+          class="w-full resize-none rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 shadow-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+        </textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-3 gap-2">
+        <button
+          type="button"
+          (click)="clearCart()"
+          [disabled]="cartItems.length === 0"
+          class="col-span-1 flex items-center justify-center rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-semibold text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none">
+          Clear
+        </button>
+
+        <button
+          type="button"
+          (click)="placeOrder()"
+          [disabled]="cartItems.length === 0"
+          class="col-span-2 flex items-center justify-center gap-2 rounded-xl bg-blue-600 py-2.5 text-xs font-semibold text-white shadow-md shadow-blue-600/20 transition-all hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          <span>Place Order</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</aside>
 
   </div>
 </div>
