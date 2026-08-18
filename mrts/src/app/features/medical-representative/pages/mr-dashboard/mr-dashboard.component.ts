@@ -11,7 +11,9 @@ import {
   Search,
   Pencil,
   Trash2,
-  Plus
+  Plus,
+  CheckCircle,
+  XCircle
 } from 'lucide-angular';
 import { MrService } from '../../services/mr.service';
 
@@ -32,7 +34,8 @@ export class MrDashboardComponent implements OnInit {
   Pencil = Pencil;
   Trash2 = Trash2;
   Plus = Plus;
-
+  CheckCircle = CheckCircle;
+  XCircle = XCircle;
   // Data Arrays
   mrList: any[] = [];
   routeList: any[] = [];
@@ -62,6 +65,11 @@ export class MrDashboardComponent implements OnInit {
   agencyId = Number(localStorage.getItem('aid'));
   managerId = Number(localStorage.getItem('mid'));
 
+    // KPI
+  totalMR = 0;
+  activeMR = 0;
+  presentCount = 0;
+  absentCount = 0;
   private destroyRef = inject(DestroyRef);
 
   constructor(
@@ -75,6 +83,7 @@ export class MrDashboardComponent implements OnInit {
     this.getMrList();
     this.getRouteList();
     this.getStockistList();
+    this.loadDashboard();
   }
 
   // Close route dropdown when clicking anywhere outside the dropdown container
@@ -127,6 +136,42 @@ export class MrDashboardComponent implements OnInit {
   onRouteSearchChange(): void {
     this.routeSearch$.next(this.routeSearch.toLowerCase().trim());
   }
+
+
+
+    loadDashboard(): void {
+
+    const payload = {
+      agencyId: this.agencyId,
+      areaManagerId: this.managerId
+    };
+
+    this.mrService
+      .get_attendance_dashboard_ar(payload)
+      .subscribe({
+        next: (res: any) => {
+
+          if (res.success) {
+
+            this.totalMR =
+              res.data.totalMedicalRepresentatives || 0;
+
+            this.activeMR =
+              res.data.activeMedicalRepresentatives || 0;
+
+            this.presentCount =
+              res.data.presentMedicalRepresentatives || 0;
+
+            this.absentCount =
+              res.data.absentMedicalRepresentatives || 0;
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
+  
 
   getRouteList(): void {
     this.mrService.getRouteList(this.agencyId)

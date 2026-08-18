@@ -8,49 +8,48 @@
         </div>
     </div>
 
-    <!-- STATS METRICS -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-        
-        <!-- Total MRs -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Total MRs</p>
-                    <h2 class="text-3xl font-bold text-slate-900 mt-1.5">{{ totalRecords }}</h2>
-                </div>
-                <div class="h-12 w-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 ring-1 ring-blue-600/10">
-                    <lucide-icon [img]="Users" class="w-6 h-6"></lucide-icon>
-                </div>
-            </div>
-        </div>
+  <!-- 🔷 KPI CARDS -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
-        <!-- Active MRs -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Active (Current Page)</p>
-                    <h2 class="text-3xl font-bold text-emerald-600 mt-1.5">{{ activeCount }}</h2>
-                </div>
-                <div class="h-12 w-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 ring-1 ring-emerald-600/10">
-                    <lucide-icon [img]="UserCheck" class="w-6 h-6"></lucide-icon>
-                </div>
-            </div>
-        </div>
-
-        <!-- Inactive MRs -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all sm:col-span-2 lg:col-span-1">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Inactive (Current Page)</p>
-                    <h2 class="text-3xl font-bold text-rose-600 mt-1.5">{{ inactiveCount }}</h2>
-                </div>
-                <div class="h-12 w-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600 ring-1 ring-rose-600/10">
-                    <lucide-icon [img]="UserX" class="w-6 h-6"></lucide-icon>
-                </div>
-            </div>
-        </div>
-        
+    <div class="card flex items-center gap-3">
+      <lucide-icon [img]="Users"></lucide-icon>
+      <div>
+        <p class="text-sm text-gray-500">Total MR</p>
+        <h2 class="text-xl font-bold">{{ totalMR }}</h2>
+      </div>
     </div>
+
+    <div class="card flex items-center gap-3">
+      <lucide-icon [img]="UserCheck"></lucide-icon>
+      <div>
+        <p class="text-sm text-gray-500">Active MR</p>
+        <h2 class="text-xl font-bold text-blue-600">
+          {{ activeMR }}
+        </h2>
+      </div>
+    </div>
+
+    <div class="card flex items-center gap-3">
+      <lucide-icon [img]="CheckCircle"></lucide-icon>
+      <div>
+        <p class="text-sm text-gray-500">Present</p>
+        <h2 class="text-xl font-bold text-green-600">
+          {{ presentCount }}
+        </h2>
+      </div>
+    </div>
+
+    <div class="card flex items-center gap-3">
+      <lucide-icon [img]="XCircle"></lucide-icon>
+      <div>
+        <p class="text-sm text-gray-500">Absent</p>
+        <h2 class="text-xl font-bold text-red-600">
+          {{ absentCount }}
+        </h2>
+      </div>
+    </div>
+
+  </div>
 
     <!-- FILTER BAR -->
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 mb-8">

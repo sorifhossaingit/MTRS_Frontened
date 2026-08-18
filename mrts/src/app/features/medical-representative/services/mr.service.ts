@@ -179,4 +179,10 @@ getTodayVisitProductsDashboard(mrId: number): Observable<any> {
     `${this.apiUrl}/medicalpresentativeown/today-visit-products-dashboard/${mrId}`
   );
 }
+
+// ---------------------
+ get_attendance_dashboard_ar(data: any) {
+    return this.http.post(`${this.apiUrl}/mrvisit/attendence/mr-attendance-dashboard`, data);
+  }
+
 }
