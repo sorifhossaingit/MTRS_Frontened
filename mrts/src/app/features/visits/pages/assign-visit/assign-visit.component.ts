@@ -71,10 +71,12 @@ export class AssignVisitComponent implements OnInit {
   loadingCustomers = false;
 
   mrSearch = '';
-routeSearch = '';
+  routeSearch = '';
+  customerSearch = '';
 
-filteredMrList: any[] = [];
-filteredRouteList: any[] = [];
+  filteredCustomerList: any[] = [];
+  filteredMrList: any[] = [];
+  filteredRouteList: any[] = [];
 
   constructor(
     private visitService: VisitService
@@ -87,109 +89,143 @@ filteredRouteList: any[] = [];
   // =====================================
   // LOAD MRS
   // =====================================
-loadMRs(): void {
-  const params = {
-    assignedAreaManager: Number(localStorage.getItem('mid')),
-    agencyId: Number(localStorage.getItem('aid'))
-  };
+  loadMRs(): void {
+    const params = {
+      assignedAreaManager: Number(localStorage.getItem('mid')),
+      agencyId: Number(localStorage.getItem('aid'))
+    };
 
-  this.visitService.get_mrs(params).subscribe({
-    next: (res: any) => {
-      this.mrList = res?.data || [];
-      this.filteredMrList = [...this.mrList];
-    },
-    error: (err) => {
-      console.error('Error fetching MRs:', err);
-    }
-  });
-}
-
-filterMrList(): void {
-  const search = this.mrSearch.trim().toLowerCase();
-
-  if (!search) {
-    this.filteredMrList = [...this.mrList];
-    return;
-  }
-
-  this.filteredMrList = this.mrList.filter((mr: any) =>
-    mr.name?.toLowerCase().includes(search) ||
-    mr.mobile?.toString().includes(search)
-  );
-}
-
-  // =====================================
-  // ON MR CHANGE -> LOAD ROUTES
-  // =====================================
-onMrChange(mrId: number): void {
-
-  this.routeList = [];
-  this.filteredRouteList = [];
-  this.customerList = [];
-
-  this.assignVisit.routeId = null;
-  this.assignVisit.places = [];
-
-  this.routeSearch = '';
-
-  if (!mrId) {
-    return;
-  }
-
-  this.loadingRoutes = true;
-
-  this.visitService.getRoutesByMedicalRepresentative(mrId).subscribe({
-
-    next: (res: any) => {
-
-      this.routeList = res?.data || [];
-      this.filteredRouteList = [...this.routeList];
-
-      this.loadingRoutes = false;
-    },
-
-    error: (err) => {
-
-      console.error('Error fetching routes:', err);
-
-      this.loadingRoutes = false;
-    }
-  });
-}
-
-filterRouteList(): void {
-  const search = this.routeSearch.trim().toLowerCase();
-
-  if (!search) {
-    this.filteredRouteList = [...this.routeList];
-    return;
-  }
-
-  this.filteredRouteList = this.routeList.filter((route: any) =>
-    route.routeName?.toLowerCase().includes(search)
-  );
-}
-  // =====================================
-  // ON ROUTE CHANGE -> LOAD CUSTOMERS
-  // =====================================
-  onRouteChange(routeId: number): void {
-    this.customerList = [];
-
-    if (!routeId) return;
-
-    this.loadingCustomers = true;
-    this.visitService.getCustomersByRoute(routeId).subscribe({
+    this.visitService.get_mrs(params).subscribe({
       next: (res: any) => {
-        this.customerList = res?.data || [];
-        this.loadingCustomers = false;
+        this.mrList = res?.data || [];
+        this.filteredMrList = [...this.mrList];
       },
       error: (err) => {
-        console.error('Error fetching customers by route:', err);
-        this.loadingCustomers = false;
+        console.error('Error fetching MRs:', err);
       }
     });
   }
 
+  filterMrList(): void {
+    const search = this.mrSearch.trim().toLowerCase();
+
+    if (!search) {
+      this.filteredMrList = [...this.mrList];
+      return;
+    }
+
+    this.filteredMrList = this.mrList.filter((mr: any) =>
+      mr.name?.toLowerCase().includes(search) ||
+      mr.mobile?.toString().includes(search)
+    );
+  }
+
+  // =====================================
+  // ON MR CHANGE -> LOAD ROUTES
+  // =====================================
+  onMrChange(mrId: number): void {
+
+    this.routeList = [];
+    this.filteredRouteList = [];
+    this.customerList = [];
+
+    this.assignVisit.routeId = null;
+    this.assignVisit.places = [];
+
+    this.routeSearch = '';
+
+    if (!mrId) {
+      return;
+    }
+
+    this.loadingRoutes = true;
+
+    this.visitService.getRoutesByMedicalRepresentative(mrId).subscribe({
+
+      next: (res: any) => {
+
+        this.routeList = res?.data || [];
+        this.filteredRouteList = [...this.routeList];
+
+        this.loadingRoutes = false;
+      },
+
+      error: (err) => {
+
+        console.error('Error fetching routes:', err);
+
+        this.loadingRoutes = false;
+      }
+    });
+  }
+
+  filterRouteList(): void {
+    const search = this.routeSearch.trim().toLowerCase();
+
+    if (!search) {
+      this.filteredRouteList = [...this.routeList];
+      return;
+    }
+
+    this.filteredRouteList = this.routeList.filter((route: any) =>
+      route.routeName?.toLowerCase().includes(search)
+    );
+  }
+  // =====================================
+  // ON ROUTE CHANGE -> LOAD CUSTOMERS
+  // =====================================
+  onRouteChange(routeId: number): void {
+
+    this.customerList = [];
+    this.filteredCustomerList = [];
+    this.customerSearch = '';
+
+    if (!routeId) {
+      return;
+    }
+
+    this.loadingCustomers = true;
+
+    this.visitService.getCustomersByRoute(routeId).subscribe({
+
+      next: (res: any) => {
+
+        this.customerList = res?.data || [];
+
+        // Initialize filtered list
+        this.filteredCustomerList = [...this.customerList];
+
+        this.loadingCustomers = false;
+      },
+
+      error: (err) => {
+
+        console.error('Error fetching customers by route:', err);
+
+        this.customerList = [];
+        this.filteredCustomerList = [];
+
+        this.loadingCustomers = false;
+      }
+
+    });
+  }
+
+
+  filterCustomerList(): void {
+
+    const search = this.customerSearch.trim().toLowerCase();
+
+    if (!search) {
+      this.filteredCustomerList = [...this.customerList];
+      return;
+    }
+
+    this.filteredCustomerList = this.customerList.filter((customer: any) =>
+      customer.name?.toLowerCase().includes(search) ||
+      customer.mobile?.toString().includes(search)
+    );
+  }
   // =====================================
   // CUSTOMER VISIT MODAL
   // =====================================
@@ -231,7 +267,7 @@ filterRouteList(): void {
     this.selectedProducts = Array.isArray(this.currentPlace?.selectedProducts)
       ? [...this.currentPlace.selectedProducts]
       : [];
-      
+
     this.showProductModal = true;
     this.loadProducts();
   }
