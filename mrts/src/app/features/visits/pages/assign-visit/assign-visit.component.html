@@ -32,38 +32,84 @@
 
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-    <!-- MR SELECT -->
-    <div>
-      <label class="block text-sm font-medium mb-1">Medical Representative</label>
-      <select
-        class="w-full border rounded-lg px-3 py-2"
-        [(ngModel)]="assignVisit.mrId"
-        (ngModelChange)="onMrChange($event)"
-        name="mrId">
-        <option [ngValue]="null">Select MR</option>
-        <option *ngFor="let mr of mrList" [ngValue]="mr.medicalRepresentativeId">
-          {{ mr.name }} (Ph : {{ mr.mobile }})
-        </option>
-      </select>
-    </div>
+<!-- MR SELECT -->
+<div>
 
-    <!-- ROUTE SELECT -->
-    <div>
-      <label class="block text-sm font-medium mb-1">Route</label>
-      <select
-        class="w-full border rounded-lg px-3 py-2 disabled:bg-gray-100"
-        [(ngModel)]="assignVisit.routeId"
-        (ngModelChange)="onRouteChange($event)"
-        [disabled]="!assignVisit.mrId || loadingRoutes"
-        name="routeId">
-        <option [ngValue]="null">
-          {{ loadingRoutes ? 'Loading routes...' : 'Select Route' }}
-        </option>
-        <option *ngFor="let route of routeList" [ngValue]="route.routeId">
-          {{ route.routeName }}
-        </option>
-      </select>
-    </div>
+  <label class="block text-sm font-medium mb-1">
+    Medical Representative
+  </label>
+
+  <!-- MR Search -->
+  <input
+    type="text"
+    [(ngModel)]="mrSearch"
+    (input)="filterMrList()"
+    name="mrSearch"
+    placeholder="Search MR by name or mobile..."
+    class="w-full border rounded-lg px-3 py-2 mb-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  />
+
+  <select
+    class="w-full border rounded-lg px-3 py-2"
+    [(ngModel)]="assignVisit.mrId"
+    (ngModelChange)="onMrChange($event)"
+    name="mrId">
+
+    <option [ngValue]="null">
+      Select MR
+    </option>
+
+    <option
+      *ngFor="let mr of filteredMrList"
+      [ngValue]="mr.medicalRepresentativeId">
+
+      {{ mr.name }} (Ph : {{ mr.mobile }})
+
+    </option>
+
+  </select>
+
+</div>
+<!-- ROUTE SELECT -->
+<div>
+
+  <label class="block text-sm font-medium mb-1">
+    Route
+  </label>
+
+  <!-- Route Search -->
+  <input
+    type="text"
+    [(ngModel)]="routeSearch"
+    (input)="filterRouteList()"
+    name="routeSearch"
+    [disabled]="!assignVisit.mrId || loadingRoutes"
+    placeholder="Search Route..."
+    class="w-full border rounded-lg px-3 py-2 mb-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:bg-gray-100"
+  />
+
+  <select
+    class="w-full border rounded-lg px-3 py-2 disabled:bg-gray-100"
+    [(ngModel)]="assignVisit.routeId"
+    (ngModelChange)="onRouteChange($event)"
+    [disabled]="!assignVisit.mrId || loadingRoutes"
+    name="routeId">
+
+    <option [ngValue]="null">
+      {{ loadingRoutes ? 'Loading routes...' : 'Select Route' }}
+    </option>
+
+    <option
+      *ngFor="let route of filteredRouteList"
+      [ngValue]="route.routeId">
+
+      {{ route.routeName }}
+
+    </option>
+
+  </select>
+
+</div>
 
     <!-- DATE -->
     <div>

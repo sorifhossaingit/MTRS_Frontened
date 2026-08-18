@@ -304,10 +304,23 @@
           Reset
         </button>
 
-        <button type="button" (click)="saveMr()"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl flex items-center justify-center gap-2 transition">
-          <lucide-icon [img]="Save"></lucide-icon>
-          Save Representative
+        <button type="button" (click)="saveMr()" [disabled]="isSaving"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 min-w-[210px] disabled:opacity-60 disabled:cursor-not-allowed">
+
+          <ng-container *ngIf="isSaving; else saveText">
+
+            <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">
+            </span>
+
+            Saving...
+
+          </ng-container>
+
+          <ng-template #saveText>
+            <lucide-icon [img]="Save" class="w-5 h-5"></lucide-icon>
+            Save Representative
+          </ng-template>
+
         </button>
 
       </div>

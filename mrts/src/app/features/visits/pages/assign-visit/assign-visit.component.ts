@@ -70,6 +70,12 @@ export class AssignVisitComponent implements OnInit {
   loadingRoutes = false;
   loadingCustomers = false;
 
+  mrSearch = '';
+routeSearch = '';
+
+filteredMrList: any[] = [];
+filteredRouteList: any[] = [];
+
   constructor(
     private visitService: VisitService
   ) { }
@@ -81,46 +87,88 @@ export class AssignVisitComponent implements OnInit {
   // =====================================
   // LOAD MRS
   // =====================================
-  loadMRs(): void {
-    const params = {
-      assignedAreaManager: Number(localStorage.getItem('mid')),
-      agencyId: Number(localStorage.getItem('aid'))
-    };
+loadMRs(): void {
+  const params = {
+    assignedAreaManager: Number(localStorage.getItem('mid')),
+    agencyId: Number(localStorage.getItem('aid'))
+  };
 
-    this.visitService.get_mrs(params).subscribe({
-      next: (res: any) => {
-        this.mrList = res?.data || [];
-      },
-      error: (err) => {
-        console.error('Error fetching MRs:', err);
-      }
-    });
+  this.visitService.get_mrs(params).subscribe({
+    next: (res: any) => {
+      this.mrList = res?.data || [];
+      this.filteredMrList = [...this.mrList];
+    },
+    error: (err) => {
+      console.error('Error fetching MRs:', err);
+    }
+  });
+}
+
+filterMrList(): void {
+  const search = this.mrSearch.trim().toLowerCase();
+
+  if (!search) {
+    this.filteredMrList = [...this.mrList];
+    return;
   }
+
+  this.filteredMrList = this.mrList.filter((mr: any) =>
+    mr.name?.toLowerCase().includes(search) ||
+    mr.mobile?.toString().includes(search)
+  );
+}
 
   // =====================================
   // ON MR CHANGE -> LOAD ROUTES
   // =====================================
-  onMrChange(mrId: number): void {
-    this.routeList = [];
-    this.customerList = [];
-    this.assignVisit.routeId = null;
-    this.assignVisit.places = []; // Reset places if MR changes
+onMrChange(mrId: number): void {
 
-    if (!mrId) return;
+  this.routeList = [];
+  this.filteredRouteList = [];
+  this.customerList = [];
 
-    this.loadingRoutes = true;
-    this.visitService.getRoutesByMedicalRepresentative(mrId).subscribe({
-      next: (res: any) => {
-        this.routeList = res?.data || [];
-        this.loadingRoutes = false;
-      },
-      error: (err) => {
-        console.error('Error fetching routes:', err);
-        this.loadingRoutes = false;
-      }
-    });
+  this.assignVisit.routeId = null;
+  this.assignVisit.places = [];
+
+  this.routeSearch = '';
+
+  if (!mrId) {
+    return;
   }
 
+  this.loadingRoutes = true;
+
+  this.visitService.getRoutesByMedicalRepresentative(mrId).subscribe({
+
+    next: (res: any) => {
+
+      this.routeList = res?.data || [];
+      this.filteredRouteList = [...this.routeList];
+
+      this.loadingRoutes = false;
+    },
+
+    error: (err) => {
+
+      console.error('Error fetching routes:', err);
+
+      this.loadingRoutes = false;
+    }
+  });
+}
+
+filterRouteList(): void {
+  const search = this.routeSearch.trim().toLowerCase();
+
+  if (!search) {
+    this.filteredRouteList = [...this.routeList];
+    return;
+  }
+
+  this.filteredRouteList = this.routeList.filter((route: any) =>
+    route.routeName?.toLowerCase().includes(search)
+  );
+}
   // =====================================
   // ON ROUTE CHANGE -> LOAD CUSTOMERS
   // =====================================

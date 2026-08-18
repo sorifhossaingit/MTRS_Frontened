@@ -58,6 +58,7 @@ export class AddMedicalRepresentativeComponent implements OnInit {
   // Form & Local Variables
   mrForm!: FormGroup;
   submitted = false;
+  isSaving = false;
   routeList: any[] = [];
   stockietList: any[] = [];
 
@@ -190,67 +191,87 @@ getStockiestList(): void {
 
   // --- Save & Reset Operations ---
 
-  saveMr(): void {
-    this.submitted = true;
+saveMr(): void {
+  this.submitted = true;
+
+  if (this.mrForm.invalid || this.isSaving) {
+    this.mrForm.markAllAsTouched();
 
     if (this.mrForm.invalid) {
-      this.mrForm.markAllAsTouched();
       Swal.fire({
         icon: 'warning',
         title: 'Validation Error',
         text: 'Please fill all required fields correctly.'
       });
-      return;
     }
 
-    const rawRouteIds = this.mrForm.value.routeIds || [];
-    const formattedRouteIds = rawRouteIds.map((id: any) => Number(id));
+    return;
+  }
 
-    const payload = {
-      agencyId: this.agencyId,
-      name: this.mrForm.value.name,
-      contactPerson: this.mrForm.value.contactPerson,
-      mobile: this.mrForm.value.mobile,
-      email: this.mrForm.value.email,
-      address: this.mrForm.value.address,
-      city: this.mrForm.value.city,
-      state: this.mrForm.value.state,
-      pincode: this.mrForm.value.pincode,
-      region: this.mrForm.value.region,
-      assignedAreaManager: this.managerId,
-      stockistId: Number(this.mrForm.value.stockistId),
-      routeIds: formattedRouteIds,
-      createdBy: this.managerId
-    };
+  this.isSaving = true;
 
-    this.mrService.add_mr(payload).subscribe({
-      next: (res: any) => {
-        if (res?.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Medical Representative added successfully'
-          });
+  const rawRouteIds = this.mrForm.value.routeIds || [];
+  const formattedRouteIds = rawRouteIds.map((id: any) => Number(id));
 
-          this.resetForm();
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: res?.message || 'Failed to add Medical Representative'
-          });
-        }
-      },
-      error: (err: any) => {
-        console.error(err);
+  const payload = {
+    agencyId: this.agencyId,
+    name: this.mrForm.value.name,
+    contactPerson: this.mrForm.value.contactPerson,
+    mobile: this.mrForm.value.mobile,
+    email: this.mrForm.value.email,
+    address: this.mrForm.value.address,
+    city: this.mrForm.value.city,
+    state: this.mrForm.value.state,
+    pincode: this.mrForm.value.pincode,
+    region: this.mrForm.value.region,
+    assignedAreaManager: this.managerId,
+    stockistId: Number(this.mrForm.value.stockistId),
+    routeIds: formattedRouteIds,
+    createdBy: this.managerId
+  };
+
+  this.mrService.add_mr(payload).subscribe({
+
+    next: (res: any) => {
+
+      this.isSaving = false;
+
+      if (res?.success) {
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Medical Representative added successfully'
+        });
+
+        this.resetForm();
+
+      } else {
+
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err?.error?.message || 'Something went wrong'
+          text: res?.message || 'Failed to add Medical Representative'
         });
+
       }
-    });
-  }
+    },
+
+    error: (err: any) => {
+
+      this.isSaving = false;
+
+      console.error(err);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: err?.error?.message || 'Something went wrong'
+      });
+
+    }
+  });
+}
 
   resetForm(): void {
     this.submitted = false;

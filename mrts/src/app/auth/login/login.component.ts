@@ -247,7 +247,7 @@ export class LoginComponent {
               );
 
               this.router.navigate([
-                '/medical-representative-master/mr-attendance'
+                '/medical-representative-master/medical-representative-master-dashboard'
               ]);
 
             },

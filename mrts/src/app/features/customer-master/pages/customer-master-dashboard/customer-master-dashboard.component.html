@@ -242,7 +242,7 @@
 
                 <ng-container [ngSwitch]="item.status">
                   <span *ngSwitchCase="1">Created by MR/Admin</span>
-                  <span *ngSwitchCase="2">Approved</span>
+                  <span *ngSwitchCase="2">Approved by Admin</span>
                   <span *ngSwitchCase="3">Reject by Admin</span>
                   <span *ngSwitchDefault>-</span>
                 </ng-container>
@@ -618,10 +618,27 @@
         class="bg-gray-400 hover:bg-gray-500 text-white font-medium px-5 py-2.5 rounded-xl transition-colors">
         Cancel
       </button>
-      <button type="button" (click)="updateCustomer()"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors">
-        Update Customer
-      </button>
+<button
+  type="button"
+  (click)="updateCustomer()"
+  [disabled]="isLoading"
+  class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors min-w-[170px] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+
+  <ng-container *ngIf="isLoading; else updateCustomerText">
+
+    <span
+      class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin">
+    </span>
+
+    Updating...
+
+  </ng-container>
+
+  <ng-template #updateCustomerText>
+    Update Customer
+  </ng-template>
+
+</button>
     </div>
 
   </div>
