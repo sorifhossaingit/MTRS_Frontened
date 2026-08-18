@@ -137,13 +137,17 @@ export class MrService {
   }
 
   // mr.service.ts
-
-  getStockiestList(agencyId: any) {
-    return this.http.get(
-      `${this.apiUrl}/areamanager/stockist-list-for-mrcreate/${agencyId}`
-    );
-  }
-
+getStockiestList(agencyId: number, assignedAreaManagerId: number) {
+  return this.http.get(
+    `${this.apiUrl}/areamanager/stockist-list-for-mrcreate`,
+    {
+      params: {
+        agencyId: agencyId,
+        assignedAreaManagerId: assignedAreaManagerId
+      }
+    }
+  );
+}
 
   // ------------------mr order----
   get_routes_by_mr(mrId: number): Observable<any> {

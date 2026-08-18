@@ -97,18 +97,20 @@ export class AddMedicalRepresentativeComponent implements OnInit {
       });
   }
 
-  getStockiestList(): void {
-    this.mrService
-      .getStockiestList(this.agencyId)
-      .subscribe({
-        next: (res: any) => {
-          this.stockietList = res.data || [];
-        },
-        error: (err: any) => {
-          console.error('Failed to fetch Stockist List:', err);
-        }
-      });
-  }
+getStockiestList(): void {
+
+  this.mrService
+    .getStockiestList(this.agencyId, this.managerId)
+    .subscribe({
+      next: (res: any) => {
+        this.stockietList = res || [];
+        console.log('Stockist List:', this.stockietList);
+      },
+      error: (err: any) => {
+        console.error('Failed to fetch Stockist List:', err);
+      }
+    });
+}
 
   initializeForm(): void {
     this.mrForm = this.fb.group({

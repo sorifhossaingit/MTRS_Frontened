@@ -271,18 +271,23 @@
 
             <div
               class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
+
               <lucide-icon [img]="Building2"></lucide-icon>
+
               <select formControlName="stockistId" class="w-full h-12 bg-transparent outline-none text-sm">
-                <option [ngValue]="null" disabled selected>
+
+                <option [ngValue]="null" disabled>
                   Select Stockist
                 </option>
-                <!-- FIXED: Changed item.data.* to item.* -->
-                <option *ngFor="let item of stockietList" [value]="item.stockistId">
+
+                <option *ngFor="let item of stockietList" [ngValue]="item.stockistId">
+
                   {{ item.name }} - {{ item.city }} - {{ item.firmType }}
+
                 </option>
+
               </select>
             </div>
-
             <small *ngIf="submitted && f['stockistId'].errors?.['required']" class="text-red-500">
               Stockist is required
             </small>

@@ -56,6 +56,7 @@ export class MrDashboardComponent implements OnInit {
 
   // Modal Control
   showUpdateModal = false;
+  isUpdating = false;
 
   // Local Storage Data
   agencyId = Number(localStorage.getItem('aid'));
@@ -141,18 +142,20 @@ export class MrDashboardComponent implements OnInit {
       });
   }
 
-  getStockistList(): void {
-    this.mrService.getStockiestList(this.agencyId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (res: any) => {
-          this.stockistList = res.data || [];
-        },
-        error: (err: any) => {
-          console.error('Failed to fetch Stockist List:', err);
-        }
-      });
-  }
+getStockistList(): void {
+
+  this.mrService
+    .getStockiestList(this.agencyId, this.managerId)
+    .subscribe({
+      next: (res: any) => {
+        this.stockistList = res || [];
+        console.log('Stockist List:', this.stockistList);
+      },
+      error: (err: any) => {
+        console.error('Failed to fetch Stockist List:', err);
+      }
+    });
+}
 
   getMrList(): void {
     const payload = {
@@ -290,57 +293,73 @@ export class MrDashboardComponent implements OnInit {
     this.showUpdateModal = false;
     this.showRouteDropdown = false;
   }
+updateMr(): void {
+  if (this.updateForm.invalid || this.isUpdating) {
+    this.updateForm.markAllAsTouched();
+    return;
+  }
 
-  updateMr(): void {
-    if (this.updateForm.invalid) {
-      this.updateForm.markAllAsTouched();
-      return;
-    }
+  this.isUpdating = true;
 
-    const formValue = this.updateForm.value;
+  const formValue = this.updateForm.value;
 
-    const payload = {
-      medicalRepresentativeId: formValue.medicalRepresentativeId,
-      name: formValue.name,
-      contactPerson: formValue.contactPerson,
-      mobile: formValue.mobile,
-      email: formValue.email,
-      address: formValue.address,
-      city: formValue.city,
-      state: formValue.state,
-      pincode: formValue.pincode,
-      region: formValue.region,
-      assignedAreaManager: this.managerId,
-      stockistId: Number(formValue.stockistId) || 0,
-      routeIds: formValue.routeIds || [],
-      isActive: formValue.isActive,
-      updatedBy: this.managerId
-    };
+  const payload = {
+    medicalRepresentativeId: formValue.medicalRepresentativeId,
+    name: formValue.name,
+    contactPerson: formValue.contactPerson,
+    mobile: formValue.mobile,
+    email: formValue.email,
+    address: formValue.address,
+    city: formValue.city,
+    state: formValue.state,
+    pincode: formValue.pincode,
+    region: formValue.region,
+    assignedAreaManager: this.managerId,
+    stockistId: Number(formValue.stockistId) || 0,
+    routeIds: formValue.routeIds || [],
+    isActive: formValue.isActive,
+    updatedBy: this.managerId
+  };
 
-    this.mrService.update_mr(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (res: any) => {
-          if (res?.success) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: 'MR updated successfully'
-            });
-            this.showUpdateModal = false;
-            this.getMrList();
-          }
-        },
-        error: (err: any) => {
-          console.error(err);
+  this.mrService.update_mr(payload)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+      next: (res: any) => {
+
+        this.isUpdating = false;
+
+        if (res?.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'MR updated successfully'
+          });
+
+          this.showUpdateModal = false;
+          this.getMrList();
+        } else {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to update MR'
+            text: res?.message || 'Failed to update MR'
           });
         }
-      });
-  }
+      },
+
+      error: (err: any) => {
+
+        this.isUpdating = false;
+
+        console.error(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err?.error?.message || 'Failed to update MR'
+        });
+      }
+    });
+}
 
   deleteMr(mr: any): void {
     Swal.fire({
