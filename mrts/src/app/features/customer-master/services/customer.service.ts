@@ -71,4 +71,23 @@ updateCustomerStatus(payload: any) {
   );
 }
 
+getAreaManagerForUpdateCustomer(
+  agencyId: number,
+  medicalRepresentativeId: number
+): Observable<any> {
+
+  return this.http.get(
+    `${this.apiUrl}/admin/area-manager/get-area-manager-for-update-customer`,
+    {
+      params: {
+        agencyId: agencyId.toString(),
+        medicalRepresentativeId:
+          medicalRepresentativeId.toString()
+      }
+    }
+  );
+}
+
+
+
 }

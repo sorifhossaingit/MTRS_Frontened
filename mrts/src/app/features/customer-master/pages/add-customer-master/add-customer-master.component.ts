@@ -79,6 +79,10 @@ newRouteName = '';
 newRouteDescription = '';
 
 
+
+loggedInAreaManagerId: number | null = null;
+medicalRepresentativeId: number | null = null;
+
   agencyId: any =
     localStorage.getItem('aid');
 
@@ -113,6 +117,9 @@ newRouteDescription = '';
     this.getCustomerTypeList();
 
     this.getRouteList();
+
+    this.getAreaManagerForUpdateCustomer();
+
 
   }
 
@@ -357,6 +364,61 @@ loadMap() {
 
   }
 
+  getAreaManagerForUpdateCustomer(): void {
+
+  const agencyId = Number(localStorage.getItem('aid'));
+  const medicalRepresentativeId =
+    Number(localStorage.getItem('mid'));
+
+  if (!agencyId || !medicalRepresentativeId) {
+    console.error(
+      'Agency ID or Medical Representative ID not found.'
+    );
+    return;
+  }
+
+  this.customerService
+    .getAreaManagerForUpdateCustomer(
+      agencyId,
+      medicalRepresentativeId
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        if (res?.success) {
+
+          this.loggedInAreaManagerId =
+            Number(res.areaManagerId);
+
+          console.log(
+            'Logged-in MR Area Manager ID:',
+            this.loggedInAreaManagerId
+          );
+        }
+
+      },
+
+      error: (err: any) => {
+        console.error(
+          'Failed to get Area Manager:',
+          err
+        );
+      }
+
+    });
+}
+
+isAreaManagerAllowed(am: any): boolean {
+
+  if (this.loggedInAreaManagerId === null) {
+    return true;
+  }
+
+  return Number(am.areaManagerId) ===
+         this.loggedInAreaManagerId;
+}
+
   // =========================================================
   // 🔷 TOKEN DECODE
   // =========================================================
@@ -406,36 +468,6 @@ loadMap() {
     const formValue =
       this.customerForm.value;
 
-    // const payload = {
-    //   agencyId: this.agencyId,
-    //   name: formValue.name,
-    //   type: formValue.type,
-    //   registrationNo: formValue.registrationNo,
-
-    //   contactPerson: formValue.contactPerson,
-    //   mobile: formValue.mobile,
-    //   email: formValue.email,
-
-    //   address: formValue.address,
-    //   city: formValue.city,
-    //   state: formValue.state,
-    //   pincode: formValue.pincode,
-
-    //   gstNo: formValue.gstNo,
-    //   drugLicenseNo: formValue.drugLicenseNo,
-    //   panNo: formValue.panNo,
-
-    //   assignedAreaManager: Number(formValue.assignedAreaManager),
-    //   region: formValue.region,
-    //   landline: formValue.landline,
-
-    //   // 🔥 NEW
-    //   latitude: formValue.latitude,
-    //   longitude: formValue.longitude,
-    //   isActive:true,
-    //   routeId: Number(formValue.routeId),
-    //   createdBy: this.createdBy
-    // };
 
 const payload = {
   agencyId: Number(this.agencyId),

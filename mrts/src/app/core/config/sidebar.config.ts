@@ -72,12 +72,12 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/customer-master/customer-master-dashboard',
         roles: ['Admin']
       },
-      {
-        label: 'Add Customer',
-        icon: 'UserPlus',
-        route: '/customer-master/add-customer-master',
-        roles: ['Admin']
-      }
+      // {
+      //   label: 'Add Customer',
+      //   icon: 'UserPlus',
+      //   route: '/customer-master/add-customer-master',
+      //   roles: ['Admin']
+      // }
     ]
   },
   {

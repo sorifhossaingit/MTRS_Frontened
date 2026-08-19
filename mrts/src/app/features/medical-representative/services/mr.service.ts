@@ -154,20 +154,25 @@ export class MrService {
     return this.http.get(`${this.apiUrl}/mrvisit/get-routes-by-medicalrepresentative/${mrId}`);
   }
 
-  // get_customers_by_route(routeId: number): Observable<any> {
-  //   return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route/${routeId}`);
-  // }
 
-  get_customers_by_route(routeId: number,agencyId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route`,
-      {
-        params: {
-          routeId: routeId.toString(),
-          agencyId: agencyId.toString()
-        }
+
+get_customers_by_route_mr(
+  routeId: number,
+  agencyId: number,
+  areaManagerId: number
+): Observable<any> {
+
+  return this.http.get(
+    `${this.apiUrl}/mrvisit/get-customers-by-route`,
+    {
+      params: {
+        routeId: routeId.toString(),
+        agencyId: agencyId.toString(),
+        areaManagerId: areaManagerId.toString()
       }
-    );
-  }
+    }
+  );
+}
 
   // --------------------- MR DASHBOARD ---------------------
 
@@ -193,5 +198,22 @@ export class MrService {
   get_attendance_dashboard_ar(data: any) {
     return this.http.post(`${this.apiUrl}/mrvisit/attendence/mr-attendance-dashboard`, data);
   }
+
+  getAreaManagerForUpdateCustomer(
+  agencyId: number,
+  medicalRepresentativeId: number
+): Observable<any> {
+
+  return this.http.get(
+    `${this.apiUrl}/admin/area-manager/get-area-manager-for-update-customer`,
+    {
+      params: {
+        agencyId: agencyId.toString(),
+        medicalRepresentativeId:
+          medicalRepresentativeId.toString()
+      }
+    }
+  );
+}
 
 }

@@ -64,15 +64,40 @@ export class VisitService {
   );
 }
 
-  get_customers_by_route(routeId: number,agencyId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route`,
-      {
-        params: {
-          routeId: routeId.toString(),
-          agencyId: agencyId.toString()
-        }
+get_customers_by_route_visit(
+  routeId: number,
+  agencyId: number,
+  areaManagerId: number
+): Observable<any> {
+
+  return this.http.get(
+    `${this.apiUrl}/mrvisit/get-customers-by-route`,
+    {
+      params: {
+        routeId: routeId.toString(),
+        agencyId: agencyId.toString(),
+        areaManagerId: areaManagerId.toString()
       }
-    );
-  }
+    }
+  );
+}
+
+
+  getAreaManagerForUpdateCustomer(
+  agencyId: number,
+  medicalRepresentativeId: number
+): Observable<any> {
+
+  return this.http.get(
+    `${this.apiUrl}/admin/area-manager/get-area-manager-for-update-customer`,
+    {
+      params: {
+        agencyId: agencyId.toString(),
+        medicalRepresentativeId:
+          medicalRepresentativeId.toString()
+      }
+    }
+  );
+}
 
 }

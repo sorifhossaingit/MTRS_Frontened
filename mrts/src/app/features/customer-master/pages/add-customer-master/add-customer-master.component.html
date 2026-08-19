@@ -3,9 +3,9 @@
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
     <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
       <lucide-icon [img]="UserPlus"></lucide-icon>
-      Add Customer
+      Add Customer 
     </h1>
-    <button routerLink="/customer-master/customer-master-dashboard"
+    <button routerLink="/medical-representative-master/customer-dashboard"
       class="px-4 py-2 bg-gray-200 rounded-lg flex items-center gap-2">
       <lucide-icon [img]="ArrowLeft"></lucide-icon>
       Back
@@ -192,11 +192,16 @@
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Assigned Area Manager</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Assigned Area Manager
+          </label>
+
           <select formControlName="assignedAreaManager" class="input">
             <option value="">Select Area Manager</option>
-            <option *ngFor="let am of areaManagerList" [value]="am.areaManagerId">
-              {{ am.name }} ({{am.assignedArea}})
+
+            <option *ngFor="let am of areaManagerList" [value]="am.areaManagerId"
+              [disabled]="!isAreaManagerAllowed(am)">
+              {{ am.name }} ({{ am.assignedArea }})
             </option>
           </select>
         </div>

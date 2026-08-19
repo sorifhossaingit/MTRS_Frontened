@@ -78,12 +78,16 @@ export class AssignVisitComponent implements OnInit {
   filteredMrList: any[] = [];
   filteredRouteList: any[] = [];
 
+
+  loggedInAreaManagerId: number | null = null;
+medicalRepresentativeId: number | null = null;
   constructor(
     private visitService: VisitService
   ) { }
 
   ngOnInit(): void {
     this.loadMRs();
+    this.getAreaManagerForUpdateCustomer();
   }
 
   // =====================================
@@ -174,6 +178,52 @@ export class AssignVisitComponent implements OnInit {
   // =====================================
   // ON ROUTE CHANGE -> LOAD CUSTOMERS
   // =====================================
+  getAreaManagerForUpdateCustomer(): void {
+
+  const agencyId = Number(localStorage.getItem('aid'));
+  const medicalRepresentativeId =
+    Number(localStorage.getItem('mid'));
+
+  if (!agencyId || !medicalRepresentativeId) {
+    console.error(
+      'Agency ID or Medical Representative ID not found.'
+    );
+    return;
+  }
+
+  this.visitService
+    .getAreaManagerForUpdateCustomer(
+      agencyId,
+      medicalRepresentativeId
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        if (res?.success) {
+
+          this.loggedInAreaManagerId =
+            Number(res.areaManagerId);
+
+          console.log(
+            'Logged-in MR Area Manager ID:',
+            this.loggedInAreaManagerId
+          );
+        }
+
+      },
+
+      error: (err: any) => {
+        console.error(
+          'Failed to get Area Manager:',
+          err
+        );
+      }
+
+    });
+}
+
+
 onRouteChange(routeId: number): void {
 
   this.customerList = [];
@@ -185,10 +235,16 @@ onRouteChange(routeId: number): void {
   }
 
   const agencyId = Number(localStorage.getItem('aid'));
+  const areaManagerId = this.loggedInAreaManagerId;
 
   if (!agencyId) {
     console.error('Agency ID not found in localStorage');
+    this.loadingCustomers = false;
+    return;
+  }
 
+  if (!areaManagerId) {
+    console.error('Area Manager ID not found');
     this.loadingCustomers = false;
     return;
   }
@@ -196,15 +252,21 @@ onRouteChange(routeId: number): void {
   this.loadingCustomers = true;
 
   this.visitService
-    .get_customers_by_route(routeId, agencyId)
+    .get_customers_by_route_visit(
+      routeId,
+      agencyId,
+      areaManagerId
+    )
     .subscribe({
 
       next: (res: any) => {
 
-        this.customerList = res?.data || [];
+        this.customerList = Array.isArray(res) ? res : [];
 
         // Initialize filtered list
-        this.filteredCustomerList = [...this.customerList];
+        this.filteredCustomerList = [
+          ...this.customerList
+        ];
 
         this.loadingCustomers = false;
       },
@@ -224,6 +286,8 @@ onRouteChange(routeId: number): void {
 
     });
 }
+
+
 
   filterCustomerList(): void {
 

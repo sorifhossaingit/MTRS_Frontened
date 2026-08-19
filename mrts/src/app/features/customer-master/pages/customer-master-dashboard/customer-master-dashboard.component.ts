@@ -82,6 +82,11 @@ export class CustomerMasterDashboardComponent implements OnInit {
   stateFilter = '';
 
   isLoading = false; // Add this variable to your component`
+
+
+
+loggedInAreaManagerId: number | null = null;
+medicalRepresentativeId: number | null = null;
   // =========================================================
   // 🔷 PAGINATION
   // =========================================================
@@ -108,6 +113,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
     this.getRouteList();
     this.getCustomerDetails();
     this.getAreaManagerList();
+    this.getAreaManagerForUpdateCustomer();
+    
   }
 
   // =========================================================
@@ -231,6 +238,56 @@ getCustomerTypeList(): void {
       console.error('Failed to fetch Customer Types:', err);
     }
   });
+}
+
+getAreaManagerForUpdateCustomer(): void {
+
+  const agencyId = Number(localStorage.getItem('aid'));
+  const medicalRepresentativeId =
+    Number(localStorage.getItem('mid'));
+
+  if (!agencyId || !medicalRepresentativeId) {
+    console.error(
+      'Agency ID or Medical Representative ID not found.'
+    );
+    return;
+  }
+
+  this.customerService
+    .getAreaManagerForUpdateCustomer(
+      agencyId,
+      medicalRepresentativeId
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        if (res?.success) {
+
+          this.loggedInAreaManagerId =
+            Number(res.areaManagerId);
+
+          console.log(
+            'Logged-in MR Area Manager ID:',
+            this.loggedInAreaManagerId
+          );
+        }
+
+      },
+
+      error: (err: any) => {
+        console.error(
+          'Failed to get Area Manager:',
+          err
+        );
+      }
+
+    });
+}
+
+
+isAddCustomerAllowed(): boolean {
+  return this.rid !== 'a5fabfee-5506-4e12-bfec-c898fc5af3ae';
 }
   // =========================================================
   // 🔷 DASHBOARD DETAILS
@@ -625,5 +682,15 @@ getCustomerTypeList(): void {
     });
 
   });
+}
+
+isAreaManagerAllowed(am: any): boolean {
+
+  if (this.loggedInAreaManagerId === null) {
+    return true;
+  }
+
+  return Number(am.areaManagerId) ===
+         this.loggedInAreaManagerId;
 }
 }
