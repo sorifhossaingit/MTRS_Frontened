@@ -87,7 +87,7 @@ medicalRepresentativeId: number | null = null;
 
   ngOnInit(): void {
     this.loadMRs();
-    this.getAreaManagerForUpdateCustomer();
+    // this.getAreaManagerForUpdateCustomer();
   }
 
   // =====================================
@@ -235,7 +235,7 @@ onRouteChange(routeId: number): void {
   }
 
   const agencyId = Number(localStorage.getItem('aid'));
-  const areaManagerId = this.loggedInAreaManagerId;
+  const areaManagerId = Number(localStorage.getItem('mid'))
 
   if (!agencyId) {
     console.error('Agency ID not found in localStorage');
