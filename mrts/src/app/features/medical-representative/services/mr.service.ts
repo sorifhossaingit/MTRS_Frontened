@@ -137,28 +137,37 @@ export class MrService {
   }
 
   // mr.service.ts
-getStockiestList(agencyId: number, assignedAreaManagerId: number) {
-  return this.http.get(
-    `${this.apiUrl}/areamanager/stockist-list-for-mrcreate`,
-    {
-      params: {
-        agencyId: agencyId,
-        assignedAreaManagerId: assignedAreaManagerId
+  getStockiestList(agencyId: number, assignedAreaManagerId: number) {
+    return this.http.get(
+      `${this.apiUrl}/areamanager/stockist-list-for-mrcreate`,
+      {
+        params: {
+          agencyId: agencyId,
+          assignedAreaManagerId: assignedAreaManagerId
+        }
       }
-    }
-  );
-}
+    );
+  }
 
   // ------------------mr order----
   get_routes_by_mr(mrId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/mrvisit/get-routes-by-medicalrepresentative/${mrId}`);
   }
 
-  get_customers_by_route(routeId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route/${routeId}`);
+  // get_customers_by_route(routeId: number): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route/${routeId}`);
+  // }
+
+  get_customers_by_route(routeId: number,agencyId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/mrvisit/get-customers-by-route`,
+      {
+        params: {
+          routeId: routeId.toString(),
+          agencyId: agencyId.toString()
+        }
+      }
+    );
   }
-
-
 
   // --------------------- MR DASHBOARD ---------------------
 
@@ -169,19 +178,19 @@ getStockiestList(agencyId: number, assignedAreaManagerId: number) {
   }
 
   getTodayVisitsDashboard(mrId: number): Observable<any> {
-  return this.http.get(
-    `${this.apiUrl}/medicalpresentativeown/today-visits-dashboard/${mrId}`
-  );
-}
+    return this.http.get(
+      `${this.apiUrl}/medicalpresentativeown/today-visits-dashboard/${mrId}`
+    );
+  }
 
-getTodayVisitProductsDashboard(mrId: number): Observable<any> {
-  return this.http.get(
-    `${this.apiUrl}/medicalpresentativeown/today-visit-products-dashboard/${mrId}`
-  );
-}
+  getTodayVisitProductsDashboard(mrId: number): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/medicalpresentativeown/today-visit-products-dashboard/${mrId}`
+    );
+  }
 
-// ---------------------
- get_attendance_dashboard_ar(data: any) {
+  // ---------------------
+  get_attendance_dashboard_ar(data: any) {
     return this.http.post(`${this.apiUrl}/mrvisit/attendence/mr-attendance-dashboard`, data);
   }
 

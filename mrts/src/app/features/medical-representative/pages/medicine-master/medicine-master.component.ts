@@ -608,22 +608,41 @@ export class MedicineMasterComponent implements OnInit {
   }
 
   // --- API CALL 2: Fetch Customers when Route changes ---
-  onRouteChange(): void {
-    this.selectedCustomerId = null;
-    this.customers = [];
+onRouteChange(): void {
+  this.selectedCustomerId = null;
+  this.customers = [];
 
-    if (!this.selectedRouteId) return;
+  if (!this.selectedRouteId) return;
 
-    this.loadingCustomers = true;
-    this.mrService.get_customers_by_route(this.selectedRouteId).subscribe({
+  const agencyId = Number(localStorage.getItem('aid'));
+
+  if (!agencyId) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Agency Not Found',
+      text: 'Agency information is missing. Please login again.'
+    });
+    return;
+  }
+
+  this.loadingCustomers = true;
+
+  this.mrService
+    .get_customers_by_route(this.selectedRouteId, agencyId)
+    .subscribe({
       next: (res: any) => {
         this.loadingCustomers = false;
-        if (res.success) {
-          this.customers = res.data || [];
-        }
+
+        // API returns direct array
+        this.customers = Array.isArray(res) ? res : [];
       },
-      error: () => {
+
+      error: (err) => {
         this.loadingCustomers = false;
+        this.customers = [];
+
+        console.error('Customers Load Failed:', err);
+
         Swal.fire({
           icon: 'error',
           title: 'Customers Load Failed',
@@ -631,7 +650,7 @@ export class MedicineMasterComponent implements OnInit {
         });
       }
     });
-  }
+}
 
   getAssignedAreaManager(): void {
     const params = { medicalRepresentativeId: this.medicalRepresentativeId };

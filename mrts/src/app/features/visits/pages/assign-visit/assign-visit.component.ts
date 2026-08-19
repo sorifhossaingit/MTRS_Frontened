@@ -174,19 +174,30 @@ export class AssignVisitComponent implements OnInit {
   // =====================================
   // ON ROUTE CHANGE -> LOAD CUSTOMERS
   // =====================================
-  onRouteChange(routeId: number): void {
+onRouteChange(routeId: number): void {
 
-    this.customerList = [];
-    this.filteredCustomerList = [];
-    this.customerSearch = '';
+  this.customerList = [];
+  this.filteredCustomerList = [];
+  this.customerSearch = '';
 
-    if (!routeId) {
-      return;
-    }
+  if (!routeId) {
+    return;
+  }
 
-    this.loadingCustomers = true;
+  const agencyId = Number(localStorage.getItem('aid'));
 
-    this.visitService.getCustomersByRoute(routeId).subscribe({
+  if (!agencyId) {
+    console.error('Agency ID not found in localStorage');
+
+    this.loadingCustomers = false;
+    return;
+  }
+
+  this.loadingCustomers = true;
+
+  this.visitService
+    .get_customers_by_route(routeId, agencyId)
+    .subscribe({
 
       next: (res: any) => {
 
@@ -200,7 +211,10 @@ export class AssignVisitComponent implements OnInit {
 
       error: (err) => {
 
-        console.error('Error fetching customers by route:', err);
+        console.error(
+          'Error fetching customers by route:',
+          err
+        );
 
         this.customerList = [];
         this.filteredCustomerList = [];
@@ -209,8 +223,7 @@ export class AssignVisitComponent implements OnInit {
       }
 
     });
-  }
-
+}
 
   filterCustomerList(): void {
 
