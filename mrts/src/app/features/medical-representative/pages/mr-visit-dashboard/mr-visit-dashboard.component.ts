@@ -25,6 +25,17 @@ import { Subject, firstValueFrom } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MrService } from '../../services/mr.service';
 
+// Fix default marker icon issues in Leaflet when bundled with Webpack/Angular CLI
+const DefaultIcon = L.icon({
+  iconUrl: 'assets/leaflet/marker-icon.png',
+  shadowUrl: 'assets/leaflet/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
 @Component({
   selector: 'app-mr-visit-dashboard',
   templateUrl: './mr-visit-dashboard.component.html',
@@ -101,10 +112,12 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   selectedPlace: any = null;
   showViewModal: boolean = false;
 
-  // Map Instance
+  // Map Instance & Lifecycle Safety
   trackingData: any = null;
-  map!: L.Map;
-  routeLayer!: L.Polyline;
+  map?: L.Map;
+  routeLayer?: L.Polyline;
+  private mapInitTimer: any = null;
+  private mapContainerId = '';
 
   constructor(
     private mrService: MrService,
@@ -291,9 +304,6 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   // PRODUCT LOGIC HELPERS FOR VISIT LIST & DIALOGS
   // ======================================================
 
-  /**
-   * Sums all products across places in a given Visit Plan
-   */
   getTotalProducts(visit: any): number {
     if (!visit || !visit.places || !Array.isArray(visit.places)) {
       return 0;
@@ -305,9 +315,6 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  /**
-   * Returns a comma-separated list of product names assigned to a Visit Plan
-   */
   getVisitedProductNames(visit: any): string {
     if (!visit || !visit.places || !Array.isArray(visit.places)) return '-';
 
@@ -385,12 +392,11 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   isVisitInProgress(visit: any): boolean { return visit.status === 'InProgress' || visit.status === 'In Progress'; }
   isVisitCompleted(visit: any): boolean { return visit.status === 'Completed' || visit.status === 'completed' || visit.status === 'InProgress' || visit.status === 'In Progress'; }
   canRoute(visit: any): boolean {
-    return visit.status === 'Accepted' || visit.status === 'InProgress' || visit.status === 'In Progress' || visit.status === 'Completed';
+    return !['Assigned', 'Accepted'].includes(visit.status);
   }
 
   viewVisit(visit: any): void {
-    this.selectedVisit = visit;
-    this.showViewModal = true;
+    this.selectedVisit = visit;    this.showViewModal = true;
   }
 
   closeViewModal(): void {
@@ -400,6 +406,15 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
 
   getCustomerName(customerId: number): string {
     return this.customerMap?.[customerId]?.name || '-';
+  }
+
+  // TrackBy functions to prevent Angular NG0955 rendering errors
+  trackByVisitPlanId(index: number, visit: any): any {
+    return visit.visitPlanId || index;
+  }
+
+  trackByPlaceId(index: number, place: any): any {
+    return place.visitPlanDetailId || `${place.customerId}_${index}`;
   }
 
   // ======================================================
@@ -719,7 +734,7 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   }
 
   // ======================================================
-  // COMPLETE VISIT FOR A PLACE (MATCHES PAYLOAD SCHEME)
+  // COMPLETE VISIT FOR A PLACE
   // ======================================================
 
   openCompleteForPlace(visit: any, place: any): void {
@@ -757,77 +772,96 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  async executeCompleteVisit(remarks: string): Promise<void> {
-    if (!this.selectedVisit || !this.selectedPlace) return;
-
-    try {
-      const location = await this.getCurrentLocation();
-
-      // Collect product IDs checked off in the modal
-      const shownProductIds: number[] = (this.selectedPlace.products || [])
-        .filter((product: any) => product.showProduct === true)
-        .map((product: any) => Number(product.productId));
-
-      // EXACT COMPLETE_VISIT PAYLOAD SCHEME
-      const payload = {
-        visitPlanId: Number(this.selectedVisit.visitPlanId),
-        visitPlanDetailId: Number(this.selectedPlace.visitPlanDetailId),
-        currentLatitude: Number(location.latitude),
-        currentLongitude: Number(location.longitude),
-        visitRemarks: remarks,
-        shownProductIds: shownProductIds
-      };
-
-      console.log('Complete Visit Payload:', payload);
-
-      this.mrService.complete_visit(payload)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res: any) => {
-            if (!res.success) {
-              Swal.fire('Error', res.message || 'Failed to complete place visit.', 'error');
-              return;
-            }
-
-            this.selectedPlace.status = 'Completed';
-
-            const allCompleted = this.selectedVisit.places.every(
-              (p: any) => p.status === 'Completed'
-            );
-            if (allCompleted) {
-              this.selectedVisit.status = 'Completed';
-            }
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Place Visit Completed',
-              text: res.message || 'Location completed successfully!',
-              timer: 1800,
-              showConfirmButton: false
-            });
-
-            this.loadVisits();
-          },
-          error: (err) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: err?.error?.message || 'Server error occurred while completing visit.'
-            });
-          }
-        });
-
-    } catch {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Location Required',
-        text: 'Please enable GPS permissions to record location upon completing visit.'
-      });
-    }
+async executeCompleteVisit(remarks: string): Promise<void> {
+  if (!this.selectedVisit || !this.selectedPlace) {
+    return;
   }
 
+  try {
+    const location = await this.getCurrentLocation();
+
+    const shownProductIds: number[] =
+      (this.selectedPlace.products || [])
+        .filter((product: any) => product.showProduct === true)
+        .map((product: any) => Number(product.productId))
+        .filter((id: number) => id > 0);
+
+    const payload = {
+      visitPlanId: Number(this.selectedVisit.visitPlanId),
+      visitPlanDetailId: Number(this.selectedPlace.visitPlanDetailId),
+      mrId: Number(this.mrId),
+      currentLatitude: Number(location.latitude),
+      currentLongitude: Number(location.longitude),
+      visitRemarks: remarks,
+      shownProductIds: shownProductIds
+    };
+
+    console.log('Complete Customer Visit Payload:', payload);
+
+    this.mrService.complete_visit(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+
+          if (!res.success) {
+            Swal.fire(
+              'Error',
+              res.message || 'Failed to complete place visit.',
+              'error'
+            );
+            return;
+          }
+
+          // Mark only this customer place as completed
+          this.selectedPlace.status = 'Completed';
+
+          // Check whether every customer/place is completed
+          const allCompleted =
+            this.selectedVisit.places?.every(
+              (p: any) => p.status === 'Completed'
+            );
+
+          if (allCompleted) {
+            this.selectedVisit.status = 'Completed';
+          }
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Place Visit Completed',
+            text: res.message || 'Location completed successfully!',
+            timer: 1800,
+            showConfirmButton: false
+          });
+
+          this.loadVisits();
+        },
+
+        error: (err) => {
+          console.error('Complete visit error:', err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              err?.error?.message ||
+              'Server error occurred while completing visit.'
+          });
+        }
+      });
+
+  } catch (error) {
+    console.error('Location error:', error);
+
+    Swal.fire({
+      icon: 'warning',
+      title: 'Location Required',
+      text: 'Please enable GPS permissions to record location upon completing visit.'
+    });
+  }
+}
+
   // ======================================================
-  // ROUTE MAP DISPLAY
+  // ROUTE MAP DISPLAY & LIFECYCLE MANAGEMENT
   // ======================================================
 
   showTracking(visit: any): void {
@@ -847,20 +881,50 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  private destroyTrackingMap(): void {
+    if (this.mapInitTimer) {
+      clearTimeout(this.mapInitTimer);
+      this.mapInitTimer = null;
+    }
+
+    if (this.map) {
+      try {
+        this.map.off();
+        this.map.remove();
+      } catch (error) {
+        console.warn('Leaflet map cleanup error:', error);
+      }
+      this.map = undefined;
+    }
+
+    this.routeLayer = undefined;
+  }
+
   openTrackingMap(): void {
+    this.destroyTrackingMap();
+
+    this.mapContainerId = `trackingMap_${Date.now()}`;
+
     Swal.fire({
       title: 'MR Route & GPS History',
       width: '90%',
-      html: `<div id="trackingMap" style="height:550px; border-radius:12px;"></div>`,
+      html: `
+        <div 
+          id="${this.mapContainerId}" 
+          style="height:550px; width:100%; border-radius:12px; overflow:hidden;">
+        </div>`,
       showConfirmButton: true,
       confirmButtonText: 'Close Map',
+      allowOutsideClick: false,
       didOpen: () => {
-        setTimeout(() => this.loadTrackingMap(), 300);
+        this.mapInitTimer = setTimeout(() => {
+          this.mapInitTimer = null;
+          if (!Swal.isVisible()) return;
+          this.loadTrackingMap();
+        }, 150);
       },
       willClose: () => {
-        if (this.map) {
-          this.map.remove();
-        }
+        this.destroyTrackingMap();
       }
     });
   }
@@ -868,13 +932,12 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   loadTrackingMap(): void {
     if (!this.trackingData || !this.trackingData.session) return;
 
+    const mapElement = document.getElementById(this.mapContainerId);
+    if (!mapElement) return;
+
     const session = this.trackingData.session;
 
-    if (this.map) {
-      this.map.remove();
-    }
-
-    this.map = L.map('trackingMap');
+    this.map = L.map(this.mapContainerId);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -883,8 +946,9 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
 
     const routeCoordinates: L.LatLngExpression[] = [];
 
+    // START POINT
     if (session.startLatitude != null && session.startLongitude != null) {
-      const startLatLng: L.LatLngExpression = [session.startLatitude, session.startLongitude];
+      const startLatLng: L.LatLngExpression = [Number(session.startLatitude), Number(session.startLongitude)];
       routeCoordinates.push(startLatLng);
 
       L.marker(startLatLng)
@@ -892,9 +956,10 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
         .bindPopup(`<b>Visit Started</b><br>Time: ${new Date(session.startTime).toLocaleString()}`);
     }
 
+    // TRACKING PINGS
     if (session.trackingPoints && session.trackingPoints.length > 0) {
       session.trackingPoints.forEach((point: any, index: number) => {
-        const latLng: L.LatLngExpression = [point.latitude, point.longitude];
+        const latLng: L.LatLngExpression = [Number(point.latitude), Number(point.longitude)];
         routeCoordinates.push(latLng);
 
         L.circleMarker(latLng, {
@@ -904,13 +969,14 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
           fillOpacity: 1,
           weight: 2
         })
-          .addTo(this.map)
+          .addTo(this.map!)
           .bindPopup(`<b>Point ${index + 1}</b><br>Time: ${new Date(point.trackedAt).toLocaleString()}`);
       });
     }
 
+    // END POINT
     if (session.endLatitude != null && session.endLongitude != null) {
-      const endLatLng: L.LatLngExpression = [session.endLatitude, session.endLongitude];
+      const endLatLng: L.LatLngExpression = [Number(session.endLatitude), Number(session.endLongitude)];
       routeCoordinates.push(endLatLng);
 
       L.marker(endLatLng)
@@ -921,6 +987,7 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
       L.marker(lastPoint).addTo(this.map).bindPopup(`<b>Current Location</b>`);
     }
 
+    // ROUTE POLYLINE
     if (routeCoordinates.length > 1) {
       this.routeLayer = L.polyline(routeCoordinates, {
         color: '#2563eb',
@@ -930,8 +997,15 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
 
       this.map.fitBounds(this.routeLayer.getBounds(), { padding: [40, 40] });
     } else if (routeCoordinates.length === 1) {
-      this.map.setView(routeCoordinates[0] as L.LatLngExpression, 16);
+      this.map.setView(routeCoordinates[0], 16);
     }
+
+    // Recalculate size to render properly within the SweetAlert modal boundaries
+    setTimeout(() => {
+      if (this.map) {
+        this.map.invalidateSize();
+      }
+    }, 100);
   }
 
   getCurrentLocation(): Promise<any> {
@@ -964,9 +1038,7 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.map) {
-      this.map.remove();
-    }
+    this.destroyTrackingMap();
     this.stopTracking();
     this.destroy$.next();
     this.destroy$.complete();

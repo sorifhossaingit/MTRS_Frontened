@@ -151,7 +151,7 @@
                 <!-- ALL CUSTOMERS LIST -->
                 <td class="px-4 py-3.5">
                   <div class="flex flex-col gap-1 max-w-xs">
-                    @for (place of visit.places; track place.customerId || $index) {
+                    @for (place of visit.places; track place.visitPlanDetailId || $index) {
                       <div class="text-xs">
                         <span class="font-semibold text-slate-800">{{ getCustomerName(place.customerId) || visit.customerName }}</span>
                         @if (place.address || visit.address) {
