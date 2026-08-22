@@ -9,7 +9,7 @@
       <div>
         <h1 class="text-xl font-bold text-slate-800">MR & Customer Reports</h1>
         <p class="text-sm text-slate-500">
-          Select date ranges and relevant entities to generate PDF reports.
+          Select date ranges and relevant entities to preview and generate PDF reports.
         </p>
       </div>
     </div>
@@ -60,7 +60,7 @@
           Medical Representative Options
         </label>
 
-        <!-- ADDED: MR Search Input -->
+        <!-- MR Search Input -->
         <div>
           <label class="block text-xs text-slate-500 mb-1">Search MR (By Name or Mobile)</label>
           <div class="relative">
@@ -114,18 +114,18 @@
           <button type="button" (click)="generateVisitReportPdf()"
             [disabled]="downloadingVisitPdf || !selectedMrId || !fromDate || !toDate || ratePerKm === null || ratePerKm < 0"
             class="flex-1 inline-flex justify-center items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-            <lucide-icon [img]="Download" class="w-4 h-4 mr-2" *ngIf="!downloadingVisitPdf"></lucide-icon>
+            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingVisitPdf"></lucide-icon>
             <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingVisitPdf"></lucide-icon>
-            <span>{{ downloadingVisitPdf ? 'Generating...' : 'Download Visit Report PDF' }}</span>
+            <span>{{ downloadingVisitPdf ? 'Loading Preview...' : 'Preview Visit Report' }}</span>
           </button>
 
           <!-- MR PDF BUTTON -->
           <button type="button" (click)="generateMrPdf()"
             [disabled]="downloadingMrPdf || !selectedMrId || !fromDate || !toDate"
             class="flex-1 inline-flex justify-center items-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-            <lucide-icon [img]="FileDown" class="w-4 h-4 mr-2" *ngIf="!downloadingMrPdf"></lucide-icon>
+            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingMrPdf"></lucide-icon>
             <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingMrPdf"></lucide-icon>
-            <span>{{ downloadingMrPdf ? 'Generating...' : 'Download MR PDF' }}</span>
+            <span>{{ downloadingMrPdf ? 'Loading Preview...' : 'Preview MR Report' }}</span>
           </button>
         </div>
       </div>
@@ -180,14 +180,49 @@
           <button type="button" (click)="generateCustomerPdf()"
             [disabled]="downloadingCustomerPdf || !selectedCustomerId || !fromDate || !toDate"
             class="w-full inline-flex justify-center items-center px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-            <lucide-icon [img]="FileDown" class="w-4 h-4 mr-2" *ngIf="!downloadingCustomerPdf"></lucide-icon>
+            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingCustomerPdf"></lucide-icon>
             <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingCustomerPdf"></lucide-icon>
-            <span>{{ downloadingCustomerPdf ? 'Generating...' : 'Download Customer Report PDF' }}</span>
+            <span>{{ downloadingCustomerPdf ? 'Loading Preview...' : 'Preview Customer Report' }}</span>
           </button>
         </div>
 
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div *ngIf="showPreviewModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+    
+    <!-- Modal Header -->
+    <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+      <div>
+        <h3 class="text-base font-semibold text-slate-800">{{ previewTitle }}</h3>
+        <p class="text-xs text-slate-500">{{ pendingFilename }}</p>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Download Button -->
+        <button (click)="confirmDownload()"
+          class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+          <lucide-icon [img]="Download" class="w-4 h-4 mr-1.5"></lucide-icon>
+          Download PDF
+        </button>
+
+        <!-- Close Button -->
+        <button (click)="closePreviewModal()"
+          class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
+          <lucide-icon [img]="X" class="w-5 h-5"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Body (Embedded PDF Viewer) -->
+    <div class="flex-1 bg-slate-100 relative">
+      <iframe *ngIf="previewUrl" [src]="previewUrl" class="w-full h-full border-none"></iframe>
+    </div>
+
   </div>
 </div>

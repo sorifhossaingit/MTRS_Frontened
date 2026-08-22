@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import {
   FileText,
@@ -15,7 +14,9 @@ import {
   FileDown,
   Loader2,
   Users,
-  Search
+  Search,
+  Eye,
+  X
 } from 'lucide-angular';
 
 import { environment } from '../../../../../environments/environment';
@@ -51,7 +52,7 @@ interface ApiResponse<T> {
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css'
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, OnDestroy {
 
   // Lucide icons
   readonly FileText = FileText;
@@ -64,6 +65,8 @@ export class ReportsComponent implements OnInit {
   readonly Loader2 = Loader2;
   readonly Users = Users;
   readonly Search = Search;
+  readonly Eye = Eye;
+  readonly X = X;
 
   private apiUrl = environment.apiUrl;
 
@@ -81,7 +84,7 @@ export class ReportsComponent implements OnInit {
   customerSearchTerm = '';
   private customerSearchSubject = new Subject<string>();
 
-  // Date & Config Controls
+  // Date & Config Controls (Initialized in ngOnInit)
   fromDate = '';
   toDate = '';
   ratePerKm: number | null = null;
@@ -93,11 +96,25 @@ export class ReportsComponent implements OnInit {
   downloadingMrPdf = false;
   downloadingCustomerPdf = false;
 
+  // Preview Modal States
+  showPreviewModal = false;
+  previewUrl: SafeResourceUrl | null = null;
+  rawPreviewUrl: string | null = null;
+  pendingBlob: Blob | null = null;
+  pendingFilename = '';
+  previewTitle = '';
+
   errorMessage = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
+    // Set default dates for current month
+    this.setDefaultDates();
+
     const aid = localStorage.getItem('aid');
     this.agencyId = aid ? Number(aid) : 0;
 
@@ -108,7 +125,6 @@ export class ReportsComponent implements OnInit {
       this.errorMessage = 'Agency ID not found in localStorage.';
     }
 
-    // Debounce MR search input (300ms delay)
     this.mrSearchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -116,7 +132,6 @@ export class ReportsComponent implements OnInit {
       this.fetchMedicalRepresentatives(term);
     });
 
-    // Debounce Customer search input (300ms delay)
     this.customerSearchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -126,15 +141,38 @@ export class ReportsComponent implements OnInit {
   }
 
   /**
-   * Fetch Active MR dropdown list with optional search term
+   * Sets default dates:
+   * fromDate = First day of current month (YYYY-MM-01)
+   * toDate = Current day (YYYY-MM-DD)
    */
+  private setDefaultDates(): void {
+    const today = new Date();
+    
+    // First day of current month
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    this.fromDate = this.formatDateToYYYYMMDD(firstDay);
+
+    // Current date
+    this.toDate = this.formatDateToYYYYMMDD(today);
+  }
+
+  private formatDateToYYYYMMDD(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupPreviewUrl();
+  }
+
   fetchMedicalRepresentatives(searchTerm: string = ''): void {
     this.loadingMRs = true;
     this.errorMessage = '';
 
     let params = new HttpParams().set('agencyId', this.agencyId.toString());
 
-    // ADDED: Set 'search' query param if non-empty
     if (searchTerm.trim()) {
       params = params.set('search', searchTerm.trim());
     }
@@ -165,9 +203,6 @@ export class ReportsComponent implements OnInit {
     this.mrSearchSubject.next(term);
   }
 
-  /**
-   * Fetch Customer list
-   */
   fetchCustomers(searchTerm: string = ''): void {
     this.loadingCustomers = true;
 
@@ -205,9 +240,6 @@ export class ReportsComponent implements OnInit {
     this.customerSearchSubject.next(term);
   }
 
-  /**
-   * Generate Visit Report PDF
-   */
   generateVisitReportPdf(): void {
     if (!this.validateVisitReport()) return;
 
@@ -226,22 +258,20 @@ export class ReportsComponent implements OnInit {
     ).subscribe({
       next: (blob) => {
         this.downloadingVisitPdf = false;
-        this.downloadFile(
+        this.openPdfPreview(
           blob,
-          `MR_Visit_Report_${this.selectedMrId}_${this.fromDate}_${this.toDate}.pdf`
+          `MR_Visit_Report_${this.selectedMrId}_${this.fromDate}_${this.toDate}.pdf`,
+          'Visit Report Preview'
         );
       },
       error: (err) => {
         this.downloadingVisitPdf = false;
         console.error('Visit Report PDF error:', err);
-        alert('Failed to download Visit Report PDF.');
+        alert('Failed to generate Visit Report PDF.');
       }
     });
   }
 
-  /**
-   * Generate MR Monthly/Date Range PDF
-   */
   generateMrPdf(): void {
     if (!this.validateDateRange(this.selectedMrId, 'MR')) return;
 
@@ -258,22 +288,20 @@ export class ReportsComponent implements OnInit {
     ).subscribe({
       next: (blob) => {
         this.downloadingMrPdf = false;
-        this.downloadFile(
+        this.openPdfPreview(
           blob,
-          `MR_Report_${this.selectedMrId}_${this.fromDate}_${this.toDate}.pdf`
+          `MR_Report_${this.selectedMrId}_${this.fromDate}_${this.toDate}.pdf`,
+          'Medical Representative Report Preview'
         );
       },
       error: (err) => {
         this.downloadingMrPdf = false;
         console.error('MR PDF error:', err);
-        alert('Failed to download MR PDF.');
+        alert('Failed to generate MR PDF.');
       }
     });
   }
 
-  /**
-   * Generate Customer PDF
-   */
   generateCustomerPdf(): void {
     if (!this.validateDateRange(this.selectedCustomerId, 'Customer')) return;
 
@@ -290,17 +318,62 @@ export class ReportsComponent implements OnInit {
     ).subscribe({
       next: (blob) => {
         this.downloadingCustomerPdf = false;
-        this.downloadFile(
+        this.openPdfPreview(
           blob,
-          `Customer_Report_${this.selectedCustomerId}_${this.fromDate}_${this.toDate}.pdf`
+          `Customer_Report_${this.selectedCustomerId}_${this.fromDate}_${this.toDate}.pdf`,
+          'Customer Report Preview'
         );
       },
       error: (err) => {
         this.downloadingCustomerPdf = false;
         console.error('Customer PDF error:', err);
-        alert('Failed to download Customer PDF.');
+        alert('Failed to generate Customer PDF.');
       }
     });
+  }
+
+  private openPdfPreview(blob: Blob, filename: string, title: string): void {
+    if (!blob || blob.size === 0) {
+      alert('Generated PDF is empty.');
+      return;
+    }
+
+    this.cleanupPreviewUrl();
+
+    this.pendingBlob = blob;
+    this.pendingFilename = filename;
+    this.previewTitle = title;
+
+    const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+    this.rawPreviewUrl = window.URL.createObjectURL(pdfBlob);
+    this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.rawPreviewUrl);
+    this.showPreviewModal = true;
+  }
+
+  confirmDownload(): void {
+    if (!this.pendingBlob || !this.pendingFilename) return;
+
+    const anchor = document.createElement('a');
+    anchor.href = this.rawPreviewUrl || window.URL.createObjectURL(this.pendingBlob);
+    anchor.download = this.pendingFilename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  }
+
+  closePreviewModal(): void {
+    this.showPreviewModal = false;
+    this.cleanupPreviewUrl();
+  }
+
+  private cleanupPreviewUrl(): void {
+    if (this.rawPreviewUrl) {
+      window.URL.revokeObjectURL(this.rawPreviewUrl);
+      this.rawPreviewUrl = null;
+    }
+    this.previewUrl = null;
+    this.pendingBlob = null;
+    this.pendingFilename = '';
   }
 
   private validateVisitReport(): boolean {
@@ -330,23 +403,5 @@ export class ReportsComponent implements OnInit {
       return false;
     }
     return true;
-  }
-
-  private downloadFile(blob: Blob, filename: string): void {
-    if (!blob || blob.size === 0) {
-      alert('Generated PDF is empty.');
-      return;
-    }
-    const url = window.URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-
-    setTimeout(() => {
-      window.URL.revokeObjectURL(url);
-    }, 100);
   }
 }
