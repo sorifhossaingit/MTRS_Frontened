@@ -1,0 +1,1019 @@
+
+<div class="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
+  <div class="mx-auto max-w-7xl">
+
+    <!-- HEADER -->
+    <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-sm">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M7 3h8l4 4v14H7a2 2 0 01-2-2V5a2 2 0 012-2z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M14 3v5h5M9 13h6M9 17h6"
+              />
+            </svg>
+          </div>
+
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900">
+              Visit Expense Reports
+            </h1>
+            <p class="mt-1 text-sm text-slate-500">
+              Monthly MR travel expenses, PDF preview and approval management
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button
+          type="button"
+          (click)="loadReports()"
+          [disabled]="loadingReports"
+          class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+        >
+          <svg
+            class="h-4 w-4"
+            [class.animate-spin]="loadingReports"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h5M20 20v-5h-5M5.5 9A7.5 7.5 0 0118 6.5L20 9M18.5 15A7.5 7.5 0 016 17.5L4 15"
+            />
+          </svg>
+          Refresh
+        </button>
+
+        <button
+          type="button"
+          (click)="toggleCreateForm()"
+          class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
+        >
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 5v14M5 12h14"
+            />
+          </svg>
+          Create Report
+        </button>
+      </div>
+    </div>
+
+
+    <!-- SUCCESS ALERT -->
+    @if (successMessage) {
+      <div
+        class="mb-5 flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800"
+      >
+        <div class="flex-1 text-sm font-medium">
+          {{ successMessage }}
+        </div>
+
+        <button
+          type="button"
+          (click)="closeSuccess()"
+          class="text-lg text-emerald-600 hover:text-emerald-900"
+        >
+          ×
+        </button>
+      </div>
+    }
+
+
+    <!-- ERROR ALERT -->
+    @if (errorMessage) {
+      <div
+        class="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-red-800"
+      >
+        <div class="flex-1 text-sm font-medium">
+          {{ errorMessage }}
+        </div>
+
+        <button
+          type="button"
+          (click)="closeError()"
+          class="text-lg text-red-600 hover:text-red-900"
+        >
+          ×
+        </button>
+      </div>
+    }
+
+
+    <!-- ========================================================= -->
+    <!-- CREATE REPORT FORM -->
+    <!-- ========================================================= -->
+
+    @if (showCreateForm) {
+
+      <!-- IMPORTANT:
+           overflow-visible prevents MR dropdown from being clipped -->
+      <div
+        class="relative z-40 mb-6 overflow-visible rounded-2xl border border-slate-200 bg-white shadow-sm"
+      >
+
+        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+          <h2 class="font-bold text-slate-900">
+            Create Monthly Visit Expense Report
+          </h2>
+
+          <p class="mt-1 text-xs text-slate-500">
+            Generate a monthly expense report for an MR
+          </p>
+        </div>
+
+
+        <form
+          (ngSubmit)="createMonthlyReport()"
+          class="relative z-40 p-5"
+        >
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+
+            <!-- ===================================================== -->
+            <!-- MEDICAL REPRESENTATIVE -->
+            <!-- ===================================================== -->
+
+            <div class="relative z-50">
+
+              <label
+                class="block text-xs font-semibold uppercase text-slate-600"
+              >
+                Select Medical Representative *
+              </label>
+
+
+              <!-- SELECTED MR TRIGGER -->
+              <div
+                (click)="toggleMrDropdown()"
+                class="mt-1 flex min-h-[48px] cursor-pointer items-center justify-between rounded-xl border border-slate-300 bg-white p-2.5 text-sm transition hover:border-slate-400"
+              >
+
+                @if (selectedMr) {
+
+                  <div class="min-w-0 flex flex-col truncate">
+                    <span class="truncate font-semibold text-slate-900">
+                      {{ selectedMr.name }}
+                    </span>
+
+                    <span class="truncate text-xs text-slate-500">
+                      📞 {{ selectedMr.mobile }}
+                      <span class="mx-1">|</span>
+                      📍 {{ selectedMr.address }}
+                    </span>
+                  </div>
+
+                } @else {
+
+                  <span class="text-slate-400">
+                    -- Select Medical Representative --
+                  </span>
+
+                }
+
+
+                <div class="ml-2 flex shrink-0 items-center gap-1.5">
+
+                  @if (selectedMr) {
+
+                    <button
+                      type="button"
+                      (click)="clearSelectedMr($event)"
+                      class="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                    >
+                      ✕
+                    </button>
+
+                  }
+
+                  <svg
+                    class="h-4 w-4 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+
+                </div>
+
+              </div>
+
+
+              <!-- ================================================= -->
+              <!-- SEARCHABLE MR DROPDOWN -->
+              <!-- ================================================= -->
+
+              @if (isMrDropdownOpen) {
+
+                <div
+                  class="absolute left-0 right-0 top-full z-[100] mt-1 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl"
+                >
+
+                  <!-- SEARCH -->
+                  <div class="border-b border-slate-100 bg-slate-50 p-2">
+
+                    <input
+                      type="text"
+                      [value]="mrSearchQuery"
+                      (input)="onMrSearchInput($event)"
+                      placeholder="Search by name or phone..."
+                      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
+                      autofocus
+                    />
+
+                  </div>
+
+
+                  <!-- ================================================= -->
+                  <!-- FIXED HEIGHT + SCROLL -->
+                  <!-- Dropdown will NOT grow too much -->
+                  <!-- ================================================= -->
+
+                  <div
+                    class="max-h-[220px] overflow-y-auto overscroll-contain divide-y divide-slate-100"
+                  >
+
+                    @if (loadingMrList) {
+
+                      <div class="p-4 text-center text-xs font-medium text-slate-500">
+                        <div class="flex items-center justify-center gap-2">
+
+                          <svg
+                            class="h-4 w-4 animate-spin"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              class="opacity-25"
+                            ></circle>
+
+                            <path
+                              d="M21 12a9 9 0 00-9-9"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              class="opacity-75"
+                            ></path>
+                          </svg>
+
+                          Searching representatives...
+
+                        </div>
+                      </div>
+
+                    } @else {
+
+                      @for (mr of mrList; track mr.medicalRepresentativeId) {
+
+                        <div
+                          (click)="selectMr(mr)"
+                          class="cursor-pointer px-3 py-2.5 transition-colors hover:bg-slate-50"
+                        >
+
+                          <div class="truncate text-sm font-semibold text-slate-800">
+                            {{ mr.name }}
+                          </div>
+
+                          <div
+                            class="mt-0.5 flex items-center justify-between gap-3 text-xs text-slate-500"
+                          >
+
+                            <span class="shrink-0">
+                              📞 {{ mr.mobile }}
+                            </span>
+
+                            <span class="min-w-0 truncate">
+                              📍 {{ mr.address }}
+                            </span>
+
+                          </div>
+
+                        </div>
+
+                      } @empty {
+
+                        <div class="p-4 text-center text-xs text-slate-500">
+                          No medical representatives found.
+                        </div>
+
+                      }
+
+                    }
+
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+
+            <!-- ===================================================== -->
+            <!-- MONTH -->
+            <!-- ===================================================== -->
+
+            <div class="relative z-10">
+
+              <label
+                class="block text-xs font-semibold uppercase text-slate-600"
+              >
+                Month
+              </label>
+
+              <select
+                [(ngModel)]="createRequest.reportMonth"
+                name="reportMonth"
+                class="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+              >
+
+                @for (m of months; track m.value) {
+
+                  <option [value]="m.value">
+                    {{ m.name }}
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+
+            <!-- ===================================================== -->
+            <!-- YEAR -->
+            <!-- ===================================================== -->
+
+            <div class="relative z-10">
+
+              <label
+                class="block text-xs font-semibold uppercase text-slate-600"
+              >
+                Year
+              </label>
+
+              <select
+                [(ngModel)]="createRequest.reportYear"
+                name="reportYear"
+                class="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+              >
+
+                @for (y of years; track y) {
+
+                  <option [value]="y">
+                    {{ y }}
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+
+            <!-- ===================================================== -->
+            <!-- RATE PER KM -->
+            <!-- ===================================================== -->
+
+            <div>
+
+              <label
+                class="block text-xs font-semibold uppercase text-slate-600"
+              >
+                Rate per KM (₹)
+              </label>
+
+              <input
+                type="number"
+                [(ngModel)]="createRequest.ratePerKm"
+                name="ratePerKm"
+                class="mt-1 w-full rounded-xl border border-slate-300 p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+                placeholder="e.g. 12"
+                required
+              />
+
+            </div>
+
+
+            <!-- ===================================================== -->
+            <!-- REPORT TYPE -->
+            <!-- ===================================================== -->
+
+            <div>
+
+              <label
+                class="block text-xs font-semibold uppercase text-slate-600"
+              >
+                Report Type
+              </label>
+
+              <select
+                [(ngModel)]="createRequest.reportType"
+                (change)="onReportTypeChange()"
+                name="reportType"
+                class="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+              >
+
+                @for (t of reportTypes; track t.value) {
+
+                  <option [value]="t.value">
+                    {{ t.label }}
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+
+            <!-- ===================================================== -->
+            <!-- EARLY CLOSURE DATE -->
+            <!-- ===================================================== -->
+
+            @if (createRequest.reportType === 'EARLY_CLOSURE') {
+
+              <div>
+
+                <label
+                  class="block text-xs font-semibold uppercase text-slate-600"
+                >
+                  Closure Date
+                </label>
+
+                <input
+                  type="date"
+                  [(ngModel)]="createRequest.closureDate"
+                  name="closureDate"
+                  class="mt-1 w-full rounded-xl border border-slate-300 p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+                  required
+                />
+
+              </div>
+
+            }
+
+          </div>
+
+
+          <!-- ===================================================== -->
+          <!-- CLOSURE REASON -->
+          <!-- ===================================================== -->
+
+          @if (createRequest.reportType === 'EARLY_CLOSURE') {
+
+            <div class="mt-4">
+
+              <label
+                class="block text-xs font-semibold uppercase text-slate-600"
+              >
+                Closure Reason
+              </label>
+
+              <textarea
+                [(ngModel)]="createRequest.closureReason"
+                name="closureReason"
+                rows="2"
+                class="mt-1 w-full rounded-xl border border-slate-300 p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+                placeholder="Reason for early closure"
+                required
+              ></textarea>
+
+            </div>
+
+          }
+
+
+          <!-- ===================================================== -->
+          <!-- FORM BUTTONS -->
+          <!-- ===================================================== -->
+
+          <div class="mt-5 flex justify-end gap-2">
+
+            <button
+              type="button"
+              (click)="toggleCreateForm()"
+              class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              [disabled]="creatingReport"
+              class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
+            >
+              {{ creatingReport ? 'Generating...' : 'Generate Report' }}
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    }
+
+
+    <!-- ========================================================= -->
+    <!-- FILTERS -->
+    <!-- ========================================================= -->
+
+    <div
+      class="relative z-10 mb-6 flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+    >
+
+      <!-- MONTH -->
+      <div>
+
+        <label class="block text-xs font-medium text-slate-500">
+          Month
+        </label>
+
+        <select
+          [(ngModel)]="selectedMonth"
+          (change)="onFilterChange()"
+          class="mt-1 rounded-xl border border-slate-300 bg-white p-2 text-sm focus:border-slate-900 focus:outline-none"
+        >
+
+          @for (m of months; track m.value) {
+
+            <option [value]="m.value">
+              {{ m.name }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- YEAR -->
+      <div>
+
+        <label class="block text-xs font-medium text-slate-500">
+          Year
+        </label>
+
+        <select
+          [(ngModel)]="selectedYear"
+          (change)="onFilterChange()"
+          class="mt-1 rounded-xl border border-slate-300 bg-white p-2 text-sm focus:border-slate-900 focus:outline-none"
+        >
+
+          @for (y of years; track y) {
+
+            <option [value]="y">
+              {{ y }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- STATUS -->
+      <div>
+
+        <label class="block text-xs font-medium text-slate-500">
+          Status
+        </label>
+
+        <select
+          [(ngModel)]="selectedStatus"
+          (change)="onFilterChange()"
+          class="mt-1 rounded-xl border border-slate-300 bg-white p-2 text-sm focus:border-slate-900 focus:outline-none"
+        >
+
+          @for (s of statusOptions; track s.value) {
+
+            <option [value]="s.value">
+              {{ s.label }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- REPORTS LIST TABLE -->
+    <!-- ========================================================= -->
+
+    <div
+      class="relative z-10 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-left text-sm text-slate-600">
+
+          <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+
+            <tr>
+
+              <th class="p-4">
+                Report ID
+              </th>
+
+              <th class="p-4">
+                MR Details
+              </th>
+
+              <th class="p-4">
+                Period
+              </th>
+
+              <th class="p-4">
+                Distance
+              </th>
+
+              <th class="p-4">
+                Expense
+              </th>
+
+              <th class="p-4">
+                Status
+              </th>
+
+              <th class="p-4 text-right">
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody class="divide-y divide-slate-200">
+
+            @for (report of reports; track report.reportId) {
+
+              <tr class="hover:bg-slate-50/50">
+
+                <!-- REPORT ID -->
+                <td class="p-4 font-semibold text-slate-900">
+                  #{{ report.reportId }}
+                </td>
+
+
+                <!-- MR DETAILS -->
+                <td class="p-4">
+
+                  <div class="font-medium text-slate-900">
+                    {{ report.mrName || ('MR #' + report.mrId) }}
+                  </div>
+
+                  <div class="text-xs text-slate-500">
+                    {{ report.mrEmail || '-' }}
+                  </div>
+
+                </td>
+
+
+                <!-- PERIOD -->
+                <td class="p-4">
+                  {{ getMonthName(report.reportMonth) }}
+                  {{ report.reportYear }}
+                </td>
+
+
+                <!-- DISTANCE -->
+                <td class="p-4">
+                  {{ formatNumber(report.totalDistanceKm) }} km
+                </td>
+
+
+                <!-- EXPENSE -->
+                <td class="p-4 font-semibold text-slate-900">
+                  {{ formatCurrency(report.totalExpense) }}
+                </td>
+
+
+                <!-- STATUS -->
+                <td class="p-4">
+
+                  <span
+                    class="rounded-lg border px-2.5 py-1 text-xs font-semibold"
+                    [class]="getStatusClass(report.reportStatus)"
+                  >
+                    {{ getStatusLabel(report.reportStatus) }}
+                  </span>
+
+                </td>
+
+
+                <!-- ACTIONS -->
+                <td class="p-4 text-right">
+
+                  <div class="flex items-center justify-end gap-2">
+
+                    <!-- PDF -->
+                    <button
+                      type="button"
+                      (click)="previewReport(report)"
+                      class="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                    >
+                      PDF
+                    </button>
+
+
+                    <!-- APPROVE / REJECT -->
+                    @if (canApprove(report)) {
+
+                      <button
+                        type="button"
+                        (click)="openApproveModal(report)"
+                        class="rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-emerald-700"
+                      >
+                        Approve
+                      </button>
+
+                      <button
+                        type="button"
+                        (click)="openRejectModal(report)"
+                        class="rounded-lg bg-red-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-700"
+                      >
+                        Reject
+                      </button>
+
+                    }
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+
+                <td
+                  colspan="7"
+                  class="p-8 text-center text-slate-500"
+                >
+                  No reports found for the selected period.
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ============================================================= -->
+<!-- PREVIEW PDF MODAL -->
+<!-- ============================================================= -->
+
+@if (showPreviewModal) {
+
+  <div
+    class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+  >
+
+    <div
+      class="flex h-[90vh] w-full max-w-5xl flex-col rounded-2xl bg-white shadow-xl"
+    >
+
+      <!-- HEADER -->
+      <div class="flex items-center justify-between border-b p-4">
+
+        <h3 class="font-bold text-slate-900">
+          PDF Preview
+        </h3>
+
+        <button
+          type="button"
+          (click)="closePreview()"
+          class="text-slate-500 hover:text-slate-900"
+        >
+          ✕
+        </button>
+
+      </div>
+
+
+      <!-- BODY -->
+      <div class="relative flex-1 bg-slate-100">
+
+        @if (previewLoading) {
+
+          <div
+            class="flex h-full items-center justify-center text-sm font-medium text-slate-500"
+          >
+            Loading preview...
+          </div>
+
+        } @else if (previewUrl) {
+
+          <iframe
+            [src]="previewUrl"
+            class="h-full w-full"
+          ></iframe>
+
+        }
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+
+<!-- ============================================================= -->
+<!-- APPROVE MODAL -->
+<!-- ============================================================= -->
+
+@if (showApproveModal) {
+
+  <div
+    class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+  >
+
+    <div
+      class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+    >
+
+      <h3 class="text-lg font-bold text-slate-900">
+        Approve Expense Report
+      </h3>
+
+      <p class="mt-1 text-sm text-slate-500">
+        Are you sure you want to approve report
+        #{{ selectedReport?.reportId }}?
+      </p>
+
+
+      <!-- REMARKS -->
+      <div class="mt-4">
+
+        <label
+          class="block text-xs font-semibold uppercase text-slate-600"
+        >
+          Remarks (Optional)
+        </label>
+
+        <textarea
+          [(ngModel)]="approveRemarks"
+          rows="3"
+          class="mt-1 w-full rounded-xl border border-slate-300 p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+          placeholder="Add approval remarks..."
+        ></textarea>
+
+      </div>
+
+
+      <!-- BUTTONS -->
+      <div class="mt-6 flex justify-end gap-2">
+
+        <button
+          type="button"
+          (click)="closeApproveModal()"
+          class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          (click)="approveReport()"
+          [disabled]="approving"
+          class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+        >
+          {{ approving ? 'Approving...' : 'Confirm Approval' }}
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+
+<!-- ============================================================= -->
+<!-- REJECT MODAL -->
+<!-- ============================================================= -->
+
+@if (showRejectModal) {
+
+  <div
+    class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+  >
+
+    <div
+      class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+    >
+
+      <h3 class="text-lg font-bold text-slate-900">
+        Reject Expense Report
+      </h3>
+
+      <p class="mt-1 text-sm text-slate-500">
+        Provide a reason for rejecting report
+        #{{ selectedReport?.reportId }}.
+      </p>
+
+
+      <!-- REJECTION REASON -->
+      <div class="mt-4">
+
+        <label
+          class="block text-xs font-semibold uppercase text-slate-600"
+        >
+          Rejection Reason *
+        </label>
+
+        <textarea
+          [(ngModel)]="rejectionReason"
+          rows="3"
+          class="mt-1 w-full rounded-xl border border-slate-300 p-2.5 text-sm focus:border-slate-900 focus:outline-none"
+          placeholder="Reason for rejection..."
+          required
+        ></textarea>
+
+      </div>
+
+
+      <!-- BUTTONS -->
+      <div class="mt-6 flex justify-end gap-2">
+
+        <button
+          type="button"
+          (click)="closeRejectModal()"
+          class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          (click)="rejectReport()"
+          [disabled]="rejecting"
+          class="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+        >
+          {{ rejecting ? 'Rejecting...' : 'Confirm Rejection' }}
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

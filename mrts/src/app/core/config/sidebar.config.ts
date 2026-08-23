@@ -25,7 +25,7 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/super-admin-master/user-control',
         roles: ['Superadmin']
       },
-      
+
     ]
   },
   {
@@ -124,7 +124,7 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/stockist-master/stockist-product-dashboard',
         roles: ['Stockist']
       },
-            {
+      {
         label: 'Stockist Personal Product',
         icon: 'Pill',
         route: '/stockist-master/stockiest-personal-product',
@@ -174,7 +174,7 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Representative Master',
     icon: 'Users', // group of representatives
     route: '/medical-representative-master',
-    roles: ['MR' , 'Manager'],
+    roles: ['MR', 'Manager'],
     children: [
       {
         label: 'Representative Master Dashboard',
@@ -194,7 +194,7 @@ export const MENU_ITEMS: MenuItem[] = [
         route: '/medical-representative-master/add-medical-representative',
         roles: ['Manager']
       },
-            {
+      {
         label: 'Customer Dashboard',
         icon: 'UserPlus', // add new MR
         route: '/medical-representative-master/customer-dashboard',
@@ -232,7 +232,7 @@ export const MENU_ITEMS: MenuItem[] = [
       }
     ]
   },
- 
+
   {
     label: 'Visits',
     icon: 'map-pin',
@@ -249,7 +249,7 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Add Visit',
         icon: 'CalendarPlus',
         route: '/visits/add-visit',
-        roles: ['MRR']
+        roles: ['MR']
       },
       {
         label: 'Assign Visit',
@@ -260,12 +260,27 @@ export const MENU_ITEMS: MenuItem[] = [
 
     ]
   },
-  {
-    label: 'Reports',
-    icon: 'file-text',
-    route: '/reports',
-    roles: ['Admin']
-  },
+{
+  label: 'Reports',
+  icon: 'file-text',
+  route: '/reports',
+  roles: ['Admin'],
+  children: [
+    {
+      label: 'Report Dashboard',
+      icon: 'bar-chart-3',
+      route: '/reports/Report-dashboard',
+      roles: ['Admin', 'MR']
+    },
+    {
+      label: 'Monthly Report Dashboard',
+      icon: 'CalendarPlus',
+      route: '/reports/monthly-Report-dashboard',
+      roles: ['Admin', 'MR']
+    }
+  ]
+},
+
   {
     label: 'Attendance',
     icon: 'clock',

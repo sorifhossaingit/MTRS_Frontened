@@ -5,11 +5,13 @@ import { ReportsRoutingModule } from './reports-routing.module';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MonthlyReportComponent } from './pages/monthly-report/monthly-report.component';
 
 
 @NgModule({
   declarations: [
-    ReportsComponent
+    ReportsComponent,
+    MonthlyReportComponent
   ],
   imports: [
     CommonModule,
