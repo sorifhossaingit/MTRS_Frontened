@@ -1,45 +1,64 @@
-<div class="max-w-4xl mx-auto p-6 space-y-6">
+<div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
 
   <!-- ============================================================
        HEADER
   ============================================================ -->
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
 
-    <div class="flex items-center space-x-3">
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
-      <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
-        <lucide-icon
-          [img]="FileText"
-          class="w-6 h-6">
+    <div class="px-6 py-5 bg-gradient-to-r from-blue-50 via-white to-indigo-50">
+
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+        <div class="flex items-center gap-4">
+
+          <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
+
+            <lucide-icon [img]="FileText" class="w-6 h-6">
+            </lucide-icon>
+
+          </div>
+
+          <div>
+
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800">
+              MR & Customer Reports
+            </h1>
+
+            <p class="text-sm text-slate-500 mt-1">
+              Select dates, medical representative and generate reports.
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- ADMIN BADGE -->
+
+        <div *ngIf="showKmRateAdmin"
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+
+          KM Rate Administrator
+
+        </div>
+
+      </div>
+
+      <!-- ERROR -->
+
+      <div *ngIf="errorMessage"
+        class="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg flex items-center gap-2 text-sm">
+
+        <lucide-icon [img]="AlertCircle" class="w-5 h-5 flex-shrink-0">
         </lucide-icon>
+
+        <span>
+          {{ errorMessage }}
+        </span>
+
       </div>
-
-      <div>
-        <h1 class="text-xl font-bold text-slate-800">
-          MR & Customer Reports
-        </h1>
-
-        <p class="text-sm text-slate-500">
-          Select date ranges and relevant entities to preview and generate PDF reports.
-        </p>
-      </div>
-
-    </div>
-
-
-    <!-- ERROR ALERT -->
-    <div
-      *ngIf="errorMessage"
-      class="mt-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-md text-sm flex items-center space-x-2">
-
-      <lucide-icon
-        [img]="AlertCircle"
-        class="w-5 h-5 flex-shrink-0">
-      </lucide-icon>
-
-      <span>
-        {{ errorMessage }}
-      </span>
 
     </div>
 
@@ -47,271 +66,718 @@
 
 
   <!-- ============================================================
-       MAIN FORM CONTAINER
+       MAIN FORM
   ============================================================ -->
-  <div
-    class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
       <!-- ========================================================
            FROM DATE
       ======================================================== -->
-      <div>
 
-        <label class="block text-sm font-medium text-slate-700 mb-2">
+ <div>
+  <label class="block text-sm font-semibold text-slate-700 mb-2">
+    From Date
+    <span class="text-red-500">*</span>
+  </label>
 
-          From Date
+  <div class="relative">
+    <input
+      type="date"
+      [(ngModel)]="fromDate"
+      (ngModelChange)="onFromDateChange()"
+      name="fromDate"
+      class="w-full pl-12 pr-12 py-3 bg-slate-50 border border-slate-300
+             rounded-xl text-sm transition
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             focus:border-blue-500"
+    />
 
-          <span class="text-red-500">
-            *
-          </span>
-
-        </label>
-
-        <div class="relative">
-
-          <input
-            type="date"
-            [(ngModel)]="fromDate"
-            name="fromDate"
-            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
-
-          <div
-            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-
-            <lucide-icon
-              [img]="Calendar"
-              class="w-5 h-5">
-            </lucide-icon>
-
-          </div>
-
-        </div>
-
-      </div>
-
+    <lucide-icon
+      [img]="Calendar"
+      class="absolute inset-y-0 left-3.5 flex items-center
+             w-5 h-full text-slate-400 pointer-events-none">
+    </lucide-icon>
+  </div>
+</div>
 
       <!-- ========================================================
            TO DATE
       ======================================================== -->
-      <div>
 
-        <label class="block text-sm font-medium text-slate-700 mb-2">
+<div>
+  <label class="block text-sm font-semibold text-slate-700 mb-2">
+    To Date
+    <span class="text-red-500">*</span>
+  </label>
 
-          To Date
+  <div class="relative">
+    <input
+      type="date"
+      [(ngModel)]="toDate"
+      name="toDate"
+      class="w-full pl-12 pr-12 py-3 bg-slate-50 border border-slate-300
+             rounded-xl text-sm transition
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             focus:border-blue-500"
+    />
 
-          <span class="text-red-500">
-            *
-          </span>
+    <lucide-icon
+      [img]="Calendar"
+      class="absolute inset-y-0 left-3.5 flex items-center
+             w-5 h-full text-slate-400 pointer-events-none">
+    </lucide-icon>
+  </div>
+</div>
 
-        </label>
+      <!-- ========================================================
+           MR SECTION
+      ======================================================== -->
 
-        <div class="relative">
+      <div class="md:col-span-2 mt-2 border-t border-slate-200 pt-6">
 
-          <input
-            type="date"
-            [(ngModel)]="toDate"
-            name="toDate"
-            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
+        <div class="flex items-center gap-2 mb-4">
 
-          <div
-            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
 
-            <lucide-icon
-              [img]="Calendar"
-              class="w-5 h-5">
+            <lucide-icon [img]="User" class="w-4 h-4">
+            </lucide-icon>
+
+          </div>
+
+          <div>
+
+            <h2 class="font-bold text-slate-800">
+              Medical Representative
+            </h2>
+
+            <p class="text-xs text-slate-500">
+              Select the representative for the report.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div *ngIf="!isSpecialRole()" class="mb-4">
+
+          <label class="block text-xs font-medium text-slate-600 mb-1.5">
+
+            Search Medical Representative
+
+          </label>
+
+          <div class="relative">
+
+            <input type="text" [(ngModel)]="mrSearchTerm" name="mrSearchTerm" (ngModelChange)="onMrSearchChange($event)"
+              placeholder="Search by name or mobile..." class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl
+                     text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+            <lucide-icon [img]="Search" class="absolute inset-y-0 left-3 flex items-center w-4 h-full text-slate-400 pointer-events-none">
             </lucide-icon>
 
           </div>
 
         </div>
 
-      </div>
 
+        <!-- DROPDOWN -->
+<div>
 
-      <!-- ========================================================
-           MEDICAL REPRESENTATIVE SECTION
-      ======================================================== -->
-      <div
-        class="col-span-1 md:col-span-2 pt-4 border-t border-slate-100 space-y-4">
+  <label class="block text-xs font-medium text-slate-600 mb-1.5">
+    Select Active Medical Representative
+  </label>
 
-        <label class="block text-sm font-semibold text-slate-800">
+  <div class="relative">
 
-          Medical Representative Options
+    <select
+      [(ngModel)]="selectedMrId"
+      name="selectedMrId"
+      [disabled]="loadingMRs || isSpecialRole()"
+      class="w-full pl-12 pr-10 py-3 bg-slate-50 border border-slate-300 rounded-xl
+             text-sm appearance-none focus:outline-none focus:ring-2
+             focus:ring-blue-500 disabled:opacity-60"
+    >
 
-        </label>
+      <option [ngValue]="null" disabled>
+        {{
+          loadingMRs
+            ? 'Searching Medical Representatives...'
+            : '-- Choose Medical Representative --'
+        }}
+      </option>
 
+      <option
+        *ngFor="let mr of mrList"
+        [ngValue]="mr.medicalRepresentativeId"
+      >
+        {{ mr.name }}
+        ({{ mr.mobile }})
+        {{
+          mr.address
+            ? ' - ' + mr.address
+            : ''
+        }}
+      </option>
 
-        <!-- ======================================================
-             MR SEARCH
-        ====================================================== -->
-        <div>
+    </select>
 
-          <label class="block text-xs text-slate-500 mb-1">
+    <!-- USER ICON -->
+    <lucide-icon
+      [img]="User"
+      class="absolute left-3.5 top-1/2 -translate-y-1/2
+             w-5 h-5 text-slate-400 pointer-events-none z-10">
+    </lucide-icon>
 
-            Search MR (By Name or Mobile)
+  </div>
 
-          </label>
-
-          <div class="relative">
-
-            <input
-              type="text"
-              [(ngModel)]="mrSearchTerm"
-              name="mrSearchTerm"
-              (ngModelChange)="onMrSearchChange($event)"
-              placeholder="Search MR by name or mobile..."
-              class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
-
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-
-              <lucide-icon
-                [img]="Search"
-                class="w-4 h-4">
-              </lucide-icon>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- ======================================================
-             MR DROPDOWN
-        ====================================================== -->
-        <div>
-
-          <label class="block text-xs text-slate-500 mb-1">
-
-            Select Active Medical Representative
-
-          </label>
-
-          <div class="relative">
-
-            <select
-              [(ngModel)]="selectedMrId"
-              name="selectedMrId"
-
-              [disabled]="
-                loadingMRs ||
-                isSpecialRole()
-              "
-
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm disabled:opacity-60 disabled:cursor-not-allowed">
-
-              <!-- PLACEHOLDER -->
-              <option
-                [ngValue]="null"
-                disabled>
-
-                {{
-                  loadingMRs
-                    ? 'Searching Medical Representatives...'
-                    : '-- Choose Medical Representative --'
-                }}
-
-              </option>
-
-
-              <!-- MR LIST -->
-              <option
-                *ngFor="let mr of mrList"
-                [ngValue]="mr.medicalRepresentativeId">
-
-                {{ mr.name }}
-
-                ({{ mr.mobile }})
-
-                {{ mr.address
-                  ? '- ' + mr.address
-                  : ''
-                }}
-
-              </option>
-
-            </select>
-
-
-            <!-- MR ICON -->
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-
-              <lucide-icon
-                [img]="User"
-                class="w-5 h-5"
-                *ngIf="!loadingMRs">
-              </lucide-icon>
-
-              <lucide-icon
-                [img]="Loader2"
-                class="w-5 h-5 animate-spin"
-                *ngIf="loadingMRs">
-              </lucide-icon>
-
-            </div>
-
-          </div>
-
-
-          <!-- AUTO SELECTED MESSAGE -->
-          <div
-            *ngIf="isSpecialRole() && selectedMrId"
-            class="mt-2 flex items-center gap-2 text-xs text-emerald-600">
-
-            <span
-              class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-100">
-
-              ✓
-
-            </span>
-
-            <span>
-              Medical Representative automatically selected
-            </span>
-
-          </div>
-
-        </div>
-
-
+</div>
         <!-- ======================================================
              RATE PER KM
         ====================================================== -->
-        <div>
 
-          <label class="block text-xs text-slate-500 mb-1">
+        <div class="mt-6 rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
 
-            Rate Per KM (₹)
+          <!-- RATE HEADER -->
 
-            <span class="text-slate-400">
-              (Required for Visit Report)
-            </span>
+          <div class="px-5 py-4 bg-gradient-to-r from-slate-50 to-blue-50 border-b border-slate-200">
 
-          </label>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
-          <div class="relative">
+              <div class="flex items-center gap-3">
 
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              placeholder="e.g. 12.50"
-              [(ngModel)]="ratePerKm"
-              name="ratePerKm"
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
+                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
 
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <lucide-icon [img]="IndianRupee" class="w-5 h-5">
+                  </lucide-icon>
 
-              <lucide-icon
-                [img]="IndianRupee"
-                class="w-5 h-5">
+                </div>
+
+                <div>
+
+                  <h3 class="font-bold text-slate-800">
+                    Rate Per KM
+                  </h3>
+
+                  <p class="text-xs text-slate-500 mt-0.5">
+                    Automatically selected according to From Date.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <!-- MONTH BADGE -->
+
+              <div *ngIf="fromDate" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                       bg-white border border-slate-200 text-xs font-semibold text-slate-600">
+
+                <lucide-icon [img]="Calendar" class="w-3.5 h-3.5">
+                </lucide-icon>
+
+                {{ getSelectedRateMonth() }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- CURRENT RATE -->
+
+          <div class="p-5">
+
+            <div *ngIf="loadingKmRate" class="flex items-center justify-center gap-2 py-5 text-sm text-blue-600">
+
+              <lucide-icon [img]="Loader2" class="w-5 h-5 animate-spin">
               </lucide-icon>
+
+              Loading KM rate...
+
+            </div>
+
+
+            <div *ngIf="!loadingKmRate" class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 items-center">
+
+              <div>
+
+                <div class="relative">
+
+                  <input type="number" [value]="ratePerKm ?? ''" readonly [placeholder]="
+                      selectedKmRate
+                        ? ''
+                        : 'No rate configured'
+                    " class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200
+                           rounded-xl text-lg font-bold text-slate-800
+                           cursor-default">
+
+                  <lucide-icon [img]="IndianRupee"
+                    class="absolute inset-y-0 left-3.5 flex items-center w-5 h-full text-slate-400 pointer-events-none">
+                  </lucide-icon>
+
+                </div>
+
+              </div>
+
+
+              <!-- RATE STATUS -->
+
+              <div *ngIf="ratePerKm !== null" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl
+                       bg-emerald-50 border border-emerald-200 text-emerald-700">
+
+                <span class="w-2 h-2 rounded-full bg-emerald-500">
+                </span>
+
+                <span class="text-sm font-semibold">
+                  Active Rate
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- RATE MESSAGE -->
+
+            <div *ngIf="!loadingKmRate" class="mt-3">
+
+              <div *ngIf="ratePerKm !== null" class="flex items-center gap-2 text-sm text-emerald-600">
+
+                <span>✓</span>
+
+                <span>
+                  {{ kmRateMessage }}
+                </span>
+
+              </div>
+
+              <div *ngIf="ratePerKm === null" class="flex items-start gap-2 p-3 rounded-xl
+                       bg-red-50 border border-red-200 text-red-600 text-sm">
+
+                <lucide-icon [img]="AlertCircle" class="w-4 h-4 mt-0.5 flex-shrink-0">
+                </lucide-icon>
+
+                <span>
+                  {{ kmRateMessage }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- ====================================================
+                 ADMIN RATE MANAGEMENT
+            ==================================================== -->
+
+            <div *ngIf="showKmRateAdmin" class="mt-6 pt-6 border-t border-slate-200">
+
+              <!-- ADMIN HEADER -->
+
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+
+                <div>
+
+                  <div class="flex items-center gap-2">
+
+                    <h4 class="font-bold text-slate-800">
+                      Rate Management
+                    </h4>
+
+                    <span
+                      class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold uppercase tracking-wide">
+
+                      Admin
+
+                    </span>
+
+                  </div>
+
+                  <p class="text-xs text-slate-500 mt-1">
+
+                    Add a rate for the selected month or edit an existing rate.
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <!-- ==================================================
+                   ADD RATE CARD
+              ================================================== -->
+
+              <div class="rounded-xl border border-blue-100 bg-blue-50/50 p-4">
+
+                <div class="flex items-center gap-2 mb-3">
+
+                  <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+
+                    <lucide-icon [img]="Plus" class="w-4 h-4">
+                    </lucide-icon>
+
+                  </div>
+
+                  <div>
+
+                    <h5 class="text-sm font-bold text-slate-800">
+
+                      Add New Rate
+
+                    </h5>
+
+                    <p class="text-[11px] text-slate-500">
+
+                      Rate will be added for
+                      <strong>
+                        {{ getSelectedRateMonth() || 'selected month' }}
+                      </strong>
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
+
+                  <div class="relative">
+
+                    <input type="number" min="0" step="0.01" [(ngModel)]="newRatePerKm" name="newRatePerKm"
+                      placeholder="Enter rate per KM" class="w-full pl-10 pr-4 py-3 bg-white border border-slate-300
+                             rounded-xl text-sm focus:outline-none focus:ring-2
+                             focus:ring-blue-500">
+
+                    <lucide-icon [img]="IndianRupee"
+                      class="absolute inset-y-0 left-3 flex items-center w-4 h-full text-slate-400 pointer-events-none">
+                    </lucide-icon>
+
+                  </div>
+
+
+                  <button type="button" (click)="addKmRate()" [disabled]="
+                      savingKmRate ||
+                      newRatePerKm === null ||
+                      newRatePerKm === undefined ||
+                      newRatePerKm < 0 ||
+                      !fromDate
+                    " class="inline-flex items-center justify-center min-w-[125px]
+                           px-5 py-3 bg-blue-600 hover:bg-blue-700
+                           text-white rounded-xl text-sm font-semibold
+                           shadow-sm transition
+                           disabled:opacity-50 disabled:cursor-not-allowed">
+
+                    <lucide-icon [img]="Plus" class="w-4 h-4 mr-1.5" *ngIf="!savingKmRate">
+                    </lucide-icon>
+
+                    <lucide-icon [img]="Loader2" class="w-4 h-4 mr-1.5 animate-spin" *ngIf="savingKmRate">
+                    </lucide-icon>
+
+                    {{
+                    savingKmRate
+                    ? 'Saving...'
+                    : 'Add Rate'
+                    }}
+
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <!-- ==================================================
+                   RATE LIST
+              ================================================== -->
+
+              <div *ngIf="kmRateList.length > 0" class="mt-5">
+
+                <div class="flex items-center justify-between mb-3">
+
+                  <h5 class="text-sm font-bold text-slate-700">
+
+                    Configured Rates
+
+                  </h5>
+
+                  <span class="text-xs text-slate-400">
+
+                    {{ kmRateList.length }} rate(s)
+
+                  </span>
+
+                </div>
+
+
+                <div class="border border-slate-200 rounded-xl overflow-hidden">
+
+                  <div class="overflow-x-auto">
+
+                    <table class="w-full text-sm">
+
+                      <thead class="bg-slate-50 border-b border-slate-200">
+
+                        <tr>
+
+                          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500">
+                            Year
+                          </th>
+
+                          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500">
+                            Month
+                          </th>
+
+                          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500">
+                            Rate / KM
+                          </th>
+
+                          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500">
+                            Status
+                          </th>
+
+                          <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500">
+                            Action
+                          </th>
+
+                        </tr>
+
+                      </thead>
+
+
+                      <tbody class="divide-y divide-slate-100">
+
+                        <tr *ngFor="let rate of kmRateList" [class.bg-blue-50]="
+                            selectedKmRate?.id === rate.id
+                          " class="hover:bg-slate-50 transition">
+
+                          <!-- YEAR -->
+
+                          <td class="px-4 py-3 font-medium text-slate-700">
+
+                            {{ rate.rateYear }}
+
+                          </td>
+
+
+                          <!-- MONTH -->
+
+                          <td class="px-4 py-3 text-slate-600">
+
+                            {{ getMonthName(rate.rateMonth) }}
+
+                            <span *ngIf="
+                                selectedKmRate?.id === rate.id
+                              " class="ml-1 text-[10px] font-bold text-blue-600">
+
+                              CURRENT
+
+                            </span>
+
+                          </td>
+
+
+                          <!-- RATE -->
+
+                          <td class="px-4 py-3">
+
+                            <!-- NORMAL -->
+
+                            <span *ngIf="
+                                editingKmRateId !== rate.id
+                              " class="font-bold text-slate-800">
+
+                              ₹{{ rate.ratePerKm | number:'1.2-2' }}
+
+                            </span>
+
+
+                            <!-- EDIT -->
+
+                            <div *ngIf="
+                                editingKmRateId === rate.id
+                              " class="relative w-36">
+
+                              <input type="number" min="0" step="0.01" [(ngModel)]="editRatePerKm"
+                                [name]="'editRate_' + rate.id" class="w-full pl-7 pr-2 py-2 border border-blue-300
+                                       rounded-lg text-sm focus:outline-none
+                                       focus:ring-2 focus:ring-blue-500">
+
+                              <span class="absolute left-2 top-2 text-slate-400">
+
+                                ₹
+
+                              </span>
+
+                            </div>
+
+                          </td>
+
+
+                          <!-- STATUS -->
+
+                          <td class="px-4 py-3">
+
+                            <span *ngIf="rate.isActive" class="inline-flex items-center gap-1.5 px-2.5 py-1
+                                     rounded-full bg-emerald-50
+                                     text-emerald-700 text-xs font-semibold">
+
+                              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500">
+                              </span>
+
+                              Active
+
+                            </span>
+
+                            <span *ngIf="!rate.isActive" class="inline-flex items-center gap-1.5 px-2.5 py-1
+                                     rounded-full bg-slate-100
+                                     text-slate-500 text-xs font-semibold">
+
+                              Inactive
+
+                            </span>
+
+                          </td>
+
+
+                          <!-- ACTION -->
+
+                          <td class="px-4 py-3 text-right whitespace-nowrap">
+
+                            <!-- EDIT -->
+
+                            <button *ngIf="
+                                editingKmRateId !== rate.id
+                              " type="button" (click)="startEditKmRate(rate)" [disabled]="
+                                !canUpdateKmRate(rate)
+                              " [title]="
+                                canUpdateKmRate(rate)
+                                  ? 'Edit rate'
+                                  : 'Only current month rate can be edited during last 10 days'
+                              " class="inline-flex items-center px-3 py-1.5
+                                     bg-amber-500 hover:bg-amber-600
+                                     text-white rounded-lg text-xs font-medium
+                                     transition disabled:opacity-30
+                                     disabled:cursor-not-allowed">
+
+                              <lucide-icon [img]="Pencil" class="w-3.5 h-3.5 mr-1">
+                              </lucide-icon>
+
+                              Edit
+
+                            </button>
+
+
+                            <!-- SAVE -->
+
+                            <button *ngIf="
+                                editingKmRateId === rate.id
+                              " type="button" (click)="updateKmRate(rate)" [disabled]="updatingKmRate" class="inline-flex items-center px-3 py-1.5
+                                     bg-emerald-600 hover:bg-emerald-700
+                                     text-white rounded-lg text-xs font-medium
+                                     transition disabled:opacity-50">
+
+                              <lucide-icon [img]="Save" class="w-3.5 h-3.5 mr-1" *ngIf="!updatingKmRate">
+                              </lucide-icon>
+
+                              <lucide-icon [img]="Loader2" class="w-3.5 h-3.5 mr-1 animate-spin" *ngIf="updatingKmRate">
+                              </lucide-icon>
+
+                              {{
+                              updatingKmRate
+                              ? 'Saving'
+                              : 'Save'
+                              }}
+
+                            </button>
+
+
+                            <!-- CANCEL -->
+
+                            <button *ngIf="
+                                editingKmRateId === rate.id
+                              " type="button" (click)="cancelEditKmRate()" class="ml-1 px-3 py-1.5 bg-slate-200
+                                     hover:bg-slate-300 text-slate-700
+                                     rounded-lg text-xs font-medium">
+
+                              Cancel
+
+                            </button>
+
+                          </td>
+
+                        </tr>
+
+                      </tbody>
+
+                    </table>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- NO RATE -->
+
+              <div *ngIf="
+                  !loadingKmRate &&
+                  kmRateList.length === 0
+                " class="mt-5 p-4 rounded-xl border border-amber-200 bg-amber-50">
+
+                <div class="flex items-start gap-3">
+
+                  <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600
+                           flex items-center justify-center flex-shrink-0">
+
+                    <lucide-icon [img]="AlertCircle" class="w-4 h-4">
+                    </lucide-icon>
+
+                  </div>
+
+                  <div>
+
+                    <p class="text-sm font-semibold text-amber-800">
+
+                      No KM rates configured
+
+                    </p>
+
+                    <p class="text-xs text-amber-700 mt-1">
+
+                      Add a rate above for the selected month.
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- UPDATE RULE -->
+
+              <div class="mt-4 flex items-start gap-2 text-xs text-slate-500">
+
+                <lucide-icon [img]="AlertCircle" class="w-3.5 h-3.5 mt-0.5 flex-shrink-0">
+                </lucide-icon>
+
+                <span>
+                  Existing rates can be edited only for the current month
+                  during the last 10 days of the month.
+                </span>
+
+              </div>
 
             </div>
 
@@ -321,88 +787,61 @@
 
 
         <!-- ======================================================
-             MR BUTTONS
+             VISIT REPORT
         ====================================================== -->
-        <div
-          class="flex flex-col sm:flex-row gap-3 pt-2">
 
+        <div class="mt-6 grid grid-cols-1 gap-3">
 
-          <!-- VISIT PDF BUTTON -->
-          <button
-            type="button"
-            (click)="generateVisitReportPdf()"
-
-            [disabled]="
+          <button type="button" (click)="generateVisitReportPdf()" [disabled]="
               downloadingVisitPdf ||
+              loadingKmRate ||
               !selectedMrId ||
               !fromDate ||
               !toDate ||
-              ratePerKm === null ||
-              ratePerKm < 0
-            "
+              ratePerKm === null
+            " class="w-full inline-flex justify-center items-center px-5 py-3
+                   bg-blue-600 hover:bg-blue-700 text-white rounded-xl
+                   font-semibold text-sm shadow-sm transition
+                   disabled:opacity-50 disabled:cursor-not-allowed">
 
-            class="flex-1 inline-flex justify-center items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-
-            <lucide-icon
-              [img]="Eye"
-              class="w-4 h-4 mr-2"
-              *ngIf="!downloadingVisitPdf">
+            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingVisitPdf">
             </lucide-icon>
 
-            <lucide-icon
-              [img]="Loader2"
-              class="w-4 h-4 mr-2 animate-spin"
-              *ngIf="downloadingVisitPdf">
+            <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingVisitPdf">
             </lucide-icon>
 
-            <span>
-
-              {{
-                downloadingVisitPdf
-                  ? 'Loading Preview...'
-                  : 'Preview Visit Report'
-              }}
-
-            </span>
+            {{
+            downloadingVisitPdf
+            ? 'Loading Preview...'
+            : 'Preview Visit Report'
+            }}
 
           </button>
 
 
-          <!-- MR PDF BUTTON -->
-          <button
-            type="button"
-            (click)="generateMrPdf()"
+          <!-- MR REPORT -->
 
-            [disabled]="
+          <button type="button" (click)="generateMrPdf()" [disabled]="
               downloadingMrPdf ||
               !selectedMrId ||
               !fromDate ||
               !toDate
-            "
+            " class="w-full inline-flex justify-center items-center px-5 py-3
+                   bg-emerald-600 hover:bg-emerald-700 text-white
+                   rounded-xl font-semibold text-sm shadow-sm transition
+                   disabled:opacity-50 disabled:cursor-not-allowed">
 
-            class="flex-1 inline-flex justify-center items-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-
-            <lucide-icon
-              [img]="Eye"
-              class="w-4 h-4 mr-2"
-              *ngIf="!downloadingMrPdf">
+            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingMrPdf">
             </lucide-icon>
 
-            <lucide-icon
-              [img]="Loader2"
-              class="w-4 h-4 mr-2 animate-spin"
-              *ngIf="downloadingMrPdf">
+            <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingMrPdf">
             </lucide-icon>
 
-            <span>
-
-              {{
-                downloadingMrPdf
-                  ? 'Loading Preview...'
-                  : 'Preview MR Report'
-              }}
-
-            </span>
+            {{
+            downloadingMrPdf
+            ? 'Loading Preview...'
+            : 'Preview MR Report'
+            }}
 
           </button>
 
@@ -412,178 +851,150 @@
 
 
       <!-- ========================================================
-           CUSTOMER SECTION
-           
-           HIDDEN FOR SPECIAL RID
+           CUSTOMER
       ======================================================== -->
-      <div
-        *ngIf="!isSpecialRole()"
-        class="col-span-1 md:col-span-2 pt-6 border-t border-slate-200 space-y-4">
 
-        <label class="block text-sm font-semibold text-slate-800">
+      <div *ngIf="!isSpecialRole()" class="md:col-span-2 border-t border-slate-200 pt-6">
 
-          Customer Options
+        <div class="flex items-center gap-2 mb-4">
 
-        </label>
+          <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
 
+            <lucide-icon [img]="Users" class="w-4 h-4">
+            </lucide-icon>
 
-        <!-- ======================================================
-             CUSTOMER SEARCH
-        ====================================================== -->
-        <div>
+          </div>
 
-          <label class="block text-xs text-slate-500 mb-1">
+          <div>
 
-            Search Customer (By Name or Mobile Number)
+            <h2 class="font-bold text-slate-800">
+              Customer Options
+            </h2>
 
-          </label>
-
-          <div class="relative">
-
-            <input
-              type="text"
-              [(ngModel)]="customerSearchTerm"
-              name="customerSearchTerm"
-              (ngModelChange)="onCustomerSearchChange($event)"
-              placeholder="Type name or phone number..."
-              class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-slate-800 text-sm" />
-
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-
-              <lucide-icon
-                [img]="Search"
-                class="w-4 h-4">
-              </lucide-icon>
-
-            </div>
+            <p class="text-xs text-slate-500">
+              Generate a customer-specific report.
+            </p>
 
           </div>
 
         </div>
 
 
-        <!-- ======================================================
-             CUSTOMER DROPDOWN
-        ====================================================== -->
-        <div>
+        <!-- SEARCH -->
 
-          <label class="block text-xs text-slate-500 mb-1">
+        <div class="mb-4">
 
-            Select Customer
+          <label class="block text-xs font-medium text-slate-600 mb-1.5">
+
+            Search Customer
 
           </label>
 
           <div class="relative">
 
-            <select
-              [(ngModel)]="selectedCustomerId"
-              name="selectedCustomerId"
-              [disabled]="loadingCustomers"
+            <input type="text" [(ngModel)]="customerSearchTerm" name="customerSearchTerm"
+              (ngModelChange)="onCustomerSearchChange($event)" placeholder="Search by name or mobile..." class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300
+                     rounded-xl text-sm focus:outline-none focus:ring-2
+                     focus:ring-purple-500">
 
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-slate-800 text-sm disabled:opacity-50">
-
-              <option
-                [ngValue]="null"
-                disabled>
-
-                {{
-                  loadingCustomers
-                    ? 'Searching Customers...'
-                    : '-- Choose Customer --'
-                }}
-
-              </option>
-
-
-              <option
-                *ngFor="let cust of customerList"
-                [ngValue]="cust.customerId">
-
-                {{ cust.name }}
-
-                {{
-                  cust.mobile
-                    ? '(' + cust.mobile + ')'
-                    : ''
-                }}
-
-                {{
-                  cust.routeName
-                    ? '[Route: ' + cust.routeName + ']'
-                    : ''
-                }}
-
-              </option>
-
-            </select>
-
-
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-
-              <lucide-icon
-                [img]="Users"
-                class="w-5 h-5"
-                *ngIf="!loadingCustomers">
-              </lucide-icon>
-
-              <lucide-icon
-                [img]="Loader2"
-                class="w-5 h-5 animate-spin"
-                *ngIf="loadingCustomers">
-              </lucide-icon>
-
-            </div>
+            <lucide-icon [img]="Search" class="absolute inset-y-0 left-3 flex items-center w-4 h-full text-slate-400 pointer-events-none">
+            </lucide-icon>
 
           </div>
 
         </div>
 
 
-        <!-- ======================================================
-             CUSTOMER PDF BUTTON
-        ====================================================== -->
-        <div class="pt-2">
+        <!-- CUSTOMER DROPDOWN -->
 
-          <button
-            type="button"
-            (click)="generateCustomerPdf()"
+  <div>
 
-            [disabled]="
-              downloadingCustomerPdf ||
-              !selectedCustomerId ||
-              !fromDate ||
-              !toDate
-            "
+  <label class="block text-xs font-medium text-slate-600 mb-1.5">
+    Select Customer
+  </label>
 
-            class="w-full inline-flex justify-center items-center px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+  <div class="relative">
 
-            <lucide-icon
-              [img]="Eye"
-              class="w-4 h-4 mr-2"
-              *ngIf="!downloadingCustomerPdf">
-            </lucide-icon>
+    <select
+      [(ngModel)]="selectedCustomerId"
+      name="selectedCustomerId"
+      [disabled]="loadingCustomers"
+      class="w-full pl-12 pr-10 py-3 bg-slate-50 border border-slate-300
+             rounded-xl text-sm appearance-none
+             focus:outline-none focus:ring-2 focus:ring-purple-500
+             disabled:opacity-60"
+    >
 
-            <lucide-icon
-              [img]="Loader2"
-              class="w-4 h-4 mr-2 animate-spin"
-              *ngIf="downloadingCustomerPdf">
-            </lucide-icon>
+      <option [ngValue]="null" disabled>
+        {{
+          loadingCustomers
+            ? 'Searching Customers...'
+            : '-- Choose Customer --'
+        }}
+      </option>
 
-            <span>
+      <option
+        *ngFor="let cust of customerList"
+        [ngValue]="cust.customerId"
+      >
+        {{ cust.name }}
+        ({{ cust.mobile }})
+        {{
+          cust.routeName
+            ? ' - ' + cust.routeName
+            : ''
+        }}
+      </option>
 
-              {{
-                downloadingCustomerPdf
-                  ? 'Loading Preview...'
-                  : 'Preview Customer Report'
-              }}
+    </select>
 
-            </span>
+    <!-- CUSTOMER ICON -->
+    <lucide-icon
+      *ngIf="!loadingCustomers"
+      [img]="Users"
+      class="absolute left-3.5 top-1/2 -translate-y-1/2
+             w-5 h-5 text-slate-400
+             pointer-events-none z-10">
+    </lucide-icon>
 
-          </button>
+    <!-- LOADER -->
+    <lucide-icon
+      *ngIf="loadingCustomers"
+      [img]="Loader2"
+      class="absolute left-3.5 top-1/2 -translate-y-1/2
+             w-5 h-5 text-purple-500
+             pointer-events-none animate-spin z-10">
+    </lucide-icon>
 
-        </div>
+  </div>
+
+</div>
+
+        <!-- CUSTOMER REPORT -->
+
+        <button type="button" (click)="generateCustomerPdf()" [disabled]="
+            downloadingCustomerPdf ||
+            !selectedCustomerId ||
+            !fromDate ||
+            !toDate
+          " class="mt-5 w-full inline-flex justify-center items-center px-5 py-3
+                 bg-purple-600 hover:bg-purple-700 text-white rounded-xl
+                 font-semibold text-sm shadow-sm transition
+                 disabled:opacity-50 disabled:cursor-not-allowed">
+
+          <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingCustomerPdf">
+          </lucide-icon>
+
+          <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingCustomerPdf">
+          </lucide-icon>
+
+          {{
+          downloadingCustomerPdf
+          ? 'Loading Preview...'
+          : 'Preview Customer Report'
+          }}
+
+        </button>
 
       </div>
 
@@ -595,46 +1006,45 @@
 
 
 <!-- ================================================================
-     PREVIEW MODAL
+     PDF PREVIEW MODAL
 ================================================================ -->
-<div
-  *ngIf="showPreviewModal"
-  class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
 
-  <div
-    class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+<div *ngIf="showPreviewModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm
+         flex items-center justify-center p-3 md:p-5">
 
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-7xl
+           h-[94vh] flex flex-col overflow-hidden">
 
-    <!-- ==========================================================
-         MODAL HEADER
-    =========================================================== -->
-    <div
-      class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+    <!-- HEADER -->
+
+    <div class="px-5 py-4 bg-white border-b border-slate-200
+             flex flex-col sm:flex-row sm:items-center
+             sm:justify-between gap-3">
 
       <div>
 
-        <h3 class="text-base font-semibold text-slate-800">
+        <h3 class="font-bold text-slate-800">
+
           {{ previewTitle }}
+
         </h3>
 
-        <p class="text-xs text-slate-500">
+        <p class="text-xs text-slate-500 mt-1">
+
           {{ pendingFilename }}
+
         </p>
 
       </div>
 
 
-      <div class="flex items-center space-x-3">
+      <div class="flex items-center gap-2">
 
-        <!-- DOWNLOAD BUTTON -->
-        <button
-          type="button"
-          (click)="confirmDownload()"
-          class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+        <button type="button" (click)="confirmDownload()" class="inline-flex items-center px-4 py-2
+                 bg-blue-600 hover:bg-blue-700 text-white
+                 text-xs font-semibold rounded-lg transition">
 
-          <lucide-icon
-            [img]="Download"
-            class="w-4 h-4 mr-1.5">
+          <lucide-icon [img]="Download" class="w-4 h-4 mr-1.5">
           </lucide-icon>
 
           Download PDF
@@ -642,15 +1052,10 @@
         </button>
 
 
-        <!-- CLOSE BUTTON -->
-        <button
-          type="button"
-          (click)="closePreviewModal()"
-          class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
+        <button type="button" (click)="closePreviewModal()" class="p-2 text-slate-500 hover:text-slate-700
+                 hover:bg-slate-100 rounded-lg transition">
 
-          <lucide-icon
-            [img]="X"
-            class="w-5 h-5">
+          <lucide-icon [img]="X" class="w-5 h-5">
           </lucide-icon>
 
         </button>
@@ -660,16 +1065,11 @@
     </div>
 
 
-    <!-- ==========================================================
-         PDF VIEWER
-    =========================================================== -->
-    <div
-      class="flex-1 bg-slate-100 relative">
+    <!-- PDF -->
 
-      <iframe
-        *ngIf="previewUrl"
-        [src]="previewUrl"
-        class="w-full h-full border-none">
+    <div class="flex-1 bg-slate-100">
+
+      <iframe *ngIf="previewUrl" [src]="previewUrl" class="w-full h-full border-0">
       </iframe>
 
     </div>

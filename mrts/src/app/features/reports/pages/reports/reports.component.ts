@@ -1,8 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  DomSanitizer,
+  SafeResourceUrl
+} from '@angular/platform-browser';
+
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import {
+  debounceTime,
+  distinctUntilChanged
+} from 'rxjs/operators';
 
 import {
   FileText,
@@ -11,15 +18,23 @@ import {
   Calendar,
   IndianRupee,
   Download,
-  FileDown,
   Loader2,
   Users,
   Search,
   Eye,
-  X
+  X,
+  Plus,
+  Pencil,
+  Save
 } from 'lucide-angular';
 
+import Swal from 'sweetalert2';
+
 import { environment } from '../../../../../environments/environment';
+
+// ============================================================
+// MODELS
+// ============================================================
 
 interface MedicalRepresentative {
   medicalRepresentativeId: number;
@@ -41,11 +56,26 @@ interface Customer {
   isActive?: boolean;
 }
 
+interface KmRate {
+  id: number;
+  agencyId: number;
+  rateYear: number;
+  rateMonth: number;
+  ratePerKm: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string | null;
+}
+
 interface ApiResponse<T> {
   success: boolean;
   message: string;
   data: T;
 }
+
+// ============================================================
+// COMPONENT
+// ============================================================
 
 @Component({
   selector: 'app-reports',
@@ -54,9 +84,9 @@ interface ApiResponse<T> {
 })
 export class ReportsComponent implements OnInit, OnDestroy {
 
-  // ============================================================
-  // LUCIDE ICONS
-  // ============================================================
+  // ==========================================================
+  // ICONS
+  // ==========================================================
 
   readonly FileText = FileText;
   readonly AlertCircle = AlertCircle;
@@ -64,48 +94,42 @@ export class ReportsComponent implements OnInit, OnDestroy {
   readonly Calendar = Calendar;
   readonly IndianRupee = IndianRupee;
   readonly Download = Download;
-  readonly FileDown = FileDown;
   readonly Loader2 = Loader2;
   readonly Users = Users;
   readonly Search = Search;
   readonly Eye = Eye;
   readonly X = X;
+  readonly Plus = Plus;
+  readonly Pencil = Pencil;
+  readonly Save = Save;
 
-  // ============================================================
+  // ==========================================================
   // API
-  // ============================================================
+  // ==========================================================
 
   private apiUrl = environment.apiUrl;
 
-  // ============================================================
-  // LOCAL STORAGE / USER INFORMATION
-  // ============================================================
+  // ==========================================================
+  // LOCAL STORAGE
+  // ==========================================================
 
   agencyId = 0;
 
-  /**
-   * RID from localStorage
-   */
   private rid = '';
 
-  /**
-   * MID from localStorage
-   */
   private mid: number | null = null;
 
-  /**
-   * RID for which MR should automatically be selected
-   */
+  // Special role for MR/customer behavior
   private readonly SPECIAL_RID =
     'fd1c87b5-524a-49e5-b60c-5d7b82ddeb43';
 
+  // Role allowed to ADD / EDIT KM rates
+  private readonly KM_RATE_ADMIN_RID =
+    'a5fabfee-5506-4e12-bfec-c898fc5af3ae';
 
-  isSpecialRole(): boolean {
-  return this.rid === this.SPECIAL_RID;
-}
-  // ============================================================
-  // MR STATE
-  // ============================================================
+  // ==========================================================
+  // MR
+  // ==========================================================
 
   mrList: MedicalRepresentative[] = [];
 
@@ -113,11 +137,14 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   mrSearchTerm = '';
 
-  private mrSearchSubject = new Subject<string>();
+  private mrSearchSubject =
+    new Subject<string>();
 
-  // ============================================================
-  // CUSTOMER STATE
-  // ============================================================
+  loadingMRs = false;
+
+  // ==========================================================
+  // CUSTOMER
+  // ==========================================================
 
   customerList: Customer[] = [];
 
@@ -125,25 +152,51 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   customerSearchTerm = '';
 
-  private customerSearchSubject = new Subject<string>();
+  private customerSearchSubject =
+    new Subject<string>();
 
-  // ============================================================
-  // DATE & CONFIG CONTROLS
-  // ============================================================
+  loadingCustomers = false;
+
+  // ==========================================================
+  // DATES
+  // ==========================================================
 
   fromDate = '';
 
   toDate = '';
 
+  // ==========================================================
+  // KM RATE
+  // ==========================================================
+
+  kmRateList: KmRate[] = [];
+
   ratePerKm: number | null = null;
 
-  // ============================================================
-  // LOADING STATES
-  // ============================================================
+  selectedKmRate: KmRate | null = null;
 
-  loadingMRs = false;
+  loadingKmRate = false;
 
-  loadingCustomers = false;
+  savingKmRate = false;
+
+  updatingKmRate = false;
+
+  kmRateError = false;
+
+  kmRateMessage = '';
+
+  // Controls Add/Edit section visibility
+  showKmRateAdmin = false;
+
+  editingKmRateId: number | null = null;
+
+  editRatePerKm: number | null = null;
+
+  newRatePerKm: number | null = null;
+
+  // ==========================================================
+  // PDF
+  // ==========================================================
 
   downloadingVisitPdf = false;
 
@@ -151,9 +204,15 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   downloadingCustomerPdf = false;
 
-  // ============================================================
-  // PREVIEW MODAL STATES
-  // ============================================================
+  // ==========================================================
+  // ERROR
+  // ==========================================================
+
+  errorMessage = '';
+
+  // ==========================================================
+  // PREVIEW
+  // ==========================================================
 
   showPreviewModal = false;
 
@@ -167,171 +226,768 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   previewTitle = '';
 
-  // ============================================================
-  // ERROR
-  // ============================================================
-
-  errorMessage = '';
-
-  // ============================================================
+  // ==========================================================
   // CONSTRUCTOR
-  // ============================================================
+  // ==========================================================
 
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer
   ) {}
 
-  // ============================================================
-  // ON INIT
-  // ============================================================
+  // ==========================================================
+  // SWEETALERT HELPERS
+  // ==========================================================
+
+  private showSuccess(message: string): void {
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: message,
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#2563eb'
+    });
+  }
+
+  private showError(message: string): void {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: message,
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#dc2626'
+    });
+  }
+
+  private showWarning(message: string): void {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Warning',
+      text: message,
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#f59e0b'
+    });
+  }
+
+  private showInfo(message: string): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Information',
+      text: message,
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#2563eb'
+    });
+  }
+
+  // ==========================================================
+  // INIT
+  // ==========================================================
 
   ngOnInit(): void {
 
-    // Set default dates for current month
     this.setDefaultDates();
 
-    // ==========================================================
-    // GET DATA FROM LOCAL STORAGE
-    // ==========================================================
-
     const aid = localStorage.getItem('aid');
-
-    this.rid = localStorage.getItem('rid') || '';
-
+    const rid = localStorage.getItem('rid');
     const mid = localStorage.getItem('mid');
 
     this.agencyId = aid ? Number(aid) : 0;
 
+    this.rid = (rid || '').trim();
+
     this.mid = mid ? Number(mid) : null;
 
-    console.log('====================================');
-    console.log('Reports Component LocalStorage');
-    console.log('====================================');
-    console.log('Agency ID:', this.agencyId);
-    console.log('RID:', this.rid);
-    console.log('MID:', this.mid);
-    console.log('====================================');
+    this.showKmRateAdmin =
+      this.isKmRateAdmin();
 
-    // ==========================================================
-    // LOAD DATA
-    // ==========================================================
-
-    if (this.agencyId > 0) {
-
-      this.fetchMedicalRepresentatives();
-
-      this.fetchCustomers();
-
-    } else {
+    if (this.agencyId <= 0) {
 
       this.errorMessage =
         'Agency ID not found in localStorage.';
+
+      this.showError(
+        this.errorMessage
+      );
+
+      return;
     }
 
-    // ==========================================================
-    // MR SEARCH
-    // ==========================================================
+    // Load MR
+    this.fetchMedicalRepresentatives();
 
-    this.mrSearchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe((term) => {
+    // Customer is hidden for special role
+    if (!this.isSpecialRole()) {
+      this.fetchCustomers();
+    }
 
-      this.fetchMedicalRepresentatives(term);
+    // Load KM rates
+    this.loadKmRates();
 
-    });
+    // Apply rate according to From Date
+    this.onFromDateChange();
 
-    // ==========================================================
-    // CUSTOMER SEARCH
-    // ==========================================================
+    // MR search
+    this.mrSearchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(term => {
 
-    this.customerSearchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe((term) => {
+        this.fetchMedicalRepresentatives(
+          term
+        );
 
-      this.fetchCustomers(term);
+      });
 
-    });
+    // Customer search
+    this.customerSearchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(term => {
+
+        if (!this.isSpecialRole()) {
+
+          this.fetchCustomers(term);
+
+        }
+
+      });
   }
 
-  // ============================================================
-  // DEFAULT DATES
-  // ============================================================
+  // ==========================================================
+  // SPECIAL ROLE
+  // ==========================================================
+
+  isSpecialRole(): boolean {
+
+    return this.rid.toLowerCase() ===
+      this.SPECIAL_RID.toLowerCase();
+  }
+
+  // ==========================================================
+  // KM RATE ADMIN ROLE
+  // ==========================================================
+
+  isKmRateAdmin(): boolean {
+
+    return this.rid.toLowerCase() ===
+      this.KM_RATE_ADMIN_RID.toLowerCase();
+  }
+
+  // ==========================================================
+  // DEFAULT DATE
+  // ==========================================================
 
   private setDefaultDates(): void {
 
     const today = new Date();
 
-    // First day of current month
-    const firstDay = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      1
-    );
+    const firstDay =
+      new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
 
     this.fromDate =
-      this.formatDateToYYYYMMDD(firstDay);
+      this.formatDate(firstDay);
 
-    // Current date
     this.toDate =
-      this.formatDateToYYYYMMDD(today);
+      this.formatDate(today);
   }
 
-  // ============================================================
-  // FORMAT DATE
-  // ============================================================
+  // ==========================================================
+  // DATE FORMAT
+  // ==========================================================
 
-  private formatDateToYYYYMMDD(date: Date): string {
+  private formatDate(date: Date): string {
 
-    const year = date.getFullYear();
+    const year =
+      date.getFullYear();
 
-    const month = String(
-      date.getMonth() + 1
-    ).padStart(2, '0');
+    const month =
+      String(date.getMonth() + 1)
+        .padStart(2, '0');
 
-    const day = String(
-      date.getDate()
-    ).padStart(2, '0');
+    const day =
+      String(date.getDate())
+        .padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
 
-  // ============================================================
-  // DESTROY
-  // ============================================================
+  // ==========================================================
+  // DATE CHANGE
+  // ==========================================================
 
-  ngOnDestroy(): void {
+  onFromDateChange(): void {
 
-    this.cleanupPreviewUrl();
+    this.loadSelectedMonthKmRate();
   }
 
-  // ============================================================
-  // FETCH MEDICAL REPRESENTATIVES
-  // ============================================================
+  // ==========================================================
+  // LOAD KM RATES
+  // ==========================================================
+
+  loadKmRates(): void {
+
+    if (this.agencyId <= 0) {
+      return;
+    }
+
+    this.loadingKmRate = true;
+
+    this.kmRateError = false;
+
+    this.kmRateMessage = '';
+
+    const params =
+      new HttpParams()
+        .set(
+          'agencyId',
+          this.agencyId.toString()
+        );
+
+    this.http.get<
+      ApiResponse<KmRate[] | KmRate>
+    >(
+      `${this.apiUrl}/VisitReport/get-km-rate-by-agency`,
+      { params }
+    )
+    .subscribe({
+
+      next: response => {
+
+        this.loadingKmRate = false;
+
+        if (!response.success) {
+
+          this.kmRateList = [];
+
+          this.ratePerKm = null;
+
+          this.selectedKmRate = null;
+
+          this.kmRateError = true;
+
+          this.kmRateMessage =
+            response.message ||
+            'Unable to load KM rates.';
+
+          return;
+        }
+
+        if (Array.isArray(response.data)) {
+
+          this.kmRateList =
+            response.data || [];
+
+        } else if (response.data) {
+
+          this.kmRateList =
+            [response.data];
+
+        } else {
+
+          this.kmRateList = [];
+
+        }
+
+        this.loadSelectedMonthKmRate();
+      },
+
+      error: err => {
+
+        this.loadingKmRate = false;
+
+        this.kmRateList = [];
+
+        this.ratePerKm = null;
+
+        this.selectedKmRate = null;
+
+        this.kmRateError = true;
+
+        this.kmRateMessage =
+          'Unable to load KM rate.';
+
+        console.error(
+          'KM rate GET error:',
+          err
+        );
+      }
+    });
+  }
+
+  // ==========================================================
+  // FIND RATE FOR SELECTED MONTH
+  // ==========================================================
+
+  private loadSelectedMonthKmRate(): void {
+
+    if (!this.fromDate) {
+
+      this.ratePerKm = null;
+
+      this.selectedKmRate = null;
+
+      this.kmRateMessage = '';
+
+      return;
+    }
+
+    const parts =
+      this.fromDate.split('-');
+
+    if (parts.length !== 3) {
+      return;
+    }
+
+    const year =
+      Number(parts[0]);
+
+    const month =
+      Number(parts[1]);
+
+    const rate =
+      this.kmRateList.find(x =>
+        Number(x.rateYear) === year &&
+        Number(x.rateMonth) === month &&
+        x.isActive !== false
+      );
+
+    if (rate) {
+
+      this.selectedKmRate = rate;
+
+      this.ratePerKm =
+        Number(rate.ratePerKm);
+
+      this.kmRateError = false;
+
+      this.kmRateMessage =
+        `₹${this.ratePerKm.toFixed(2)} / KM`;
+
+    } else {
+
+      this.selectedKmRate = null;
+
+      this.ratePerKm = null;
+
+      this.kmRateError = true;
+
+      this.kmRateMessage =
+        `No rate configured for ${this.getMonthName(month)} ${year}.`;
+    }
+  }
+
+  // ==========================================================
+  // ADD KM RATE
+  // ==========================================================
+
+  addKmRate(): void {
+
+    if (!this.isKmRateAdmin()) {
+
+      this.showError(
+        'You are not authorized to manage KM rates.'
+      );
+
+      return;
+    }
+
+    if (
+      this.newRatePerKm === null ||
+      this.newRatePerKm === undefined ||
+      Number.isNaN(Number(this.newRatePerKm)) ||
+      Number(this.newRatePerKm) < 0
+    ) {
+
+      this.showWarning(
+        'Please enter a valid Rate Per KM.'
+      );
+
+      return;
+    }
+
+    if (!this.fromDate) {
+
+      this.showWarning(
+        'Please select a From Date.'
+      );
+
+      return;
+    }
+
+    const parts =
+      this.fromDate.split('-');
+
+    if (parts.length !== 3) {
+
+      this.showWarning(
+        'Please select a valid From Date.'
+      );
+
+      return;
+    }
+
+    const rateYear =
+      Number(parts[0]);
+
+    const rateMonth =
+      Number(parts[1]);
+
+    const alreadyExists =
+      this.kmRateList.some(rate =>
+        Number(rate.agencyId) === this.agencyId &&
+        Number(rate.rateYear) === rateYear &&
+        Number(rate.rateMonth) === rateMonth
+      );
+
+    if (alreadyExists) {
+
+      this.showWarning(
+        `KM Rate already exists for ${this.getMonthName(rateMonth)} ${rateYear}. Please use Edit instead.`
+      );
+
+      return;
+    }
+
+    const body = {
+
+      agencyId:
+        this.agencyId,
+
+      rateYear:
+        rateYear,
+
+      rateMonth:
+        rateMonth,
+
+      ratePerKm:
+        Number(this.newRatePerKm)
+
+    };
+
+    console.log(
+      'POST KM RATE BODY:',
+      body
+    );
+
+    this.savingKmRate = true;
+
+    this.http.post<
+      ApiResponse<any>
+    >(
+      `${this.apiUrl}/VisitReport/post-km-rate`,
+      body
+    )
+    .subscribe({
+
+      next: response => {
+
+        this.savingKmRate = false;
+
+        if (!response.success) {
+
+          this.showError(
+            response.message ||
+            'Failed to add KM Rate.'
+          );
+
+          return;
+        }
+
+        this.showSuccess(
+          'KM Rate added successfully.'
+        );
+
+        this.newRatePerKm = null;
+
+        this.loadKmRates();
+      },
+
+      error: err => {
+
+        this.savingKmRate = false;
+
+        console.error(
+          'POST KM rate error:',
+          err
+        );
+
+        this.showError(
+          err?.error?.message ||
+          'Failed to add KM Rate.'
+        );
+      }
+    });
+  }
+
+  // ==========================================================
+  // START EDIT
+  // ==========================================================
+
+  startEditKmRate(rate: KmRate): void {
+
+    if (!this.isKmRateAdmin()) {
+
+      this.showError(
+        'You are not authorized to edit KM rates.'
+      );
+
+      return;
+    }
+
+    if (!this.canUpdateKmRate(rate)) {
+
+      this.showWarning(
+        'KM Rate can be updated only for the current month during the last 10 days of the month.'
+      );
+
+      return;
+    }
+
+    this.editingKmRateId =
+      rate.id;
+
+    this.editRatePerKm =
+      Number(rate.ratePerKm);
+  }
+
+  // ==========================================================
+  // CANCEL EDIT
+  // ==========================================================
+
+  cancelEditKmRate(): void {
+
+    this.editingKmRateId = null;
+
+    this.editRatePerKm = null;
+  }
+
+  // ==========================================================
+  // UPDATE KM RATE
+  // ==========================================================
+
+  updateKmRate(rate: KmRate): void {
+
+    if (!this.isKmRateAdmin()) {
+
+      this.showError(
+        'You are not authorized to update KM rates.'
+      );
+
+      return;
+    }
+
+    if (
+      this.editRatePerKm === null ||
+      this.editRatePerKm === undefined ||
+      Number.isNaN(Number(this.editRatePerKm)) ||
+      Number(this.editRatePerKm) < 0
+    ) {
+
+      this.showWarning(
+        'Please enter a valid Rate Per KM.'
+      );
+
+      return;
+    }
+
+    if (!this.canUpdateKmRate(rate)) {
+
+      this.showWarning(
+        'KM Rate can be updated only for the current month during the last 10 days of the month.'
+      );
+
+      return;
+    }
+
+    this.updatingKmRate = true;
+
+    const body = {
+
+      ratePerKm:
+        Number(this.editRatePerKm)
+
+    };
+
+    this.http.put<
+      ApiResponse<any>
+    >(
+      `${this.apiUrl}/VisitReport/update-km-rate/${rate.id}`,
+      body
+    )
+    .subscribe({
+
+      next: response => {
+
+        this.updatingKmRate = false;
+
+        if (!response.success) {
+
+          this.showError(
+            response.message ||
+            'Failed to update KM Rate.'
+          );
+
+          return;
+        }
+
+        this.showSuccess(
+          'KM Rate updated successfully.'
+        );
+
+        this.editingKmRateId = null;
+
+        this.editRatePerKm = null;
+
+        this.loadKmRates();
+      },
+
+      error: err => {
+
+        this.updatingKmRate = false;
+
+        console.error(
+          'PUT KM rate error:',
+          err
+        );
+
+        this.showError(
+          err?.error?.message ||
+          'Failed to update KM Rate.'
+        );
+      }
+    });
+  }
+
+  // ==========================================================
+  // CHECK UPDATE ALLOWED
+  // ==========================================================
+
+  canUpdateKmRate(rate: KmRate): boolean {
+
+    if (!this.isKmRateAdmin()) {
+      return false;
+    }
+
+    const today =
+      new Date();
+
+    const currentYear =
+      today.getFullYear();
+
+    const currentMonth =
+      today.getMonth() + 1;
+
+    // Must be current month
+    if (
+      Number(rate.rateYear) !==
+        currentYear ||
+      Number(rate.rateMonth) !==
+        currentMonth
+    ) {
+
+      return false;
+    }
+
+    const lastDay =
+      new Date(
+        currentYear,
+        currentMonth,
+        0
+      ).getDate();
+
+    const day =
+      today.getDate();
+
+    const firstAllowedDay =
+      lastDay - 9;
+
+    return day >= firstAllowedDay;
+  }
+
+  // ==========================================================
+  // GET CURRENT RATE MONTH
+  // ==========================================================
+
+  getSelectedRateMonth(): string {
+
+    if (!this.fromDate) {
+      return '';
+    }
+
+    const parts =
+      this.fromDate.split('-');
+
+    if (parts.length !== 3) {
+      return '';
+    }
+
+    const year =
+      Number(parts[0]);
+
+    const month =
+      Number(parts[1]);
+
+    return `${this.getMonthName(month)} ${year}`;
+  }
+
+  // ==========================================================
+  // MONTH NAME
+  // ==========================================================
+
+  getMonthName(month: number): string {
+
+    const months = [
+
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+
+    ];
+
+    return months[month - 1] || '';
+  }
+
+  // ==========================================================
+  // MR API
+  // ==========================================================
 
   fetchMedicalRepresentatives(
-    searchTerm: string = ''
+    searchTerm = ''
   ): void {
 
     this.loadingMRs = true;
 
-    this.errorMessage = '';
+    let params =
+      new HttpParams()
+        .set(
+          'agencyId',
+          this.agencyId.toString()
+        );
 
-    let params = new HttpParams()
-      .set(
-        'agencyId',
-        this.agencyId.toString()
-      );
-
-    // Add search parameter only when user searches
     if (searchTerm.trim()) {
 
-      params = params.set(
-        'search',
-        searchTerm.trim()
-      );
+      params =
+        params.set(
+          'search',
+          searchTerm.trim()
+        );
     }
 
     this.http.get<
@@ -339,13 +995,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
     >(
       `${this.apiUrl}/VisitReport/admin-get-mrlist-active`,
       { params }
-    ).subscribe({
+    )
+    .subscribe({
 
-      // ========================================================
-      // SUCCESS
-      // ========================================================
-
-      next: (response) => {
+      next: response => {
 
         this.loadingMRs = false;
 
@@ -354,108 +1007,26 @@ export class ReportsComponent implements OnInit, OnDestroy {
           this.mrList =
             response.data || [];
 
-          console.log(
-            'Medical Representatives:',
-            this.mrList
-          );
-
-          // ====================================================
-          // AUTO SELECT MR
-          // ====================================================
-          //
-          // Only execute this when:
-          //
-          // rid =
-          // fd1c87b5-524a-49e5-b60c-5d7b82ddeb43
-          //
-          // and mid exists in localStorage.
-          //
-          // Also only auto-select during initial loading,
-          // not while the user is searching.
-          // ====================================================
-
+          // Auto select MID for special role
           if (
             !searchTerm.trim() &&
-            this.rid === this.SPECIAL_RID &&
+            this.isSpecialRole() &&
             this.mid !== null
           ) {
 
-            const matchedMr =
+            const matched =
               this.mrList.find(
                 mr =>
-                  Number(mr.medicalRepresentativeId) ===
-                  Number(this.mid)
+                  Number(
+                    mr.medicalRepresentativeId
+                  ) === Number(this.mid)
               );
 
-            if (matchedMr) {
+            if (matched) {
 
               this.selectedMrId =
-                matchedMr.medicalRepresentativeId;
-
-              console.log(
-                '===================================='
-              );
-
-              console.log(
-                'AUTO SELECTED MR'
-              );
-
-              console.log(
-                'RID:',
-                this.rid
-              );
-
-              console.log(
-                'MID:',
-                this.mid
-              );
-
-              console.log(
-                'MR ID:',
-                matchedMr.medicalRepresentativeId
-              );
-
-              console.log(
-                'MR Name:',
-                matchedMr.name
-              );
-
-              console.log(
-                '===================================='
-              );
-
-            } else {
-
-              console.warn(
-                '===================================='
-              );
-
-              console.warn(
-                'MR from localStorage was not found'
-              );
-
-              console.warn(
-                'RID:',
-                this.rid
-              );
-
-              console.warn(
-                'MID:',
-                this.mid
-              );
-
-              console.warn(
-                'Available MR IDs:',
-                this.mrList.map(
-                  x => x.medicalRepresentativeId
-                )
-              );
-
-              console.warn(
-                '===================================='
-              );
+                matched.medicalRepresentativeId;
             }
-
           }
 
         } else {
@@ -464,47 +1035,59 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
           this.errorMessage =
             response.message ||
-            'Failed to fetch MR list.';
+            'Failed to load MR list.';
+
+          this.showError(
+            this.errorMessage
+          );
         }
       },
 
-      // ========================================================
-      // ERROR
-      // ========================================================
-
-      error: (err) => {
+      error: err => {
 
         this.loadingMRs = false;
 
         this.mrList = [];
 
-        this.errorMessage =
-          'Error fetching MR data. Please try again.';
-
         console.error(
-          'MR dropdown error:',
+          'MR API error:',
           err
+        );
+
+        this.showError(
+          err?.error?.message ||
+          'Failed to load Medical Representatives.'
         );
       }
     });
   }
 
-  // ============================================================
-  // MR SEARCH CHANGE
-  // ============================================================
+  // ==========================================================
+  // MR SEARCH
+  // ==========================================================
 
-  onMrSearchChange(term: string): void {
+  onMrSearchChange(
+    term: string
+  ): void {
+
+    if (this.isSpecialRole()) {
+      return;
+    }
 
     this.mrSearchSubject.next(term);
   }
 
-  // ============================================================
-  // FETCH CUSTOMERS
-  // ============================================================
+  // ==========================================================
+  // CUSTOMER API
+  // ==========================================================
 
   fetchCustomers(
-    searchTerm: string = ''
+    searchTerm = ''
   ): void {
+
+    if (this.isSpecialRole()) {
+      return;
+    }
 
     this.loadingCustomers = true;
 
@@ -515,19 +1098,24 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     const body = {
 
-      agencyId: this.agencyId,
+      agencyId:
+        this.agencyId,
 
-      assignedAreaManager: null,
+      assignedAreaManager:
+        null,
 
-      isActive: true,
+      isActive:
+        true,
 
       name:
-        !isPhone && searchTerm.trim()
+        !isPhone &&
+        searchTerm.trim()
           ? searchTerm.trim()
           : null,
 
       mobile:
-        isPhone && searchTerm.trim()
+        isPhone &&
+        searchTerm.trim()
           ? searchTerm.trim()
           : null
     };
@@ -537,59 +1125,64 @@ export class ReportsComponent implements OnInit, OnDestroy {
     >(
       `${this.apiUrl}/VisitReport/customer-list-pdf`,
       body
-    ).subscribe({
+    )
+    .subscribe({
 
-      // ========================================================
-      // SUCCESS
-      // ========================================================
-
-      next: (response) => {
+      next: response => {
 
         this.loadingCustomers = false;
 
-        if (response.success) {
+        this.customerList =
+          response.success
+            ? response.data || []
+            : [];
 
-          this.customerList =
-            response.data || [];
+        if (!response.success) {
 
-        } else {
-
-          this.customerList = [];
+          console.error(
+            'Customer API response:',
+            response.message
+          );
         }
       },
 
-      // ========================================================
-      // ERROR
-      // ========================================================
-
-      error: (err) => {
+      error: err => {
 
         this.loadingCustomers = false;
 
         this.customerList = [];
 
         console.error(
-          'Customer list error:',
+          'Customer API error:',
           err
+        );
+
+        this.showError(
+          err?.error?.message ||
+          'Failed to load customers.'
         );
       }
     });
   }
 
-  // ============================================================
-  // CUSTOMER SEARCH CHANGE
-  // ============================================================
+  // ==========================================================
+  // CUSTOMER SEARCH
+  // ==========================================================
 
   onCustomerSearchChange(
     term: string
   ): void {
 
+    if (this.isSpecialRole()) {
+      return;
+    }
+
     this.customerSearchSubject.next(term);
   }
 
-  // ============================================================
-  // GENERATE VISIT REPORT PDF
-  // ============================================================
+  // ==========================================================
+  // VISIT REPORT PDF
+  // ==========================================================
 
   generateVisitReportPdf(): void {
 
@@ -599,25 +1192,24 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     this.downloadingVisitPdf = true;
 
-    this.errorMessage = '';
-
-    const params = new HttpParams()
-      .set(
-        'MrId',
-        this.selectedMrId!.toString()
-      )
-      .set(
-        'FromDate',
-        this.fromDate
-      )
-      .set(
-        'ToDate',
-        this.toDate
-      )
-      .set(
-        'RatePerKm',
-        this.ratePerKm!.toString()
-      );
+    const params =
+      new HttpParams()
+        .set(
+          'MrId',
+          this.selectedMrId!.toString()
+        )
+        .set(
+          'FromDate',
+          this.fromDate
+        )
+        .set(
+          'ToDate',
+          this.toDate
+        )
+        .set(
+          'RatePerKm',
+          this.ratePerKm!.toString()
+        );
 
     this.http.get(
       `${this.apiUrl}/VisitReport/mr-visit-pdf`,
@@ -625,9 +1217,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
         params,
         responseType: 'blob'
       }
-    ).subscribe({
+    )
+    .subscribe({
 
-      next: (blob) => {
+      next: blob => {
 
         this.downloadingVisitPdf = false;
 
@@ -638,25 +1231,25 @@ export class ReportsComponent implements OnInit, OnDestroy {
         );
       },
 
-      error: (err) => {
+      error: err => {
 
         this.downloadingVisitPdf = false;
 
         console.error(
-          'Visit Report PDF error:',
+          'Visit PDF error:',
           err
         );
 
-        alert(
+        this.showError(
           'Failed to generate Visit Report PDF.'
         );
       }
     });
   }
 
-  // ============================================================
-  // GENERATE MR PDF
-  // ============================================================
+  // ==========================================================
+  // MR PDF
+  // ==========================================================
 
   generateMrPdf(): void {
 
@@ -671,17 +1264,16 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     this.downloadingMrPdf = true;
 
-    this.errorMessage = '';
-
-    const params = new HttpParams()
-      .set(
-        'fromDate',
-        this.fromDate
-      )
-      .set(
-        'toDate',
-        this.toDate
-      );
+    const params =
+      new HttpParams()
+        .set(
+          'fromDate',
+          this.fromDate
+        )
+        .set(
+          'toDate',
+          this.toDate
+        );
 
     this.http.get(
       `${this.apiUrl}/VisitReport/mr/${this.selectedMrId}/pdf`,
@@ -689,9 +1281,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
         params,
         responseType: 'blob'
       }
-    ).subscribe({
+    )
+    .subscribe({
 
-      next: (blob) => {
+      next: blob => {
 
         this.downloadingMrPdf = false;
 
@@ -702,7 +1295,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
         );
       },
 
-      error: (err) => {
+      error: err => {
 
         this.downloadingMrPdf = false;
 
@@ -711,16 +1304,16 @@ export class ReportsComponent implements OnInit, OnDestroy {
           err
         );
 
-        alert(
+        this.showError(
           'Failed to generate MR PDF.'
         );
       }
     });
   }
 
-  // ============================================================
-  // GENERATE CUSTOMER PDF
-  // ============================================================
+  // ==========================================================
+  // CUSTOMER PDF
+  // ==========================================================
 
   generateCustomerPdf(): void {
 
@@ -735,17 +1328,16 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     this.downloadingCustomerPdf = true;
 
-    this.errorMessage = '';
-
-    const params = new HttpParams()
-      .set(
-        'fromDate',
-        this.fromDate
-      )
-      .set(
-        'toDate',
-        this.toDate
-      );
+    const params =
+      new HttpParams()
+        .set(
+          'fromDate',
+          this.fromDate
+        )
+        .set(
+          'toDate',
+          this.toDate
+        );
 
     this.http.get(
       `${this.apiUrl}/VisitReport/customer/${this.selectedCustomerId}/pdf`,
@@ -753,9 +1345,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
         params,
         responseType: 'blob'
       }
-    ).subscribe({
+    )
+    .subscribe({
 
-      next: (blob) => {
+      next: blob => {
 
         this.downloadingCustomerPdf = false;
 
@@ -766,7 +1359,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
         );
       },
 
-      error: (err) => {
+      error: err => {
 
         this.downloadingCustomerPdf = false;
 
@@ -775,16 +1368,99 @@ export class ReportsComponent implements OnInit, OnDestroy {
           err
         );
 
-        alert(
+        this.showError(
           'Failed to generate Customer PDF.'
         );
       }
     });
   }
 
-  // ============================================================
-  // OPEN PDF PREVIEW
-  // ============================================================
+  // ==========================================================
+  // VALIDATE VISIT REPORT
+  // ==========================================================
+
+  private validateVisitReport(): boolean {
+
+    if (
+      !this.validateDateRange(
+        this.selectedMrId,
+        'MR'
+      )
+    ) {
+
+      return false;
+    }
+
+    if (
+      this.ratePerKm === null ||
+      this.ratePerKm < 0
+    ) {
+
+      this.showWarning(
+        this.kmRateMessage ||
+        'KM Rate is not configured for the selected month.'
+      );
+
+      return false;
+    }
+
+    return true;
+  }
+
+  // ==========================================================
+  // VALIDATE DATE
+  // ==========================================================
+
+  private validateDateRange(
+    selectedId: number | null,
+    name: string
+  ): boolean {
+
+    if (!selectedId) {
+
+      this.showWarning(
+        `Please select a ${name}.`
+      );
+
+      return false;
+    }
+
+    if (!this.fromDate) {
+
+      this.showWarning(
+        'Please select From Date.'
+      );
+
+      return false;
+    }
+
+    if (!this.toDate) {
+
+      this.showWarning(
+        'Please select To Date.'
+      );
+
+      return false;
+    }
+
+    if (
+      this.fromDate >
+      this.toDate
+    ) {
+
+      this.showWarning(
+        'From Date cannot be greater than To Date.'
+      );
+
+      return false;
+    }
+
+    return true;
+  }
+
+  // ==========================================================
+  // PDF PREVIEW
+  // ==========================================================
 
   private openPdfPreview(
     blob: Blob,
@@ -792,12 +1468,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
     title: string
   ): void {
 
-    if (
-      !blob ||
-      blob.size === 0
-    ) {
+    if (!blob || blob.size === 0) {
 
-      alert(
+      this.showError(
         'Generated PDF is empty.'
       );
 
@@ -808,9 +1481,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     this.pendingBlob = blob;
 
-    this.pendingFilename = filename;
+    this.pendingFilename =
+      filename;
 
-    this.previewTitle = title;
+    this.previewTitle =
+      title;
 
     const pdfBlob =
       new Blob(
@@ -821,7 +1496,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       );
 
     this.rawPreviewUrl =
-      window.URL.createObjectURL(
+      URL.createObjectURL(
         pdfBlob
       );
 
@@ -834,9 +1509,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
     this.showPreviewModal = true;
   }
 
-  // ============================================================
-  // DOWNLOAD PDF
-  // ============================================================
+  // ==========================================================
+  // DOWNLOAD
+  // ==========================================================
 
   confirmDownload(): void {
 
@@ -844,35 +1519,38 @@ export class ReportsComponent implements OnInit, OnDestroy {
       !this.pendingBlob ||
       !this.pendingFilename
     ) {
+
+      this.showWarning(
+        'No PDF is available for download.'
+      );
+
       return;
     }
 
-    const anchor =
-      document.createElement('a');
-
-    anchor.href =
+    const url =
       this.rawPreviewUrl ||
-      window.URL.createObjectURL(
+      URL.createObjectURL(
         this.pendingBlob
       );
 
-    anchor.download =
+    const a =
+      document.createElement('a');
+
+    a.href = url;
+
+    a.download =
       this.pendingFilename;
 
-    document.body.appendChild(
-      anchor
-    );
+    document.body.appendChild(a);
 
-    anchor.click();
+    a.click();
 
-    document.body.removeChild(
-      anchor
-    );
+    document.body.removeChild(a);
   }
 
-  // ============================================================
-  // CLOSE PREVIEW MODAL
-  // ============================================================
+  // ==========================================================
+  // CLOSE
+  // ==========================================================
 
   closePreviewModal(): void {
 
@@ -881,15 +1559,15 @@ export class ReportsComponent implements OnInit, OnDestroy {
     this.cleanupPreviewUrl();
   }
 
-  // ============================================================
-  // CLEANUP PREVIEW URL
-  // ============================================================
+  // ==========================================================
+  // CLEANUP
+  // ==========================================================
 
   private cleanupPreviewUrl(): void {
 
     if (this.rawPreviewUrl) {
 
-      window.URL.revokeObjectURL(
+      URL.revokeObjectURL(
         this.rawPreviewUrl
       );
 
@@ -903,84 +1581,16 @@ export class ReportsComponent implements OnInit, OnDestroy {
     this.pendingFilename = '';
   }
 
-  // ============================================================
-  // VALIDATE VISIT REPORT
-  // ============================================================
+  // ==========================================================
+  // DESTROY
+  // ==========================================================
 
-  private validateVisitReport(): boolean {
+  ngOnDestroy(): void {
 
-    if (
-      !this.validateDateRange(
-        this.selectedMrId,
-        'MR'
-      )
-    ) {
-      return false;
-    }
+    this.cleanupPreviewUrl();
 
-    if (
-      this.ratePerKm === null ||
-      this.ratePerKm === undefined ||
-      this.ratePerKm < 0
-    ) {
+    this.mrSearchSubject.complete();
 
-      alert(
-        'Please enter a valid Rate Per KM.'
-      );
-
-      return false;
-    }
-
-    return true;
-  }
-
-  // ============================================================
-  // VALIDATE DATE RANGE
-  // ============================================================
-
-  private validateDateRange(
-    selectedId: number | null,
-    entityName: string
-  ): boolean {
-
-    if (!selectedId) {
-
-      alert(
-        `Please select a ${entityName}.`
-      );
-
-      return false;
-    }
-
-    if (!this.fromDate) {
-
-      alert(
-        'Please select From Date.'
-      );
-
-      return false;
-    }
-
-    if (!this.toDate) {
-
-      alert(
-        'Please select To Date.'
-      );
-
-      return false;
-    }
-
-    if (
-      this.fromDate > this.toDate
-    ) {
-
-      alert(
-        'From Date cannot be greater than To Date.'
-      );
-
-      return false;
-    }
-
-    return true;
+    this.customerSearchSubject.complete();
   }
 }
