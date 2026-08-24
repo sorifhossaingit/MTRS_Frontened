@@ -1,228 +1,679 @@
 <div class="max-w-4xl mx-auto p-6 space-y-6">
 
-  <!-- HEADER -->
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
   <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+
     <div class="flex items-center space-x-3">
+
       <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
-        <lucide-icon [img]="FileText" class="w-6 h-6"></lucide-icon>
+        <lucide-icon
+          [img]="FileText"
+          class="w-6 h-6">
+        </lucide-icon>
       </div>
+
       <div>
-        <h1 class="text-xl font-bold text-slate-800">MR & Customer Reports</h1>
+        <h1 class="text-xl font-bold text-slate-800">
+          MR & Customer Reports
+        </h1>
+
         <p class="text-sm text-slate-500">
           Select date ranges and relevant entities to preview and generate PDF reports.
         </p>
       </div>
+
     </div>
+
 
     <!-- ERROR ALERT -->
-    <div *ngIf="errorMessage"
+    <div
+      *ngIf="errorMessage"
       class="mt-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-md text-sm flex items-center space-x-2">
-      <lucide-icon [img]="AlertCircle" class="w-5 h-5 flex-shrink-0"></lucide-icon>
-      <span>{{ errorMessage }}</span>
+
+      <lucide-icon
+        [img]="AlertCircle"
+        class="w-5 h-5 flex-shrink-0">
+      </lucide-icon>
+
+      <span>
+        {{ errorMessage }}
+      </span>
+
     </div>
+
   </div>
 
-  <!-- MAIN FORM CONTAINER -->
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+
+  <!-- ============================================================
+       MAIN FORM CONTAINER
+  ============================================================ -->
+  <div
+    class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-      <!-- FROM DATE -->
+
+      <!-- ========================================================
+           FROM DATE
+      ======================================================== -->
       <div>
+
         <label class="block text-sm font-medium text-slate-700 mb-2">
-          From Date <span class="text-red-500">*</span>
+
+          From Date
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
+
         <div class="relative">
-          <input type="date" [(ngModel)]="fromDate" name="fromDate"
+
+          <input
+            type="date"
+            [(ngModel)]="fromDate"
+            name="fromDate"
             class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-            <lucide-icon [img]="Calendar" class="w-5 h-5"></lucide-icon>
+
+          <div
+            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+
+            <lucide-icon
+              [img]="Calendar"
+              class="w-5 h-5">
+            </lucide-icon>
+
           </div>
+
         </div>
+
       </div>
 
-      <!-- TO DATE -->
+
+      <!-- ========================================================
+           TO DATE
+      ======================================================== -->
       <div>
+
         <label class="block text-sm font-medium text-slate-700 mb-2">
-          To Date <span class="text-red-500">*</span>
+
+          To Date
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
+
         <div class="relative">
-          <input type="date" [(ngModel)]="toDate" name="toDate"
+
+          <input
+            type="date"
+            [(ngModel)]="toDate"
+            name="toDate"
             class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-            <lucide-icon [img]="Calendar" class="w-5 h-5"></lucide-icon>
+
+          <div
+            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+
+            <lucide-icon
+              [img]="Calendar"
+              class="w-5 h-5">
+            </lucide-icon>
+
           </div>
+
         </div>
+
       </div>
 
-      <!-- MEDICAL REPRESENTATIVE SECTION -->
-      <div class="col-span-1 md:col-span-2 pt-4 border-t border-slate-100 space-y-4">
+
+      <!-- ========================================================
+           MEDICAL REPRESENTATIVE SECTION
+      ======================================================== -->
+      <div
+        class="col-span-1 md:col-span-2 pt-4 border-t border-slate-100 space-y-4">
+
         <label class="block text-sm font-semibold text-slate-800">
+
           Medical Representative Options
+
         </label>
 
-        <!-- MR Search Input -->
+
+        <!-- ======================================================
+             MR SEARCH
+        ====================================================== -->
         <div>
-          <label class="block text-xs text-slate-500 mb-1">Search MR (By Name or Mobile)</label>
+
+          <label class="block text-xs text-slate-500 mb-1">
+
+            Search MR (By Name or Mobile)
+
+          </label>
+
           <div class="relative">
-            <input type="text" [(ngModel)]="mrSearchTerm" name="mrSearchTerm"
+
+            <input
+              type="text"
+              [(ngModel)]="mrSearchTerm"
+              name="mrSearchTerm"
               (ngModelChange)="onMrSearchChange($event)"
               placeholder="Search MR by name or mobile..."
               class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <lucide-icon [img]="Search" class="w-4 h-4"></lucide-icon>
+
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+
+              <lucide-icon
+                [img]="Search"
+                class="w-4 h-4">
+              </lucide-icon>
+
             </div>
+
           </div>
+
         </div>
 
-        <!-- MR Dropdown -->
-        <div>
-          <label class="block text-xs text-slate-500 mb-1">Select Active Medical Representative</label>
-          <div class="relative">
-            <select [(ngModel)]="selectedMrId" name="selectedMrId" [disabled]="loadingMRs"
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm disabled:opacity-50">
-              <option [ngValue]="null" disabled selected>
-                {{ loadingMRs ? 'Searching Medical Representatives...' : '-- Choose Medical Representative --' }}
-              </option>
-              <option *ngFor="let mr of mrList" [ngValue]="mr.medicalRepresentativeId">
-                {{ mr.name }} ({{ mr.mobile }}) {{ mr.address ? '- ' + mr.address : '' }}
-              </option>
-            </select>
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <lucide-icon [img]="User" class="w-5 h-5" *ngIf="!loadingMRs"></lucide-icon>
-              <lucide-icon [img]="Loader2" class="w-5 h-5 animate-spin" *ngIf="loadingMRs"></lucide-icon>
-            </div>
-          </div>
-        </div>
 
-        <!-- Rate Per KM -->
+        <!-- ======================================================
+             MR DROPDOWN
+        ====================================================== -->
         <div>
+
           <label class="block text-xs text-slate-500 mb-1">
-            Rate Per KM (₹) <span class="text-slate-400">(Required for Visit Report)</span>
+
+            Select Active Medical Representative
+
           </label>
+
           <div class="relative">
-            <input type="number" step="0.01" min="0" placeholder="e.g. 12.50" [(ngModel)]="ratePerKm" name="ratePerKm"
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <lucide-icon [img]="IndianRupee" class="w-5 h-5"></lucide-icon>
+
+            <select
+              [(ngModel)]="selectedMrId"
+              name="selectedMrId"
+
+              [disabled]="
+                loadingMRs ||
+                isSpecialRole()
+              "
+
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm disabled:opacity-60 disabled:cursor-not-allowed">
+
+              <!-- PLACEHOLDER -->
+              <option
+                [ngValue]="null"
+                disabled>
+
+                {{
+                  loadingMRs
+                    ? 'Searching Medical Representatives...'
+                    : '-- Choose Medical Representative --'
+                }}
+
+              </option>
+
+
+              <!-- MR LIST -->
+              <option
+                *ngFor="let mr of mrList"
+                [ngValue]="mr.medicalRepresentativeId">
+
+                {{ mr.name }}
+
+                ({{ mr.mobile }})
+
+                {{ mr.address
+                  ? '- ' + mr.address
+                  : ''
+                }}
+
+              </option>
+
+            </select>
+
+
+            <!-- MR ICON -->
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+
+              <lucide-icon
+                [img]="User"
+                class="w-5 h-5"
+                *ngIf="!loadingMRs">
+              </lucide-icon>
+
+              <lucide-icon
+                [img]="Loader2"
+                class="w-5 h-5 animate-spin"
+                *ngIf="loadingMRs">
+              </lucide-icon>
+
             </div>
+
           </div>
+
+
+          <!-- AUTO SELECTED MESSAGE -->
+          <div
+            *ngIf="isSpecialRole() && selectedMrId"
+            class="mt-2 flex items-center gap-2 text-xs text-emerald-600">
+
+            <span
+              class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-100">
+
+              ✓
+
+            </span>
+
+            <span>
+              Medical Representative automatically selected
+            </span>
+
+          </div>
+
         </div>
 
-        <!-- MR Buttons -->
-        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+
+        <!-- ======================================================
+             RATE PER KM
+        ====================================================== -->
+        <div>
+
+          <label class="block text-xs text-slate-500 mb-1">
+
+            Rate Per KM (₹)
+
+            <span class="text-slate-400">
+              (Required for Visit Report)
+            </span>
+
+          </label>
+
+          <div class="relative">
+
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="e.g. 12.50"
+              [(ngModel)]="ratePerKm"
+              name="ratePerKm"
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-800 text-sm" />
+
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+
+              <lucide-icon
+                [img]="IndianRupee"
+                class="w-5 h-5">
+              </lucide-icon>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ======================================================
+             MR BUTTONS
+        ====================================================== -->
+        <div
+          class="flex flex-col sm:flex-row gap-3 pt-2">
+
+
           <!-- VISIT PDF BUTTON -->
-          <button type="button" (click)="generateVisitReportPdf()"
-            [disabled]="downloadingVisitPdf || !selectedMrId || !fromDate || !toDate || ratePerKm === null || ratePerKm < 0"
+          <button
+            type="button"
+            (click)="generateVisitReportPdf()"
+
+            [disabled]="
+              downloadingVisitPdf ||
+              !selectedMrId ||
+              !fromDate ||
+              !toDate ||
+              ratePerKm === null ||
+              ratePerKm < 0
+            "
+
             class="flex-1 inline-flex justify-center items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingVisitPdf"></lucide-icon>
-            <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingVisitPdf"></lucide-icon>
-            <span>{{ downloadingVisitPdf ? 'Loading Preview...' : 'Preview Visit Report' }}</span>
+
+            <lucide-icon
+              [img]="Eye"
+              class="w-4 h-4 mr-2"
+              *ngIf="!downloadingVisitPdf">
+            </lucide-icon>
+
+            <lucide-icon
+              [img]="Loader2"
+              class="w-4 h-4 mr-2 animate-spin"
+              *ngIf="downloadingVisitPdf">
+            </lucide-icon>
+
+            <span>
+
+              {{
+                downloadingVisitPdf
+                  ? 'Loading Preview...'
+                  : 'Preview Visit Report'
+              }}
+
+            </span>
+
           </button>
+
 
           <!-- MR PDF BUTTON -->
-          <button type="button" (click)="generateMrPdf()"
-            [disabled]="downloadingMrPdf || !selectedMrId || !fromDate || !toDate"
+          <button
+            type="button"
+            (click)="generateMrPdf()"
+
+            [disabled]="
+              downloadingMrPdf ||
+              !selectedMrId ||
+              !fromDate ||
+              !toDate
+            "
+
             class="flex-1 inline-flex justify-center items-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingMrPdf"></lucide-icon>
-            <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingMrPdf"></lucide-icon>
-            <span>{{ downloadingMrPdf ? 'Loading Preview...' : 'Preview MR Report' }}</span>
+
+            <lucide-icon
+              [img]="Eye"
+              class="w-4 h-4 mr-2"
+              *ngIf="!downloadingMrPdf">
+            </lucide-icon>
+
+            <lucide-icon
+              [img]="Loader2"
+              class="w-4 h-4 mr-2 animate-spin"
+              *ngIf="downloadingMrPdf">
+            </lucide-icon>
+
+            <span>
+
+              {{
+                downloadingMrPdf
+                  ? 'Loading Preview...'
+                  : 'Preview MR Report'
+              }}
+
+            </span>
+
           </button>
+
         </div>
+
       </div>
 
-      <!-- CUSTOMER SECTION -->
-      <div class="col-span-1 md:col-span-2 pt-6 border-t border-slate-200 space-y-4">
+
+      <!-- ========================================================
+           CUSTOMER SECTION
+           
+           HIDDEN FOR SPECIAL RID
+      ======================================================== -->
+      <div
+        *ngIf="!isSpecialRole()"
+        class="col-span-1 md:col-span-2 pt-6 border-t border-slate-200 space-y-4">
+
         <label class="block text-sm font-semibold text-slate-800">
+
           Customer Options
+
         </label>
 
-        <!-- Customer Live Search Input -->
+
+        <!-- ======================================================
+             CUSTOMER SEARCH
+        ====================================================== -->
         <div>
-          <label class="block text-xs text-slate-500 mb-1">Search Customer (By Name or Mobile Number)</label>
+
+          <label class="block text-xs text-slate-500 mb-1">
+
+            Search Customer (By Name or Mobile Number)
+
+          </label>
+
           <div class="relative">
-            <input type="text" [(ngModel)]="customerSearchTerm" name="customerSearchTerm"
+
+            <input
+              type="text"
+              [(ngModel)]="customerSearchTerm"
+              name="customerSearchTerm"
               (ngModelChange)="onCustomerSearchChange($event)"
               placeholder="Type name or phone number..."
               class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-slate-800 text-sm" />
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <lucide-icon [img]="Search" class="w-4 h-4"></lucide-icon>
+
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+
+              <lucide-icon
+                [img]="Search"
+                class="w-4 h-4">
+              </lucide-icon>
+
             </div>
+
           </div>
+
         </div>
 
-        <!-- Customer Select Dropdown -->
+
+        <!-- ======================================================
+             CUSTOMER DROPDOWN
+        ====================================================== -->
         <div>
-          <label class="block text-xs text-slate-500 mb-1">Select Customer</label>
+
+          <label class="block text-xs text-slate-500 mb-1">
+
+            Select Customer
+
+          </label>
+
           <div class="relative">
-            <select [(ngModel)]="selectedCustomerId" name="selectedCustomerId" [disabled]="loadingCustomers"
+
+            <select
+              [(ngModel)]="selectedCustomerId"
+              name="selectedCustomerId"
+              [disabled]="loadingCustomers"
+
               class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-slate-800 text-sm disabled:opacity-50">
-              
-              <option [ngValue]="null" disabled selected>
-                {{ loadingCustomers ? 'Searching Customers...' : '-- Choose Customer --' }}
+
+              <option
+                [ngValue]="null"
+                disabled>
+
+                {{
+                  loadingCustomers
+                    ? 'Searching Customers...'
+                    : '-- Choose Customer --'
+                }}
+
               </option>
 
-              <option *ngFor="let cust of customerList" [ngValue]="cust.customerId">
-                {{ cust.name }} 
-                {{ cust.mobile ? '(' + cust.mobile + ')' : '' }} 
-                {{ cust.routeName ? '[Route: ' + cust.routeName + ']' : '' }}
+
+              <option
+                *ngFor="let cust of customerList"
+                [ngValue]="cust.customerId">
+
+                {{ cust.name }}
+
+                {{
+                  cust.mobile
+                    ? '(' + cust.mobile + ')'
+                    : ''
+                }}
+
+                {{
+                  cust.routeName
+                    ? '[Route: ' + cust.routeName + ']'
+                    : ''
+                }}
+
               </option>
+
             </select>
 
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <lucide-icon [img]="Users" class="w-5 h-5" *ngIf="!loadingCustomers"></lucide-icon>
-              <lucide-icon [img]="Loader2" class="w-5 h-5 animate-spin" *ngIf="loadingCustomers"></lucide-icon>
+
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+
+              <lucide-icon
+                [img]="Users"
+                class="w-5 h-5"
+                *ngIf="!loadingCustomers">
+              </lucide-icon>
+
+              <lucide-icon
+                [img]="Loader2"
+                class="w-5 h-5 animate-spin"
+                *ngIf="loadingCustomers">
+              </lucide-icon>
+
             </div>
+
           </div>
+
         </div>
 
-        <!-- CUSTOMER PDF BUTTON -->
+
+        <!-- ======================================================
+             CUSTOMER PDF BUTTON
+        ====================================================== -->
         <div class="pt-2">
-          <button type="button" (click)="generateCustomerPdf()"
-            [disabled]="downloadingCustomerPdf || !selectedCustomerId || !fromDate || !toDate"
+
+          <button
+            type="button"
+            (click)="generateCustomerPdf()"
+
+            [disabled]="
+              downloadingCustomerPdf ||
+              !selectedCustomerId ||
+              !fromDate ||
+              !toDate
+            "
+
             class="w-full inline-flex justify-center items-center px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm rounded-lg shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-            <lucide-icon [img]="Eye" class="w-4 h-4 mr-2" *ngIf="!downloadingCustomerPdf"></lucide-icon>
-            <lucide-icon [img]="Loader2" class="w-4 h-4 mr-2 animate-spin" *ngIf="downloadingCustomerPdf"></lucide-icon>
-            <span>{{ downloadingCustomerPdf ? 'Loading Preview...' : 'Preview Customer Report' }}</span>
+
+            <lucide-icon
+              [img]="Eye"
+              class="w-4 h-4 mr-2"
+              *ngIf="!downloadingCustomerPdf">
+            </lucide-icon>
+
+            <lucide-icon
+              [img]="Loader2"
+              class="w-4 h-4 mr-2 animate-spin"
+              *ngIf="downloadingCustomerPdf">
+            </lucide-icon>
+
+            <span>
+
+              {{
+                downloadingCustomerPdf
+                  ? 'Loading Preview...'
+                  : 'Preview Customer Report'
+              }}
+
+            </span>
+
           </button>
+
         </div>
 
       </div>
 
     </div>
+
   </div>
+
 </div>
 
-<!-- PREVIEW MODAL -->
-<div *ngIf="showPreviewModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
-    
-    <!-- Modal Header -->
-    <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+
+<!-- ================================================================
+     PREVIEW MODAL
+================================================================ -->
+<div
+  *ngIf="showPreviewModal"
+  class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+
+  <div
+    class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+
+
+    <!-- ==========================================================
+         MODAL HEADER
+    =========================================================== -->
+    <div
+      class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+
       <div>
-        <h3 class="text-base font-semibold text-slate-800">{{ previewTitle }}</h3>
-        <p class="text-xs text-slate-500">{{ pendingFilename }}</p>
+
+        <h3 class="text-base font-semibold text-slate-800">
+          {{ previewTitle }}
+        </h3>
+
+        <p class="text-xs text-slate-500">
+          {{ pendingFilename }}
+        </p>
+
       </div>
+
 
       <div class="flex items-center space-x-3">
-        <!-- Download Button -->
-        <button (click)="confirmDownload()"
+
+        <!-- DOWNLOAD BUTTON -->
+        <button
+          type="button"
+          (click)="confirmDownload()"
           class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
-          <lucide-icon [img]="Download" class="w-4 h-4 mr-1.5"></lucide-icon>
+
+          <lucide-icon
+            [img]="Download"
+            class="w-4 h-4 mr-1.5">
+          </lucide-icon>
+
           Download PDF
+
         </button>
 
-        <!-- Close Button -->
-        <button (click)="closePreviewModal()"
+
+        <!-- CLOSE BUTTON -->
+        <button
+          type="button"
+          (click)="closePreviewModal()"
           class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
-          <lucide-icon [img]="X" class="w-5 h-5"></lucide-icon>
+
+          <lucide-icon
+            [img]="X"
+            class="w-5 h-5">
+          </lucide-icon>
+
         </button>
+
       </div>
+
     </div>
 
-    <!-- Modal Body (Embedded PDF Viewer) -->
-    <div class="flex-1 bg-slate-100 relative">
-      <iframe *ngIf="previewUrl" [src]="previewUrl" class="w-full h-full border-none"></iframe>
+
+    <!-- ==========================================================
+         PDF VIEWER
+    =========================================================== -->
+    <div
+      class="flex-1 bg-slate-100 relative">
+
+      <iframe
+        *ngIf="previewUrl"
+        [src]="previewUrl"
+        class="w-full h-full border-none">
+      </iframe>
+
     </div>
 
   </div>
+
 </div>

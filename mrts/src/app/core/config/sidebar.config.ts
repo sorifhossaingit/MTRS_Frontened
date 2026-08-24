@@ -264,7 +264,7 @@ export const MENU_ITEMS: MenuItem[] = [
   label: 'Reports',
   icon: 'file-text',
   route: '/reports',
-  roles: ['Admin'],
+  roles: ['Admin','MR'],
   children: [
     {
       label: 'Report Dashboard',
