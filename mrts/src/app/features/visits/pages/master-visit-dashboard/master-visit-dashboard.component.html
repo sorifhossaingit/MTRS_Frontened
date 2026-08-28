@@ -1,3 +1,4 @@
+
 <div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
 
   <!-- ========================= -->
@@ -7,22 +8,32 @@
   <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
 
     <div>
+
       <h1 class="text-2xl font-bold flex items-center gap-2">
+
         <lucide-icon [img]="MapPin"></lucide-icon>
+
         Visit Dashboard
+
       </h1>
 
       <p class="text-gray-500 mt-1">
+
         Manage, Track and Monitor Visit Plans
+
       </p>
+
     </div>
+
 
     <div class="flex flex-wrap gap-2 w-full lg:w-auto">
 
-      <button routerLink="/visits/assign-visit"
+      <button
+        routerLink="/visits/assign-visit"
         class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
 
         <lucide-icon [img]="Plus"></lucide-icon>
+
         Assign Visit
 
       </button>
@@ -30,6 +41,7 @@
     </div>
 
   </div>
+
 
   <!-- ========================= -->
   <!-- KPI CARDS -->
@@ -40,10 +52,13 @@
     <div class="bg-white rounded-xl shadow-sm p-5 flex items-center gap-4">
 
       <div class="bg-blue-100 p-3 rounded-lg">
+
         <lucide-icon [img]="MapPin"></lucide-icon>
+
       </div>
 
       <div>
+
         <p class="text-sm text-gray-500">
           Total Visits
         </p>
@@ -51,17 +66,22 @@
         <h2 class="text-2xl font-bold">
           {{ totalRecords }}
         </h2>
+
       </div>
 
     </div>
 
+
     <div class="bg-white rounded-xl shadow-sm p-5 flex items-center gap-4">
 
       <div class="bg-green-100 p-3 rounded-lg">
+
         <lucide-icon [img]="Users"></lucide-icon>
+
       </div>
 
       <div>
+
         <p class="text-sm text-gray-500">
           Total MRs
         </p>
@@ -69,17 +89,22 @@
         <h2 class="text-2xl font-bold">
           {{ mrList.length }}
         </h2>
+
       </div>
 
     </div>
 
+
     <div class="bg-white rounded-xl shadow-sm p-5 flex items-center gap-4">
 
       <div class="bg-yellow-100 p-3 rounded-lg">
+
         <lucide-icon [img]="Package"></lucide-icon>
+
       </div>
 
       <div>
+
         <p class="text-sm text-gray-500">
           Customers
         </p>
@@ -87,17 +112,22 @@
         <h2 class="text-2xl font-bold">
           {{ customerList.length }}
         </h2>
+
       </div>
 
     </div>
 
+
     <div class="bg-white rounded-xl shadow-sm p-5 flex items-center gap-4">
 
       <div class="bg-purple-100 p-3 rounded-lg">
+
         <lucide-icon [img]="ShoppingCart"></lucide-icon>
+
       </div>
 
       <div>
+
         <p class="text-sm text-gray-500">
           Current Page
         </p>
@@ -105,11 +135,13 @@
         <h2 class="text-2xl font-bold">
           {{ pageNumber }}
         </h2>
+
       </div>
 
     </div>
 
   </div>
+
 
   <!-- ========================= -->
   <!-- FILTERS -->
@@ -121,37 +153,53 @@
       Filters
     </h2>
 
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
 
       <!-- MR NAME -->
 
       <div>
+
         <label class="block text-sm font-medium mb-1">
           MR Name
         </label>
 
-        <input type="text" class="w-full border rounded-lg px-3 py-2" placeholder="Search MR"
+        <input
+          type="text"
+          class="w-full border rounded-lg px-3 py-2"
+          placeholder="Search MR"
           [(ngModel)]="filters.mrName">
+
       </div>
+
 
       <!-- VISIT DATE -->
 
       <div>
+
         <label class="block text-sm font-medium mb-1">
           Visit Date
         </label>
 
-        <input type="date" class="w-full border rounded-lg px-3 py-2" [(ngModel)]="filters.visitDate">
+        <input
+          type="date"
+          class="w-full border rounded-lg px-3 py-2"
+          [(ngModel)]="filters.visitDate">
+
       </div>
+
 
       <!-- STATUS -->
 
       <div>
+
         <label class="block text-sm font-medium mb-1">
           Status
         </label>
 
-        <select class="w-full border rounded-lg px-3 py-2" [(ngModel)]="filters.status">
+        <select
+          class="w-full border rounded-lg px-3 py-2"
+          [(ngModel)]="filters.status">
 
           <option value="">
             All
@@ -174,13 +222,17 @@
           </option>
 
         </select>
+
       </div>
 
-      <!-- ACTIONS -->
+
+      <!-- SEARCH -->
 
       <div class="flex items-end">
 
-        <button (click)="applyFilters()" class="w-full bg-blue-600 text-white rounded-lg py-2">
+        <button
+          (click)="applyFilters()"
+          class="w-full bg-blue-600 text-white rounded-lg py-2">
 
           Search
 
@@ -188,9 +240,14 @@
 
       </div>
 
+
+      <!-- RESET -->
+
       <div class="flex items-end">
 
-        <button (click)="resetFilters()" class="w-full bg-gray-200 rounded-lg py-2">
+        <button
+          (click)="resetFilters()"
+          class="w-full bg-gray-200 rounded-lg py-2">
 
           Reset
 
@@ -201,6 +258,7 @@
     </div>
 
   </div>
+
 
   <!-- ========================= -->
   <!-- TABLE -->
@@ -216,13 +274,19 @@
 
     </div>
 
-    <div *ngIf="loading" class="text-center py-10">
+
+    <div
+      *ngIf="loading"
+      class="text-center py-10">
 
       Loading visits...
 
     </div>
 
-    <div *ngIf="!loading" class="overflow-x-auto">
+
+    <div
+      *ngIf="!loading"
+      class="overflow-x-auto">
 
       <table class="min-w-[1200px] w-full text-sm">
 
@@ -270,43 +334,61 @@
 
         </thead>
 
+
         <tbody>
 
-          <tr *ngFor="let visit of visits" class="border-t hover:bg-gray-50">
+          <tr
+            *ngFor="let visit of visits"
+            class="border-t hover:bg-gray-50">
 
             <td class="p-4">
+
               {{ visit.visitDate | date:'dd MMM yyyy' }}
+
             </td>
+
 
             <td>
               {{ visit.mrName }}
             </td>
 
+
             <td>
               {{ visit.mobile }}
             </td>
+
 
             <td>
               {{ visit.email }}
             </td>
 
+
             <td>
               {{ visit.places?.length }}
             </td>
+
 
             <td>
               {{ getTotalProducts(visit) }}
             </td>
 
+
             <td>
+
               <div class="max-w-[180px] truncate">
+
                 {{ visit.remarks }}
+
               </div>
+
             </td>
 
+
             <td>
 
-              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(visit.status)">
+              <span
+                class="px-3 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="getStatusClass(visit.status)">
 
                 {{ visit.status }}
 
@@ -314,39 +396,55 @@
 
             </td>
 
+
             <td>
 
               <div class="flex justify-center gap-2">
 
                 <!-- VIEW -->
 
-                <button (click)="openViewModal(visit)"
+                <button
+                  (click)="openViewModal(visit)"
                   class="p-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
 
                   <lucide-icon [img]="Eye"></lucide-icon>
 
                 </button>
 
+
                 <!-- EDIT -->
 
-                <button *ngIf="canEdit(visit)" (click)="openEditModal(visit)"
+                <button
+                  *ngIf="canEdit(visit)"
+                  (click)="openEditModal(visit)"
                   class="p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200">
 
                   <lucide-icon [img]="Edit"></lucide-icon>
 
                 </button>
 
+
                 <!-- CANCEL -->
 
-                <button *ngIf="canCancel(visit)" (click)="cancelVisit(visit)"
+                <button
+                  *ngIf="canCancel(visit)"
+                  (click)="cancelVisit(visit)"
                   class="p-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200">
 
                   <lucide-icon [img]="XCircle"></lucide-icon>
 
                 </button>
 
-                <button *ngIf="canRoute(visit)" (click)="showTracking(visit)" class="bg-indigo-100 px-3 py-2 rounded">
+
+                <!-- ROUTE -->
+
+                <button
+                  *ngIf="canRoute(visit)"
+                  (click)="showTracking(visit)"
+                  class="bg-indigo-100 px-3 py-2 rounded">
+
                   Route
+
                 </button>
 
               </div>
@@ -355,9 +453,12 @@
 
           </tr>
 
+
           <tr *ngIf="visits.length === 0">
 
-            <td colspan="9" class="text-center py-10 text-gray-500">
+            <td
+              colspan="9"
+              class="text-center py-10 text-gray-500">
 
               No Visit Plans Found
 
@@ -373,11 +474,13 @@
 
   </div>
 
+
   <!-- ========================= -->
   <!-- PAGINATION -->
   <!-- ========================= -->
 
-  <div class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+  <div
+    class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
 
     <div class="text-sm text-gray-600">
 
@@ -386,25 +489,36 @@
 
     </div>
 
+
     <div class="flex items-center gap-2">
 
-      <button (click)="previousPage()" [disabled]="pageNumber === 1"
+      <button
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
         class="px-3 py-2 border rounded-lg disabled:opacity-50">
 
         Previous
 
       </button>
 
-      <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)" [ngClass]="{
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        (click)="goToPage(page)"
+        [ngClass]="{
           'bg-blue-600 text-white': pageNumber === page,
           'bg-white': pageNumber !== page
-        }" class="px-3 py-2 border rounded-lg">
+        }"
+        class="px-3 py-2 border rounded-lg">
 
         {{ page }}
 
       </button>
 
-      <button (click)="nextPage()" [disabled]="pageNumber === totalPages"
+
+      <button
+        (click)="nextPage()"
+        [disabled]="pageNumber === totalPages"
         class="px-3 py-2 border rounded-lg disabled:opacity-50">
 
         Next
@@ -417,18 +531,26 @@
 
 </div>
 
+
 <!-- ===================================================== -->
 <!-- VIEW VISIT MODAL -->
 <!-- ===================================================== -->
 
-<div *ngIf="showViewModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+<div
+  *ngIf="showViewModal"
+  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
+  <div
+    class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
+
 
     <!-- HEADER -->
-    <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+
+    <div
+      class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
 
       <div>
+
         <h2 class="text-2xl font-bold">
           Visit Details
         </h2>
@@ -436,9 +558,13 @@
         <p class="text-gray-500 text-sm">
           Complete Visit Plan Information
         </p>
+
       </div>
 
-      <button (click)="closeViewModal()" class="text-red-600 hover:text-red-800">
+
+      <button
+        (click)="closeViewModal()"
+        class="text-red-600 hover:text-red-800">
 
         <lucide-icon [img]="XCircle"></lucide-icon>
 
@@ -446,56 +572,79 @@
 
     </div>
 
+
     <div class="p-6">
 
       <!-- VISIT INFO -->
+
       <div class="grid lg:grid-cols-4 gap-4 mb-6">
 
         <div class="bg-blue-50 rounded-xl p-4">
+
           <p class="text-xs text-gray-500">
             Visit Date
           </p>
 
           <h3 class="font-semibold mt-1">
+
             {{ selectedVisit?.visitDate | date:'dd MMM yyyy' }}
+
           </h3>
+
         </div>
 
+
         <div class="bg-green-50 rounded-xl p-4">
+
           <p class="text-xs text-gray-500">
             MR Name
           </p>
 
           <h3 class="font-semibold mt-1">
+
             {{ selectedVisit?.mrName }}
+
           </h3>
+
         </div>
 
+
         <div class="bg-yellow-50 rounded-xl p-4">
+
           <p class="text-xs text-gray-500">
             Mobile
           </p>
 
           <h3 class="font-semibold mt-1">
+
             {{ selectedVisit?.mobile }}
+
           </h3>
+
         </div>
 
+
         <div class="bg-purple-50 rounded-xl p-4">
+
           <p class="text-xs text-gray-500">
             Status
           </p>
 
-          <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(selectedVisit?.status)">
+          <span
+            class="px-3 py-1 rounded-full text-xs font-semibold"
+            [ngClass]="getStatusClass(selectedVisit?.status)">
 
             {{ selectedVisit?.status }}
 
           </span>
+
         </div>
 
       </div>
 
+
       <!-- REMARKS -->
+
       <div class="bg-gray-50 rounded-xl p-4 mb-6">
 
         <h3 class="font-semibold mb-2">
@@ -508,16 +657,23 @@
 
       </div>
 
+
       <!-- CUSTOMER VISITS -->
+
       <div>
 
         <h3 class="text-lg font-bold mb-4">
           Customer Visit Plan
         </h3>
 
-        <div *ngFor="let place of selectedVisit?.places" class="border rounded-xl p-5 mb-5">
+
+        <div
+          *ngFor="let place of selectedVisit?.places"
+          class="border rounded-xl p-5 mb-5">
+
 
           <!-- TOP -->
+
           <div class="grid lg:grid-cols-4 gap-4 mb-4">
 
             <div>
@@ -527,10 +683,13 @@
               </p>
 
               <h4 class="font-semibold">
+
                 {{ getCustomerName(place.customerId) }}
+
               </h4>
 
             </div>
+
 
             <div>
 
@@ -539,10 +698,13 @@
               </p>
 
               <h4 class="font-semibold">
+
                 {{ place.plannedTime }}
+
               </h4>
 
             </div>
+
 
             <div>
 
@@ -551,10 +713,13 @@
               </p>
 
               <h4 class="font-semibold">
+
                 {{ place.sequenceNo }}
+
               </h4>
 
             </div>
+
 
             <div>
 
@@ -562,7 +727,9 @@
                 Status
               </p>
 
-              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(place.status)">
+              <span
+                class="px-3 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="getStatusClass(place.status)">
 
                 {{ place.status }}
 
@@ -572,35 +739,53 @@
 
           </div>
 
+
           <!-- PRODUCTS -->
+
           <div>
 
             <h4 class="font-semibold mb-3">
               Products
             </h4>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-              <div *ngFor="let product of place.products" class="border rounded-xl overflow-hidden bg-white">
+            <div
+              class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-                <img [src]="product.imageUrl" [alt]="product.productName" class="w-full h-32 object-cover">
+              <div
+                *ngFor="let product of place.products"
+                class="border rounded-xl overflow-hidden bg-white">
+
+                <img
+                  [src]="product.imageUrl"
+                  [alt]="product.productName"
+                  class="w-full h-32 object-cover">
+
 
                 <div class="p-3">
 
                   <h5 class="font-semibold text-sm">
+
                     {{ product.productName }}
+
                   </h5>
 
                   <p class="text-xs text-gray-500">
+
                     {{ product.brandName }}
+
                   </p>
 
                   <p class="text-xs text-gray-500">
+
                     {{ product.genericName }}
+
                   </p>
 
                   <p class="text-sm font-semibold mt-1">
+
                     ₹{{ product.mrp }}
+
                   </p>
 
                 </div>
@@ -621,23 +806,40 @@
 
 </div>
 
+
 <!-- ===================================================== -->
 <!-- EDIT VISIT MODAL -->
 <!-- ===================================================== -->
 
-<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+<div
+  *ngIf="showEditModal"
+  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
+  <div
+    class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
+
 
     <!-- HEADER -->
 
-    <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+    <div
+      class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
 
-      <h2 class="text-2xl font-bold">
-        Edit Visit Plan
-      </h2>
+      <div>
 
-      <button (click)="closeEditModal()" class="text-red-600">
+        <h2 class="text-2xl font-bold">
+          Edit Visit Plan
+        </h2>
+
+        <p class="text-sm text-gray-500 mt-1">
+          Edit customers and products for the existing route
+        </p>
+
+      </div>
+
+
+      <button
+        (click)="closeEditModal()"
+        class="text-red-600 hover:text-red-800">
 
         <lucide-icon [img]="XCircle"></lucide-icon>
 
@@ -645,11 +847,18 @@
 
     </div>
 
+
     <div class="p-6">
 
-      <!-- VISIT INFO -->
 
-      <div class="grid md:grid-cols-3 gap-4 mb-6">
+      <!-- ========================= -->
+      <!-- VISIT INFO -->
+      <!-- ========================= -->
+
+      <div class="grid md:grid-cols-4 gap-4 mb-6">
+
+
+        <!-- MR -->
 
         <div>
 
@@ -657,15 +866,19 @@
             MR
           </label>
 
-          <select [(ngModel)]="editVisit.mrId" class="w-full border rounded-lg px-3 py-2">
+          <select
+            [(ngModel)]="editVisit.mrId"
+            class="w-full border rounded-lg px-3 py-2">
 
             <option [ngValue]="null">
               Select MR
             </option>
 
-            <option *ngFor="let mr of mrList" [ngValue]="mr.medicalRepresentativeId">
+            <option
+              *ngFor="let mr of mrList"
+              [ngValue]="mr.medicalRepresentativeId">
 
-              {{ mr.name }} ({{mr.coverArea}})
+              {{ mr.name }} | ({{mr.mobile}})
 
             </option>
 
@@ -673,15 +886,71 @@
 
         </div>
 
+
+        <!-- EXISTING ROUTE -->
+
+        <div>
+
+          <label class="block text-sm font-medium mb-1">
+            Route
+          </label>
+
+
+          <div
+            class="w-full border rounded-lg px-3 py-2 bg-gray-100 min-h-[42px] flex items-center gap-2">
+
+            <lucide-icon
+              [img]="MapPin"
+              class="text-blue-600">
+            </lucide-icon>
+
+
+            <span
+              *ngIf="editVisit?.routeName"
+              class="font-medium text-gray-700">
+
+              {{ editVisit.routeName }}
+
+            </span>
+
+
+            <span
+              *ngIf="!editVisit?.routeName"
+              class="font-medium text-gray-700">
+
+              Route #{{ editVisit?.routeId }}
+
+            </span>
+
+          </div>
+
+
+          <p class="text-xs text-gray-500 mt-1">
+
+            Existing route is fixed during edit.
+
+          </p>
+
+        </div>
+
+
+        <!-- VISIT DATE -->
+
         <div>
 
           <label class="block text-sm font-medium mb-1">
             Visit Date
           </label>
 
-          <input type="date" [(ngModel)]="editVisit.visitDate" class="w-full border rounded-lg px-3 py-2">
+          <input
+            type="date"
+            [(ngModel)]="editVisit.visitDate"
+            class="w-full border rounded-lg px-3 py-2">
 
         </div>
+
+
+        <!-- REMARKS -->
 
         <div>
 
@@ -689,21 +958,44 @@
             Remarks
           </label>
 
-          <input type="text" [(ngModel)]="editVisit.remarks" class="w-full border rounded-lg px-3 py-2">
+          <input
+            type="text"
+            [(ngModel)]="editVisit.remarks"
+            class="w-full border rounded-lg px-3 py-2">
 
         </div>
 
       </div>
 
-      <!-- CUSTOMER VISITS -->
 
-      <div class="flex justify-between items-center mb-4">
+      <!-- ========================= -->
+      <!-- CUSTOMER VISITS HEADER -->
+      <!-- ========================= -->
 
-        <h3 class="text-lg font-bold">
-          Customer Visits
-        </h3>
+      <div
+        class="flex justify-between items-center mb-4">
 
-        <button (click)="addPlace()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+        <div>
+
+          <h3 class="text-lg font-bold">
+            Customer Visits
+          </h3>
+
+          <p class="text-xs text-gray-500 mt-1">
+
+            Customers are restricted to the selected route.
+
+          </p>
+
+        </div>
+
+
+        <button
+          (click)="addPlace()"
+          [disabled]="!editRouteId || loadingRouteCustomers"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+
+          <lucide-icon [img]="Plus"></lucide-icon>
 
           Add Customer
 
@@ -711,33 +1003,82 @@
 
       </div>
 
-      <div *ngFor="let place of editVisit?.places; let i = index" class="border rounded-xl p-5 mb-5">
+
+      <!-- ========================= -->
+      <!-- LOADING CUSTOMERS -->
+      <!-- ========================= -->
+
+      <div
+        *ngIf="loadingRouteCustomers"
+        class="mb-5 bg-blue-50 border border-blue-200 text-blue-700 rounded-xl px-4 py-3 flex items-center gap-2">
+
+        <span
+          class="inline-block w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin">
+        </span>
+
+        Loading customers for this route...
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- CUSTOMER VISITS -->
+      <!-- ========================= -->
+
+      <div
+        *ngFor="let place of editVisit?.places; let i = index"
+        class="border rounded-xl p-5 mb-5 bg-white shadow-sm">
+
+
+        <!-- CUSTOMER / TIME / SEQUENCE / REMARKS / REMOVE -->
 
         <div class="grid lg:grid-cols-5 gap-4">
+
 
           <!-- CUSTOMER -->
 
           <div>
 
             <label class="block text-sm font-medium mb-1">
+
               Customer
+
+              <span class="text-red-500">
+                *
+              </span>
+
             </label>
 
-            <select [(ngModel)]="place.customerId" class="w-full border rounded-lg px-3 py-2">
+<select
+  [(ngModel)]="place.customerId"
+  [name]="'customerId_' + i"
+  [disabled]="loadingRouteCustomers"
+  class="w-full border rounded-lg px-3 py-2 bg-white disabled:bg-gray-100">
 
-              <option [ngValue]="null">
-                Select Customer
-              </option>
+  <option [ngValue]="null">
+    {{ loadingRouteCustomers ? 'Loading Customers...' : 'Select Customer' }}
+  </option>
 
-              <option *ngFor="let customer of customerList" [ngValue]="customer.customerId">
+  <option
+    *ngFor="let customer of customerList"
+    [ngValue]="customer.customerId">
 
-                {{ customer.name }} ({{customer.region}})
+    {{ customer.name }}
 
-              </option>
+  </option>
 
-            </select>
+</select>
+
+            <p
+              *ngIf="editRouteId && !loadingRouteCustomers"
+              class="text-xs text-gray-500 mt-1">
+
+              Only customers from this route are available.
+
+            </p>
 
           </div>
+
 
           <!-- TIME -->
 
@@ -747,9 +1088,13 @@
               Time
             </label>
 
-            <input type="time" [(ngModel)]="place.plannedTime" class="w-full border rounded-lg px-3 py-2">
+            <input
+              type="time"
+              [(ngModel)]="place.plannedTime"
+              class="w-full border rounded-lg px-3 py-2">
 
           </div>
+
 
           <!-- SEQUENCE -->
 
@@ -759,9 +1104,13 @@
               Sequence
             </label>
 
-            <input type="number" [(ngModel)]="place.sequenceNo" class="w-full border rounded-lg px-3 py-2">
+            <input
+              type="number"
+              [(ngModel)]="place.sequenceNo"
+              class="w-full border rounded-lg px-3 py-2">
 
           </div>
+
 
           <!-- REMARKS -->
 
@@ -771,15 +1120,23 @@
               Remarks
             </label>
 
-            <input type="text" [(ngModel)]="place.remarks" class="w-full border rounded-lg px-3 py-2">
+            <input
+              type="text"
+              [(ngModel)]="place.remarks"
+              class="w-full border rounded-lg px-3 py-2">
 
           </div>
+
 
           <!-- REMOVE -->
 
           <div class="flex items-end">
 
-            <button (click)="removePlace(i)" class="bg-red-600 text-white px-4 py-2 rounded-lg w-full">
+            <button
+              (click)="removePlace(i)"
+              class="bg-red-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2">
+
+              <lucide-icon [img]="Trash2"></lucide-icon>
 
               Remove
 
@@ -789,17 +1146,29 @@
 
         </div>
 
+
+        <!-- ========================= -->
         <!-- PRODUCTS -->
+        <!-- ========================= -->
 
         <div class="mt-5">
 
-          <div class="flex justify-between items-center mb-3">
+
+          <div
+            class="flex justify-between items-center mb-3">
 
             <h4 class="font-semibold">
+
               Products
+
             </h4>
 
-            <button (click)="openProductModal(i)" class="bg-green-600 text-white px-4 py-2 rounded-lg">
+
+            <button
+              (click)="openProductModal(i)"
+              class="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+
+              <lucide-icon [img]="ShoppingCart"></lucide-icon>
 
               Add / Edit Products
 
@@ -807,20 +1176,53 @@
 
           </div>
 
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-            <div *ngFor="let product of place.selectedProducts" class="border rounded-xl overflow-hidden">
+          <!-- NO PRODUCTS -->
 
-              <img [src]="product.imageUrl" class="w-full h-32 object-cover">
+          <div
+            *ngIf="!place.selectedProducts?.length"
+            class="border border-dashed rounded-xl p-5 text-center text-gray-500">
+
+            No products selected.
+
+            <span class="text-gray-400">
+              Click "Add / Edit Products" to add products.
+            </span>
+
+          </div>
+
+
+          <!-- PRODUCTS -->
+
+          <div
+            *ngIf="place.selectedProducts?.length"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+
+
+            <div
+              *ngFor="let product of place.selectedProducts"
+              class="border rounded-xl overflow-hidden bg-white shadow-sm">
+
+
+              <img
+                [src]="product.imageUrl"
+                [alt]="product.productName || product.name"
+                class="w-full h-32 object-cover">
+
 
               <div class="p-3">
 
                 <h5 class="font-semibold text-sm">
+
                   {{ product.productName || product.name }}
+
                 </h5>
 
+
                 <p class="text-xs text-gray-500">
+
                   {{ product.brandName }}
+
                 </p>
 
               </div>
@@ -833,17 +1235,51 @@
 
       </div>
 
+
+      <!-- ========================= -->
+      <!-- EMPTY CUSTOMER STATE -->
+      <!-- ========================= -->
+
+      <div
+        *ngIf="!loadingRouteCustomers && editVisit?.places?.length === 0"
+        class="border border-dashed rounded-xl p-8 text-center text-gray-500 mb-5">
+
+        <lucide-icon
+          [img]="Users"
+          class="mx-auto mb-3">
+        </lucide-icon>
+
+        <p class="font-medium">
+          No customers added to this visit.
+        </p>
+
+        <p class="text-sm mt-1">
+          Click "Add Customer" to add a customer from this route.
+        </p>
+
+      </div>
+
+
+      <!-- ========================= -->
       <!-- ACTIONS -->
+      <!-- ========================= -->
 
       <div class="flex justify-end gap-3 mt-6">
 
-        <button (click)="closeEditModal()" class="bg-gray-200 px-5 py-2 rounded-lg">
+
+        <button
+          (click)="closeEditModal()"
+          class="bg-gray-200 hover:bg-gray-300 px-5 py-2 rounded-lg">
 
           Close
 
         </button>
 
-        <button (click)="updateVisit()" class="bg-blue-600 text-white px-5 py-2 rounded-lg flex items-center gap-2">
+
+        <button
+          (click)="updateVisit()"
+          [disabled]="loadingRouteCustomers"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50">
 
           <lucide-icon [img]="Save"></lucide-icon>
 
@@ -859,13 +1295,21 @@
 
 </div>
 
+
 <!-- ===================================================== -->
 <!-- PRODUCT SELECTION MODAL -->
 <!-- ===================================================== -->
 
-<div *ngIf="showProductModal" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
+<div
+  *ngIf="showProductModal"
+  class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
 
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto p-6">
+
+  <div
+    class="bg-white rounded-2xl shadow-xl w-full max-w-7xl max-h-[95vh] overflow-y-auto p-6">
+
+
+    <!-- HEADER -->
 
     <div class="flex justify-between items-center mb-6">
 
@@ -873,7 +1317,10 @@
         Select Products
       </h2>
 
-      <button (click)="closeProductModal()" class="text-red-600">
+
+      <button
+        (click)="closeProductModal()"
+        class="text-red-600 hover:text-red-800">
 
         <lucide-icon [img]="XCircle"></lucide-icon>
 
@@ -881,23 +1328,38 @@
 
     </div>
 
+
     <!-- SEARCH -->
 
     <div class="grid md:grid-cols-4 gap-4 mb-6">
 
-      <input type="text" placeholder="Product Name" [(ngModel)]="productSearch.name"
+
+      <input
+        type="text"
+        placeholder="Product Name"
+        [(ngModel)]="productSearch.name"
         class="border rounded-lg px-3 py-2">
 
-      <input type="text" placeholder="Brand Name" [(ngModel)]="productSearch.brandName"
+
+      <input
+        type="text"
+        placeholder="Brand Name"
+        [(ngModel)]="productSearch.brandName"
         class="border rounded-lg px-3 py-2">
 
-      <button (click)="searchProducts()" class="bg-blue-600 text-white rounded-lg">
+
+      <button
+        (click)="searchProducts()"
+        class="bg-blue-600 text-white rounded-lg">
 
         Search
 
       </button>
 
-      <button (click)="clearProductSearch()" class="bg-gray-200 rounded-lg">
+
+      <button
+        (click)="clearProductSearch()"
+        class="bg-gray-200 rounded-lg">
 
         Reset
 
@@ -905,41 +1367,74 @@
 
     </div>
 
-    <!-- PRODUCTS -->
 
-    <div *ngIf="loadingProducts" class="text-center py-10">
+    <!-- PRODUCTS LOADING -->
+
+    <div
+      *ngIf="loadingProducts"
+      class="text-center py-10">
 
       Loading Products...
 
     </div>
 
-    <div *ngIf="!loadingProducts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
 
-      <div *ngFor="let product of products" class="border rounded-xl overflow-hidden">
+    <!-- PRODUCTS -->
 
-        <img [src]="product.imageUrl" class="w-full h-36 object-cover">
+    <div
+      *ngIf="!loadingProducts"
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+
+
+      <div
+        *ngFor="let product of products"
+        class="border rounded-xl overflow-hidden bg-white shadow-sm">
+
+
+        <img
+          [src]="product.imageUrl"
+          [alt]="product.name"
+          class="w-full h-36 object-cover">
+
 
         <div class="p-3">
 
+
           <h4 class="font-semibold text-sm">
+
             {{ product.name }}
+
           </h4>
 
-          <p class="text-xs text-gray-500">
-            {{ product.brandName }}
-          </p>
 
           <p class="text-xs text-gray-500">
-            {{ product.strength }}
+
+            {{ product.brandName }}
+
           </p>
+
+
+          <p class="text-xs text-gray-500">
+
+            {{ product.strength }}
+
+          </p>
+
 
           <div class="mt-3">
 
-            <label class="flex items-center gap-2 cursor-pointer">
+            <label
+              class="flex items-center gap-2 cursor-pointer">
 
-              <input type="checkbox" [checked]="isSelected(product.productId)" (change)="toggleProduct(product)">
+              <input
+                type="checkbox"
+                [checked]="isSelected(product.productId)"
+                (change)="toggleProduct(product)">
 
-              <span>Select</span>
+
+              <span>
+                Select
+              </span>
 
             </label>
 
@@ -951,9 +1446,16 @@
 
     </div>
 
+
+    <!-- SAVE -->
+
     <div class="flex justify-end mt-6">
 
-      <button (click)="saveProducts()" class="bg-green-600 text-white px-5 py-2 rounded-lg">
+      <button
+        (click)="saveProducts()"
+        class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg flex items-center gap-2">
+
+        <lucide-icon [img]="Save"></lucide-icon>
 
         Save Selected Products
 
@@ -964,3 +1466,4 @@
   </div>
 
 </div>
+

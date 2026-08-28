@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import * as L from 'leaflet';
@@ -86,6 +87,12 @@ export class MasterVisitDashboardComponent implements OnInit {
 
   showEditModal = false;
   editVisit: any = null;
+
+  // Route selected for current edit
+  editRouteId: number | null = null;
+
+  // Loading route customers
+  loadingRouteCustomers = false;
 
   // =========================
   // Product Modal
@@ -329,6 +336,10 @@ export class MasterVisitDashboardComponent implements OnInit {
 
   }
 
+  // =========================
+  // ROUTE
+  // =========================
+
   canRoute(visit: any): boolean {
 
     return visit.status === 'Accepted'
@@ -338,244 +349,247 @@ export class MasterVisitDashboardComponent implements OnInit {
   }
 
   showTracking(visit: any): void {
-  
-      this.visitService
-        .get_tracking_of_mr(visit.visitPlanId)
-        .subscribe({
-  
-          next: (res: any) => {
-  
-            if (!res.success) {
-  
-              Swal.fire(
-                'Error',
-                res.message,
-                'error'
-              );
-  
-              return;
-  
-            }
-  
-            this.trackingData = res.data;
-  
-            this.openTrackingMap();
-  
-          },
-  
-          error: () => {
-  
+
+    this.visitService
+      .get_tracking_of_mr(visit.visitPlanId)
+      .subscribe({
+
+        next: (res: any) => {
+
+          if (!res.success) {
+
             Swal.fire(
               'Error',
-              'Unable to fetch tracking.',
+              res.message,
               'error'
             );
-  
+
+            return;
+
           }
-  
-        });
-  
-    }
-  
-    openTrackingMap(): void {
-  
-      Swal.fire({
-  
-        title: 'MR Route',
-  
-        width: '90%',
-  
-        html: `
-  
-          <div id="trackingMap"
-               style="height:600px;border-radius:12px;"></div>
-  
-      `,
-  
-        showConfirmButton: true,
-  
-        confirmButtonText: 'Close',
-  
-        didOpen: () => {
-  
-          setTimeout(() => {
-  
-            this.loadTrackingMap();
-  
-          }, 300);
-  
+
+          this.trackingData = res.data;
+
+          this.openTrackingMap();
+
+        },
+
+        error: () => {
+
+          Swal.fire(
+            'Error',
+            'Unable to fetch tracking.',
+            'error'
+          );
+
         }
-  
+
       });
-  
+
+  }
+
+  openTrackingMap(): void {
+
+    Swal.fire({
+
+      title: 'MR Route',
+
+      width: '90%',
+
+      html: `
+
+        <div id="trackingMap"
+             style="height:600px;border-radius:12px;"></div>
+
+    `,
+
+      showConfirmButton: true,
+
+      confirmButtonText: 'Close',
+
+      didOpen: () => {
+
+        setTimeout(() => {
+
+          this.loadTrackingMap();
+
+        }, 300);
+
+      }
+
+    });
+
+  }
+
+
+  loadTrackingMap(): void {
+
+    if (!this.trackingData || !this.trackingData.session) {
+      return;
     }
-  
-  
-    loadTrackingMap(): void {
-  
-      if (!this.trackingData || !this.trackingData.session) {
-        return;
+
+    const session = this.trackingData.session;
+
+    // Destroy previous map
+    if (this.map) {
+      this.map.remove();
+    }
+
+    // Create map
+    this.map = L.map('trackingMap');
+
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
       }
-  
-      const session = this.trackingData.session;
-  
-      // Destroy previous map
-      if (this.map) {
-        this.map.remove();
-      }
-  
-      // Create map
-      this.map = L.map('trackingMap');
-  
-      L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    ).addTo(this.map);
+
+    const routeCoordinates: L.LatLngExpression[] = [];
+
+    // -------------------------------
+    // START MARKER
+    // -------------------------------
+
+    if (
+      session.startLatitude != null &&
+      session.startLongitude != null
+    ) {
+
+      const startLatLng: L.LatLngExpression = [
+        session.startLatitude,
+        session.startLongitude
+      ];
+
+      routeCoordinates.push(startLatLng);
+
+      L.marker(startLatLng)
+        .addTo(this.map)
+        .bindPopup(`
+        <b>Visit Started</b><br>
+        Time :
+        ${new Date(session.startTime).toLocaleString()}
+      `);
+
+    }
+
+    // -------------------------------
+    // TRACKING POINTS
+    // -------------------------------
+
+    if (
+      session.trackingPoints &&
+      session.trackingPoints.length > 0
+    ) {
+
+      session.trackingPoints.forEach(
+        (point: any, index: number) => {
+
+          const latLng: L.LatLngExpression = [
+            point.latitude,
+            point.longitude
+          ];
+
+          routeCoordinates.push(latLng);
+
+          L.circleMarker(latLng, {
+
+            radius: 6,
+
+            color: '#2563eb',
+
+            fillColor: '#3b82f6',
+
+            fillOpacity: 1,
+
+            weight: 2
+
+          })
+            .addTo(this.map)
+            .bindPopup(`
+            <b>Tracking Point ${index + 1}</b><br>
+            Time :
+            ${new Date(point.trackedAt).toLocaleString()}
+          `);
+
+        });
+
+    }
+
+    // -------------------------------
+    // END MARKER
+    // -------------------------------
+
+    if (
+      session.endLatitude != null &&
+      session.endLongitude != null
+    ) {
+
+      const endLatLng: L.LatLngExpression = [
+        session.endLatitude,
+        session.endLongitude
+      ];
+
+      routeCoordinates.push(endLatLng);
+
+      L.marker(endLatLng)
+        .addTo(this.map)
+        .bindPopup(`
+        <b>Visit Ended</b><br>
+        Time :
+        ${new Date(session.endTime).toLocaleString()}
+      `);
+
+    }
+
+    else if (routeCoordinates.length > 0) {
+
+      const lastPoint =
+        routeCoordinates[routeCoordinates.length - 1];
+
+      L.marker(lastPoint)
+        .addTo(this.map)
+        .bindPopup(`
+        <b>Current Position</b>
+      `);
+
+    }
+
+    // -------------------------------
+    // ROUTE LINE
+    // -------------------------------
+
+    if (routeCoordinates.length > 1) {
+
+      this.routeLayer = L.polyline(
+        routeCoordinates,
         {
-          maxZoom: 19,
-          attribution: '&copy; OpenStreetMap contributors'
+          color: '#2563eb',
+          weight: 5,
+          opacity: 0.8
         }
       ).addTo(this.map);
-  
-      const routeCoordinates: L.LatLngExpression[] = [];
-  
-      // -------------------------------
-      // START MARKER
-      // -------------------------------
-  
-      if (
-        session.startLatitude != null &&
-        session.startLongitude != null
-      ) {
-  
-        const startLatLng: L.LatLngExpression = [
-          session.startLatitude,
-          session.startLongitude
-        ];
-  
-        routeCoordinates.push(startLatLng);
-  
-        L.marker(startLatLng)
-          .addTo(this.map)
-          .bindPopup(`
-          <b>Visit Started</b><br>
-          Time :
-          ${new Date(session.startTime).toLocaleString()}
-        `);
-  
-      }
-  
-      // -------------------------------
-      // TRACKING POINTS
-      // -------------------------------
-  
-      if (
-        session.trackingPoints &&
-        session.trackingPoints.length > 0
-      ) {
-  
-        session.trackingPoints.forEach(
-          (point: any, index: number) => {
-  
-            const latLng: L.LatLngExpression = [
-              point.latitude,
-              point.longitude
-            ];
-  
-            routeCoordinates.push(latLng);
-  
-            L.circleMarker(latLng, {
-  
-              radius: 6,
-  
-              color: '#2563eb',
-  
-              fillColor: '#3b82f6',
-  
-              fillOpacity: 1,
-  
-              weight: 2
-  
-            })
-              .addTo(this.map)
-              .bindPopup(`
-              <b>Tracking Point ${index + 1}</b><br>
-              Time :
-              ${new Date(point.trackedAt).toLocaleString()}
-            `);
-  
-          });
-  
-      }
-  
-      // -------------------------------
-      // END MARKER
-      // -------------------------------
-  
-      if (
-        session.endLatitude != null &&
-        session.endLongitude != null
-      ) {
-  
-        const endLatLng: L.LatLngExpression = [
-          session.endLatitude,
-          session.endLongitude
-        ];
-  
-        routeCoordinates.push(endLatLng);
-  
-        L.marker(endLatLng)
-          .addTo(this.map)
-          .bindPopup(`
-          <b>Visit Ended</b><br>
-          Time :
-          ${new Date(session.endTime).toLocaleString()}
-        `);
-  
-      }
-  
-      else if (routeCoordinates.length > 0) {
-  
-        const lastPoint =
-          routeCoordinates[routeCoordinates.length - 1];
-  
-        L.marker(lastPoint)
-          .addTo(this.map)
-          .bindPopup(`
-          <b>Current Position</b>
-        `);
-  
-      }
-  
-      // -------------------------------
-      // ROUTE LINE
-      // -------------------------------
-  
-      if (routeCoordinates.length > 1) {
-  
-        this.routeLayer = L.polyline(
-          routeCoordinates,
-          {
-            color: '#2563eb',
-            weight: 5,
-            opacity: 0.8
-          }
-        ).addTo(this.map);
-  
-        this.map.fitBounds(
-          this.routeLayer.getBounds(),
-          {
-            padding: [40, 40]
-          }
-        );
-  
-      }
-  
-      else if (routeCoordinates.length === 1) {
-  
-        this.map.setView(routeCoordinates[0] as L.LatLngExpression, 16);
-  
-      }
-  
+
+      this.map.fitBounds(
+        this.routeLayer.getBounds(),
+        {
+          padding: [40, 40]
+        }
+      );
+
     }
+
+    else if (routeCoordinates.length === 1) {
+
+      this.map.setView(
+        routeCoordinates[0] as L.LatLngExpression,
+        16
+      );
+
+    }
+
+  }
 
   // =========================
   // LOAD CUSTOMERS
@@ -584,8 +598,12 @@ export class MasterVisitDashboardComponent implements OnInit {
   loadCustomers(): void {
 
     const payload = {
-      assignedAreaManager: Number(localStorage.getItem('mid')),
-      agencyId: Number(localStorage.getItem('aid')),
+
+      assignedAreaManager:
+        Number(localStorage.getItem('mid')),
+
+      agencyId:
+        Number(localStorage.getItem('aid')),
 
     };
 
@@ -607,6 +625,122 @@ export class MasterVisitDashboardComponent implements OnInit {
         }
 
       });
+
+  }
+
+  // =========================
+  // LOAD CUSTOMERS BY ROUTE
+  // =========================
+
+loadCustomersByRoute(routeId: number): void {
+
+  if (!routeId) {
+    console.warn('Route ID is missing.');
+    return;
+  }
+
+  this.loadingRouteCustomers = true;
+
+  const agencyId =
+    Number(localStorage.getItem('aid'));
+
+  const areaManagerId =
+    Number(localStorage.getItem('mid'));
+
+  this.visitService
+    .get_customers_by_route_visit(
+      routeId,
+      agencyId,
+      areaManagerId
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        console.log(
+          'Customers by Route API Response:',
+          res
+        );
+
+        // API returns array directly
+        if (Array.isArray(res)) {
+
+          this.customerList = res;
+
+        }
+        // Keep compatibility if API later returns { data: [] }
+        else if (Array.isArray(res?.data)) {
+
+          this.customerList = res.data;
+
+        }
+        else {
+
+          this.customerList = [];
+
+        }
+
+        console.log(
+          'Route Customer List:',
+          this.customerList
+        );
+
+        this.loadingRouteCustomers = false;
+
+      },
+
+      error: (err: any) => {
+
+        console.error(
+          'Failed to load customers by route:',
+          err
+        );
+
+        this.customerList = [];
+
+        this.loadingRouteCustomers = false;
+
+        Swal.fire(
+          'Error',
+          'Failed to load customers for this route.',
+          'error'
+        );
+
+      }
+
+    });
+
+}
+
+  // =========================
+  // GET ROUTE ID
+  // =========================
+
+  getVisitRouteId(
+    visit: any
+  ): number | null {
+
+    const routeId =
+      visit?.routeId ??
+      visit?.routeID ??
+      visit?.route?.routeId ??
+      visit?.route?.routeID ??
+      visit?.route?.id ??
+      visit?.places?.[0]?.routeId ??
+      visit?.places?.[0]?.routeID ??
+      null;
+
+    if (
+      routeId === null ||
+      routeId === undefined ||
+      routeId === ''
+    ) {
+
+      return null;
+
+    }
+
+    return Number(routeId);
 
   }
 
@@ -643,7 +777,8 @@ export class MasterVisitDashboardComponent implements OnInit {
     const customer =
       this.customerList.find(
         (x: any) =>
-          x.customerId === customerId
+          Number(x.customerId) ===
+          Number(customerId)
       );
 
     return (
@@ -696,45 +831,105 @@ export class MasterVisitDashboardComponent implements OnInit {
   // EDIT VISIT
   // =========================
 
-  openEditModal(visit: any): void {
+  openEditModal(
+    visit: any
+  ): void {
+
+    // ---------------------------------
+    // GET EXISTING ROUTE
+    // ---------------------------------
+
+    this.editRouteId =
+      this.getVisitRouteId(visit);
+
+    // ---------------------------------
+    // CREATE EDIT OBJECT
+    // ---------------------------------
 
     this.editVisit = {
-      visitPlanId: visit.visitPlanId,
-      mrId: visit.mrId,
-      visitDate: visit.visitDate
-        ? visit.visitDate.split('T')[0]
-        : '',
-      remarks: visit.remarks,
-      places: visit.places.map((place: any) => ({
-        visitPlanDetailId:
-          place.visitPlanDetailId,
 
-        customerId:
-          place.customerId,
+      visitPlanId:
+        visit.visitPlanId,
 
-        doctorId:
-          place.doctorId,
+      mrId:
+        visit.mrId,
 
-        plannedTime:
-          place.plannedTime,
+      // Route is already selected.
+      // We only keep it for edit.
+      routeId:
+        this.editRouteId,
 
-        sequenceNo:
-          place.sequenceNo,
+      visitDate:
+        visit.visitDate
+          ? visit.visitDate.split('T')[0]
+          : '',
 
-        remarks:
-          place.remarks || '',
+      remarks:
+        visit.remarks,
 
-        productIds:
-          place.products.map(
-            (p: any) => p.productId
-          ),
+      places:
+        (visit.places || []).map(
+          (place: any) => ({
 
-        selectedProducts:
-          [...place.products]
-      }))
+            visitPlanDetailId:
+              place.visitPlanDetailId,
+
+            customerId:
+              place.customerId,
+
+            doctorId:
+              place.doctorId,
+
+            plannedTime:
+              place.plannedTime,
+
+            sequenceNo:
+              place.sequenceNo,
+
+            remarks:
+              place.remarks || '',
+
+            productIds:
+              (place.products || []).map(
+                (p: any) =>
+                  p.productId
+              ),
+
+            selectedProducts:
+              [...(place.products || [])]
+
+          })
+        )
+
     };
 
     this.showEditModal = true;
+
+    // ---------------------------------
+    // LOAD ONLY CUSTOMERS OF ROUTE
+    // ---------------------------------
+
+    if (this.editRouteId) {
+
+      this.loadCustomersByRoute(
+        this.editRouteId
+      );
+
+    }
+    else {
+
+      console.warn(
+        'Route ID not found for visit:',
+        visit
+      );
+
+      Swal.fire(
+        'Warning',
+        'Route information was not found for this visit.',
+        'warning'
+      );
+
+    }
 
   }
 
@@ -743,6 +938,14 @@ export class MasterVisitDashboardComponent implements OnInit {
     this.editVisit = null;
 
     this.showEditModal = false;
+
+    this.editRouteId = null;
+
+    this.loadingRouteCustomers = false;
+
+    // Restore normal customer list
+    // after edit modal closes.
+    this.loadCustomers();
 
   }
 
@@ -754,22 +957,44 @@ export class MasterVisitDashboardComponent implements OnInit {
 
     if (!this.editVisit) return;
 
+    // Route must already exist.
+    if (!this.editRouteId) {
+
+      Swal.fire(
+        'Validation',
+        'Route is not available for this visit.',
+        'warning'
+      );
+
+      return;
+
+    }
+
     this.editVisit.places.push({
 
-      customerId: null,
+      visitPlanDetailId:
+        null,
 
-      doctorId: null,
+      customerId:
+        null,
 
-      plannedTime: '',
+      doctorId:
+        null,
+
+      plannedTime:
+        '',
 
       sequenceNo:
         this.editVisit.places.length + 1,
 
-      remarks: '',
+      remarks:
+        '',
 
-      productIds: [],
+      productIds:
+        [],
 
-      selectedProducts: []
+      selectedProducts:
+        []
 
     });
 
@@ -905,8 +1130,11 @@ export class MasterVisitDashboardComponent implements OnInit {
   clearProductSearch(): void {
 
     this.productSearch = {
+
       name: '',
+
       brandName: ''
+
     };
 
     this.loadProducts();
@@ -935,7 +1163,8 @@ export class MasterVisitDashboardComponent implements OnInit {
         1
       );
 
-    } else {
+    }
+    else {
 
       this.selectedProducts.push(
         product
@@ -961,20 +1190,22 @@ export class MasterVisitDashboardComponent implements OnInit {
     if (
       this.currentPlaceIndex < 0
     ) {
+
       return;
+
     }
 
     this.editVisit
       .places[
-      this.currentPlaceIndex
-    ]
+        this.currentPlaceIndex
+      ]
       .selectedProducts =
       [...this.selectedProducts];
 
     this.editVisit
       .places[
-      this.currentPlaceIndex
-    ]
+        this.currentPlaceIndex
+      ]
       .productIds =
       this.selectedProducts.map(
         (x: any) =>
@@ -1024,7 +1255,8 @@ export class MasterVisitDashboardComponent implements OnInit {
           .visitPlanId,
 
       mrId:
-        this.editVisit.mrId,
+        this.editVisit
+          .mrId,
 
       visitDate:
         this.editVisit
@@ -1068,6 +1300,11 @@ export class MasterVisitDashboardComponent implements OnInit {
 
     };
 
+    console.log(
+      'Update Visit Payload:',
+      payload
+    );
+
     this.visitService
       .update_visit(payload)
       .subscribe({
@@ -1075,10 +1312,15 @@ export class MasterVisitDashboardComponent implements OnInit {
         next: () => {
 
           Swal.fire({
+
             icon: 'success',
-            title: 'Success',
+
+            title:
+              'Success',
+
             text:
               'Visit Updated Successfully'
+
           });
 
           this.closeEditModal();
@@ -1092,11 +1334,16 @@ export class MasterVisitDashboardComponent implements OnInit {
           console.error(err);
 
           Swal.fire({
+
             icon: 'error',
-            title: 'Error',
+
+            title:
+              'Error',
+
             text:
               err?.error?.message ||
               'Failed to update visit'
+
           });
 
         }
@@ -1136,7 +1383,9 @@ export class MasterVisitDashboardComponent implements OnInit {
       if (
         !result.isConfirmed
       ) {
+
         return;
+
       }
 
       const payload = {
@@ -1207,7 +1456,7 @@ export class MasterVisitDashboardComponent implements OnInit {
   ): string {
 
     switch (
-    status?.toLowerCase()
+      status?.toLowerCase()
     ) {
 
       case 'completed':
