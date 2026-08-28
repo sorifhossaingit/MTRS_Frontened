@@ -85,10 +85,10 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   totalRecords = 0;
 
   // Filters
-  filters = {
-    visitDate: '',
-    status: ''
-  };
+filters = {
+  visitDate: this.getTodayDate(),
+  status: ''
+};
 
   // Dashboard Counters
   assignedCount = 0;
@@ -127,12 +127,25 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadInitialData();
     this.checkTodayStartedVisit();
+    this.filters.visitDate = this.getTodayDate();
+    this.autoRestartActiveSession();
   }
 
   loadInitialData(): void {
     this.loading = true;
     this.getAssignedAreaManager();
   }
+
+private getTodayDate(): string {
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
 
   /**
    * Recovers active visit tracking session on app launch/refresh
@@ -342,11 +355,15 @@ export class MrVisitDashboardComponent implements OnInit, OnDestroy {
     this.loadVisits();
   }
 
-  resetFilters(): void {
-    this.filters = { visitDate: '', status: '' };
-    this.pageNumber = 1;
-    this.loadVisits();
-  }
+resetFilters(): void {
+  this.filters = {
+    visitDate: this.getTodayDate(),
+    status: ''
+  };
+
+  this.pageNumber = 1;
+  this.loadVisits();
+}
 
   previousPage(): void {
     if (this.pageNumber > 1) {
@@ -1037,10 +1054,111 @@ async executeCompleteVisit(remarks: string): Promise<void> {
     }
   }
 
+private autoRestartActiveSession(): void {
+  if (!this.agencyId || !this.mrId) {
+    console.log('Agency ID or MR ID is missing.');
+    return;
+  }
+
+  console.log('Checking for active visit session...');
+
+  this.mrService
+    .get_today_started_visit(this.agencyId, this.mrId)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (res: any) => {
+
+        console.log('Today started visits response:', res);
+
+        const startedVisits = Array.isArray(res?.data)
+          ? res.data
+          : [];
+
+        if (startedVisits.length === 0) {
+          console.log('No active visit session found.');
+          return;
+        }
+
+        // Find an active visit
+        const activeVisit = startedVisits.find((visit: any) => {
+
+          const status = String(
+            visit?.status || ''
+          ).trim().toLowerCase();
+
+          return (
+            status === 'started' ||
+            status === 'inprogress' ||
+            status === 'in progress'
+          );
+        });
+
+        if (!activeVisit) {
+          console.log('No active tracking session found.');
+          return;
+        }
+
+        const sessionId = Number(
+          activeVisit.sessionId || 0
+        );
+
+        const visitPlanId = Number(
+          activeVisit.visitPlanId || 0
+        );
+
+        if (sessionId <= 0 || visitPlanId <= 0) {
+          console.log(
+            'Invalid active session:',
+            activeVisit
+          );
+          return;
+        }
+
+        // Restore active tracking state
+        this.sessionId = sessionId;
+        this.activeVisitPlanId = visitPlanId;
+
+        // Save session ID
+        localStorage.setItem(
+          'visitSessionId',
+          sessionId.toString()
+        );
+
+        console.log(
+          `Active session found. Session ID: ${sessionId}, Visit Plan ID: ${visitPlanId}`
+        );
+
+        // Automatically restart GPS tracking
+        this.startTracking();
+
+        // Update matching visit in UI
+        const matchingVisit = this.visits.find(
+          (v: any) =>
+            Number(v.visitPlanId) === visitPlanId
+        );
+
+        if (matchingVisit) {
+          matchingVisit.status = 'In Progress';
+          this.selectedVisit = matchingVisit;
+        }
+      },
+
+      error: (err) => {
+        console.error(
+          'Failed to check active visit session:',
+          err
+        );
+      }
+    });
+}
+
+
   ngOnDestroy(): void {
     this.destroyTrackingMap();
     this.stopTracking();
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+
 }

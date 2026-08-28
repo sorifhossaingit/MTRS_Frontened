@@ -1,3 +1,4 @@
+
 <div class="min-h-screen bg-slate-100 p-4 sm:p-6">
 
   <!-- ====================================================== -->
@@ -10,6 +11,7 @@
           <lucide-icon [img]="MapPin" class="h-8 w-8 text-blue-200"></lucide-icon>
           My Visit Dashboard
         </h1>
+
         <p class="mt-2 text-sm text-blue-100 sm:text-base">
           Manage your assigned visits, route information, perform location tracking, and update visit remarks.
         </p>
@@ -17,44 +19,75 @@
     </div>
   </header>
 
+
   <!-- ====================================================== -->
   <!-- ACTIVE TRACKING BANNER -->
   <!-- ====================================================== -->
-  @if (sessionId > 0) {
-    <div class="mb-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/90 p-4 shadow-sm backdrop-blur-sm sm:flex-row">
-      <div class="flex items-center gap-3.5">
-        <span class="relative flex h-3.5 w-3.5">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex h-3.5 w-3.5 rounded-full bg-emerald-600"></span>
-        </span>
-        <div>
-          <p class="text-sm font-bold text-emerald-950 sm:text-base">
-            Active Tracking Session (#{{ sessionId }})
-          </p>
-          <p class="text-xs text-emerald-700">
-            GPS coordinates are automatically syncing every 60 seconds.
-          </p>
-        </div>
+@if (sessionId > 0) {
+  <div class="mb-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/90 p-4 shadow-sm backdrop-blur-sm sm:flex-row">
+
+    <div class="flex items-center gap-3.5">
+
+      <span class="relative flex h-3.5 w-3.5">
+        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex h-3.5 w-3.5 rounded-full bg-emerald-600"></span>
+      </span>
+
+      <div>
+        <p class="text-sm font-bold text-emerald-950 sm:text-base">
+          Active Tracking Session
+        </p>
+
+        <p class="text-xs font-bold text-blue-700">
+          Visit Plan ID: #{{ activeVisitPlanId }}
+        </p>
+
+        <p class="text-xs text-emerald-700">
+          GPS coordinates are automatically syncing every 60 seconds.
+        </p>
       </div>
 
-      <div class="flex w-full items-center gap-2 sm:w-auto">
-        <button (click)="restartTracking(activeVisitPlanId)" class="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-amber-600 px-3.5 py-2 text-xs font-semibold text-white shadow transition hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500/50 sm:flex-none">
-          <lucide-icon [img]="RotateCcw" class="h-4 w-4"></lucide-icon>
-          <span>Restart Tracking</span>
-        </button>
-
-        <button (click)="endVisit(selectedVisit || visits[0])" class="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/50 sm:flex-none">
-          <lucide-icon [img]="StopCircle" class="h-4 w-4"></lucide-icon>
-          <span>End Active Visit</span>
-        </button>
-      </div>
     </div>
-  }
+
+    <div class="flex w-full items-center gap-2 sm:w-auto">
+
+      <button
+        (click)="restartTracking(activeVisitPlanId)"
+        class="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-amber-600 px-3.5 py-2 text-xs font-semibold text-white shadow transition hover:bg-amber-700 sm:flex-none">
+
+        <lucide-icon
+          [img]="RotateCcw"
+          class="h-4 w-4">
+        </lucide-icon>
+
+        <span>Restart Tracking</span>
+
+      </button>
+
+      <button
+        (click)="endVisit(selectedVisit || visits[0])"
+        class="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white shadow transition hover:bg-red-700 sm:flex-none">
+
+        <lucide-icon
+          [img]="StopCircle"
+          class="h-4 w-4">
+        </lucide-icon>
+
+        <span>End Active Visit</span>
+
+      </button>
+
+    </div>
+
+  </div>
+}
+
 
   <!-- ====================================================== -->
   <!-- FILTERS -->
   <!-- ====================================================== -->
   <section class="mb-6 rounded-2xl bg-white shadow-sm">
+
     <div class="border-b border-slate-100 px-6 py-4">
       <h2 class="flex items-center gap-2 text-base font-semibold text-slate-800">
         <lucide-icon [img]="Filter" class="h-5 w-5 text-blue-600"></lucide-icon>
@@ -63,484 +96,1300 @@
     </div>
 
     <div class="p-6">
+
       <div class="grid grid-cols-1 gap-5 md:grid-cols-4">
-        <div>
-          <label class="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-600">Visit Date</label>
-          <input type="date" [(ngModel)]="filters.visitDate" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
-        </div>
 
         <div>
-          <label class="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-600">Status</label>
-          <select [(ngModel)]="filters.status" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+          <label class="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            Visit Date
+          </label>
+
+          <input
+            type="date"
+            [(ngModel)]="filters.visitDate"
+            class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+        </div>
+
+
+        <div>
+          <label class="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            Status
+          </label>
+
+          <select
+            [(ngModel)]="filters.status"
+            class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+
             <option value="">All Statuses</option>
             <option value="Assigned">Assigned</option>
             <option value="Accepted">Accepted</option>
             <option value="Rejected">Rejected</option>
             <option value="InProgress">In Progress</option>
             <option value="Completed">Completed</option>
+
           </select>
         </div>
 
+
         <div class="flex items-end gap-3 md:col-span-2">
-          <button (click)="applyFilters()" class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+
+          <button
+            (click)="applyFilters()"
+            class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
             Apply Filters
           </button>
-          <button (click)="resetFilters()" class="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300">
+
+          <button
+            (click)="resetFilters()"
+            class="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300">
             Reset
           </button>
+
         </div>
+
       </div>
+
     </div>
   </section>
+
 
   <!-- ====================================================== -->
   <!-- DESKTOP TABLE -->
   <!-- ====================================================== -->
-  <section class="hidden rounded-2xl bg-white shadow-sm overflow-hidden md:block">
+  <section class="hidden overflow-hidden rounded-2xl bg-white shadow-sm md:block">
+
     <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+
       <div>
         <h2 class="flex items-center gap-2 text-xl font-semibold text-slate-800">
           <lucide-icon [img]="ClipboardList" class="h-5 w-5 text-blue-600"></lucide-icon>
           My Assigned Visits
         </h2>
-        <p class="mt-0.5 text-xs text-slate-500">Manage daily customer visits, route names, mapped products, and track status</p>
+
+        <p class="mt-0.5 text-xs text-slate-500">
+          Manage daily customer visits, route names, mapped products, and track status
+        </p>
       </div>
 
-      <span class="rounded-full bg-blue-50 px-3.5 py-1.5 text-xs font-bold text-blue-700 border border-blue-200/60">
+      <span class="rounded-full border border-blue-200/60 bg-blue-50 px-3.5 py-1.5 text-xs font-bold text-blue-700">
         {{ totalRecords }} Visits
       </span>
+
     </div>
 
+
     @if (loading) {
+
       <div class="py-12 text-center">
+
         <div class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
-        <p class="mt-3 text-sm font-medium text-slate-500">Loading visit plans...</p>
+
+        <p class="mt-3 text-sm font-medium text-slate-500">
+          Loading visit plans...
+        </p>
+
       </div>
+
     } @else {
+
       <div class="overflow-x-auto">
+
         <table class="w-full border-collapse text-left text-sm">
+
           <thead class="border-b border-slate-200 bg-slate-50/80 text-xs uppercase tracking-wider text-slate-600">
+
             <tr>
-              <th class="px-4 py-3.5">Date</th>
-              <th class="px-4 py-3.5">Route Name</th>
-              <th class="px-4 py-3.5">Assigned Customers</th>
-              <th class="px-4 py-3.5 text-center">Places</th>
-              <th class="px-4 py-3.5 text-center">Products</th>
-              <th class="px-4 py-3.5">Remarks</th>
-              <th class="px-4 py-3.5">Status</th>
-              <th class="px-4 py-3.5 text-center">Actions & Controls</th>
+
+              <!-- VISIT PLAN ID -->
+              <th class="whitespace-nowrap px-4 py-3.5">
+                Visit Plan ID
+              </th>
+
+              <!-- DATE -->
+              <th class="whitespace-nowrap px-4 py-3.5">
+                Date
+              </th>
+
+              <!-- ROUTE -->
+              <th class="whitespace-nowrap px-4 py-3.5">
+                Route Name
+              </th>
+
+              <!-- CUSTOMERS -->
+              <th class="px-4 py-3.5">
+                Assigned Customers
+              </th>
+
+              <!-- PLACES -->
+              <th class="px-4 py-3.5 text-center">
+                Places
+              </th>
+
+              <!-- PRODUCTS -->
+              <th class="px-4 py-3.5 text-center">
+                Products
+              </th>
+
+              <!-- REMARKS -->
+              <th class="px-4 py-3.5">
+                Remarks
+              </th>
+
+              <!-- STATUS -->
+              <th class="px-4 py-3.5">
+                Status
+              </th>
+
+              <!-- ACTIONS -->
+              <th class="px-4 py-3.5 text-center">
+                Actions & Controls
+              </th>
+
             </tr>
+
           </thead>
 
+
           <tbody class="divide-y divide-slate-100 text-sm">
+
             @for (visit of visits; track visit.visitPlanId || $index) {
+
               <tr class="transition hover:bg-slate-50/80">
+
+                <!-- ================================================= -->
+                <!-- VISIT PLAN ID -->
+                <!-- ================================================= -->
+                <td class="whitespace-nowrap px-4 py-3.5">
+
+                  <span class="inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700">
+
+                    <lucide-icon
+                      [img]="ClipboardList"
+                      class="h-3.5 w-3.5">
+                    </lucide-icon>
+
+                    #{{ visit.visitPlanId }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- ================================================= -->
                 <!-- DATE -->
+                <!-- ================================================= -->
                 <td class="whitespace-nowrap px-4 py-3.5 font-medium text-slate-700">
+
                   {{ visit.visitDate | date:'dd MMM yyyy' }}
+
                 </td>
 
+
+                <!-- ================================================= -->
                 <!-- ROUTE NAME -->
+                <!-- ================================================= -->
                 <td class="px-4 py-3.5 font-semibold text-blue-700">
+
                   <div class="flex items-center gap-1.5">
-                    <lucide-icon [img]="Navigation" class="h-4 w-4 text-blue-500 flex-shrink-0"></lucide-icon>
-                    <span>{{ visit.routeName || 'N/A' }}</span>
+
+                    <lucide-icon
+                      [img]="Navigation"
+                      class="h-4 w-4 flex-shrink-0 text-blue-500">
+                    </lucide-icon>
+
+                    <span>
+                      {{ visit.routeName || 'N/A' }}
+                    </span>
+
                   </div>
+
                 </td>
 
-                <!-- ALL CUSTOMERS LIST -->
+
+                <!-- ================================================= -->
+                <!-- ALL CUSTOMERS -->
+                <!-- ================================================= -->
                 <td class="px-4 py-3.5">
-                  <div class="flex flex-col gap-1 max-w-xs">
+
+                  <div class="flex max-w-xs flex-col gap-1">
+
                     @for (place of visit.places; track place.visitPlanDetailId || $index) {
+
                       <div class="text-xs">
-                        <span class="font-semibold text-slate-800">{{ getCustomerName(place.customerId) || visit.customerName }}</span>
+
+                        <span class="font-semibold text-slate-800">
+                          {{ getCustomerName(place.customerId) || place.customerName || visit.customerName }}
+                        </span>
+
                         @if (place.address || visit.address) {
-                          <span class="text-slate-500 truncate block">- {{ place.address || visit.address }}</span>
+
+                          <span class="block truncate text-slate-500">
+                            - {{ place.address || visit.address }}
+                          </span>
+
                         }
+
                       </div>
+
                     } @empty {
-                      <div class="font-semibold text-slate-800">{{ visit.customerName }}</div>
-                      <div class="text-xs text-slate-500 truncate">{{ visit.address }}</div>
+
+                      <div class="font-semibold text-slate-800">
+                        {{ visit.customerName }}
+                      </div>
+
+                      <div class="truncate text-xs text-slate-500">
+                        {{ visit.address }}
+                      </div>
+
                     }
+
                   </div>
+
                 </td>
 
+
+                <!-- ================================================= -->
+                <!-- PLACES -->
+                <!-- ================================================= -->
                 <td class="px-4 py-3.5 text-center">
-                  <span class="inline-block rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700 border border-slate-200">
+
+                  <span class="inline-block rounded-full border border-slate-200 bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">
                     {{ visit.places?.length || 0 }}
                   </span>
+
                 </td>
 
-                <!-- PRODUCT DISPLAY COLUMN -->
+
+                <!-- ================================================= -->
+                <!-- PRODUCTS -->
+                <!-- ================================================= -->
                 <td class="px-4 py-3.5 text-center">
-                  <span [title]="getVisitedProductNames(visit)" class="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
-                    <lucide-icon [img]="Package" class="h-3.5 w-3.5 text-blue-600"></lucide-icon>
+
+                  <span
+                    [title]="getVisitedProductNames(visit)"
+                    class="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+
+                    <lucide-icon
+                      [img]="Package"
+                      class="h-3.5 w-3.5 text-blue-600">
+                    </lucide-icon>
+
                     {{ getTotalProducts(visit) }}
+
                   </span>
+
                 </td>
 
-                <td class="max-w-[180px] truncate px-4 py-3.5 text-slate-500" [title]="visit.remarks || '-'">
+
+                <!-- ================================================= -->
+                <!-- REMARKS -->
+                <!-- ================================================= -->
+                <td
+                  class="max-w-[180px] truncate px-4 py-3.5 text-slate-500"
+                  [title]="visit.remarks || '-'">
+
                   {{ visit.remarks || '-' }}
+
                 </td>
 
+
+                <!-- ================================================= -->
+                <!-- STATUS -->
+                <!-- ================================================= -->
                 <td class="whitespace-nowrap px-4 py-3.5">
-                  <span [class]="'px-2.5 py-1 rounded-full text-xs font-semibold ' + getStatusClass(visit.status)">
+
+                  <span
+                    [class]="'rounded-full px-2.5 py-1 text-xs font-semibold ' + getStatusClass(visit.status)">
+
                     {{ visit.status }}
+
                   </span>
+
                 </td>
 
+
+                <!-- ================================================= -->
                 <!-- ACTIONS -->
+                <!-- ================================================= -->
                 <td class="px-4 py-3.5">
+
                   <div class="flex flex-wrap items-center justify-center gap-1.5">
-                    <button (click)="viewVisit(visit)" title="View Details & Products" class="inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">
-                      <lucide-icon [img]="Eye" class="h-3.5 w-3.5"></lucide-icon>
+
+                    <!-- VIEW -->
+                    <button
+                      (click)="viewVisit(visit)"
+                      title="View Details & Products"
+                      class="inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">
+
+                      <lucide-icon
+                        [img]="Eye"
+                        class="h-3.5 w-3.5">
+                      </lucide-icon>
+
                       <span>View</span>
+
                     </button>
 
+
+                    <!-- ACCEPT -->
                     @if (canAccept(visit)) {
-                      <button (click)="acceptVisit(visit)" title="Accept Assignment" class="inline-flex items-center gap-1 rounded-lg border border-emerald-300 bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100">
-                        <lucide-icon [img]="CheckCircle" class="h-3.5 w-3.5"></lucide-icon>
+
+                      <button
+                        (click)="acceptVisit(visit)"
+                        title="Accept Assignment"
+                        class="inline-flex items-center gap-1 rounded-lg border border-emerald-300 bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100">
+
+                        <lucide-icon
+                          [img]="CheckCircle"
+                          class="h-3.5 w-3.5">
+                        </lucide-icon>
+
                         <span>Accept</span>
+
                       </button>
+
                     }
 
+
+                    <!-- REJECT -->
                     @if (canReject(visit)) {
-                      <button (click)="rejectVisit(visit)" title="Reject Assignment" class="inline-flex items-center gap-1 rounded-lg border border-red-300 bg-red-50 px-2.5 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100">
-                        <lucide-icon [img]="XCircle" class="h-3.5 w-3.5"></lucide-icon>
+
+                      <button
+                        (click)="rejectVisit(visit)"
+                        title="Reject Assignment"
+                        class="inline-flex items-center gap-1 rounded-lg border border-red-300 bg-red-50 px-2.5 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100">
+
+                        <lucide-icon
+                          [img]="XCircle"
+                          class="h-3.5 w-3.5">
+                        </lucide-icon>
+
                         <span>Reject</span>
+
                       </button>
+
                     }
 
+
+                    <!-- START -->
                     @if (canStartVisit(visit)) {
-                      <button (click)="startVisit(visit)" title="Start Visit & GPS Tracking" class="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700">
-                        <lucide-icon [img]="PlayCircle" class="h-3.5 w-3.5"></lucide-icon>
+
+                      <button
+                        (click)="startVisit(visit)"
+                        title="Start Visit & GPS Tracking"
+                        class="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700">
+
+                        <lucide-icon
+                          [img]="PlayCircle"
+                          class="h-3.5 w-3.5">
+                        </lucide-icon>
+
                         <span>Start</span>
+
                       </button>
+
                     }
 
-                  @if (isVisitInProgress(visit) || canStartVisit(visit)) {
-  <button
-    (click)="restartTracking(visit.visitPlanId)"
-    title="Restart Location Tracking"
-    class="inline-flex items-center gap-1 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100"
-  >
-    <lucide-icon
-      [img]="RotateCcw"
-      class="h-3.5 w-3.5"
-    ></lucide-icon>
 
-    <span>Restart Tracking</span>
-  </button>
-}
+                    <!-- RESTART TRACKING -->
+                    @if (isVisitInProgress(visit) || canStartVisit(visit)) {
 
+                      <button
+                        (click)="restartTracking(visit.visitPlanId)"
+                        title="Restart Location Tracking"
+                        class="inline-flex items-center gap-1 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100">
+
+                        <lucide-icon
+                          [img]="RotateCcw"
+                          class="h-3.5 w-3.5">
+                        </lucide-icon>
+
+                        <span>Restart Tracking</span>
+
+                      </button>
+
+                    }
+
+
+                    <!-- ROUTE -->
                     @if (canRoute(visit)) {
-                      <button (click)="showTracking(visit)" title="View GPS Route on Map" class="inline-flex items-center gap-1 rounded-lg border border-indigo-300 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100">
-                        <lucide-icon [img]="Navigation" class="h-3.5 w-3.5"></lucide-icon>
+
+                      <button
+                        (click)="showTracking(visit)"
+                        title="View GPS Route on Map"
+                        class="inline-flex items-center gap-1 rounded-lg border border-indigo-300 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100">
+
+                        <lucide-icon
+                          [img]="Navigation"
+                          class="h-3.5 w-3.5">
+                        </lucide-icon>
+
                         <span>Route</span>
+
                       </button>
+
                     }
 
+
+                    <!-- END VISIT -->
                     @if (isVisitCompleted(visit)) {
-                      <button (click)="endVisit(visit)" title="End Active Session" class="inline-flex items-center gap-1 rounded-lg bg-red-600 px-2.5 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-red-700">
-                        <lucide-icon [img]="StopCircle" class="h-3.5 w-3.5"></lucide-icon>
+
+                      <button
+                        (click)="endVisit(visit)"
+                        title="End Active Session"
+                        class="inline-flex items-center gap-1 rounded-lg bg-red-600 px-2.5 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-red-700">
+
+                        <lucide-icon
+                          [img]="StopCircle"
+                          class="h-3.5 w-3.5">
+                        </lucide-icon>
+
                         <span>End Visit</span>
+
                       </button>
+
                     }
+
                   </div>
+
                 </td>
+
               </tr>
+
+
             } @empty {
+
               <tr>
-                <td colspan="8" class="py-12 text-center text-slate-500">
+
+                <td
+                  colspan="9"
+                  class="py-12 text-center text-slate-500">
+
                   <div class="flex flex-col items-center justify-center gap-2">
-                    <lucide-icon [img]="ClipboardList" class="h-8 w-8 text-slate-300"></lucide-icon>
-                    <p class="text-sm font-medium">No Visit Plans found matching your criteria.</p>
+
+                    <lucide-icon
+                      [img]="ClipboardList"
+                      class="h-8 w-8 text-slate-300">
+                    </lucide-icon>
+
+                    <p class="text-sm font-medium">
+                      No Visit Plans found matching your criteria.
+                    </p>
+
                   </div>
+
                 </td>
+
               </tr>
+
             }
+
           </tbody>
+
         </table>
+
       </div>
+
     }
+
   </section>
+
 
   <!-- ====================================================== -->
   <!-- MOBILE CARDS -->
   <!-- ====================================================== -->
   <section class="mt-6 space-y-4 md:hidden">
+
     @for (visit of visits; track visit.visitPlanId || $index) {
+
       <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
+
+        <!-- MOBILE HEADER -->
         <div class="mb-3 flex items-start justify-between border-b border-slate-100 pb-3">
+
           <div>
-            <div class="text-xs font-semibold text-blue-600">Route: {{ visit.routeName || 'N/A' }}</div>
-            <div class="font-bold text-slate-900 mt-0.5">{{ visit.customerName }}</div>
-            <div class="text-xs text-slate-500">{{ visit.visitDate | date:'dd MMM yyyy' }}</div>
+
+            <!-- VISIT PLAN ID -->
+            <div class="mb-1.5 inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700">
+
+              <lucide-icon
+                [img]="ClipboardList"
+                class="h-3.5 w-3.5">
+              </lucide-icon>
+
+              Visit Plan #{{ visit.visitPlanId }}
+
+            </div>
+
+
+            <!-- ROUTE -->
+            <div class="text-xs font-semibold text-blue-600">
+              Route: {{ visit.routeName || 'N/A' }}
+            </div>
+
+
+            <!-- CUSTOMER -->
+            <div class="mt-0.5 font-bold text-slate-900">
+              {{ visit.customerName }}
+            </div>
+
+
+            <!-- DATE -->
+            <div class="text-xs text-slate-500">
+              {{ visit.visitDate | date:'dd MMM yyyy' }}
+            </div>
+
           </div>
 
-          <span [class]="'text-xs px-2.5 py-1 rounded-full font-semibold ' + getStatusClass(visit.status)">
+
+          <!-- STATUS -->
+          <span
+            [class]="'rounded-full px-2.5 py-1 text-xs font-semibold ' + getStatusClass(visit.status)">
+
             {{ visit.status }}
+
           </span>
+
         </div>
 
+
+        <!-- MOBILE DETAILS -->
         <div class="space-y-1.5 text-xs text-slate-600">
-          <p><span class="font-semibold text-slate-700">Address:</span> {{ visit.address }}</p>
-          <p><span class="font-semibold text-slate-700">Products:</span> {{ getTotalProducts(visit) }} items assigned</p>
+
+          <p>
+            <span class="font-semibold text-slate-700">
+              Visit Plan ID:
+            </span>
+
+            <span class="font-bold text-blue-700">
+              #{{ visit.visitPlanId }}
+            </span>
+          </p>
+
+          <p>
+            <span class="font-semibold text-slate-700">
+              Route:
+            </span>
+
+            {{ visit.routeName || 'N/A' }}
+          </p>
+
+          <p>
+            <span class="font-semibold text-slate-700">
+              Address:
+            </span>
+
+            {{ visit.address || 'N/A' }}
+          </p>
+
+          <p>
+            <span class="font-semibold text-slate-700">
+              Places:
+            </span>
+
+            {{ visit.places?.length || 0 }}
+          </p>
+
+          <p>
+            <span class="font-semibold text-slate-700">
+              Products:
+            </span>
+
+            {{ getTotalProducts(visit) }} items assigned
+          </p>
+
         </div>
 
+
+        <!-- MOBILE ACTIONS -->
         <div class="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-3">
-          <button (click)="viewVisit(visit)" class="flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition active:bg-slate-200">
-            <lucide-icon [img]="Eye" class="h-3.5 w-3.5"></lucide-icon> View
+
+          <!-- VIEW -->
+          <button
+            (click)="viewVisit(visit)"
+            class="flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition active:bg-slate-200">
+
+            <lucide-icon
+              [img]="Eye"
+              class="h-3.5 w-3.5">
+            </lucide-icon>
+
+            View
+
           </button>
 
+
+          <!-- ACCEPT -->
           @if (canAccept(visit)) {
-            <button (click)="acceptVisit(visit)" class="flex items-center gap-1 rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 border border-emerald-200 transition active:bg-emerald-100">
-              <lucide-icon [img]="CheckCircle" class="h-3.5 w-3.5"></lucide-icon> Accept
+
+            <button
+              (click)="acceptVisit(visit)"
+              class="flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition active:bg-emerald-100">
+
+              <lucide-icon
+                [img]="CheckCircle"
+                class="h-3.5 w-3.5">
+              </lucide-icon>
+
+              Accept
+
             </button>
+
           }
 
+
+          <!-- REJECT -->
+          @if (canReject(visit)) {
+
+            <button
+              (click)="rejectVisit(visit)"
+              class="flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition active:bg-red-100">
+
+              <lucide-icon
+                [img]="XCircle"
+                class="h-3.5 w-3.5">
+              </lucide-icon>
+
+              Reject
+
+            </button>
+
+          }
+
+
+          <!-- START -->
           @if (canStartVisit(visit)) {
-            <button (click)="startVisit(visit)" class="flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white transition active:bg-blue-700">
-              <lucide-icon [img]="PlayCircle" class="h-3.5 w-3.5"></lucide-icon> Start
+
+            <button
+              (click)="startVisit(visit)"
+              class="flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white transition active:bg-blue-700">
+
+              <lucide-icon
+                [img]="PlayCircle"
+                class="h-3.5 w-3.5">
+              </lucide-icon>
+
+              Start
+
             </button>
+
           }
 
+
+          <!-- RESTART TRACKING -->
+          @if (isVisitInProgress(visit) || canStartVisit(visit)) {
+
+            <button
+              (click)="restartTracking(visit.visitPlanId)"
+              class="flex items-center gap-1 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 transition active:bg-amber-100">
+
+              <lucide-icon
+                [img]="RotateCcw"
+                class="h-3.5 w-3.5">
+              </lucide-icon>
+
+              Restart Tracking
+
+            </button>
+
+          }
+
+
+          <!-- ROUTE -->
           @if (canRoute(visit)) {
-            <button (click)="showTracking(visit)" class="flex items-center gap-1 rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 border border-indigo-200 transition active:bg-indigo-100">
-              <lucide-icon [img]="Navigation" class="h-3.5 w-3.5"></lucide-icon> Route
+
+            <button
+              (click)="showTracking(visit)"
+              class="flex items-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition active:bg-indigo-100">
+
+              <lucide-icon
+                [img]="Navigation"
+                class="h-3.5 w-3.5">
+              </lucide-icon>
+
+              Route
+
             </button>
+
           }
 
+
+          <!-- END -->
           @if (isVisitCompleted(visit)) {
-            <button (click)="endVisit(visit)" class="flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-bold text-white transition active:bg-red-700">
-              <lucide-icon [img]="StopCircle" class="h-3.5 w-3.5"></lucide-icon> End
+
+            <button
+              (click)="endVisit(visit)"
+              class="flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-bold text-white transition active:bg-red-700">
+
+              <lucide-icon
+                [img]="StopCircle"
+                class="h-3.5 w-3.5">
+              </lucide-icon>
+
+              End
+
             </button>
+
           }
+
         </div>
+
       </div>
+
     } @empty {
+
       @if (!loading) {
+
         <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500">
+
           No Visit Plans Available
+
         </div>
+
       }
+
     }
+
   </section>
+
 
   <!-- ====================================================== -->
   <!-- PAGINATION -->
   <!-- ====================================================== -->
   <div class="mt-6 flex flex-col items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-sm sm:flex-row">
+
     <div class="text-xs text-slate-600">
-      Showing <span class="font-semibold text-slate-800">{{ visits.length }}</span> of <span class="font-semibold text-slate-800">{{ totalRecords }}</span> total records
+
+      Showing
+      <span class="font-semibold text-slate-800">
+        {{ visits.length }}
+      </span>
+      of
+      <span class="font-semibold text-slate-800">
+        {{ totalRecords }}
+      </span>
+      total records
+
     </div>
+
 
     <div class="flex flex-wrap gap-1">
-      <button (click)="previousPage()" [disabled]="pageNumber === 1" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium transition hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent">
+
+      <button
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
+        class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium transition hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent">
+
         Prev
+
       </button>
+
 
       @for (page of getPageNumbers(); track page) {
-        <button (click)="goToPage(page)" [class.bg-blue-600]="page === pageNumber" [class.text-white]="page === pageNumber" [class.border-blue-600]="page === pageNumber" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium transition hover:border-slate-400">
+
+        <button
+          (click)="goToPage(page)"
+          [class.bg-blue-600]="page === pageNumber"
+          [class.text-white]="page === pageNumber"
+          [class.border-blue-600]="page === pageNumber"
+          class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium transition hover:border-slate-400">
+
           {{ page }}
+
         </button>
+
       }
 
-      <button (click)="nextPage()" [disabled]="pageNumber === totalPages" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium transition hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent">
+
+      <button
+        (click)="nextPage()"
+        [disabled]="pageNumber === totalPages"
+        class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium transition hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent">
+
         Next
+
       </button>
+
     </div>
+
   </div>
 
 </div>
+
 
 <!-- ====================================================== -->
 <!-- VIEW VISIT MODAL -->
 <!-- ====================================================== -->
 @if (showViewModal) {
+
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
+
     <div class="flex max-h-[95vh] w-full max-w-7xl flex-col rounded-2xl bg-white shadow-2xl">
 
-      <!-- MODAL HEADER WITH MR NAME & PHONE NUMBER -->
+
+      <!-- ================================================= -->
+      <!-- MODAL HEADER -->
+      <!-- ================================================= -->
       <div class="sticky top-0 z-10 border-b border-slate-100 bg-white px-6 py-4">
+
         <div class="flex items-start justify-between gap-4">
+
           <div>
+
             <h2 class="text-xl font-bold text-slate-800 sm:text-2xl">
-              Visit Details (#{{ selectedVisit?.visitPlanId || 42 }})
+
+              Visit Details
+
+              <span class="text-blue-700">
+                (#{{ selectedVisit?.visitPlanId }})
+              </span>
+
             </h2>
+
             <p class="mt-0.5 text-xs text-slate-500">
               Review customer visit plan, planned timings, and select shown products.
             </p>
+
           </div>
 
-          <button (click)="closeViewModal()" class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-red-600">
-            <lucide-icon [img]="XCircle" class="h-7 w-7"></lucide-icon>
+
+          <button
+            (click)="closeViewModal()"
+            class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-red-600">
+
+            <lucide-icon
+              [img]="XCircle"
+              class="h-7 w-7">
+            </lucide-icon>
+
           </button>
+
         </div>
 
-        <!-- MR DETAILS BANNER IN HEADER -->
-        <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-xl bg-slate-50 p-3 border border-slate-200 text-xs text-slate-700">
+
+        <!-- ================================================= -->
+        <!-- MR DETAILS -->
+        <!-- ================================================= -->
+        <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700">
+
+          <!-- VISIT PLAN ID -->
           <div class="flex items-center gap-1.5 font-semibold text-slate-900">
-            <lucide-icon [img]="User" class="h-4 w-4 text-blue-600"></lucide-icon>
+
+            <lucide-icon
+              [img]="ClipboardList"
+              class="h-4 w-4 text-blue-600">
+            </lucide-icon>
+
+            <span>Visit Plan ID:</span>
+
+            <span class="font-bold text-blue-700">
+              #{{ selectedVisit?.visitPlanId }}
+            </span>
+
+          </div>
+
+
+          <!-- MR NAME -->
+          <div class="flex items-center gap-1.5 font-semibold text-slate-900">
+
+            <lucide-icon
+              [img]="User"
+              class="h-4 w-4 text-blue-600">
+            </lucide-icon>
+
             <span>MR Name:</span>
-            <span class="text-blue-700">{{ selectedVisit?.mrName || selectedVisit?.salesRepName || 'N/A' }}</span>
+
+            <span class="text-blue-700">
+              {{ selectedVisit?.mrName || selectedVisit?.salesRepName || 'N/A' }}
+            </span>
+
           </div>
 
+
+          <!-- PHONE -->
           <div class="flex items-center gap-1.5 font-semibold text-slate-900">
-            <lucide-icon [img]="Phone" class="h-4 w-4 text-blue-600"></lucide-icon>
+
+            <lucide-icon
+              [img]="Phone"
+              class="h-4 w-4 text-blue-600">
+            </lucide-icon>
+
             <span>Phone:</span>
-            <span class="text-slate-700">{{ selectedVisit?.mrPhone || selectedVisit?.mobile || 'N/A' }}</span>
+
+            <span class="text-slate-700">
+              {{ selectedVisit?.mrPhone || selectedVisit?.mobile || 'N/A' }}
+            </span>
+
           </div>
 
+
+          <!-- ROUTE -->
           <div class="flex items-center gap-1.5 font-semibold text-slate-900">
-            <lucide-icon [img]="Navigation" class="h-4 w-4 text-blue-600"></lucide-icon>
+
+            <lucide-icon
+              [img]="Navigation"
+              class="h-4 w-4 text-blue-600">
+            </lucide-icon>
+
             <span>Route:</span>
-            <span class="text-slate-700">{{ selectedVisit?.routeName || 'N/A' }}</span>
+
+            <span class="text-slate-700">
+              {{ selectedVisit?.routeName || 'N/A' }}
+            </span>
+
           </div>
+
         </div>
+
       </div>
 
+
+      <!-- ================================================= -->
+      <!-- MODAL BODY -->
+      <!-- ================================================= -->
       <div class="overflow-y-auto p-6">
-        <!-- VISIT SUMMARY INFO -->
-        <div class="mb-6 grid gap-4 lg:grid-cols-4">
+
+
+        <!-- ================================================= -->
+        <!-- VISIT SUMMARY -->
+        <!-- ================================================= -->
+        <div class="mb-6 grid gap-4 lg:grid-cols-5">
+
+          <!-- VISIT PLAN ID -->
           <div class="rounded-xl border border-blue-100 bg-blue-50/70 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Visit Date</p>
+
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Visit Plan ID
+            </p>
+
+            <h3 class="mt-1 text-lg font-bold text-blue-700">
+              #{{ selectedVisit?.visitPlanId }}
+            </h3>
+
+          </div>
+
+
+          <!-- DATE -->
+          <div class="rounded-xl border border-blue-100 bg-blue-50/70 p-4">
+
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Visit Date
+            </p>
+
             <h3 class="mt-1 font-bold text-slate-800">
               {{ selectedVisit?.visitDate | date:'dd MMM yyyy' }}
             </h3>
+
           </div>
 
+
+          <!-- CUSTOMER -->
           <div class="rounded-xl border border-emerald-100 bg-emerald-50/70 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Customer</p>
+
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Customer
+            </p>
+
             <h3 class="mt-1 font-bold text-slate-800">
               {{ selectedVisit?.customerName }}
             </h3>
+
           </div>
 
+
+          <!-- CUSTOMER MOBILE -->
           <div class="rounded-xl border border-amber-100 bg-amber-50/70 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Customer Mobile</p>
+
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Customer Mobile
+            </p>
+
             <h3 class="mt-1 font-bold text-slate-800">
               {{ selectedVisit?.mobile }}
             </h3>
+
           </div>
 
+
+          <!-- STATUS -->
           <div class="rounded-xl border border-purple-100 bg-purple-50/70 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Status</p>
-            <span [class]="'inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold ' + getStatusClass(selectedVisit?.status)">
+
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Status
+            </p>
+
+            <span
+              [class]="'mt-1 inline-block rounded-full px-3 py-1 text-xs font-bold ' + getStatusClass(selectedVisit?.status)">
+
               {{ selectedVisit?.status }}
+
             </span>
+
           </div>
+
         </div>
 
+
+        <!-- ================================================= -->
         <!-- REMARKS -->
+        <!-- ================================================= -->
         <div class="mb-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <h3 class="mb-1 text-sm font-semibold text-slate-700">Visit Remarks</h3>
+
+          <h3 class="mb-1 text-sm font-semibold text-slate-700">
+            Visit Remarks
+          </h3>
+
           <p class="text-sm text-slate-600">
             {{ selectedVisit?.remarks || 'No general visit remarks recorded.' }}
           </p>
+
         </div>
 
-        <!-- CUSTOMER PLACES & PRODUCTS DETAILS -->
+
+        <!-- ================================================= -->
+        <!-- CUSTOMER PLACES -->
+        <!-- ================================================= -->
         <div>
-          <h3 class="mb-4 text-lg font-bold text-slate-800">Customer Visit Plan & Mapped Products</h3>
 
-          @for (place of selectedVisit?.places; track place.sequenceNo || $index) {
+          <h3 class="mb-4 text-lg font-bold text-slate-800">
+            Customer Visit Plan & Mapped Products
+          </h3>
+
+
+          @for (place of selectedVisit?.places; track place.visitPlanDetailId || place.sequenceNo || $index) {
+
             <div class="mb-5 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm">
-              
-              <!-- CUSTOMER DETAILS BAR -->
-              <div class="mb-4 rounded-xl bg-slate-50 p-4 border border-slate-200">
-                <div class="grid items-start gap-4 lg:grid-cols-4">
+
+
+              <!-- ================================================= -->
+              <!-- CUSTOMER DETAILS -->
+              <!-- ================================================= -->
+              <div class="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+
+                <div class="grid items-start gap-4 lg:grid-cols-5">
+
+
+                  <!-- CUSTOMER -->
                   <div>
-                    <p class="text-xs font-medium text-slate-400">Customer Name</p>
-                    <h4 class="font-bold text-slate-800 text-base">{{ getCustomerName(place.customerId) || selectedVisit?.customerName }}</h4>
+
+                    <p class="text-xs font-medium text-slate-400">
+                      Customer Name
+                    </p>
+
+                    <h4 class="text-base font-bold text-slate-800">
+
+                      {{ getCustomerName(place.customerId) || place.customerName || selectedVisit?.customerName }}
+
+                    </h4>
+
                   </div>
 
+
+                  <!-- CUSTOMER ID -->
                   <div>
-                    <p class="text-xs font-medium text-slate-400">Address & Details</p>
-                    <p class="text-xs font-semibold text-slate-700">{{ place.address || selectedVisit?.address || 'N/A' }}</p>
+
+                    <p class="text-xs font-medium text-slate-400">
+                      Customer ID
+                    </p>
+
+                    <p class="text-sm font-bold text-blue-700">
+                      #{{ place.customerId }}
+                    </p>
+
                   </div>
 
+
+                  <!-- ADDRESS -->
                   <div>
-                    <p class="text-xs font-medium text-slate-400">Contact / Email</p>
-                    <p class="text-xs font-semibold text-slate-700">{{ place.contactPerson || place.mobile || selectedVisit?.mobile || 'N/A' }}</p>
+
+                    <p class="text-xs font-medium text-slate-400">
+                      Address & Details
+                    </p>
+
+                    <p class="text-xs font-semibold text-slate-700">
+                      {{ place.address || selectedVisit?.address || place.customerAddress || 'N/A' }}
+                    </p>
+
                   </div>
 
-                  <div class="flex items-center justify-between lg:justify-end gap-3">
+
+                  <!-- CONTACT -->
+                  <div>
+
+                    <p class="text-xs font-medium text-slate-400">
+                      Contact / Email
+                    </p>
+
+                    <p class="text-xs font-semibold text-slate-700">
+
+                      {{ place.contactPerson || place.mobile || place.customerMobile || selectedVisit?.mobile || 'N/A' }}
+
+                    </p>
+
+                  </div>
+
+
+                  <!-- SEQUENCE -->
+                  <div class="flex items-center justify-between gap-3 lg:justify-end">
+
                     <div>
-                      <p class="text-xs font-medium text-slate-400">Sequence / Planned Time</p>
-                      <p class="text-xs font-bold text-slate-800">#{{ place.sequenceNo }} - {{ place.plannedTime || 'N/A' }}</p>
+
+                      <p class="text-xs font-medium text-slate-400">
+                        Sequence / Planned Time
+                      </p>
+
+                      <p class="text-xs font-bold text-slate-800">
+                        #{{ place.sequenceNo }} -
+                        {{ place.plannedTime || 'N/A' }}
+                      </p>
+
                     </div>
 
-                    <span [class]="'px-3 py-1 rounded-full text-xs font-semibold ' + getStatusClass(place.status)">
+
+                    <span
+                      [class]="'rounded-full px-3 py-1 text-xs font-semibold ' + getStatusClass(place.status)">
+
                       {{ place.status }}
+
                     </span>
+
                   </div>
+
                 </div>
 
-                <!-- COMPLETE PLACE VISIT BUTTON -->
-                @if ((selectedVisit?.status === 'Accepted' || isVisitInProgress(selectedVisit)) && place.status !== 'Completed') {
+
+                <!-- COMPLETE PLACE VISIT -->
+                @if (
+                  (selectedVisit?.status === 'Accepted' || isVisitInProgress(selectedVisit))
+                  && place.status !== 'Completed'
+                ) {
+
                   <div class="mt-3 flex justify-end border-t border-slate-200/60 pt-3">
+
                     <button
                       (click)="openCompleteForPlace(selectedVisit, place)"
                       class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700">
-                      <lucide-icon [img]="Flag" class="h-3.5 w-3.5"></lucide-icon>
-                      <span>Complete Location</span>
+
+                      <lucide-icon
+                        [img]="Flag"
+                        class="h-3.5 w-3.5">
+                      </lucide-icon>
+
+                      <span>
+                        Complete Location
+                      </span>
+
                     </button>
+
                   </div>
+
                 }
+
               </div>
 
-              <!-- PRODUCTS GRID & SELECTION -->
+
+              <!-- ================================================= -->
+              <!-- PRODUCTS -->
+              <!-- ================================================= -->
               <div>
+
                 <h4 class="mb-3 text-sm font-semibold text-slate-700">
                   Products Detail (Check boxes for products shown during visit)
                 </h4>
 
+
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                  @for (product of place.products; track product.id || $index) {
+
+                  @for (product of place.products; track product.productId || product.id || $index) {
+
                     <div class="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+
                       <div class="flex items-start gap-2.5">
+
                         <input
                           type="checkbox"
                           [(ngModel)]="product.showProduct"
                           class="mt-1 h-4 w-4 rounded text-blue-600 focus:ring-blue-500"
                           [disabled]="selectedVisit?.status !== 'Accepted' && !isVisitInProgress(selectedVisit)">
 
-                        <div class="w-full">
-                          <img [src]="product.imageUrl || 'assets/placeholder-product.png'" [alt]="product.productName" class="h-28 w-full rounded-lg border border-slate-200 bg-white object-cover">
 
-                          <h5 class="mt-2 line-clamp-1 text-xs font-bold text-slate-800" [title]="product.productName">
+                        <div class="w-full">
+
+                          <img
+                            [src]="product.imageUrl || 'assets/placeholder-product.png'"
+                            [alt]="product.productName"
+                            class="h-28 w-full rounded-lg border border-slate-200 bg-white object-cover">
+
+
+                          <h5
+                            class="mt-2 line-clamp-1 text-xs font-bold text-slate-800"
+                            [title]="product.productName">
+
                             {{ product.productName }}
+
                           </h5>
 
+
                           <p class="text-[11px] text-slate-500">
-                            Brand: {{ product.brandName || '-' }}
+
+                            Brand:
+                            {{ product.brandName || '-' }}
+
                           </p>
+
 
                           <p class="mt-1 text-xs font-bold text-blue-700">
+
                             ₹{{ product.mrp }}
+
                           </p>
+
                         </div>
+
                       </div>
+
                     </div>
+
                   } @empty {
+
                     <div class="col-span-full rounded-xl bg-slate-50 py-6 text-center text-xs text-slate-400">
+
                       No products mapped to this customer place.
+
                     </div>
+
                   }
+
                 </div>
+
               </div>
+
             </div>
+
           }
+
         </div>
+
       </div>
 
+
+      <!-- ================================================= -->
       <!-- MODAL FOOTER -->
+      <!-- ================================================= -->
       <div class="sticky bottom-0 flex justify-end border-t border-slate-100 bg-slate-50 px-6 py-3">
-        <button (click)="closeViewModal()" class="rounded-xl bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-300">
+
+        <button
+          (click)="closeViewModal()"
+          class="rounded-xl bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-300">
+
           Close
+
         </button>
+
       </div>
+
     </div>
+
   </div>
+
 }
