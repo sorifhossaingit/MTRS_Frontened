@@ -355,9 +355,10 @@
                 Month
               </label>
 
-              <select
-                [(ngModel)]="createRequest.reportMonth"
-                name="reportMonth"
+             <select
+  [(ngModel)]="createRequest.reportMonth"
+  (change)="onCreateMonthChange()"
+  name="reportMonth"
                 class="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-sm focus:border-slate-900 focus:outline-none"
               >
 
@@ -386,9 +387,11 @@
                 Year
               </label>
 
-              <select
-                [(ngModel)]="createRequest.reportYear"
-                name="reportYear"
+            <select
+  [(ngModel)]="createRequest.reportYear"
+  (change)="onCreateYearChange()"
+  name="reportYear"
+>
                 class="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-sm focus:border-slate-900 focus:outline-none"
               >
 
@@ -417,14 +420,14 @@
                 Rate per KM (₹)
               </label>
 
-              <input
-                type="number"
-                [(ngModel)]="createRequest.ratePerKm"
-                name="ratePerKm"
-                class="mt-1 w-full rounded-xl border border-slate-300 p-2.5 text-sm focus:border-slate-900 focus:outline-none"
-                placeholder="e.g. 12"
-                required
-              />
+          <input
+  type="number"
+  [(ngModel)]="createRequest.ratePerKm"
+  name="ratePerKm"
+  readonly
+  class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-sm font-semibold"
+  placeholder="Rate will load automatically"
+/>
 
             </div>
 
