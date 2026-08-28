@@ -975,7 +975,7 @@ fetchMedicalRepresentatives(
   this.loadingMRs = true;
 
   // ==========================================
-  // GET ROLE ID AND MID FROM LOCAL STORAGE
+  // GET ROLE ID + MID FROM LOCAL STORAGE
   // ==========================================
 
   const roleId =
@@ -1007,8 +1007,7 @@ fetchMedicalRepresentatives(
   //
   // 11714ca6-4cdb-46c5-bb12-d582ef179bc2
   //
-  // Send:
-  // assignedAreaManager = mid
+  // mid -> assignedAreaManager
   // ==========================================
 
   if (
@@ -1038,10 +1037,46 @@ fetchMedicalRepresentatives(
 
 
   // ==========================================
+  // MR ROLE
+  //
+  // fd1c87b5-524a-49e5-b60c-5d7b82ddeb43
+  //
+  // mid -> mrId
+  // ==========================================
+
+  else if (
+    roleId ===
+    'fd1c87b5-524a-49e5-b60c-5d7b82ddeb43'
+  ) {
+
+    if (
+      mid !== null &&
+      !isNaN(mid) &&
+      mid > 0
+    ) {
+
+      params =
+        params.set(
+          'mrId',
+          mid.toString()
+        );
+
+    } else {
+
+      console.error(
+        'MID not found or invalid in localStorage.'
+      );
+    }
+  }
+
+
+  // ==========================================
   // SEARCH
   // ==========================================
 
-  if (searchTerm.trim()) {
+  if (
+    searchTerm.trim()
+  ) {
 
     params =
       params.set(
@@ -1049,24 +1084,6 @@ fetchMedicalRepresentatives(
         searchTerm.trim()
       );
   }
-
-
-  // ==========================================
-  // DEBUG
-  // ==========================================
-
-  // console.log(
-  //   'MR LIST REQUEST:',
-  //   {
-  //     roleId: roleId,
-  //     agencyId: this.agencyId,
-  //     mid: mid,
-  //     assignedAreaManager:
-  //       params.get('assignedAreaManager'),
-  //     search:
-  //       params.get('search')
-  //   }
-  // );
 
 
   // ==========================================
@@ -1092,13 +1109,18 @@ fetchMedicalRepresentatives(
 
 
         // ====================================
-        // AUTO SELECT MID FOR SPECIAL ROLE
+        // AUTO SELECT MID
         // ====================================
 
         if (
           !searchTerm.trim() &&
-          roleId ===
-            '11714ca6-4cdb-46c5-bb12-d582ef179bc2' &&
+          (
+            roleId ===
+              '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
+            ||
+            roleId ===
+              'fd1c87b5-524a-49e5-b60c-5d7b82ddeb43'
+          ) &&
           mid !== null
         ) {
 
@@ -1116,7 +1138,6 @@ fetchMedicalRepresentatives(
               matched.medicalRepresentativeId;
           }
         }
-
 
       } else {
 
@@ -1151,7 +1172,6 @@ fetchMedicalRepresentatives(
 
   });
 }
-
   // ==========================================================
   // MR SEARCH
   // ==========================================================
