@@ -347,11 +347,26 @@
         placeholder="Description">
       </textarea>
 
-      <button class="bg-blue-600 text-white px-4 py-2 rounded" (click)="addRoute()">
+     <button
+  type="button"
+  class="bg-blue-600 text-white px-4 py-2 rounded
+         hover:bg-blue-700
+         disabled:bg-gray-400
+         disabled:cursor-not-allowed
+         flex items-center gap-2"
+  [disabled]="isAddingRoute"
+  (click)="addRoute()">
 
-        Add Route
+  <span
+    *ngIf="isAddingRoute"
+    class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin">
+  </span>
 
-      </button>
+  <span>
+    {{ isAddingRoute ? 'Adding...' : 'Add Route' }}
+  </span>
+
+</button>
 
     </div>
 

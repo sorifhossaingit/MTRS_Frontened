@@ -77,7 +77,7 @@ showRouteModal = false;
 newRouteName = '';
 
 newRouteDescription = '';
-
+isAddingRoute = false;
 
 
 loggedInAreaManagerId: number | null = null;
@@ -712,6 +712,11 @@ openRouteModal() {
 }
 addRoute(): void {
 
+  // Prevent multiple clicks while API request is running
+  if (this.isAddingRoute) {
+    return;
+  }
+
   if (!this.newRouteName.trim()) {
     Swal.fire(
       'Validation',
@@ -730,9 +735,15 @@ addRoute(): void {
 
   console.log('Payload:', payload);
 
+  // Disable button immediately
+  this.isAddingRoute = true;
+
   this.customerService.createRoute(payload).subscribe({
 
     next: (res: any) => {
+
+      // Re-enable button after API response
+      this.isAddingRoute = false;
 
       Swal.fire(
         'Success',
@@ -748,18 +759,19 @@ addRoute(): void {
 
     error: (err: any) => {
 
+      // Re-enable button even when API fails
+      this.isAddingRoute = false;
+
       console.error(err);
 
       Swal.fire(
         'Error',
-        err.error?.message || 'Unable to add route.',
+        err?.error?.message || 'Unable to add route.',
         'error'
       );
-
     }
 
   });
-
 }
 
 
