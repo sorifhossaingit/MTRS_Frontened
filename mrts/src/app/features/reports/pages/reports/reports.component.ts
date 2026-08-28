@@ -968,99 +968,189 @@ export class ReportsComponent implements OnInit, OnDestroy {
   // MR API
   // ==========================================================
 
-  fetchMedicalRepresentatives(
-    searchTerm = ''
-  ): void {
+fetchMedicalRepresentatives(
+  searchTerm = ''
+): void {
 
-    this.loadingMRs = true;
+  this.loadingMRs = true;
 
-    let params =
-      new HttpParams()
-        .set(
-          'agencyId',
-          this.agencyId.toString()
-        );
+  // ==========================================
+  // GET ROLE ID AND MID FROM LOCAL STORAGE
+  // ==========================================
 
-    if (searchTerm.trim()) {
+  const roleId =
+    localStorage.getItem('rid');
+
+  const midStorage =
+    localStorage.getItem('mid');
+
+  const mid =
+    midStorage !== null
+      ? Number(midStorage)
+      : null;
+
+
+  // ==========================================
+  // BASE PARAMS
+  // ==========================================
+
+  let params =
+    new HttpParams()
+      .set(
+        'agencyId',
+        this.agencyId.toString()
+      );
+
+
+  // ==========================================
+  // SPECIAL ROLE
+  //
+  // 11714ca6-4cdb-46c5-bb12-d582ef179bc2
+  //
+  // Send:
+  // assignedAreaManager = mid
+  // ==========================================
+
+  if (
+    roleId ===
+    '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
+  ) {
+
+    if (
+      mid !== null &&
+      !isNaN(mid) &&
+      mid > 0
+    ) {
 
       params =
         params.set(
-          'search',
-          searchTerm.trim()
+          'assignedAreaManager',
+          mid.toString()
         );
+
+    } else {
+
+      console.error(
+        'MID not found or invalid in localStorage.'
+      );
     }
+  }
 
-    this.http.get<
-      ApiResponse<MedicalRepresentative[]>
-    >(
-      `${this.apiUrl}/VisitReport/admin-get-mrlist-active`,
-      { params }
-    )
-    .subscribe({
 
-      next: response => {
+  // ==========================================
+  // SEARCH
+  // ==========================================
 
-        this.loadingMRs = false;
+  if (searchTerm.trim()) {
 
-        if (response.success) {
+    params =
+      params.set(
+        'search',
+        searchTerm.trim()
+      );
+  }
 
-          this.mrList =
-            response.data || [];
 
-          // Auto select MID for special role
-          if (
-            !searchTerm.trim() &&
-            this.isSpecialRole() &&
-            this.mid !== null
-          ) {
+  // ==========================================
+  // DEBUG
+  // ==========================================
 
-            const matched =
-              this.mrList.find(
-                mr =>
-                  Number(
-                    mr.medicalRepresentativeId
-                  ) === Number(this.mid)
-              );
+  // console.log(
+  //   'MR LIST REQUEST:',
+  //   {
+  //     roleId: roleId,
+  //     agencyId: this.agencyId,
+  //     mid: mid,
+  //     assignedAreaManager:
+  //       params.get('assignedAreaManager'),
+  //     search:
+  //       params.get('search')
+  //   }
+  // );
 
-            if (matched) {
 
-              this.selectedMrId =
-                matched.medicalRepresentativeId;
-            }
+  // ==========================================
+  // API CALL
+  // ==========================================
+
+  this.http.get<
+    ApiResponse<MedicalRepresentative[]>
+  >(
+    `${this.apiUrl}/VisitReport/admin-get-mrlist-active`,
+    { params }
+  )
+  .subscribe({
+
+    next: response => {
+
+      this.loadingMRs = false;
+
+      if (response.success) {
+
+        this.mrList =
+          response.data || [];
+
+
+        // ====================================
+        // AUTO SELECT MID FOR SPECIAL ROLE
+        // ====================================
+
+        if (
+          !searchTerm.trim() &&
+          roleId ===
+            '11714ca6-4cdb-46c5-bb12-d582ef179bc2' &&
+          mid !== null
+        ) {
+
+          const matched =
+            this.mrList.find(
+              mr =>
+                Number(
+                  mr.medicalRepresentativeId
+                ) === Number(mid)
+            );
+
+          if (matched) {
+
+            this.selectedMrId =
+              matched.medicalRepresentativeId;
           }
-
-        } else {
-
-          this.mrList = [];
-
-          this.errorMessage =
-            response.message ||
-            'Failed to load MR list.';
-
-          this.showError(
-            this.errorMessage
-          );
         }
-      },
 
-      error: err => {
 
-        this.loadingMRs = false;
+      } else {
 
         this.mrList = [];
 
-        console.error(
-          'MR API error:',
-          err
-        );
+        this.errorMessage =
+          response.message ||
+          'Failed to load MR list.';
 
         this.showError(
-          err?.error?.message ||
-          'Failed to load Medical Representatives.'
+          this.errorMessage
         );
       }
-    });
-  }
+    },
+
+    error: err => {
+
+      this.loadingMRs = false;
+
+      this.mrList = [];
+
+      console.error(
+        'MR API error:',
+        err
+      );
+
+      this.showError(
+        err?.error?.message ||
+        'Failed to load Medical Representatives.'
+      );
+    }
+
+  });
+}
 
   // ==========================================================
   // MR SEARCH
@@ -1081,89 +1171,176 @@ export class ReportsComponent implements OnInit, OnDestroy {
   // CUSTOMER API
   // ==========================================================
 
-  fetchCustomers(
-    searchTerm = ''
-  ): void {
+ fetchCustomers(
+  searchTerm = ''
+): void {
 
-    if (this.isSpecialRole()) {
-      return;
-    }
+  this.loadingCustomers = true;
 
-    this.loadingCustomers = true;
+  // ==========================================
+  // GET ROLE + MID FROM LOCAL STORAGE
+  // ==========================================
 
-    const isPhone =
-      /^[0-9+\s-]+$/.test(
-        searchTerm.trim()
+  const roleId =
+    localStorage.getItem('rid');
+
+  const midStorage =
+    localStorage.getItem('mid');
+
+  const mid =
+    midStorage !== null
+      ? Number(midStorage)
+      : null;
+
+
+  // ==========================================
+  // SPECIAL ROLE
+  //
+  // 11714ca6-4cdb-46c5-bb12-d582ef179bc2
+  //
+  // assignedAreaManager = mid
+  // ==========================================
+
+  let assignedAreaManager: number | null = null;
+
+  if (
+    roleId ===
+    '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
+  ) {
+
+    if (
+      mid !== null &&
+      !isNaN(mid) &&
+      mid > 0
+    ) {
+
+      assignedAreaManager = mid;
+
+    } else {
+
+      console.error(
+        'MID not found or invalid in localStorage.'
       );
 
-    const body = {
+      this.loadingCustomers = false;
+      this.customerList = [];
 
-      agencyId:
-        this.agencyId,
+      this.showError(
+        'Area Manager ID was not found.'
+      );
 
-      assignedAreaManager:
-        null,
+      return;
+    }
+  }
 
-      isActive:
-        true,
 
-      name:
-        !isPhone &&
-        searchTerm.trim()
-          ? searchTerm.trim()
-          : null,
+  // ==========================================
+  // SEARCH TYPE
+  // ==========================================
 
-      mobile:
-        isPhone &&
-        searchTerm.trim()
-          ? searchTerm.trim()
-          : null
-    };
+  const trimmedSearch =
+    searchTerm.trim();
 
-    this.http.post<
-      ApiResponse<Customer[]>
-    >(
-      `${this.apiUrl}/VisitReport/customer-list-pdf`,
-      body
-    )
-    .subscribe({
+  const isPhone =
+    /^[0-9+\s-]+$/.test(
+      trimmedSearch
+    );
 
-      next: response => {
 
-        this.loadingCustomers = false;
+  // ==========================================
+  // REQUEST BODY
+  // ==========================================
 
-        this.customerList =
-          response.success
-            ? response.data || []
-            : [];
+  const body = {
 
-        if (!response.success) {
+    agencyId:
+      this.agencyId,
 
-          console.error(
-            'Customer API response:',
-            response.message
-          );
-        }
-      },
+    assignedAreaManager:
+      assignedAreaManager,
 
-      error: err => {
+    isActive:
+      true,
 
-        this.loadingCustomers = false;
+    name:
+      !isPhone &&
+      trimmedSearch
+        ? trimmedSearch
+        : null,
 
-        this.customerList = [];
+    mobile:
+      isPhone &&
+      trimmedSearch
+        ? trimmedSearch
+        : null
+  };
+
+
+  // ==========================================
+  // DEBUG
+  // ==========================================
+
+  // console.log(
+  //   'Customer List Request:',
+  //   {
+  //     roleId,
+  //     agencyId: this.agencyId,
+  //     mid,
+  //     assignedAreaManager,
+  //     searchTerm: trimmedSearch
+  //   }
+  // );
+
+
+  // ==========================================
+  // API CALL
+  // ==========================================
+
+  this.http.post<
+    ApiResponse<Customer[]>
+  >(
+    `${this.apiUrl}/VisitReport/customer-list-pdf`,
+    body
+  )
+  .subscribe({
+
+    next: response => {
+
+      this.loadingCustomers = false;
+
+      this.customerList =
+        response.success
+          ? response.data || []
+          : [];
+
+      if (!response.success) {
 
         console.error(
-          'Customer API error:',
-          err
-        );
-
-        this.showError(
-          err?.error?.message ||
-          'Failed to load customers.'
+          'Customer API response:',
+          response.message
         );
       }
-    });
-  }
+    },
+
+    error: err => {
+
+      this.loadingCustomers = false;
+
+      this.customerList = [];
+
+      console.error(
+        'Customer API error:',
+        err
+      );
+
+      this.showError(
+        err?.error?.message ||
+        'Failed to load customers.'
+      );
+    }
+
+  });
+}
 
   // ==========================================================
   // CUSTOMER SEARCH
