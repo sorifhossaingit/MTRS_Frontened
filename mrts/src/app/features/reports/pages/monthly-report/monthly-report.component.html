@@ -2,68 +2,116 @@
 <div class="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
   <div class="mx-auto max-w-7xl">
 
-    <!-- HEADER -->
-    <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      <div>
-        <div class="flex items-center gap-3">
-          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-sm">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.8"
-                d="M7 3h8l4 4v14H7a2 2 0 01-2-2V5a2 2 0 012-2z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.8"
-                d="M14 3v5h5M9 13h6M9 17h6"
-              />
-            </svg>
-          </div>
+<!-- HEADER -->
+<div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-          <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900">
-              Visit Expense Reports
-            </h1>
-            <p class="mt-1 text-sm text-slate-500">
-              Monthly MR travel expenses, PDF preview and approval management
-            </p>
-          </div>
-        </div>
+  <!-- TITLE -->
+  <div>
+    <div class="flex items-center gap-3">
+
+      <div
+        class="flex h-12 w-12 shrink-0 items-center justify-center
+               rounded-2xl bg-slate-900 text-white shadow-sm"
+      >
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.8"
+            d="M7 3h8l4 4v14H7a2 2 0 01-2-2V5a2 2 0 012-2z"
+          />
+
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.8"
+            d="M14 3v5h5M9 13h6M9 17h6"
+          />
+        </svg>
       </div>
 
-      <div class="flex gap-2">
-        <button
-          type="button"
-          (click)="loadReports()"
-          [disabled]="loadingReports"
-          class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+      <div class="min-w-0">
+        <h1
+          class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl"
         >
-          <svg
-            class="h-4 w-4"
-            [class.animate-spin]="loadingReports"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 4v5h5M20 20v-5h-5M5.5 9A7.5 7.5 0 0118 6.5L20 9M18.5 15A7.5 7.5 0 016 17.5L4 15"
-            />
-          </svg>
-          Refresh
-        </button>
+          Visit Expense Reports
+        </h1>
 
-@if (canCreateReport()) {
-  <button
-    type="button"
-    (click)="toggleCreateForm()"
-    class="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
-  >
+        <p class="mt-1 text-sm text-slate-500">
+          Monthly MR travel expenses, PDF preview and approval management
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ACTION BUTTONS -->
+  <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+
+    <!-- REFRESH -->
+    <button
+      type="button"
+      (click)="loadReports()"
+      [disabled]="loadingReports"
+      class="inline-flex h-11 items-center justify-center gap-2
+             rounded-xl border border-slate-200 bg-white px-4
+             text-sm font-semibold text-slate-700 shadow-sm
+             transition-all duration-200
+             hover:border-slate-300 hover:bg-slate-50 hover:shadow
+             focus:outline-none focus:ring-2 focus:ring-slate-200
+             disabled:cursor-not-allowed disabled:opacity-50"
+    >
+
+      <svg
+        class="h-4 w-4 shrink-0"
+        [class.animate-spin]="loadingReports"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 4v5h5M20 20v-5h-5
+             M5.5 9A7.5 7.5 0 0118 6.5L20 9
+             M18.5 15A7.5 7.5 0 016 17.5L4 15"
+        />
+      </svg>
+
+      <span>
+        {{ loadingReports ? 'Refreshing...' : 'Refresh' }}
+      </span>
+
+    </button>
+
+
+    <!-- CREATE REPORT -->
+    @if (canCreateReport()) {
+
+      <button
+        type="button"
+        (click)="toggleCreateForm()"
+        class="group inline-flex h-11 items-center justify-center gap-2
+               rounded-xl bg-slate-900 px-4
+               text-sm font-semibold text-white shadow-sm
+               transition-all duration-200
+               hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-md
+               focus:outline-none focus:ring-2 focus:ring-slate-300
+               active:translate-y-0"
+      >
+
+        <span
+          class="flex h-5 w-5 items-center justify-center rounded-md
+                 bg-white/10 transition-colors
+                 group-hover:bg-white/20"
+        >
           <svg
             class="h-4 w-4"
             fill="none"
@@ -77,12 +125,17 @@
               d="M12 5v14M5 12h14"
             />
           </svg>
-          Create Report
-        </button>
-      }
-      </div>
-    </div>
+        </span>
 
+        <span>Create Report</span>
+
+      </button>
+
+    }
+
+  </div>
+
+</div>
 
     <!-- SUCCESS ALERT -->
     @if (successMessage) {
@@ -182,9 +235,9 @@
                     </span>
 
                     <span class="truncate text-xs text-slate-500">
-                      📞 {{ selectedMr.mobile }}
+                       {{ selectedMr.mobile }}
                       <span class="mx-1">|</span>
-                      📍 {{ selectedMr.address }}
+                      {{ selectedMr.address }}
                     </span>
                   </div>
 
@@ -315,11 +368,7 @@
                           >
 
                             <span class="shrink-0">
-                              📞 {{ mr.mobile }}
-                            </span>
-
-                            <span class="min-w-0 truncate">
-                              📍 {{ mr.address }}
+                               {{ mr.mobile }} || {{ mr.address }}
                             </span>
 
                           </div>

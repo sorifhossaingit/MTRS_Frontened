@@ -1155,153 +1155,249 @@ export class MonthlyReportComponent
   // LOAD REPORTS
   // =======================================================
 
-  loadReports(): void {
+// =======================================================
+// LOAD REPORTS
+// =======================================================
 
-    this.clearMessages();
+loadReports(): void {
 
-    this.loadingReports =
-      true;
+  this.clearMessages();
 
+  this.loadingReports = true;
 
-    let params =
-      new HttpParams()
-        .set(
-          'month',
-          String(this.selectedMonth)
-        )
-        .set(
-          'year',
-          String(this.selectedYear)
-        )
-        .set(
-          'status',
-          this.selectedStatus
-        );
+  // =====================================================
+  // BASE PARAMETERS
+  // =====================================================
 
-
-    // =====================================================
-    // IMPORTANT:
-    //
-    // fd1c87b5...
-    //
-    // SEND MR ID FROM LOCAL STORAGE
-    // =====================================================
-
-    if (
-      this.roleId === this.ROLE_MR_VIEW
-    ) {
-
-      if (
-        this.mrIdFromStorage &&
-        this.mrIdFromStorage > 0
-      ) {
-
-        params =
-          params.set(
-            'mrId',
-            String(
-              this.mrIdFromStorage
-            )
-          );
-
-      } else {
-
-        this.loadingReports =
-          false;
-
-        this.reports =
-          [];
-
-        this.errorMessage =
-          'MR ID was not found in localStorage.';
-
-        return;
-      }
-    }
-
-
-    console.log(
-      'ADMIN REPORT REQUEST:',
-      {
-        roleId:
-          this.roleId,
-
-        mrId:
-          params.get('mrId'),
-
-        month:
-          params.get('month'),
-
-        year:
-          params.get('year'),
-
-        status:
-          params.get('status')
-      }
+  let params = new HttpParams()
+    .set(
+      'month',
+      String(this.selectedMonth)
+    )
+    .set(
+      'year',
+      String(this.selectedYear)
+    )
+    .set(
+      'status',
+      this.selectedStatus
     );
 
+  // =====================================================
+  // ALWAYS SEND AGENCY ID
+  //
+  // localStorage:
+  // aid = agency ID
+  // =====================================================
 
-    const sub =
-      this.http
-        .get<any>(
-          `${this.apiUrl}/admin`,
-          {
-            params
-          }
-        )
-        .subscribe({
+  if (
+    this.agencyId &&
+    this.agencyId > 0
+  ) {
 
-          next: response => {
+    params = params.set(
+      'agencyId',
+      String(this.agencyId)
+    );
 
-            this.loadingReports =
-              false;
+  } else {
 
+    this.loadingReports = false;
 
-            if (
-              response &&
-              Array.isArray(response.data)
-            ) {
+    this.reports = [];
 
-              this.reports =
-                response.data;
+    this.errorMessage =
+      'Agency ID was not found in localStorage.';
 
-            } else if (
-              Array.isArray(response)
-            ) {
+    console.error(
+      'Agency ID missing. localStorage key: aid'
+    );
 
-              this.reports =
-                response;
-
-            } else {
-
-              this.reports =
-                [];
-            }
-          },
-
-
-          error: error => {
-
-            this.loadingReports =
-              false;
-
-            this.reports =
-              [];
-
-
-            this.errorMessage =
-              this.getApiErrorMessage(
-                error,
-                'Unable to load visit expense reports.'
-              );
-          }
-
-        });
-
-
-    this.subscriptions.push(sub);
+    return;
   }
 
+
+  // =====================================================
+  // ROLE: AREA MANAGER / CREATE ROLE
+  //
+  // 11714ca6-4cdb-46c5-bb12-d582ef179bc2
+  //
+  // Send:
+  // assignedAreaManager = localStorage.mid
+  //
+  // Do NOT send mrId
+  // =====================================================
+
+  if (
+    this.roleId === this.ROLE_CREATE
+  ) {
+
+    if (
+      this.mrIdFromStorage &&
+      this.mrIdFromStorage > 0
+    ) {
+
+      params = params.set(
+        'assignedAreaManager',
+        String(this.mrIdFromStorage)
+      );
+
+    } else {
+
+      this.loadingReports = false;
+
+      this.reports = [];
+
+      this.errorMessage =
+        'Area Manager ID was not found in localStorage.';
+
+      console.error(
+        'Area Manager ID missing. localStorage key: mid'
+      );
+
+      return;
+    }
+  }
+
+
+  // =====================================================
+  // ROLE: MR VIEW
+  //
+  // fd1c87b5-524a-49e5-b60c-5d7b82ddeb43
+  //
+  // Send:
+  // mrId = localStorage.mid
+  // =====================================================
+
+  else if (
+    this.roleId === this.ROLE_MR_VIEW
+  ) {
+
+    if (
+      this.mrIdFromStorage &&
+      this.mrIdFromStorage > 0
+    ) {
+
+      params = params.set(
+        'mrId',
+        String(this.mrIdFromStorage)
+      );
+
+    } else {
+
+      this.loadingReports = false;
+
+      this.reports = [];
+
+      this.errorMessage =
+        'MR ID was not found in localStorage.';
+
+      console.error(
+        'MR ID missing. localStorage key: mid'
+      );
+
+      return;
+    }
+  }
+
+
+  // =====================================================
+  // DEBUG
+  // =====================================================
+
+  console.log(
+    'ADMIN REPORT REQUEST:',
+    {
+      roleId: this.roleId,
+
+      agencyId:
+        params.get('agencyId'),
+
+      assignedAreaManager:
+        params.get('assignedAreaManager'),
+
+      mrId:
+        params.get('mrId'),
+
+      month:
+        params.get('month'),
+
+      year:
+        params.get('year'),
+
+      status:
+        params.get('status')
+    }
+  );
+
+
+  // =====================================================
+  // API CALL
+  // =====================================================
+
+  const sub =
+    this.http
+      .get<any>(
+        `${this.apiUrl}/admin`,
+        {
+          params
+        }
+      )
+      .subscribe({
+
+        next: response => {
+
+          this.loadingReports = false;
+
+          if (
+            response &&
+            Array.isArray(response.data)
+          ) {
+
+            this.reports =
+              response.data;
+
+          }
+
+          else if (
+            Array.isArray(response)
+          ) {
+
+            this.reports =
+              response;
+
+          }
+
+          else {
+
+            this.reports = [];
+          }
+
+        },
+
+        error: error => {
+
+          this.loadingReports = false;
+
+          this.reports = [];
+
+          this.errorMessage =
+            this.getApiErrorMessage(
+              error,
+              'Unable to load visit expense reports.'
+            );
+
+          console.error(
+            'ADMIN REPORT API ERROR:',
+            error
+          );
+        }
+
+      });
+
+
+  this.subscriptions.push(sub);
+}
 
   // =======================================================
   // FILTER CHANGE
