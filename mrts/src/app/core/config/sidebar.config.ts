@@ -264,19 +264,19 @@ export const MENU_ITEMS: MenuItem[] = [
   label: 'Reports',
   icon: 'file-text',
   route: '/reports',
-  roles: ['Admin','MR'],
+  roles: ['Admin','MR','Manager'],
   children: [
     {
       label: 'Report Dashboard',
       icon: 'bar-chart-3',
       route: '/reports/Report-dashboard',
-      roles: ['Admin', 'MR']
+      roles: ['Admin', 'MR','Manager']
     },
     {
       label: 'Monthly Report Dashboard',
       icon: 'CalendarPlus',
       route: '/reports/monthly-Report-dashboard',
-      roles: ['Admin', 'MR']
+      roles: ['Admin', 'MR','Manager']
     }
   ]
 },

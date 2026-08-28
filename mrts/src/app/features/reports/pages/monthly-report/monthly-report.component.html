@@ -58,11 +58,12 @@
           Refresh
         </button>
 
-        <button
-          type="button"
-          (click)="toggleCreateForm()"
-          class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
-        >
+@if (canCreateReport()) {
+  <button
+    type="button"
+    (click)="toggleCreateForm()"
+    class="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+  >
           <svg
             class="h-4 w-4"
             fill="none"
@@ -78,6 +79,7 @@
           </svg>
           Create Report
         </button>
+      }
       </div>
     </div>
 
@@ -763,25 +765,25 @@
 
 
                     <!-- APPROVE / REJECT -->
-                    @if (canApprove(report)) {
+@if (canApproveReject() && canApprove(report)) {
 
-                      <button
-                        type="button"
-                        (click)="openApproveModal(report)"
-                        class="rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-emerald-700"
-                      >
-                        Approve
-                      </button>
+  <button
+    type="button"
+    (click)="openApproveModal(report)"
+    class="rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-emerald-700"
+  >
+    Approve
+  </button>
 
-                      <button
-                        type="button"
-                        (click)="openRejectModal(report)"
-                        class="rounded-lg bg-red-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-700"
-                      >
-                        Reject
-                      </button>
+  <button
+    type="button"
+    (click)="openRejectModal(report)"
+    class="rounded-lg bg-red-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-700"
+  >
+    Reject
+  </button>
 
-                    }
+}
 
                   </div>
 

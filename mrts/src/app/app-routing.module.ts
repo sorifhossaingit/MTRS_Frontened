@@ -82,7 +82,7 @@ const routes: Routes = [
           import('./features/reports/reports.module')
             .then(m => m.ReportsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['Admin','MR'] }
+        data: { roles: ['Admin','MR','Manager'] }
       },
 
       {
