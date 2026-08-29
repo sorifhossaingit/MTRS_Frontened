@@ -287,11 +287,26 @@
 
       <input class="input flex-1" [(ngModel)]="newCustomerType" placeholder="Customer Type">
 
-      <button class="bg-blue-600 text-white px-4 rounded" (click)="addCustomerType()">
+<button
+  type="button"
+  class="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded
+         disabled:bg-gray-400 disabled:cursor-not-allowed
+         flex items-center justify-center gap-2"
+  [disabled]="isAddingCustomerType"
+  (click)="addCustomerType()">
 
-        Add
+  <span *ngIf="!isAddingCustomerType">
+    Add
+  </span>
 
-      </button>
+  <span *ngIf="isAddingCustomerType" class="flex items-center gap-2">
+    <span
+      class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin">
+    </span>
+    Adding...
+  </span>
+
+</button>
 
     </div>
 

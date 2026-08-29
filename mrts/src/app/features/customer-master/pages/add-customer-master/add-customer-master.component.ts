@@ -58,7 +58,7 @@ export class AddCustomerMasterComponent implements OnInit {
 Plus = Plus;
 
 showCustomerTypeModal = false;
-
+isAddingCustomerType = false;
 newCustomerType = '';
 
 
@@ -590,16 +590,19 @@ openCustomerTypeModal(){
   this.showCustomerTypeModal=true;
 
 }
-addCustomerType() {
+addCustomerType(): void {
+
+  // Prevent multiple clicks while API request is running
+  if (this.isAddingCustomerType) {
+    return;
+  }
 
   if (!this.newCustomerType.trim()) {
-
     Swal.fire(
       'Validation',
       'Enter Customer Type',
       'warning'
     );
-
     return;
   }
 
@@ -609,23 +612,34 @@ addCustomerType() {
     createdby: Number(this.createdBy)
   };
 
+  console.log('Customer Type Payload:', payload);
+
+  // Disable button immediately
+  this.isAddingCustomerType = true;
+
   this.customerService.createCustomerType(payload).subscribe({
 
-    next: () => {
+    next: (res: any) => {
+
+      // Re-enable after API response
+      this.isAddingCustomerType = false;
 
       Swal.fire(
         'Success',
-        'Customer Type Added',
+        res?.message || 'Customer Type Added',
         'success'
       );
 
       this.newCustomerType = '';
 
+      // Refresh list
       this.getCustomerTypeList();
-
     },
 
     error: (err: any) => {
+
+      // Re-enable even if API fails
+      this.isAddingCustomerType = false;
 
       console.error(err);
 
@@ -634,11 +648,9 @@ addCustomerType() {
         err?.error?.message || 'Unable to add customer type',
         'error'
       );
-
     }
 
   });
-
 }
 deleteCustomerType(id:number){
 
