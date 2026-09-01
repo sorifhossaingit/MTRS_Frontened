@@ -15,7 +15,7 @@ export class ProductService {
     return this.http.get(`${this.apiUrl}/admin/product/product-dashboard/${agencyid}`);
   }
 
-   getproductdetails(params: any) {
+  getproductdetails(params: any) {
     return this.http.get(
       `${this.apiUrl}/admin/product/list`, { params });
   }
@@ -24,11 +24,11 @@ export class ProductService {
     return this.http.post(`${this.apiUrl}/admin/product/create`, data);
   }
 
-   updateproductdetails(data: any) {
+  updateproductdetails(data: any) {
     return this.http.put(`${this.apiUrl}/admin/product/update`, data);
   }
 
-// Stockist Order Details APIs //
+  // Stockist Order Details APIs //
 
   getstockistorderdetails(params: any) {
     return this.http.get(
@@ -44,4 +44,14 @@ export class ProductService {
     return this.http.put(`${this.apiUrl}/admin/stockiestorder/update-status`, data);
   }
 
+
+  updateStockistOrder(
+    orderId: number,
+    payload: any
+  ) {
+    return this.http.put(
+      `${this.apiUrl}/admin/stockiestorder/stockiest/update-order/${orderId}`,
+      payload
+    );
+  }
 }

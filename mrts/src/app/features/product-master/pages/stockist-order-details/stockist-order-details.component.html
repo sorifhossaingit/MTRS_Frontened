@@ -4,11 +4,14 @@
   <!-- HEADER -->
   <!-- ===================================== -->
 
-  <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
+  <div
+    class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
 
     <h1 class="text-2xl font-bold flex items-center gap-3">
 
-      <lucide-icon [img]="ClipboardList"></lucide-icon>
+      <lucide-icon
+        [img]="ClipboardList">
+      </lucide-icon>
 
       Stockist Order Approval
 
@@ -16,17 +19,25 @@
 
   </div>
 
+
   <!-- ===================================== -->
   <!-- KPI CARDS -->
   <!-- ===================================== -->
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
 
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
+    <!-- TOTAL -->
 
-      <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+    <div
+      class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
 
-        <lucide-icon [img]="Package" class="text-blue-600">
+      <div
+        class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+
+        <lucide-icon
+          [img]="Package"
+          class="text-blue-600">
         </lucide-icon>
 
       </div>
@@ -45,11 +56,18 @@
 
     </div>
 
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
 
-      <div class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
+    <!-- PENDING -->
 
-        <lucide-icon [img]="Clock" class="text-yellow-600">
+    <div
+      class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
+
+      <div
+        class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
+
+        <lucide-icon
+          [img]="Clock"
+          class="text-yellow-600">
         </lucide-icon>
 
       </div>
@@ -60,7 +78,8 @@
           Pending
         </p>
 
-        <h2 class="text-2xl font-bold text-yellow-600">
+        <h2
+          class="text-2xl font-bold text-yellow-600">
           {{ pending }}
         </h2>
 
@@ -68,11 +87,18 @@
 
     </div>
 
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
 
-      <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+    <!-- ACCEPTED -->
 
-        <lucide-icon [img]="CheckCircle" class="text-green-600">
+    <div
+      class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
+
+      <div
+        class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+
+        <lucide-icon
+          [img]="CheckCircle"
+          class="text-green-600">
         </lucide-icon>
 
       </div>
@@ -80,10 +106,11 @@
       <div>
 
         <p class="text-gray-500 text-sm">
-          Approved
+          Accepted
         </p>
 
-        <h2 class="text-2xl font-bold text-green-600">
+        <h2
+          class="text-2xl font-bold text-green-600">
           {{ approved }}
         </h2>
 
@@ -91,11 +118,18 @@
 
     </div>
 
-    <div class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
 
-      <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+    <!-- REJECTED -->
 
-        <lucide-icon [img]="XCircle" class="text-red-600">
+    <div
+      class="bg-white rounded-2xl shadow p-5 flex items-center gap-4">
+
+      <div
+        class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+
+        <lucide-icon
+          [img]="XCircle"
+          class="text-red-600">
         </lucide-icon>
 
       </div>
@@ -106,7 +140,8 @@
           Rejected
         </p>
 
-        <h2 class="text-2xl font-bold text-red-600">
+        <h2
+          class="text-2xl font-bold text-red-600">
           {{ rejected }}
         </h2>
 
@@ -116,48 +151,71 @@
 
   </div>
 
+
   <!-- ===================================== -->
   <!-- FILTERS -->
   <!-- ===================================== -->
 
-  <div class="bg-white rounded-2xl shadow p-5 mb-6">
+  <div
+    class="bg-white rounded-2xl shadow p-5 mb-6">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
 
-      <!-- Stockist -->
+      <!-- STOCKIST -->
 
       <div>
 
-        <label class="block text-sm font-medium mb-2">
+        <label
+          class="block text-sm font-medium mb-2">
+
           Stockist
+
         </label>
 
-        <input type="text" [(ngModel)]="stockistName" placeholder="Search Stockist"
+        <input
+          type="text"
+          [(ngModel)]="stockistName"
+          placeholder="Search Stockist"
           class="w-full h-12 border rounded-xl px-4">
 
       </div>
 
-      <!-- Mobile -->
+
+      <!-- MOBILE -->
 
       <div>
 
-        <label class="block text-sm font-medium mb-2">
+        <label
+          class="block text-sm font-medium mb-2">
+
           Mobile
+
         </label>
 
-        <input type="text" [(ngModel)]="mobile" placeholder="Search Mobile" class="w-full h-12 border rounded-xl px-4">
+        <input
+          type="text"
+          [(ngModel)]="mobile"
+          placeholder="Search Mobile"
+          class="w-full h-12 border rounded-xl px-4">
 
       </div>
 
-      <!-- Status -->
+
+      <!-- STATUS -->
 
       <div>
 
-        <label class="block text-sm font-medium mb-2">
+        <label
+          class="block text-sm font-medium mb-2">
+
           Status
+
         </label>
 
-        <select [(ngModel)]="status" class="w-full h-12 border rounded-xl px-4">
+        <select
+          [(ngModel)]="status"
+          class="w-full h-12 border rounded-xl px-4">
 
           <option value="">
             All Status
@@ -167,8 +225,8 @@
             Pending
           </option>
 
-          <option value="Approved">
-            Approved
+          <option value="Accepted">
+            Accepted
           </option>
 
           <option value="Rejected">
@@ -179,41 +237,61 @@
 
       </div>
 
-      <!-- From Date -->
+
+      <!-- FROM DATE -->
 
       <div>
 
-        <label class="block text-sm font-medium mb-2">
+        <label
+          class="block text-sm font-medium mb-2">
+
           From Date
+
         </label>
 
-        <input type="date" [(ngModel)]="fromDate" class="w-full h-12 border rounded-xl px-4">
+        <input
+          type="date"
+          [(ngModel)]="fromDate"
+          class="w-full h-12 border rounded-xl px-4">
 
       </div>
 
-      <!-- To Date -->
+
+      <!-- TO DATE -->
 
       <div>
 
-        <label class="block text-sm font-medium mb-2">
+        <label
+          class="block text-sm font-medium mb-2">
+
           To Date
+
         </label>
 
-        <input type="date" [(ngModel)]="toDate" class="w-full h-12 border rounded-xl px-4">
+        <input
+          type="date"
+          [(ngModel)]="toDate"
+          class="w-full h-12 border rounded-xl px-4">
 
       </div>
 
-      <!-- Buttons -->
 
-      <div class="flex items-end gap-2">
+      <!-- BUTTONS -->
 
-        <button (click)="applyFilter()" class="bg-blue-600 text-white h-12 px-5 rounded-xl w-full">
+      <div
+        class="flex items-end gap-2">
+
+        <button
+          (click)="applyFilter()"
+          class="bg-blue-600 text-white h-12 px-5 rounded-xl w-full">
 
           Search
 
         </button>
 
-        <button (click)="resetFilter()" class="bg-gray-200 h-12 px-5 rounded-xl">
+        <button
+          (click)="resetFilter()"
+          class="bg-gray-200 h-12 px-5 rounded-xl">
 
           Reset
 
@@ -225,17 +303,22 @@
 
   </div>
 
+
   <!-- ===================================== -->
   <!-- TABLE -->
   <!-- ===================================== -->
 
-  <div class="bg-white rounded-2xl shadow overflow-hidden">
+  <div
+    class="bg-white rounded-2xl shadow overflow-hidden">
 
-    <div class="overflow-x-auto">
+    <div
+      class="overflow-x-auto">
 
-      <table class="w-full min-w-[1000px]">
+      <table
+        class="w-full min-w-[1000px]">
 
-        <thead class="bg-gray-50">
+        <thead
+          class="bg-gray-50">
 
           <tr>
 
@@ -271,41 +354,77 @@
 
         </thead>
 
+
         <tbody>
 
-          <tr *ngFor="let order of orders" class="border-t hover:bg-gray-50">
+          <tr
+            *ngFor="let order of orders"
+            class="border-t hover:bg-gray-50">
+
+            <!-- ORDER NUMBER -->
 
             <td class="p-4 font-medium">
+
               {{ order.orderNumber }}
+
             </td>
 
+
+            <!-- DATE -->
+
             <td class="p-4">
+
               {{ order.orderDate | date:'dd MMM yyyy' }}
+
             </td>
 
+
+            <!-- STOCKIST -->
+
             <td class="p-4">
+
               {{ order.stockistName }}
+
             </td>
 
+
+            <!-- CONTACT -->
+
             <td class="p-4">
+
               {{ order.contactPerson }}
+
             </td>
 
-            <td class="p-4 font-semibold text-green-600">
-              ₹{{ order.totalAmount }}
+
+            <!-- AMOUNT -->
+
+            <td
+              class="p-4 font-semibold text-green-600">
+
+              ₹{{ order.totalAmount | number:'1.2-2' }}
+
             </td>
+
+
+            <!-- STATUS -->
 
             <td class="p-4">
 
-              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
+              <span
+                class="px-3 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="{
+
                   'bg-yellow-100 text-yellow-700':
                     order.status === 'Pending',
 
                   'bg-green-100 text-green-700':
+                    order.status === 'Accepted' ||
                     order.status === 'Approved',
 
                   'bg-red-100 text-red-700':
                     order.status === 'Rejected'
+
                 }">
 
                 {{ order.status }}
@@ -314,25 +433,47 @@
 
             </td>
 
+
+            <!-- ACTIONS -->
+
             <td class="p-4">
 
-              <div class="flex justify-center gap-2">
+              <div
+                class="flex justify-center gap-2">
 
-                <button (click)="viewOrder(order)"
+                <!-- VIEW -->
+
+                <button
+                  (click)="viewOrder(order)"
+                  title="View Order"
                   class="bg-blue-100 hover:bg-blue-200 text-blue-600 px-3 py-2 rounded-lg">
 
-                  <lucide-icon [img]="Eye"></lucide-icon>
+                  <lucide-icon
+                    [img]="Eye">
+                  </lucide-icon>
 
                 </button>
 
-                <button *ngIf="order.status === 'Pending'" (click)="updateStatus(order,'Accepted')"
+
+                <!-- APPROVE -->
+
+                <button
+                  *ngIf="order.status === 'Pending'"
+                  (click)="updateStatus(order,'Accepted')"
+                  title="Accept Order"
                   class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg">
 
                   Approve
 
                 </button>
 
-                <button *ngIf="order.status === 'Pending'" (click)="updateStatus(order,'Rejected')"
+
+                <!-- REJECT -->
+
+                <button
+                  *ngIf="order.status === 'Pending'"
+                  (click)="updateStatus(order,'Rejected')"
+                  title="Reject Order"
                   class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg">
 
                   Reject
@@ -345,9 +486,15 @@
 
           </tr>
 
-          <tr *ngIf="orders.length === 0">
 
-            <td colspan="7" class="text-center py-10 text-gray-500">
+          <!-- NO DATA -->
+
+          <tr
+            *ngIf="orders.length === 0">
+
+            <td
+              colspan="7"
+              class="text-center py-10 text-gray-500">
 
               No Orders Found
 
@@ -361,24 +508,40 @@
 
     </div>
 
+
+    <!-- ===================================== -->
     <!-- PAGINATION -->
+    <!-- ===================================== -->
 
-    <div class="flex justify-between items-center p-5 border-t">
+    <div
+      class="flex justify-between items-center p-5 border-t">
 
-      <button (click)="previousPage()" [disabled]="pageNumber === 1"
+      <button
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
         class="px-4 py-2 bg-gray-200 rounded-xl disabled:opacity-50">
 
         Previous
 
       </button>
 
+
       <div class="font-medium">
 
-        Page {{ pageNumber }} of {{ totalPages }}
+        Page
+        {{ pageNumber }}
+        of
+        {{ totalPages }}
 
       </div>
 
-      <button (click)="nextPage()" [disabled]="pageNumber === totalPages"
+
+      <button
+        (click)="nextPage()"
+        [disabled]="
+          totalPages === 0 ||
+          pageNumber === totalPages
+        "
         class="px-4 py-2 bg-blue-600 text-white rounded-xl disabled:opacity-50">
 
         Next
@@ -389,26 +552,39 @@
 
   </div>
 
- 
+
   <!-- ================================================= -->
   <!-- ORDER PREVIEW MODAL -->
   <!-- ================================================= -->
 
-  <div *ngIf="showPreviewModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div
+    *ngIf="showPreviewModal"
+    class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 
-    <div class="bg-white rounded-3xl w-full max-w-7xl max-h-[95vh] overflow-hidden">
+    <div
+      class="bg-white rounded-3xl w-full max-w-7xl max-h-[95vh] overflow-hidden shadow-2xl flex flex-col">
 
+
+      <!-- ================================================= -->
       <!-- HEADER -->
+      <!-- ================================================= -->
 
-      <div class="flex justify-between items-center border-b p-5 bg-white sticky top-0">
+      <div
+        class="flex justify-between items-center border-b p-5 bg-white">
+
+        <!-- LEFT -->
 
         <div>
 
-          <h2 class="text-2xl font-bold">
+          <h2
+            class="text-2xl font-bold text-gray-800">
+
             Order Preview
+
           </h2>
 
-          <p class="text-sm text-gray-500 mt-1">
+          <p
+            class="text-sm text-gray-500 mt-1">
 
             {{ selectedOrder?.orderNumber }}
 
@@ -416,59 +592,126 @@
 
         </div>
 
-        <button (click)="closeModal()"
-          class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center">
 
-          <lucide-icon [img]="X"></lucide-icon>
+        <!-- RIGHT -->
 
-        </button>
+        <div
+          class="flex items-center gap-3">
+
+          <!-- EDIT -->
+
+          <button
+            *ngIf="
+              selectedOrder?.status === 'Pending' &&
+              !editingOrder &&
+              !previewLoading
+            "
+            (click)="startEditOrder()"
+            class="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition flex items-center gap-2">
+
+            <lucide-icon
+              [img]="Package"
+              [size]="18">
+            </lucide-icon>
+
+            Edit Quantity
+
+          </button>
+
+
+          <!-- CLOSE -->
+
+          <button
+            (click)="closeModal()"
+            [disabled]="savingOrder"
+            class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition disabled:opacity-50">
+
+            <lucide-icon
+              [img]="X">
+            </lucide-icon>
+
+          </button>
+
+        </div>
 
       </div>
 
+
+      <!-- ================================================= -->
       <!-- ORDER INFO -->
+      <!-- ================================================= -->
 
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-5 border-b bg-gray-50">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-5 border-b bg-gray-50">
+
+        <!-- STOCKIST -->
 
         <div>
 
-          <p class="text-xs text-gray-500">
+          <p
+            class="text-xs text-gray-500 mb-1">
+
             Stockist
+
           </p>
 
-          <p class="font-semibold">
+          <p
+            class="font-semibold text-gray-800">
+
             {{ selectedOrder?.stockistName }}
+
           </p>
 
         </div>
 
+
+        <!-- CONTACT -->
+
         <div>
 
-          <p class="text-xs text-gray-500">
+          <p
+            class="text-xs text-gray-500 mb-1">
+
             Contact Person
+
           </p>
 
-          <p class="font-semibold">
+          <p
+            class="font-semibold text-gray-800">
+
             {{ selectedOrder?.contactPerson }}
+
           </p>
 
         </div>
 
+
+        <!-- STATUS -->
+
         <div>
 
-          <p class="text-xs text-gray-500">
+          <p
+            class="text-xs text-gray-500 mb-2">
+
             Status
+
           </p>
 
-          <span class="px-3 py-1 rounded-full text-xs" [ngClass]="{
-            'bg-yellow-100 text-yellow-700':
-              selectedOrder?.status === 'Pending',
+          <span
+            class="px-3 py-1.5 rounded-full text-xs font-semibold"
+            [ngClass]="{
 
-            'bg-green-100 text-green-700':
-              selectedOrder?.status === 'Approved',
+              'bg-yellow-100 text-yellow-700':
+                selectedOrder?.status === 'Pending',
 
-            'bg-red-100 text-red-700':
-              selectedOrder?.status === 'Rejected'
-          }">
+              'bg-green-100 text-green-700':
+                selectedOrder?.status === 'Approved' ||
+                selectedOrder?.status === 'Accepted',
+
+              'bg-red-100 text-red-700':
+                selectedOrder?.status === 'Rejected'
+
+            }">
 
             {{ selectedOrder?.status }}
 
@@ -476,15 +719,27 @@
 
         </div>
 
+
+        <!-- TOTAL -->
+
         <div>
 
-          <p class="text-xs text-gray-500">
+          <p
+            class="text-xs text-gray-500 mb-1">
+
             Total Amount
+
           </p>
 
-          <p class="font-bold text-green-600">
+          <p
+            class="font-bold text-green-600 text-lg">
 
-            ₹{{ selectedOrder?.totalAmount }}
+            ₹{{
+              editingOrder
+                ? getAcceptedTotalAmount()
+                : selectedOrder?.totalAmount
+              | number:'1.2-2'
+            }}
 
           </p>
 
@@ -492,21 +747,81 @@
 
       </div>
 
-      <!-- LOADER -->
 
-      <div *ngIf="previewLoading" class="p-10 text-center">
+      <!-- ================================================= -->
+      <!-- EDIT INFORMATION -->
+      <!-- ================================================= -->
 
-        Loading Order Details...
+      <div
+        *ngIf="
+          editingOrder &&
+          selectedOrder?.status === 'Pending'
+        "
+        class="px-5 py-3 bg-blue-50 border-b border-blue-100">
+
+        <div
+          class="flex items-center gap-2 text-blue-700">
+
+          <lucide-icon
+            [img]="Package"
+            [size]="18">
+          </lucide-icon>
+
+          <p
+            class="text-sm font-medium">
+
+            Enter the quantity you want to accept.
+            Balance quantity will be calculated automatically.
+
+          </p>
+
+        </div>
 
       </div>
 
+
+      <!-- ================================================= -->
+      <!-- LOADER -->
+      <!-- ================================================= -->
+
+      <div
+        *ngIf="previewLoading"
+        class="p-10 text-center flex-1">
+
+        <div
+          class="flex flex-col items-center justify-center">
+
+          <div
+            class="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin mb-4">
+          </div>
+
+          <p
+            class="text-gray-500">
+
+            Loading Order Details...
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
       <!-- PRODUCTS -->
+      <!-- ================================================= -->
 
-      <div *ngIf="!previewLoading" class="overflow-auto max-h-[60vh]">
+      <div
+        *ngIf="!previewLoading"
+        class="overflow-auto flex-1">
 
-        <table class="min-w-[1400px] w-full text-sm">
+        <table
+          class="min-w-[1500px] w-full text-sm">
 
-          <thead class="bg-gray-100 sticky top-0">
+          <!-- TABLE HEADER -->
+
+          <thead
+            class="bg-gray-100 sticky top-0 z-10">
 
             <tr>
 
@@ -514,39 +829,55 @@
                 Image
               </th>
 
-              <th class="text-left">
+              <th class="text-left px-3 py-3">
                 Product
               </th>
 
-              <th class="text-left">
+              <th class="text-left px-3 py-3">
                 Brand
               </th>
 
-              <th class="text-left">
+              <th class="text-left px-3 py-3">
                 Category
               </th>
 
-              <th class="text-center">
-                Qty
+              <th class="text-center px-3 py-3">
+                Ordered Qty
               </th>
 
-              <th class="text-center">
+              <th
+                *ngIf="editingOrder"
+                class="text-center px-3 py-3">
+
+                Accept Qty
+
+              </th>
+
+              <th
+                *ngIf="editingOrder"
+                class="text-center px-3 py-3">
+
+                Balance
+
+              </th>
+
+              <th class="text-center px-3 py-3">
                 Free Qty
               </th>
 
-              <th class="text-center">
+              <th class="text-center px-3 py-3">
                 PTR
               </th>
 
-              <th class="text-center">
+              <th class="text-center px-3 py-3">
                 Tax %
               </th>
 
-              <th class="text-center">
+              <th class="text-center px-3 py-3">
                 Discount %
               </th>
 
-              <th class="text-right pr-4">
+              <th class="text-right pr-5 px-3 py-3">
                 Amount
               </th>
 
@@ -554,29 +885,44 @@
 
           </thead>
 
+
+          <!-- TABLE BODY -->
+
           <tbody>
 
-            <tr *ngFor="let item of previewProducts" class="border-b hover:bg-gray-50">
+            <tr
+              *ngFor="let item of previewProducts"
+              class="border-b hover:bg-gray-50 transition">
+
 
               <!-- IMAGE -->
 
               <td class="p-3">
 
-                <img [src]="item.imageUrl" class="w-16 h-16 rounded-xl object-cover border">
+                <img
+                  [src]="item.imageUrl"
+                  [alt]="item.productName"
+                  class="w-16 h-16 rounded-xl object-cover border bg-gray-50"
+                  (error)="$any($event.target).style.display='none'"
+                />
 
               </td>
 
+
               <!-- PRODUCT -->
 
-              <td>
+              <td class="px-3">
 
-                <div class="font-semibold">
+                <div
+                  class="font-semibold text-gray-800">
 
                   {{ item.productName }}
 
                 </div>
 
-                <div class="text-xs text-gray-500">
+                <div
+                  *ngIf="item.remarks"
+                  class="text-xs text-gray-500 mt-1">
 
                   {{ item.remarks }}
 
@@ -584,77 +930,161 @@
 
               </td>
 
+
               <!-- BRAND -->
 
-              <td>
+              <td class="px-3">
 
                 {{ item.brandName }}
 
               </td>
 
+
               <!-- CATEGORY -->
 
-              <td>
+              <td class="px-3">
 
                 {{ item.category }}
 
               </td>
 
-              <!-- QTY -->
 
-              <td class="text-center">
+              <!-- ORDERED -->
+
+              <td
+                class="text-center px-3 font-semibold text-gray-800">
 
                 {{ item.quantity }}
 
               </td>
 
+
+              <!-- ACCEPT -->
+
+              <td
+                *ngIf="editingOrder"
+                class="text-center px-3">
+
+                <input
+                  type="number"
+                  min="0"
+                  [max]="item.quantity"
+                  [(ngModel)]="item.acceptQuantity"
+                  (ngModelChange)="calculateAcceptedQuantity(item)"
+                  class="w-24 px-3 py-2 border border-gray-300 rounded-lg text-center font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+
+              </td>
+
+
+              <!-- BALANCE -->
+
+              <td
+                *ngIf="editingOrder"
+                class="text-center px-3">
+
+                <span
+                  class="inline-flex items-center justify-center min-w-[45px] px-3 py-1.5 rounded-full text-xs font-semibold"
+                  [ngClass]="{
+
+                    'bg-green-100 text-green-700':
+                      item.balanceQuantity === 0,
+
+                    'bg-yellow-100 text-yellow-700':
+                      item.balanceQuantity > 0
+
+                  }">
+
+                  {{ item.balanceQuantity }}
+
+                </span>
+
+              </td>
+
+
               <!-- FREE -->
 
-              <td class="text-center">
+              <td
+                class="text-center px-3">
 
                 {{ item.freeQuantity }}
 
               </td>
 
+
               <!-- PTR -->
 
-              <td class="text-center">
+              <td
+                class="text-center px-3">
 
-                ₹{{ item.ptr }}
+                ₹{{ item.ptr | number:'1.2-2' }}
 
               </td>
 
+
               <!-- TAX -->
 
-              <td class="text-center">
+              <td
+                class="text-center px-3">
 
                 {{ item.taxPercent }}%
 
               </td>
 
+
               <!-- DISCOUNT -->
 
-              <td class="text-center">
+              <td
+                class="text-center px-3">
 
                 {{ item.discountPercent }}%
 
               </td>
 
-              <!-- TOTAL -->
 
-              <td class="text-right pr-4 font-bold text-green-600">
+              <!-- AMOUNT -->
 
-                ₹{{ item.totalAmount }}
+              <td
+                class="text-right pr-5 px-3 font-bold text-green-600">
+
+                ₹{{
+                  editingOrder
+                    ? calculateAcceptedAmount(item)
+                    : item.totalAmount
+                  | number:'1.2-2'
+                }}
 
               </td>
 
             </tr>
 
-            <tr *ngIf="previewProducts.length === 0">
 
-              <td colspan="12" class="text-center py-10 text-gray-500">
+            <!-- NO PRODUCTS -->
 
-                No Products Found
+            <tr
+              *ngIf="previewProducts.length === 0">
+
+              <td
+                colspan="12"
+                class="text-center py-10 text-gray-500">
+
+                <div
+                  class="flex flex-col items-center justify-center">
+
+                  <lucide-icon
+                    [img]="Package"
+                    [size]="40"
+                    class="text-gray-300 mb-3">
+                  </lucide-icon>
+
+                  <p
+                    class="font-medium">
+
+                    No Products Found
+
+                  </p>
+
+                </div>
 
               </td>
 
@@ -663,6 +1093,124 @@
           </tbody>
 
         </table>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- EDIT FOOTER -->
+      <!-- ================================================= -->
+
+      <div
+        *ngIf="
+          editingOrder &&
+          !previewLoading &&
+          previewProducts.length > 0
+        "
+        class="border-t bg-gray-50 p-5 flex flex-col md:flex-row justify-between items-center gap-4">
+
+
+        <!-- ACCEPTED TOTAL -->
+
+        <div>
+
+          <p
+            class="text-sm text-gray-500">
+
+            Accepted Order Total
+
+          </p>
+
+          <p
+            class="text-2xl font-bold text-green-600">
+
+            ₹{{
+              getAcceptedTotalAmount()
+              | number:'1.2-2'
+            }}
+
+          </p>
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+
+        <div
+          class="flex items-center gap-3">
+
+          <!-- CANCEL -->
+
+          <button
+            (click)="editingOrder = false"
+            [disabled]="savingOrder"
+            class="px-5 py-2.5 border border-gray-300 bg-white text-gray-700 rounded-xl hover:bg-gray-100 transition disabled:opacity-50">
+
+            Cancel
+
+          </button>
+
+
+          <!-- ACCEPT -->
+
+          <button
+            (click)="acceptOrder()"
+            [disabled]="savingOrder"
+            class="px-5 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition disabled:opacity-50 flex items-center gap-2">
+
+            <!-- NORMAL -->
+
+            <ng-container
+              *ngIf="!savingOrder">
+
+              <lucide-icon
+                [img]="CheckCircle"
+                [size]="18">
+              </lucide-icon>
+
+              Accept Order
+
+            </ng-container>
+
+
+            <!-- LOADING -->
+
+            <ng-container
+              *ngIf="savingOrder">
+
+              <div
+                class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">
+              </div>
+
+              Updating...
+
+            </ng-container>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- NORMAL FOOTER -->
+      <!-- ================================================= -->
+
+      <div
+        *ngIf="
+          !editingOrder &&
+          !previewLoading
+        "
+        class="border-t bg-white p-4 flex justify-end">
+
+        <button
+          (click)="closeModal()"
+          class="px-5 py-2.5 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition">
+
+          Close
+
+        </button>
 
       </div>
 
