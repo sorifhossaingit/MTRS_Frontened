@@ -528,68 +528,88 @@ export class ReportsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ==========================================================
-  // FIND RATE FOR SELECTED MONTH
-  // ==========================================================
 
-  private loadSelectedMonthKmRate(): void {
+// ==========================================================
+// FIND RATE FOR SELECTED MONTH
+// ==========================================================
 
-    if (!this.fromDate) {
+private loadSelectedMonthKmRate(): void {
 
-      this.ratePerKm = null;
+  if (!this.fromDate) {
 
-      this.selectedKmRate = null;
+    this.ratePerKm = null;
+    this.selectedKmRate = null;
+    this.kmRateMessage = '';
 
-      this.kmRateMessage = '';
-
-      return;
-    }
-
-    const parts =
-      this.fromDate.split('-');
-
-    if (parts.length !== 3) {
-      return;
-    }
-
-    const year =
-      Number(parts[0]);
-
-    const month =
-      Number(parts[1]);
-
-    const rate =
-      this.kmRateList.find(x =>
-        Number(x.rateYear) === year &&
-        Number(x.rateMonth) === month &&
-        x.isActive !== false
-      );
-
-    if (rate) {
-
-      this.selectedKmRate = rate;
-
-      this.ratePerKm =
-        Number(rate.ratePerKm);
-
-      this.kmRateError = false;
-
-      this.kmRateMessage =
-        `₹${this.ratePerKm.toFixed(2)} / KM`;
-
-    } else {
-
-      this.selectedKmRate = null;
-
-      this.ratePerKm = null;
-
-      this.kmRateError = true;
-
-      this.kmRateMessage =
-        `No rate configured for ${this.getMonthName(month)} ${year}.`;
-    }
+    return;
   }
 
+  const parts =
+    this.fromDate.split('-');
+
+  if (parts.length !== 3) {
+    return;
+  }
+
+  const year =
+    Number(parts[0]);
+
+  const month =
+    Number(parts[1]);
+
+  const rate =
+    this.kmRateList.find(x =>
+      Number(x.rateYear) === year &&
+      Number(x.rateMonth) === month &&
+      x.isActive !== false
+    );
+
+  if (rate) {
+
+    // ================================================
+    // SELECT CURRENT MONTH RATE
+    // ================================================
+
+    this.selectedKmRate = rate;
+
+    // ================================================
+    // RATE PER KM
+    // ================================================
+
+    this.ratePerKm =
+      Number(rate.ratePerKm);
+
+    // ================================================
+    // FOOD EXPENSE
+    // Stored in selectedKmRate.foodExpense
+    // ================================================
+
+    const foodExpense =
+      Number(rate.foodExpense ?? 0);
+
+    // ================================================
+    // STATUS
+    // ================================================
+
+    this.kmRateError = false;
+
+    this.kmRateMessage =
+      `₹${this.ratePerKm.toFixed(2)} / KM | ` +
+      `Food ₹${foodExpense.toFixed(2)} / Day`;
+
+  } else {
+
+    this.selectedKmRate = null;
+
+    this.ratePerKm = null;
+
+    this.kmRateError = true;
+
+    this.kmRateMessage =
+      `No rate configured for ` +
+      `${this.getMonthName(month)} ${year}.`;
+  }
+}
   // ==========================================================
   // ADD KM RATE
   // ==========================================================
@@ -1561,68 +1581,240 @@ fetchMedicalRepresentatives(
   // VISIT REPORT PDF
   // ==========================================================
 
-  generateVisitReportPdf(): void {
+// ==========================================================
+// VISIT REPORT PDF
+// ==========================================================
 
-    if (!this.validateVisitReport()) {
-      return;
+generateVisitReportPdf(): void {
+
+  // ========================================================
+  // VALIDATION
+  // ========================================================
+
+  if (!this.validateVisitReport()) {
+    return;
+  }
+
+
+  // ========================================================
+  // CHECK SELECTED RATE
+  // ========================================================
+
+  if (!this.selectedKmRate) {
+
+    this.showWarning(
+      'No KM Rate and Food Expense configured for the selected month.'
+    );
+
+    return;
+  }
+
+
+  // ========================================================
+  // GET RATE PER KM
+  // ========================================================
+
+  const ratePerKm =
+    Number(this.selectedKmRate.ratePerKm);
+
+
+  // ========================================================
+  // GET FOOD EXPENSE PER DAY
+  // ========================================================
+
+  const foodExpensePerDay =
+    Number(this.selectedKmRate.foodExpense ?? 0);
+
+
+  // ========================================================
+  // VALIDATE RATE
+  // ========================================================
+
+  if (
+    Number.isNaN(ratePerKm) ||
+    ratePerKm < 0
+  ) {
+
+    this.showWarning(
+      'Invalid Rate Per KM.'
+    );
+
+    return;
+  }
+
+
+  // ========================================================
+  // VALIDATE FOOD EXPENSE
+  // ========================================================
+
+  if (
+    Number.isNaN(foodExpensePerDay) ||
+    foodExpensePerDay < 0
+  ) {
+
+    this.showWarning(
+      'Invalid Food Expense.'
+    );
+
+    return;
+  }
+
+
+  // ========================================================
+  // LOADING
+  // ========================================================
+
+  this.downloadingVisitPdf = true;
+
+
+  // ========================================================
+  // QUERY PARAMETERS
+  // ========================================================
+
+  const params =
+    new HttpParams()
+
+      // -----------------------------------------------
+      // MR ID
+      // -----------------------------------------------
+
+      .set(
+        'MrId',
+        this.selectedMrId!.toString()
+      )
+
+      // -----------------------------------------------
+      // RATE PER KM
+      // -----------------------------------------------
+
+      .set(
+        'RatePerKm',
+        ratePerKm.toString()
+      )
+
+      // -----------------------------------------------
+      // FOOD EXPENSE PER DAY
+      // -----------------------------------------------
+
+      .set(
+        'FoodExpensePerDay',
+        foodExpensePerDay.toString()
+      )
+
+      // -----------------------------------------------
+      // FROM DATE
+      // -----------------------------------------------
+
+      .set(
+        'FromDate',
+        this.fromDate
+      )
+
+      // -----------------------------------------------
+      // TO DATE
+      // -----------------------------------------------
+
+      .set(
+        'ToDate',
+        this.toDate
+      );
+
+
+  // ========================================================
+  // DEBUG
+  // ========================================================
+
+  console.log(
+    'GENERATE VISIT REPORT PDF:',
+    {
+      MrId:
+        this.selectedMrId,
+
+      RatePerKm:
+        ratePerKm,
+
+      FoodExpensePerDay:
+        foodExpensePerDay,
+
+      FromDate:
+        this.fromDate,
+
+      ToDate:
+        this.toDate
+    }
+  );
+
+
+  // ========================================================
+  // API CALL
+  // ========================================================
+
+  this.http.get(
+    `${this.apiUrl}/VisitReport/mr-visit-pdf`,
+    {
+      params,
+      responseType: 'blob'
+    }
+  )
+  .subscribe({
+
+    // ======================================================
+    // SUCCESS
+    // ======================================================
+
+    next: blob => {
+
+      this.downloadingVisitPdf = false;
+
+
+      this.openPdfPreview(
+        blob,
+
+        `MR_Visit_Report_` +
+        `${this.selectedMrId}_` +
+        `${this.fromDate}_` +
+        `${this.toDate}.pdf`,
+
+        'Visit Report Preview'
+      );
+    },
+
+
+    // ======================================================
+    // ERROR
+    // ======================================================
+
+    error: err => {
+
+      this.downloadingVisitPdf = false;
+
+
+      console.error(
+        'Visit PDF error:',
+        err
+      );
+
+
+      let message =
+        'Failed to generate Visit Report PDF.';
+
+
+      // Try backend error message
+      if (
+        err?.error?.message
+      ) {
+        message =
+          err.error.message;
+      }
+
+
+      this.showError(
+        message
+      );
     }
 
-    this.downloadingVisitPdf = true;
-
-    const params =
-      new HttpParams()
-        .set(
-          'MrId',
-          this.selectedMrId!.toString()
-        )
-        .set(
-          'FromDate',
-          this.fromDate
-        )
-        .set(
-          'ToDate',
-          this.toDate
-        )
-        .set(
-          'RatePerKm',
-          this.ratePerKm!.toString()
-        );
-
-    this.http.get(
-      `${this.apiUrl}/VisitReport/mr-visit-pdf`,
-      {
-        params,
-        responseType: 'blob'
-      }
-    )
-    .subscribe({
-
-      next: blob => {
-
-        this.downloadingVisitPdf = false;
-
-        this.openPdfPreview(
-          blob,
-          `MR_Visit_Report_${this.selectedMrId}_${this.fromDate}_${this.toDate}.pdf`,
-          'Visit Report Preview'
-        );
-      },
-
-      error: err => {
-
-        this.downloadingVisitPdf = false;
-
-        console.error(
-          'Visit PDF error:',
-          err
-        );
-
-        this.showError(
-          'Failed to generate Visit Report PDF.'
-        );
-      }
-    });
-  }
+  });
+}
 
   // ==========================================================
   // MR PDF
