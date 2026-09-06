@@ -1577,10 +1577,6 @@ fetchMedicalRepresentatives(
     this.customerSearchSubject.next(term);
   }
 
-  // ==========================================================
-  // VISIT REPORT PDF
-  // ==========================================================
-
 // ==========================================================
 // VISIT REPORT PDF
 // ==========================================================
@@ -1944,38 +1940,89 @@ generateVisitReportPdf(): void {
     });
   }
 
-  // ==========================================================
-  // VALIDATE VISIT REPORT
-  // ==========================================================
 
-  private validateVisitReport(): boolean {
+// ==========================================================
+// VALIDATE VISIT REPORT
+// ==========================================================
 
-    if (
-      !this.validateDateRange(
-        this.selectedMrId,
-        'MR'
-      )
-    ) {
+private validateVisitReport(): boolean {
 
-      return false;
-    }
+  // ========================================================
+  // DATE + MR VALIDATION
+  // ========================================================
 
-    if (
-      this.ratePerKm === null ||
-      this.ratePerKm < 0
-    ) {
+  if (
+    !this.validateDateRange(
+      this.selectedMrId,
+      'MR'
+    )
+  ) {
 
-      this.showWarning(
-        this.kmRateMessage ||
-        'KM Rate is not configured for the selected month.'
-      );
-
-      return false;
-    }
-
-    return true;
+    return false;
   }
 
+
+  // ========================================================
+  // RATE CONFIGURATION
+  // ========================================================
+
+  if (
+    this.ratePerKm === null ||
+    this.ratePerKm === undefined ||
+    Number.isNaN(
+      Number(this.ratePerKm)
+    ) ||
+    Number(this.ratePerKm) < 0
+  ) {
+
+    this.showWarning(
+      this.kmRateMessage ||
+      'KM Rate is not configured for the selected month.'
+    );
+
+    return false;
+  }
+
+
+  // ========================================================
+  // SELECTED MONTH RATE
+  // ========================================================
+
+  if (!this.selectedKmRate) {
+
+    this.showWarning(
+      'No KM Rate configured for the selected month.'
+    );
+
+    return false;
+  }
+
+
+  // ========================================================
+  // FOOD EXPENSE
+  // ========================================================
+
+  const foodExpense =
+    Number(
+      this.selectedKmRate.foodExpense ?? 0
+    );
+
+
+  if (
+    Number.isNaN(foodExpense) ||
+    foodExpense < 0
+  ) {
+
+    this.showWarning(
+      'Food Expense is not configured correctly for the selected month.'
+    );
+
+    return false;
+  }
+
+
+  return true;
+}
   // ==========================================================
   // VALIDATE DATE
   // ==========================================================

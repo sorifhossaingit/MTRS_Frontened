@@ -227,7 +227,6 @@ export class LoginComponent {
 
     case 'Admin':
 
-        this.router.navigate([
       // Set logged-in Admin user ID
       localStorage.setItem(
         'mid',
