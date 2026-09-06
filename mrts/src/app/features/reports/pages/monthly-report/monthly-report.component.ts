@@ -28,6 +28,7 @@ import {
 } from 'rxjs/operators';
 
 import { isPlatformBrowser } from '@angular/common';
+import Swal from 'sweetalert2';
 
 
 // =========================================================
@@ -106,7 +107,12 @@ interface CreateMonthlyReportRequest {
   reportType: string;
   closureDate: string | null;
   closureReason: string;
+
+  // KM RATE
   ratePerKm: number;
+
+  // FOOD EXPENSE PER DAY
+  foodExpense: number;
 }
 
 
@@ -120,11 +126,11 @@ interface KmRate {
   rateYear: number;
   rateMonth: number;
   ratePerKm: number;
+  foodExpense: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string | null;
 }
-
 
 // =========================================================
 // COMPONENT
@@ -323,30 +329,30 @@ export class MonthlyReportComponent
 
   showCreateForm = false;
 
-  createRequest:
-    CreateMonthlyReportRequest = {
+createRequest: CreateMonthlyReportRequest = {
+  mrId: 0,
 
-      mrId: 0,
+  reportMonth:
+    this.selectedMonth,
 
-      reportMonth:
-        this.selectedMonth,
+  reportYear:
+    this.selectedYear,
 
-      reportYear:
-        this.selectedYear,
+  reportType:
+    'NORMAL',
 
-      reportType:
-        'NORMAL',
+  closureDate:
+    null,
 
-      closureDate:
-        null,
+  closureReason:
+    '',
 
-      closureReason:
-        '',
+  ratePerKm:
+    0,
 
-      ratePerKm:
-        0
-    };
-
+  foodExpense:
+    0
+};
 
   // =======================================================
   // KM RATES
@@ -863,54 +869,96 @@ export class MonthlyReportComponent
   // SET RATE FOR SELECTED MONTH / YEAR
   // =======================================================
 
-  private setRateForSelectedPeriod(): void {
+// =======================================================
+// SET RATE + FOOD EXPENSE FOR SELECTED MONTH / YEAR
+// =======================================================
 
-    const month =
-      Number(
-        this.createRequest.reportMonth
-      );
+private setRateForSelectedPeriod(): void {
 
+  const month =
+    Number(
+      this.createRequest.reportMonth
+    );
 
-    const year =
-      Number(
-        this.createRequest.reportYear
-      );
-
-
-    const rate =
-      this.kmRates.find(
-        item =>
-
-          Number(item.rateMonth) === month &&
-
-          Number(item.rateYear) === year &&
-
-          item.isActive === true
-      );
+  const year =
+    Number(
+      this.createRequest.reportYear
+    );
 
 
-    if (rate) {
+  // =====================================================
+  // FIND ACTIVE RATE
+  // =====================================================
 
-      this.createRequest.ratePerKm =
-        Number(rate.ratePerKm);
+  const rate =
+    this.kmRates.find(
+      item =>
+
+        Number(item.rateMonth) === month &&
+
+        Number(item.rateYear) === year &&
+
+        item.isActive === true
+    );
 
 
-      console.log(
-        `Rate for ${month}/${year}:`,
-        this.createRequest.ratePerKm
-      );
+  // =====================================================
+  // RATE FOUND
+  // =====================================================
 
-    } else {
+  if (rate) {
 
-      this.createRequest.ratePerKm =
-        0;
+    // ---------------------------------------------------
+    // RATE PER KM
+    // ---------------------------------------------------
+
+    this.createRequest.ratePerKm =
+      Number(rate.ratePerKm);
 
 
-      console.warn(
-        `No active KM rate found for ${month}/${year}`
-      );
-    }
+    // ---------------------------------------------------
+    // FOOD EXPENSE PER DAY
+    // ---------------------------------------------------
+
+    this.createRequest.foodExpense =
+      Number(rate.foodExpense ?? 0);
+
+
+    // ---------------------------------------------------
+    // DEBUG
+    // ---------------------------------------------------
+
+    console.log(
+      `Rate for ${month}/${year}:`,
+      {
+        ratePerKm:
+          this.createRequest.ratePerKm,
+
+        foodExpense:
+          this.createRequest.foodExpense
+      }
+    );
+
   }
+
+  // =====================================================
+  // RATE NOT FOUND
+  // =====================================================
+
+  else {
+
+    this.createRequest.ratePerKm =
+      0;
+
+    this.createRequest.foodExpense =
+      0;
+
+
+    console.warn(
+      `No active KM rate found for ${month}/${year}`
+    );
+  }
+}
 
 
   // =======================================================
@@ -1614,42 +1662,43 @@ loadReports(): void {
     // PAYLOAD
     // =====================================================
 
-    const payload = {
+const mid = Number(localStorage.getItem('mid'));
 
-      mrId:
-        Number(
-          this.createRequest.mrId
-        ),
+if (!mid || mid <= 0) {
+  Swal.fire({
+    icon: 'error',
+    title: 'MR ID not found',
+    text: 'Please login again.'
+  });
+  return;
+}
 
-      reportMonth:
-        Number(
-          this.createRequest.reportMonth
-        ),
+const payload = {
+  mrId: Number(this.createRequest.mrId),
 
-      reportYear:
-        Number(
-          this.createRequest.reportYear
-        ),
+  reportMonth: Number(
+    this.createRequest.reportMonth
+  ),
 
-      reportType:
-        this.createRequest.reportType,
+  reportYear: Number(
+    this.createRequest.reportYear
+  ),
 
-      closureDate:
+  reportType: this.createRequest.reportType,
+
+  closureDate: this.createRequest.closureDate
+    ? new Date(
         this.createRequest.closureDate
-          ? new Date(
-              this.createRequest.closureDate
-            ).toISOString()
-          : null,
+      ).toISOString()
+    : null,
 
-      closureReason:
-        this.createRequest.closureReason
-          ?.trim() || '',
+  closureReason:
+    this.createRequest.closureReason?.trim() || '',
 
-      ratePerKm:
-        Number(
-          this.createRequest.ratePerKm
-        )
-    };
+  // Logged-in MR ID
+  generatedBy: mid
+};
+
 
 
     console.log(
@@ -1716,47 +1765,46 @@ loadReports(): void {
   // RESET CREATE FORM
   // =======================================================
 
-  resetCreateForm(): void {
+resetCreateForm(): void {
 
-    this.createRequest = {
+  this.createRequest = {
 
-      mrId:
-        0,
+    mrId:
+      0,
 
-      reportMonth:
-        this.selectedMonth,
+    reportMonth:
+      this.selectedMonth,
 
-      reportYear:
-        this.selectedYear,
+    reportYear:
+      this.selectedYear,
 
-      reportType:
-        'NORMAL',
+    reportType:
+      'NORMAL',
 
-      closureDate:
-        null,
+    closureDate:
+      null,
 
-      closureReason:
-        '',
+    closureReason:
+      '',
 
-      ratePerKm:
-        0
-    };
+    ratePerKm:
+      0,
 
+    foodExpense:
+      0
+  };
 
-    this.selectedMr =
-      null;
+  this.selectedMr =
+    null;
 
+  this.mrSearchQuery =
+    '';
 
-    this.mrSearchQuery =
-      '';
+  this.isMrDropdownOpen =
+    false;
 
-
-    this.isMrDropdownOpen =
-      false;
-
-
-    this.setRateForSelectedPeriod();
-  }
+  this.setRateForSelectedPeriod();
+}
 
 
   // =======================================================
@@ -1970,91 +2018,93 @@ loadReports(): void {
   // CAN DECIDE
   // =======================================================
 
-  canDecide(
-    report:
-      VisitExpenseReport | null
-  ): boolean {
+ 
+// =======================================================
+// CAN DECIDE
+// =======================================================
 
-    /**
-     * ROLE CHECK
-     *
-     * Only:
-     *
-     * a5fabfee...
-     *
-     * can approve/reject.
-     */
-    if (
-      !this.canApproveReject()
-    ) {
+canDecide(
+  report: VisitExpenseReport | null
+): boolean {
 
-      return false;
-    }
-
-
-    if (!report) {
-      return false;
-    }
-
-
-    const status =
-      (
-        report.reportStatus || ''
-      ).toLowerCase();
-
-
-    if (
-      status !== 'pending'
-    ) {
-
-      return false;
-    }
-
-
-    if (
-      report.canDecide === true
-    ) {
-
-      return true;
-    }
-
-
-    if (
-      report.reportEndDate
-    ) {
-
-      const end =
-        new Date(
-          report.reportEndDate
-        );
-
-
-      const today =
-        new Date();
-
-
-      today.setHours(
-        0,
-        0,
-        0,
-        0
-      );
-
-
-      end.setHours(
-        0,
-        0,
-        0,
-        0
-      );
-
-
-      return today > end;
-    }
-
-
+  // -------------------------------------------------------
+  // ROLE CHECK
+  // -------------------------------------------------------
+  if (!this.canApproveReject()) {
     return false;
   }
+
+  // -------------------------------------------------------
+  // REPORT CHECK
+  // -------------------------------------------------------
+  if (!report) {
+    return false;
+  }
+
+  // -------------------------------------------------------
+  // STATUS CHECK
+  // -------------------------------------------------------
+  const status = (
+    report.reportStatus || ''
+  ).toLowerCase();
+
+  // Only pending reports can be approved/rejected
+  if (status !== 'pending') {
+    return false;
+  }
+
+  // -------------------------------------------------------
+  // EARLY CLOSURE
+  // -------------------------------------------------------
+  // Early Closure reports can be approved/rejected
+  // immediately without waiting for reportEndDate.
+  if (
+    (report.reportType || '').toUpperCase() ===
+    'EARLY_CLOSURE'
+  ) {
+    return true;
+  }
+
+  // -------------------------------------------------------
+  // NORMAL REPORT
+  // -------------------------------------------------------
+  // Existing API permission
+  if (report.canDecide === true) {
+    return true;
+  }
+
+  // -------------------------------------------------------
+  // NORMAL REPORT - END DATE PASSED
+  // -------------------------------------------------------
+  if (report.reportEndDate) {
+
+    const end = new Date(
+      report.reportEndDate
+    );
+
+    const today = new Date();
+
+    today.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    end.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    return today > end;
+  }
+
+  return false;
+}
+
+
 
 
   // =======================================================
@@ -2245,55 +2295,102 @@ loadReports(): void {
   // APPROVE REPORT
   // =======================================================
 
-  approveReport(): void {
+approveReport(): void {
 
-    if (
-      !this.canApproveReject()
-    ) {
+  // =====================================================
+  // PERMISSION CHECK
+  // =====================================================
 
-      this.errorMessage =
-        'You do not have permission to approve reports.';
+  if (!this.canApproveReject()) {
+    this.errorMessage =
+      'You do not have permission to approve reports.';
+    return;
+  }
 
+  // =====================================================
+  // REPORT CHECK
+  // =====================================================
+
+  if (!this.selectedReport) {
+    return;
+  }
+
+  // =====================================================
+  // ELIGIBILITY CHECK
+  // =====================================================
+
+  if (!this.canDecide(this.selectedReport)) {
+    this.errorMessage =
+      'This report is not eligible for approval yet.';
+    return;
+  }
+
+  // =====================================================
+  // GET ADMIN ID FROM LOCAL STORAGE
+  // =====================================================
+
+  const adminId = Number(
+    localStorage.getItem('mid')
+  );
+
+  if (!adminId || adminId <= 0) {
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Admin ID not found',
+      text: 'Please login again.'
+    });
+
+    return;
+  }
+
+  // =====================================================
+  // CONFIRM APPROVAL
+  // =====================================================
+
+  Swal.fire({
+    title: 'Approve Report?',
+    text: `Are you sure you want to approve report #${this.selectedReport.reportId}?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Approve',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true
+  }).then((result) => {
+
+    // User clicked Cancel
+    if (!result.isConfirmed) {
       return;
     }
 
+    // ===================================================
+    // START APPROVAL
+    // ===================================================
 
-    if (
-      !this.selectedReport
-    ) {
-
-      return;
-    }
-
-
-    if (
-      !this.canDecide(
-        this.selectedReport
-      )
-    ) {
-
-      this.errorMessage =
-        'This report is not eligible for approval yet.';
-
-      return;
-    }
-
-
-    this.approving =
-      true;
-
+    this.approving = true;
 
     const reportId =
-      this.selectedReport.reportId;
+      this.selectedReport!.reportId;
 
+    // ===================================================
+    // PAYLOAD
+    // ===================================================
 
     const payload = {
+      adminId: adminId,
 
       remarks:
-        this.approveRemarks
-          ?.trim() || ''
+        this.approveRemarks?.trim() || ''
     };
 
+    console.log(
+      'APPROVE REPORT PAYLOAD:',
+      payload
+    );
+
+    // ===================================================
+    // API CALL
+    // ===================================================
 
     const sub =
       this.http
@@ -2303,113 +2400,181 @@ loadReports(): void {
         )
         .subscribe({
 
+          // =============================================
+          // SUCCESS
+          // =============================================
+
           next: response => {
 
-            this.approving =
-              false;
+            this.approving = false;
 
+            this.showApproveModal = false;
 
-            this.showApproveModal =
-              false;
+            this.approveRemarks = '';
 
-
-            this.approveRemarks =
-              '';
-
-
-            this.successMessage =
-              response?.message ||
-              'Report approved successfully.';
-
+            Swal.fire({
+              icon: 'success',
+              title: 'Approved!',
+              text:
+                response?.message ||
+                'Report approved successfully.',
+              confirmButtonText: 'OK'
+            });
 
             this.loadReports();
           },
 
+          // =============================================
+          // ERROR
+          // =============================================
 
           error: error => {
 
-            this.approving =
-              false;
+            this.approving = false;
 
-
-            this.errorMessage =
+            const message =
               this.getApiErrorMessage(
                 error,
                 'Unable to approve report.'
               );
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Approval Failed',
+              text: message
+            });
           }
 
         });
 
-
     this.subscriptions.push(sub);
-  }
+  });
+}
 
 
   // =======================================================
   // REJECT REPORT
   // =======================================================
 
-  rejectReport(): void {
+rejectReport(): void {
 
-    if (
-      !this.canApproveReject()
-    ) {
+  // =====================================================
+  // PERMISSION CHECK
+  // =====================================================
 
-      this.errorMessage =
-        'You do not have permission to reject reports.';
+  if (!this.canApproveReject()) {
 
+    this.errorMessage =
+      'You do not have permission to reject reports.';
+
+    return;
+  }
+
+  // =====================================================
+  // REPORT CHECK
+  // =====================================================
+
+  if (!this.selectedReport) {
+    return;
+  }
+
+  // =====================================================
+  // ELIGIBILITY CHECK
+  // =====================================================
+
+  if (!this.canDecide(this.selectedReport)) {
+
+    this.errorMessage =
+      'This report is not eligible for rejection yet.';
+
+    return;
+  }
+
+  // =====================================================
+  // REJECTION REASON CHECK
+  // =====================================================
+
+  if (
+    !this.rejectionReason ||
+    !this.rejectionReason.trim()
+  ) {
+
+    this.errorMessage =
+      'Rejection reason is required.';
+
+    return;
+  }
+
+  // =====================================================
+  // GET ADMIN ID FROM LOCAL STORAGE
+  // =====================================================
+
+  const adminId = Number(
+    localStorage.getItem('mid')
+  );
+
+  if (!adminId || adminId <= 0) {
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Admin ID not found',
+      text: 'Please login again.'
+    });
+
+    return;
+  }
+
+  const reportId =
+    this.selectedReport.reportId;
+
+  const reason =
+    this.rejectionReason.trim();
+
+  // =====================================================
+  // CONFIRM REJECTION
+  // =====================================================
+
+  Swal.fire({
+    title: 'Reject Report?',
+    text: `Are you sure you want to reject report #${reportId}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Reject',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true
+  }).then((result) => {
+
+    // User clicked Cancel
+    if (!result.isConfirmed) {
       return;
     }
 
+    // ===================================================
+    // START REJECTION
+    // ===================================================
 
-    if (
-      !this.selectedReport
-    ) {
+    this.rejecting = true;
 
-      return;
-    }
-
-
-    if (
-      !this.canDecide(
-        this.selectedReport
-      )
-    ) {
-
-      this.errorMessage =
-        'This report is not eligible for rejection yet.';
-
-      return;
-    }
-
-
-    if (
-      !this.rejectionReason ||
-      !this.rejectionReason.trim()
-    ) {
-
-      this.errorMessage =
-        'Rejection reason is required.';
-
-      return;
-    }
-
-
-    this.rejecting =
-      true;
-
-
-    const reportId =
-      this.selectedReport.reportId;
-
+    // ===================================================
+    // PAYLOAD
+    // ===================================================
 
     const payload = {
 
-      rejectionReason:
-        this.rejectionReason.trim()
+      adminId: adminId,
+
+      reason: reason
+
     };
 
+    console.log(
+      'REJECT REPORT PAYLOAD:',
+      payload
+    );
+
+    // ===================================================
+    // API CALL
+    // ===================================================
 
     const sub =
       this.http
@@ -2419,47 +2584,56 @@ loadReports(): void {
         )
         .subscribe({
 
+          // =============================================
+          // SUCCESS
+          // =============================================
+
           next: response => {
 
-            this.rejecting =
-              false;
+            this.rejecting = false;
 
+            this.showRejectModal = false;
 
-            this.showRejectModal =
-              false;
+            this.rejectionReason = '';
 
-
-            this.rejectionReason =
-              '';
-
-
-            this.successMessage =
-              response?.message ||
-              'Report rejected successfully.';
-
+            Swal.fire({
+              icon: 'success',
+              title: 'Rejected!',
+              text:
+                response?.message ||
+                'Report rejected successfully.',
+              confirmButtonText: 'OK'
+            });
 
             this.loadReports();
           },
 
+          // =============================================
+          // ERROR
+          // =============================================
 
           error: error => {
 
-            this.rejecting =
-              false;
+            this.rejecting = false;
 
-
-            this.errorMessage =
+            const message =
               this.getApiErrorMessage(
                 error,
                 'Unable to reject report.'
               );
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Rejection Failed',
+              text: message
+            });
           }
 
         });
 
-
     this.subscriptions.push(sub);
-  }
+  });
+}
 
 
   // =======================================================

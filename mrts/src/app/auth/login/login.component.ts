@@ -225,13 +225,20 @@ export class LoginComponent {
 
         break;
 
-      case 'Admin':
+    case 'Admin':
 
         this.router.navigate([
-          '/dashboard'
-        ]);
+      // Set logged-in Admin user ID
+      localStorage.setItem(
+        'mid',
+        this.userid.toString()
+      );
 
-        break;
+      this.router.navigate([
+        '/dashboard'
+      ]);
+
+      break;
 
       case 'MR':
 
