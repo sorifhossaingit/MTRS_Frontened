@@ -1,92 +1,272 @@
 <div class="p-4 md:p-6 bg-gray-100 min-h-screen">
 
-  <!-- Header -->
-  <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
 
-    <h1 class="text-2xl font-bold flex items-center gap-2">
-      <lucide-icon [img]="UserPlus"></lucide-icon>
+  <div
+    class="flex flex-col md:flex-row
+           justify-between items-center
+           gap-4 mb-6">
+
+    <h1
+      class="text-2xl font-bold
+             flex items-center gap-2">
+
+      <lucide-icon
+        [img]="UserPlus"
+        class="w-6 h-6">
+      </lucide-icon>
+
       Add Area Manager
+
     </h1>
 
-    <button routerLink="/area-manager/area-manager-dashboard" type="button"
-      class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-xl flex items-center gap-2">
 
-      <lucide-icon [img]="ArrowLeft"></lucide-icon>
+    <button
+      routerLink="/area-manager/area-manager-dashboard"
+      type="button"
+      class="bg-gray-500
+             hover:bg-gray-600
+             text-white
+             px-5 py-2
+             rounded-xl
+             flex items-center gap-2
+             transition">
+
+      <lucide-icon
+        [img]="ArrowLeft"
+        class="w-5 h-5">
+      </lucide-icon>
+
       Back
 
     </button>
 
   </div>
 
-  <form [formGroup]="areaManagerForm" (ngSubmit)="saveAreaManager()" class="space-y-6">
 
+
+  <!-- ===================================================== -->
+  <!-- FORM -->
+  <!-- ===================================================== -->
+
+  <form
+    [formGroup]="areaManagerForm"
+    (ngSubmit)="saveAreaManager()"
+    class="space-y-6">
+
+
+    <!-- =================================================== -->
     <!-- PERSONAL INFORMATION -->
-    <div class="bg-white rounded-2xl shadow p-6">
+    <!-- =================================================== -->
 
-      <h2 class="text-lg font-semibold mb-5">
+    <div
+      class="bg-white
+             rounded-2xl
+             shadow-sm
+             border border-gray-100
+             p-6">
+
+      <h2
+        class="text-lg font-semibold
+               text-gray-800
+               mb-5">
+
         Personal Information
+
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-        <!-- Name -->
+      <div
+        class="grid grid-cols-1
+               md:grid-cols-2
+               lg:grid-cols-3
+               gap-5">
+
+
+        <!-- ============================================= -->
+        <!-- NAME -->
+        <!-- ============================================= -->
+
         <div>
-          <label class="block mb-2 font-medium">
-            Full Name *
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Full Name
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <input type="text" formControlName="name" class="input">
 
-          <p *ngIf="submitted && f['name'].hasError('required')" class="error">
+          <input
+            type="text"
+            formControlName="name"
+            class="input"
+            placeholder="Enter full name"
+            autocomplete="name">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['name'].hasError('required')
+            "
+            class="error">
+
             Name is required
+
           </p>
 
-          <p *ngIf="submitted && f['name'].hasError('minlength')" class="error">
+
+          <p
+            *ngIf="
+              submitted &&
+              f['name'].hasError('minlength')
+            "
+            class="error">
+
             Minimum 3 characters required
+
           </p>
+
         </div>
 
-        <!-- Email -->
+
+
+        <!-- ============================================= -->
+        <!-- EMAIL -->
+        <!-- ============================================= -->
+
         <div>
-          <label class="block mb-2 font-medium">
-            Email *
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Email
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <input type="email" formControlName="email" class="input">
 
-          <p *ngIf="submitted && f['email'].hasError('required')" class="error">
+          <input
+            type="email"
+            formControlName="email"
+            class="input"
+            placeholder="Enter email address"
+            autocomplete="email">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['email'].hasError('required')
+            "
+            class="error">
+
             Email is required
+
           </p>
 
-          <p *ngIf="submitted && f['email'].hasError('email')" class="error">
+
+          <p
+            *ngIf="
+              submitted &&
+              f['email'].hasError('email')
+            "
+            class="error">
+
             Invalid email format
+
           </p>
+
         </div>
 
-        <!-- Mobile -->
+
+
+        <!-- ============================================= -->
+        <!-- MOBILE -->
+        <!-- ============================================= -->
+
         <div>
-          <label class="block mb-2 font-medium">
-            Mobile Number *
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Mobile Number
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <input type="text" formControlName="mobile" class="input">
 
-          <p *ngIf="submitted && f['mobile'].hasError('required')" class="error">
+          <input
+            type="text"
+            formControlName="mobile"
+            class="input"
+            maxlength="10"
+            inputmode="numeric"
+            placeholder="Enter 10 digit mobile number"
+            autocomplete="tel">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['mobile'].hasError('required')
+            "
+            class="error">
+
             Mobile number is required
+
           </p>
 
-          <p *ngIf="submitted && f['mobile'].hasError('pattern')" class="error">
+
+          <p
+            *ngIf="
+              submitted &&
+              f['mobile'].hasError('pattern')
+            "
+            class="error">
+
             Enter valid 10 digit mobile number
+
           </p>
+
         </div>
 
-        <!-- Gender -->
+
+
+        <!-- ============================================= -->
+        <!-- GENDER -->
+        <!-- ============================================= -->
+
         <div>
-          <label class="block mb-2 font-medium">
-            Gender *
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Gender
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <select formControlName="gender" class="input">
+
+          <select
+            formControlName="gender"
+            class="input">
 
             <option value="">
               Select Gender
@@ -106,155 +286,842 @@
 
           </select>
 
-          <p *ngIf="submitted && f['gender'].hasError('required')" class="error">
+
+          <p
+            *ngIf="
+              submitted &&
+              f['gender'].hasError('required')
+            "
+            class="error">
+
             Gender is required
+
           </p>
+
         </div>
 
-<!-- DOB -->
-<div>
-  <label class="block mb-2 font-medium">
-    Date Of Birth *
-  </label>
 
-  <input
-    type="date"
-    formControlName="dateOfBirth"
-    [max]="today"
-    class="input">
 
-  <p
-    *ngIf="submitted && f['dateOfBirth'].hasError('required')"
-    class="error">
-    Date of Birth is required
-  </p>
+        <!-- ============================================= -->
+        <!-- DOB -->
+        <!-- ============================================= -->
 
-  <p
-    *ngIf="submitted && f['dateOfBirth'].hasError('futureDate')"
-    class="error">
-    Date of Birth cannot be a future date
-  </p>
-</div>
+        <div>
 
-<!-- Joining Date -->
-<div>
-  <label class="block mb-2 font-medium">
-    Joining Date *
-  </label>
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
 
-  <input
-    type="date"
-    formControlName="joiningDate"
-    [max]="today"
-    class="input">
+            Date Of Birth
+            <span class="text-red-500">*</span>
 
-  <p
-    *ngIf="submitted && f['joiningDate'].hasError('required')"
-    class="error">
-    Joining Date is required
-  </p>
+          </label>
 
-  <p
-    *ngIf="submitted && f['joiningDate'].hasError('futureDate')"
-    class="error">
-    Joining Date cannot be a future date
-  </p>
-</div>
+
+          <input
+            type="date"
+            formControlName="dateOfBirth"
+            [max]="today"
+            class="input">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['dateOfBirth'].hasError('required')
+            "
+            class="error">
+
+            Date of Birth is required
+
+          </p>
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['dateOfBirth'].hasError('futureDate')
+            "
+            class="error">
+
+            Date of Birth cannot be a future date
+
+          </p>
+
+        </div>
+
+
+
+        <!-- ============================================= -->
+        <!-- JOINING DATE -->
+        <!-- ============================================= -->
+
+        <div>
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Joining Date
+            <span class="text-red-500">*</span>
+
+          </label>
+
+
+          <input
+            type="date"
+            formControlName="joiningDate"
+            [max]="today"
+            class="input">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['joiningDate'].hasError('required')
+            "
+            class="error">
+
+            Joining Date is required
+
+          </p>
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['joiningDate'].hasError('futureDate')
+            "
+            class="error">
+
+            Joining Date cannot be a future date
+
+          </p>
+
+        </div>
 
       </div>
 
     </div>
 
+
+
+    <!-- ===================================================== -->
     <!-- TERRITORY DETAILS -->
-    <div class="bg-white rounded-2xl shadow p-6">
+    <!-- ===================================================== -->
 
-      <h2 class="text-lg font-semibold mb-5">
+    <div
+      class="bg-white
+             rounded-2xl
+             shadow-sm
+             border border-gray-100
+             p-6">
+
+      <h2
+        class="text-lg font-semibold
+               text-gray-800
+               mb-5">
+
         Territory Details
+
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-        <!-- Region -->
+      <div
+        class="grid grid-cols-1
+               md:grid-cols-2
+               gap-5">
+
+
+        <!-- ============================================= -->
+        <!-- REGION -->
+        <!-- ============================================= -->
+
         <div>
-          <label class="block mb-2 font-medium">
-            Region *
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Region
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <input type="text" formControlName="region" class="input">
 
-          <p *ngIf="submitted && f['region'].hasError('required')" class="error">
+          <input
+            type="text"
+            formControlName="region"
+            class="input"
+            placeholder="Enter region">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['region'].hasError('required')
+            "
+            class="error">
+
             Region is required
+
           </p>
+
         </div>
 
-        <!-- Assigned Area -->
-        <div>
-          <label class="block mb-2 font-medium">
-            Assigned Area *
+
+
+        <!-- ============================================= -->
+        <!-- MODERN MULTI AREA SELECT -->
+        <!-- ============================================= -->
+
+        <div class="relative">
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Assigned Areas
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <input type="text" formControlName="assignedArea" class="input">
 
-          <p *ngIf="submitted && f['assignedArea'].hasError('required')" class="error">
-            Assigned Area is required
-          </p>
+
+          <!-- ================================================= -->
+          <!-- MAIN DROPDOWN BUTTON -->
+          <!-- ================================================= -->
+
+          <button
+            type="button"
+            (click)="toggleAreaDropdown()"
+            class="w-full
+                   min-h-[46px]
+                   px-3 py-2
+                   bg-white
+                   border
+                   border-gray-300
+                   rounded-xl
+                   text-left
+                   flex
+                   items-center
+                   justify-between
+                   gap-2
+                   hover:border-blue-400
+                   focus:outline-none
+                   focus:ring-2
+                   focus:ring-blue-100
+                   transition">
+
+
+            <!-- ============================================= -->
+            <!-- SELECTED AREA CHIPS -->
+            <!-- ============================================= -->
+
+            <div
+              class="flex flex-wrap
+                     items-center
+                     gap-1.5
+                     flex-1
+                     min-w-0">
+
+
+              <!-- No selection -->
+              <span
+                *ngIf="selectedAreas.length === 0"
+                class="text-gray-400
+                       text-sm">
+
+                Select areas...
+
+              </span>
+
+
+
+              <!-- Selected chips -->
+              <span
+                *ngFor="let area of selectedAreas"
+                class="inline-flex
+                       items-center
+                       gap-1
+                       max-w-full
+                       bg-blue-50
+                       text-blue-700
+                       border
+                       border-blue-100
+                       rounded-lg
+                       px-2 py-1
+                       text-xs
+                       font-medium">
+
+
+                <span
+                  class="truncate
+                         max-w-[150px]">
+
+                  {{ area.areaName }}
+
+                </span>
+
+
+                <button
+                  type="button"
+                  (click)="removeArea(
+                    area.areaId,
+                    $event
+                  )"
+                  class="ml-0.5
+                         flex-shrink-0
+                         text-blue-500
+                         hover:text-red-500
+                         rounded-full
+                         hover:bg-red-50
+                         p-0.5
+                         transition">
+
+                  <lucide-icon
+                    [img]="X"
+                    class="w-3 h-3">
+                  </lucide-icon>
+
+                </button>
+
+              </span>
+
+            </div>
+
+
+
+            <!-- ============================================= -->
+            <!-- DROPDOWN ARROW -->
+            <!-- ============================================= -->
+
+            <lucide-icon
+              [img]="ChevronDown"
+              class="w-5 h-5
+                     text-gray-400
+                     flex-shrink-0
+                     transition-transform
+                     duration-200"
+              [class.rotate-180]="areaDropdownOpen">
+            </lucide-icon>
+
+          </button>
+
+
+
+          <!-- ================================================= -->
+          <!-- DROPDOWN PANEL -->
+          <!-- ================================================= -->
+
+          <div
+            *ngIf="areaDropdownOpen"
+            class="absolute
+                   z-50
+                   mt-2
+                   w-full
+                   bg-white
+                   border
+                   border-gray-200
+                   rounded-xl
+                   shadow-xl
+                   overflow-hidden">
+
+
+            <!-- ============================================= -->
+            <!-- SEARCH -->
+            <!-- ============================================= -->
+
+            <div
+              class="p-3
+                     border-b
+                     border-gray-100
+                     bg-gray-50">
+
+              <div
+                class="relative">
+
+
+                <lucide-icon
+                  [img]="Search"
+                  class="absolute
+                         left-3
+                         top-1/2
+                         -translate-y-1/2
+                         w-4 h-4
+                         text-gray-400">
+                </lucide-icon>
+
+
+                <input
+                  type="text"
+                  [(ngModel)]="areaSearch"
+                  [ngModelOptions]="{
+                    standalone: true
+                  }"
+                  placeholder="Search area..."
+                  class="w-full
+                         pl-9
+                         pr-3
+                         py-2
+                         border
+                         border-gray-200
+                         rounded-lg
+                         bg-white
+                         text-sm
+                         focus:outline-none
+                         focus:ring-2
+                         focus:ring-blue-100
+                         focus:border-blue-400"
+                  (click)="$event.stopPropagation()">
+
+              </div>
+
+            </div>
+
+
+
+            <!-- ============================================= -->
+            <!-- ACTION BUTTONS -->
+            <!-- ============================================= -->
+
+            <div
+              class="px-3 py-2
+                     flex items-center
+                     justify-between
+                     border-b
+                     border-gray-100">
+
+              <button
+                type="button"
+                (click)="selectAllAreas()"
+                class="text-xs
+                       font-medium
+                       text-blue-600
+                       hover:text-blue-800">
+
+                Select All
+
+              </button>
+
+
+              <button
+                type="button"
+                (click)="clearAllAreas()"
+                class="text-xs
+                       font-medium
+                       text-gray-500
+                       hover:text-red-600">
+
+                Clear All
+
+              </button>
+
+            </div>
+
+
+
+            <!-- ============================================= -->
+            <!-- LOADING -->
+            <!-- ============================================= -->
+
+            <div
+              *ngIf="isLoadingAreas"
+              class="p-6
+                     text-center
+                     text-sm
+                     text-gray-500">
+
+              <div
+                class="inline-block
+                       w-5 h-5
+                       border-2
+                       border-gray-200
+                       border-t-blue-500
+                       rounded-full
+                       animate-spin
+                       mb-2">
+              </div>
+
+              <div>
+                Loading areas...
+              </div>
+
+            </div>
+
+
+
+            <!-- ============================================= -->
+            <!-- AREA LIST -->
+            <!-- ============================================= -->
+
+            <div
+              *ngIf="!isLoadingAreas"
+              class="max-h-64
+                     overflow-y-auto">
+
+
+              <ng-container
+                *ngIf="
+                  filteredAreas.length > 0;
+                  else noAreas
+                ">
+
+
+                <button
+                  type="button"
+                  *ngFor="
+                    let area of filteredAreas
+                  "
+                  (click)="
+                    toggleArea(area.areaId)
+                  "
+                  class="w-full
+                         px-3 py-2.5
+                         flex items-center
+                         gap-3
+                         text-left
+                         hover:bg-blue-50
+                         transition">
+
+
+                  <!-- ===================================== -->
+                  <!-- CHECKBOX -->
+                  <!-- ===================================== -->
+
+                  <div
+                    class="w-5 h-5
+                           rounded-md
+                           border
+                           flex
+                           items-center
+                           justify-center
+                           flex-shrink-0"
+                    [class.bg-blue-600]="
+                      isAreaSelected(
+                        area.areaId
+                      )
+                    "
+                    [class.border-blue-600]="
+                      isAreaSelected(
+                        area.areaId
+                      )
+                    "
+                    [class.border-gray-300]="
+                      !isAreaSelected(
+                        area.areaId
+                      )
+                    ">
+
+
+                    <lucide-icon
+                      *ngIf="
+                        isAreaSelected(
+                          area.areaId
+                        )
+                      "
+                      [img]="Check"
+                      class="w-3.5 h-3.5
+                             text-white">
+                    </lucide-icon>
+
+                  </div>
+
+
+
+                  <!-- ===================================== -->
+                  <!-- AREA INFORMATION -->
+                  <!-- ===================================== -->
+
+                  <div
+                    class="flex-1
+                           min-w-0">
+
+
+                    <div
+                      class="text-sm
+                             font-medium
+                             text-gray-800
+                             truncate">
+
+                      {{ area.areaName }}
+
+                    </div>
+
+
+                    <div
+                      *ngIf="area.areaCode"
+                      class="text-xs
+                             text-gray-400">
+
+                      {{ area.areaCode }}
+
+                    </div>
+
+                  </div>
+
+
+
+                  <!-- ===================================== -->
+                  <!-- SELECTED -->
+                  <!-- ===================================== -->
+
+                  <span
+                    *ngIf="
+                      isAreaSelected(
+                        area.areaId
+                      )
+                    "
+                    class="text-xs
+                           font-medium
+                           text-blue-600">
+
+                    Selected
+
+                  </span>
+
+                </button>
+
+              </ng-container>
+
+
+
+              <!-- ========================================= -->
+              <!-- NO AREAS -->
+              <!-- ========================================= -->
+
+              <ng-template #noAreas>
+
+                <div
+                  class="px-4 py-8
+                         text-center
+                         text-sm
+                         text-gray-500">
+
+
+                  <lucide-icon
+                    [img]="MapPin"
+                    class="w-8 h-8
+                           mx-auto
+                           mb-2
+                           text-gray-300">
+                  </lucide-icon>
+
+
+                  <p
+                    class="font-medium">
+
+                    No areas found
+
+                  </p>
+
+
+                  <p
+                    *ngIf="areaSearch"
+                    class="text-xs
+                           mt-1">
+
+                    Try another search term.
+
+                  </p>
+
+                </div>
+
+              </ng-template>
+
+            </div>
+
+
+
+            <!-- ============================================= -->
+            <!-- SELECTED COUNT -->
+            <!-- ============================================= -->
+
+            <div
+              *ngIf="
+                selectedAreas.length > 0
+              "
+              class="px-3 py-2
+                     border-t
+                     border-gray-100
+                     bg-gray-50
+                     text-xs
+                     text-gray-500">
+
+              {{ selectedAreas.length }}
+
+              {{
+                selectedAreas.length === 1
+                  ? 'area'
+                  : 'areas'
+              }}
+
+              selected
+
+            </div>
+
+          </div>
+
         </div>
 
       </div>
 
     </div>
 
-    <!-- ADDRESS DETAILS -->
-    <div class="bg-white rounded-2xl shadow p-6">
 
-      <h2 class="text-lg font-semibold mb-5">
+
+    <!-- ===================================================== -->
+    <!-- ADDRESS DETAILS -->
+    <!-- ===================================================== -->
+
+    <div
+      class="bg-white
+             rounded-2xl
+             shadow-sm
+             border border-gray-100
+             p-6">
+
+      <h2
+        class="text-lg
+               font-semibold
+               text-gray-800
+               mb-5">
+
         Address Details
+
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-        <!-- Address -->
-        <div class="md:col-span-2">
+      <div
+        class="grid grid-cols-1
+               md:grid-cols-2
+               gap-5">
 
-          <label class="block mb-2 font-medium">
-            Address *
+
+        <!-- ============================================= -->
+        <!-- ADDRESS -->
+        <!-- ============================================= -->
+
+        <div
+          class="md:col-span-2">
+
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            Address
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <textarea rows="4" formControlName="address" class="input">
+
+          <textarea
+            rows="4"
+            formControlName="address"
+            class="input"
+            placeholder="Enter address">
           </textarea>
 
-          <p *ngIf="submitted && f['address'].hasError('required')" class="error">
+
+          <p
+            *ngIf="
+              submitted &&
+              f['address'].hasError('required')
+            "
+            class="error">
+
             Address is required
+
           </p>
 
         </div>
 
-        <!-- City -->
+
+
+        <!-- ============================================= -->
+        <!-- CITY -->
+        <!-- ============================================= -->
+
         <div>
 
-          <label class="block mb-2 font-medium">
-            City *
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            City
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <input type="text" formControlName="city" class="input">
 
-          <p *ngIf="submitted && f['city'].hasError('required')" class="error">
+          <input
+            type="text"
+            formControlName="city"
+            class="input"
+            placeholder="Enter city">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['city'].hasError('required')
+            "
+            class="error">
+
             City is required
+
           </p>
 
         </div>
 
-        <!-- State -->
+
+
+        <!-- ============================================= -->
+        <!-- STATE -->
+        <!-- ============================================= -->
+
         <div>
 
-          <label class="block mb-2 font-medium">
-            State *
+          <label
+            class="block mb-2
+                   text-sm
+                   font-medium
+                   text-gray-700">
+
+            State
+            <span class="text-red-500">*</span>
+
           </label>
 
-          <input type="text" formControlName="state" class="input">
 
-          <p *ngIf="submitted && f['state'].hasError('required')" class="error">
+          <input
+            type="text"
+            formControlName="state"
+            class="input"
+            placeholder="Enter state">
+
+
+          <p
+            *ngIf="
+              submitted &&
+              f['state'].hasError('required')
+            "
+            class="error">
+
             State is required
+
           </p>
 
         </div>
@@ -263,44 +1130,114 @@
 
     </div>
 
-    <!-- BUTTONS -->
-    <div class="flex flex-col sm:flex-row justify-end gap-3">
 
-      <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-xl">
+
+    <!-- ===================================================== -->
+    <!-- BUTTONS -->
+    <!-- ===================================================== -->
+
+    <div
+      class="flex
+             flex-col
+             sm:flex-row
+             justify-end
+             gap-3">
+
+
+      <!-- CANCEL -->
+
+      <button
+        type="button"
+        routerLink="/area-manager/area-manager-dashboard"
+        class="bg-gray-400
+               hover:bg-gray-500
+               text-white
+               px-6 py-2
+               rounded-xl
+               transition">
 
         Cancel
 
       </button>
 
-      <button type="submit" [disabled]="isSaving" class="bg-blue-500 hover:bg-blue-600
-         disabled:bg-blue-300
-         disabled:cursor-not-allowed
-         text-white px-6 py-2 rounded-xl
-         flex items-center justify-center gap-2
-         min-w-[190px]">
 
-        <!-- Loading -->
-        <ng-container *ngIf="isSaving; else saveAreaManagerButton">
 
-          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+      <!-- SAVE -->
+
+      <button
+        type="submit"
+        [disabled]="isSaving"
+        class="bg-blue-500
+               hover:bg-blue-600
+               disabled:bg-blue-300
+               disabled:cursor-not-allowed
+               text-white
+               px-6 py-2
+               rounded-xl
+               flex
+               items-center
+               justify-center
+               gap-2
+               min-w-[190px]
+               transition">
+
+
+        <!-- =============================================== -->
+        <!-- LOADING -->
+        <!-- =============================================== -->
+
+        <ng-container
+          *ngIf="
+            isSaving;
+            else saveAreaManagerButton
+          ">
+
+
+          <svg
+            class="animate-spin
+                   h-5 w-5
+                   text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
             viewBox="0 0 24 24">
 
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4">
             </circle>
 
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
             </path>
 
           </svg>
+
 
           Saving...
 
         </ng-container>
 
-        <!-- Normal -->
-        <ng-template #saveAreaManagerButton>
 
-          <lucide-icon [img]="Save"></lucide-icon>
+
+        <!-- =============================================== -->
+        <!-- NORMAL -->
+        <!-- =============================================== -->
+
+        <ng-template
+          #saveAreaManagerButton>
+
+          <lucide-icon
+            [img]="Save"
+            class="w-5 h-5">
+          </lucide-icon>
 
           Save Area Manager
 

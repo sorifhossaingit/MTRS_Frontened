@@ -169,7 +169,7 @@ export const MENU_ITEMS: MenuItem[] = [
         roles: ['Admin']
       },
             {
-        label: 'Add Area',
+        label: 'Area Management',
         icon: 'UserPlus',
         route: '/area-manager/add-area',
         roles: ['Admin']

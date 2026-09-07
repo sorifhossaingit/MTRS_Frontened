@@ -52,16 +52,24 @@ export class AreaManagerService {
 
   }
 
-  get_all_area(params: any) {
+get_all_area(params: {
+  agencyId: number;
+  isActive: boolean;
+}) {
 
-    return this.http.get(
-      `${this.apiUrl}/admin/area-manager/get-all-area`,
-      {
-        params: params
+  return this.http.get(
+    `${this.apiUrl}/admin/area-manager/get-all-area`,
+    {
+      params: {
+        agencyId: params.agencyId.toString(),
+        isActive: params.isActive.toString()
       }
-    );
+    }
+  );
 
-  }
+}
+
+  
 
   get_area_by_id(areaId: number) {
 
