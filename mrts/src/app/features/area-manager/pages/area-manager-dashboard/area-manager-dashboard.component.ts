@@ -12,7 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  KeyRound 
+  KeyRound
 } from 'lucide-angular';
 
 import {
@@ -48,7 +48,8 @@ export class AreaManagerDashboardComponent implements OnInit {
   ChevronLeft = ChevronLeft;
   ChevronRight = ChevronRight;
   X = X;
-  KeyRound = KeyRound ;
+  KeyRound = KeyRound;
+
   // =====================================================
   // VARIABLES
   // =====================================================
@@ -60,6 +61,11 @@ export class AreaManagerDashboardComponent implements OnInit {
 
   areaManagers: any[] = [];
 
+  // ALL ACTIVE AREAS
+  areas: any[] = [];
+
+  isLoadingAreas = false;
+
   loading = false;
 
   // Filters
@@ -67,7 +73,11 @@ export class AreaManagerDashboardComponent implements OnInit {
   searchText = '';
   mobile = '';
   selectedRegion = '';
-  isActive = '';
+
+  // IMPORTANT:
+  // Because HTML uses [ngValue]="true/false",
+  // this must be boolean | ''
+  isActive: boolean | '' = '';
 
   // Pagination
 
@@ -76,8 +86,6 @@ export class AreaManagerDashboardComponent implements OnInit {
   totalPages = 0;
   totalRecords = 0;
   pages: number[] = [];
-
-
 
   // Dashboard Cards
 
@@ -91,14 +99,16 @@ export class AreaManagerDashboardComponent implements OnInit {
   // Modal
 
   showEditModal = false;
+
   selectedManagerId: number = 0;
 
   editForm!: FormGroup;
+
   submitted = false;
 
   isUpdating = false;
 
-   today: string = '';
+  today: string = '';
 
   constructor(
     private areaManagerService: AreaManagerService,
@@ -116,14 +126,16 @@ export class AreaManagerDashboardComponent implements OnInit {
     this.initializeForm();
 
     this.getManagers();
-    
+
     this.loadManagerDashboardSummary();
+
+    // LOAD ACTIVE AREAS
+    this.loadAreas();
 
     const now = new Date();
 
     this.today =
       `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-
   }
 
   // =====================================================
@@ -162,6 +174,9 @@ export class AreaManagerDashboardComponent implements OnInit {
 
       assignedArea: ['', Validators.required],
 
+      // NEW
+      areaIds: [[]],
+
       address: ['', Validators.required],
 
       city: ['', Validators.required],
@@ -199,6 +214,10 @@ export class AreaManagerDashboardComponent implements OnInit {
 
   }
 
+  // =====================================================
+  // DASHBOARD SUMMARY
+  // =====================================================
+
   loadManagerDashboardSummary() {
 
     this.areaManagerService
@@ -208,16 +227,16 @@ export class AreaManagerDashboardComponent implements OnInit {
         next: (res: any) => {
 
           this.totalManagers =
-            res.data.totalAreaManagers || 0;
+            res?.data?.totalAreaManagers || 0;
 
           this.activeManagers =
-            res.data.activeAreaManagers || 0;
+            res?.data?.activeAreaManagers || 0;
 
           this.inactiveManagers =
-            res.data.inactiveAreaManagers || 0;
+            res?.data?.inactiveAreaManagers || 0;
 
           this.newManagerthismonth =
-            res.data.newAreaManagersThisMonth || 0;
+            res?.data?.newAreaManagersThisMonth || 0;
 
         },
 
@@ -232,12 +251,83 @@ export class AreaManagerDashboardComponent implements OnInit {
   }
 
   // =====================================================
+  // GET ALL ACTIVE AREAS
+  // =====================================================
+
+  loadAreas(): void {
+
+    const agencyId =
+      Number(localStorage.getItem('aid')) || 0;
+
+    if (agencyId <= 0) {
+
+      console.error('Invalid Agency ID');
+
+      return;
+    }
+
+    this.isLoadingAreas = true;
+
+    this.areaManagerService
+      .get_all_area({
+        agencyId: agencyId,
+        isActive: true
+      })
+      .subscribe({
+
+        // -------------------------------------------
+        // SUCCESS
+        // -------------------------------------------
+
+        next: (res: any) => {
+
+          console.log(
+            'Area API Response:',
+            res
+          );
+
+          this.areas =
+            Array.isArray(res?.data)
+              ? res.data
+              : [];
+
+          this.isLoadingAreas = false;
+
+        },
+
+        // -------------------------------------------
+        // ERROR
+        // -------------------------------------------
+
+        error: (err: any) => {
+
+          console.error(
+            'Area API Error:',
+            err
+          );
+
+          this.areas = [];
+
+          this.isLoadingAreas = false;
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load areas'
+          });
+
+        }
+
+      });
+  }
+
+  // =====================================================
   // GET AREA MANAGERS
   // =====================================================
 
   getManagers() {
 
-    const params = {
+    const params: any = {
 
       AgencyId: this.agencyId,
 
@@ -247,10 +337,12 @@ export class AreaManagerDashboardComponent implements OnInit {
 
       Region: this.selectedRegion || '',
 
+      // IMPORTANT
+      // Send '' OR boolean
       IsActive:
         this.isActive === ''
           ? ''
-          : this.isActive === 'true',
+          : this.isActive,
 
       PageNumber: this.currentPage,
 
@@ -261,28 +353,66 @@ export class AreaManagerDashboardComponent implements OnInit {
     this.loading = true;
 
     this.areaManagerService
-      .get_area_manager_details(params)
+      .get_area_manager_list(params)
       .subscribe({
 
         next: (res: any) => {
 
           this.loading = false;
 
+          console.log(
+            'Area Manager List Response:',
+            res
+          );
+
+          // -----------------------------------------
+          // LIST
+          // -----------------------------------------
+
           this.areaManagers =
-            res?.data || [];
+            Array.isArray(res?.data)
+              ? res.data
+              : [];
+
+          // -----------------------------------------
+          // PAGINATION
+          // API RESPONSE:
+          // totalCount
+          // pageNumber
+          // pageSize
+          // -----------------------------------------
 
           this.totalRecords =
-            res?.totalCount ||
-            res?.totalRecords ||
-            0;
+            Number(res?.totalCount) || 0;
+
+          this.currentPage =
+            Number(res?.pageNumber) ||
+            this.currentPage;
+
+          this.pageSize =
+            Number(res?.pageSize) ||
+            this.pageSize;
 
           this.totalPages =
-            res?.totalPages || 0;
+            this.totalRecords > 0
+              ? Math.ceil(
+                  this.totalRecords /
+                  this.pageSize
+                )
+              : 0;
 
-          this.pages = Array.from(
-            { length: this.totalPages || 0 },
-            (_, i) => i + 1
-          );
+          this.pages =
+            Array.from(
+              {
+                length: this.totalPages
+              },
+              (_, i) => i + 1
+            );
+
+          // -----------------------------------------
+          // DO NOT CHANGE YOUR EXISTING DASHBOARD
+          // CALCULATIONS
+          // -----------------------------------------
 
           this.totalManagers =
             this.totalRecords;
@@ -312,7 +442,10 @@ export class AreaManagerDashboardComponent implements OnInit {
 
           this.loading = false;
 
-          console.error(err);
+          console.error(
+            'Area Manager List API Error:',
+            err
+          );
 
           Swal.fire({
             icon: 'error',
@@ -361,17 +494,49 @@ export class AreaManagerDashboardComponent implements OnInit {
   editManager(manager: any) {
 
     this.selectedManagerId =
-      manager.areaManagerId;
+      Number(manager.areaManagerId) || 0;
 
     this.showEditModal = true;
 
+    // -----------------------------------------
+    // GET AREA IDS FROM API RESPONSE
+    // -----------------------------------------
+
+    const areaIds: number[] =
+      Array.isArray(manager?.areas)
+        ? manager.areas
+            .map((area: any) =>
+              Number(area.areaId)
+            )
+            .filter((id: number) =>
+              id > 0
+            )
+        : [];
+
+    console.log(
+      'Selected Manager:',
+      manager
+    );
+
+    console.log(
+      'Selected Area IDs:',
+      areaIds
+    );
+
+    // -----------------------------------------
+    // PATCH FORM
+    // -----------------------------------------
+
     this.editForm.patchValue({
 
-      name: manager.name,
+      name:
+        manager.name || '',
 
-      email: manager.email,
+      email:
+        manager.email || '',
 
-      gender: manager.gender,
+      gender:
+        manager.gender || '',
 
       dateOfBirth:
         manager.dateOfBirth
@@ -383,24 +548,38 @@ export class AreaManagerDashboardComponent implements OnInit {
           ? manager.joiningDate.split('T')[0]
           : '',
 
-      mobile: manager.mobile,
+      mobile:
+        manager.mobile || '',
 
-      region: manager.region,
+      region:
+        manager.region || '',
 
       assignedArea:
-        manager.assignedArea,
+        manager.assignedArea || '',
 
-      address: manager.address,
+      // NEW
+      areaIds:
+        areaIds,
 
-      city: manager.city,
+      address:
+        manager.address || '',
 
-      state: manager.state,
+      city:
+        manager.city || '',
 
-      isActive: manager.isActive
+      state:
+        manager.state || '',
+
+      isActive:
+        manager.isActive === true
 
     });
 
   }
+
+  // =====================================================
+  // CLOSE MODAL
+  // =====================================================
 
   closeModal() {
 
@@ -410,133 +589,201 @@ export class AreaManagerDashboardComponent implements OnInit {
 
     this.selectedManagerId = 0;
 
-    this.editForm.reset();
-
-  }
-
-updateManager(): void {
-
-  this.submitted = true;
-
-  // Validation
-  if (this.editForm.invalid) {
-
-    this.editForm.markAllAsTouched();
-
-    return;
-  }
-
-  // Start loading
-  this.isUpdating = true;
-
-  const payload = {
-
-    areaManagerId:
-      this.selectedManagerId,
-
-    agencyId:
-      this.agencyId,
-
-    updatedBy:
-      this.userId,
-
-    name:
-      this.editForm.value.name,
-
-    email:
-      this.editForm.value.email,
-
-    gender:
-      this.editForm.value.gender,
-
-    dateOfBirth:
-      this.editForm.value.dateOfBirth
-        ? this.editForm.value.dateOfBirth + 'T00:00:00'
-        : '',
-
-    joiningDate:
-      this.editForm.value.joiningDate
-        ? this.editForm.value.joiningDate + 'T00:00:00'
-        : '',
-
-    mobile:
-      this.editForm.value.mobile,
-
-    region:
-      this.editForm.value.region,
-
-    assignedArea:
-      this.editForm.value.assignedArea,
-
-    address:
-      this.editForm.value.address,
-
-    city:
-      this.editForm.value.city,
-
-    state:
-      this.editForm.value.state,
-
-    isActive:
-      this.editForm.value.isActive
-
-  };
-
-  this.areaManagerService
-    .update_area_manager_details(payload)
-    .subscribe({
-
-      // ==============================
-      // SUCCESS
-      // ==============================
-      next: (res: any) => {
-
-        this.isUpdating = false;
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text:
-            res?.message ||
-            'Area Manager Updated Successfully',
-          confirmButtonColor: '#16a34a'
-        }).then(() => {
-
-          this.closeModal();
-
-          // Reload manager list
-          this.getManagers();
-
-          // Reload dashboard summary
-          this.loadManagerDashboardSummary();
-
-        });
-
-      },
-
-      // ==============================
-      // ERROR
-      // ==============================
-      error: (err: any) => {
-
-        this.isUpdating = false;
-
-        console.error(err);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text:
-            err?.error?.message ||
-            'Failed To Update Manager',
-          confirmButtonColor: '#dc2626'
-        });
-
-      }
-
+    this.editForm.reset({
+      name: '',
+      email: '',
+      gender: '',
+      dateOfBirth: '',
+      joiningDate: '',
+      mobile: '',
+      region: '',
+      assignedArea: '',
+      areaIds: [],
+      address: '',
+      city: '',
+      state: '',
+      isActive: true
     });
 
-}
+  }
+
+  // =====================================================
+  // UPDATE AREA MANAGER
+  // =====================================================
+
+  updateManager(): void {
+
+    this.submitted = true;
+
+    // -----------------------------------------
+    // VALIDATION
+    // -----------------------------------------
+
+    if (this.editForm.invalid) {
+
+      this.editForm.markAllAsTouched();
+
+      return;
+    }
+
+    // -----------------------------------------
+    // START LOADING
+    // -----------------------------------------
+
+    this.isUpdating = true;
+
+    const formValue =
+      this.editForm.value;
+
+    // -----------------------------------------
+    // AREA IDS
+    // -----------------------------------------
+
+    const areaIds: number[] =
+      Array.isArray(formValue.areaIds)
+        ? formValue.areaIds
+            .map((id: any) =>
+              Number(id)
+            )
+            .filter((id: number) =>
+              id > 0
+            )
+        : [];
+
+    // -----------------------------------------
+    // UPDATE PAYLOAD
+    // -----------------------------------------
+
+    const payload = {
+
+      areaManagerId:
+        this.selectedManagerId,
+
+      agencyId:
+        this.agencyId,
+
+      name:
+        formValue.name,
+
+      email:
+        formValue.email,
+
+      mobile:
+        formValue.mobile,
+
+      gender:
+        formValue.gender,
+
+      dateOfBirth:
+        formValue.dateOfBirth
+          ? formValue.dateOfBirth + 'T00:00:00'
+          : '',
+
+      joiningDate:
+        formValue.joiningDate
+          ? formValue.joiningDate + 'T00:00:00'
+          : '',
+
+      region:
+        formValue.region,
+
+      assignedArea:
+        formValue.assignedArea,
+
+      // -----------------------------------------
+      // IMPORTANT NEW FIELD
+      // -----------------------------------------
+
+      areaIds:
+        areaIds,
+
+      address:
+        formValue.address,
+
+      city:
+        formValue.city,
+
+      state:
+        formValue.state,
+
+      isActive:
+        formValue.isActive === true,
+
+      updatedBy:
+        this.userId
+
+    };
+
+    console.log(
+      'Update Area Manager Payload:',
+      payload
+    );
+
+    // -----------------------------------------
+    // API CALL
+    // -----------------------------------------
+
+    this.areaManagerService
+      .update_area_manager_details(payload)
+      .subscribe({
+
+        // ==============================
+        // SUCCESS
+        // ==============================
+
+        next: (res: any) => {
+
+          this.isUpdating = false;
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text:
+              res?.message ||
+              'Area Manager Updated Successfully',
+            confirmButtonColor: '#16a34a'
+          }).then(() => {
+
+            this.closeModal();
+
+            // Reload manager list
+            this.getManagers();
+
+            // Reload dashboard summary
+            this.loadManagerDashboardSummary();
+
+          });
+
+        },
+
+        // ==============================
+        // ERROR
+        // ==============================
+
+        error: (err: any) => {
+
+          this.isUpdating = false;
+
+          console.error(
+            'Update Area Manager Error:',
+            err
+          );
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              err?.error?.message ||
+              'Failed To Update Manager',
+            confirmButtonColor: '#dc2626'
+          });
+
+        }
+
+      });
+
+  }
+
   // =====================================================
   // SOFT DELETE
   // =====================================================
@@ -562,6 +809,21 @@ updateManager(): void {
     }).then((result) => {
 
       if (!result.isConfirmed) return;
+
+      // -----------------------------------------
+      // GET EXISTING AREA IDS
+      // -----------------------------------------
+
+      const areaIds: number[] =
+        Array.isArray(manager?.areas)
+          ? manager.areas
+              .map((area: any) =>
+                Number(area.areaId)
+              )
+              .filter((id: number) =>
+                id > 0
+              )
+          : [];
 
       const payload = {
 
@@ -594,6 +856,10 @@ updateManager(): void {
 
         assignedArea:
           manager.assignedArea,
+
+        // NEW
+        areaIds:
+          areaIds,
 
         address:
           manager.address,
@@ -629,6 +895,7 @@ updateManager(): void {
             });
 
             this.getManagers();
+
             this.loadManagerDashboardSummary();
 
           },
@@ -656,55 +923,99 @@ updateManager(): void {
 
   }
 
+  // =====================================================
+  // RESET PASSWORD
+  // =====================================================
+
   reset_password(data: any): void {
-  Swal.fire({
-    title: 'Reset Password?',
-    text: `Are you sure you want to reset the password for ${data.name}?`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, Reset',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: '#2563eb'
-  }).then((result) => {
 
-    if (result.isConfirmed) {
+    Swal.fire({
 
-      const payload = {
-        userId: data.userId, // change if your API expects another field
-        updatedBy: this.userId
-      };
+      title: 'Reset Password?',
 
-      this.areaManagerService.reset_password(payload).subscribe({
-        next: (res: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: res?.message || 'Password reset successfully.'
+      text:
+        `Are you sure you want to reset the password for ${data.name}?`,
+
+      icon: 'warning',
+
+      showCancelButton: true,
+
+      confirmButtonText: 'Yes, Reset',
+
+      cancelButtonText: 'Cancel',
+
+      confirmButtonColor: '#2563eb'
+
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        const payload = {
+
+          userId:
+            data.userId,
+
+          updatedBy:
+            this.userId
+
+        };
+
+        this.areaManagerService
+          .reset_password(payload)
+          .subscribe({
+
+            next: (res: any) => {
+
+              Swal.fire({
+
+                icon: 'success',
+
+                title: 'Success',
+
+                text:
+                  res?.message ||
+                  'Password reset successfully.'
+
+              });
+
+            },
+
+            error: (err: any) => {
+
+              Swal.fire({
+
+                icon: 'error',
+
+                title: 'Failed',
+
+                text:
+                  err?.error?.message ||
+                  'Unable to reset password. Please try again.'
+
+              });
+
+            }
+
           });
-        },
-        error: (err) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Failed',
-            text:
-              err?.error?.message ||
-              'Unable to reset password. Please try again.'
-          });
-        }
-      });
 
-    }
+      }
 
-  });
-}
+    });
 
-  
+  }
 
   // =====================================================
   // PAGINATION
   // =====================================================
 
   goToPage(page: number) {
+
+    if (
+      page < 1 ||
+      page > this.totalPages
+    ) {
+      return;
+    }
 
     this.currentPage = page;
 
@@ -726,7 +1037,9 @@ updateManager(): void {
 
   nextPage() {
 
-    if (this.currentPage < this.totalPages) {
+    if (
+      this.currentPage < this.totalPages
+    ) {
 
       this.currentPage++;
 

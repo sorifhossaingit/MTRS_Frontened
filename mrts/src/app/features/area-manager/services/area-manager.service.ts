@@ -17,7 +17,7 @@ export class AreaManagerService {
   }
 
 
-  get_area_manager_details(params: any) {
+  get_area_manager_list(params: any) {
     return this.http.get(
       `${this.apiUrl}/admin/area-manager/area-manager-list`, { params });
   }
