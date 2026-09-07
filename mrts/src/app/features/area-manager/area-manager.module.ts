@@ -16,11 +16,13 @@ import {
   Trash2,
   LucideAngularModule
 } from 'lucide-angular';
+import { AreaManagementComponent } from './pages/area-management/area-management.component';
 
 @NgModule({
   declarations: [
     AreaManagerDashboardComponent,
-    AddAreaManagerComponent
+    AddAreaManagerComponent,
+    AreaManagementComponent
   ],
   imports: [
     CommonModule,

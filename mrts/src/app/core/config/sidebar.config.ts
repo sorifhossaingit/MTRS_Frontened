@@ -167,6 +167,12 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'UserPlus',
         route: '/area-manager/add-area-manager',
         roles: ['Admin']
+      },
+            {
+        label: 'Add Area',
+        icon: 'UserPlus',
+        route: '/area-manager/add-area',
+        roles: ['Admin']
       }
     ]
   },

@@ -1,0 +1,1205 @@
+<div class="min-h-screen bg-gray-100 p-4 md:p-6">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+    <div>
+
+      <div class="flex items-center gap-3">
+
+        <div
+          class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100">
+
+          <lucide-icon
+            [img]="MapPin"
+            class="h-6 w-6 text-blue-600">
+          </lucide-icon>
+
+        </div>
+
+        <div>
+
+          <h1 class="text-2xl font-bold text-gray-800">
+            Area Management
+          </h1>
+
+          <p class="mt-1 text-sm text-gray-500">
+            Manage areas for your agency
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ADD AREA -->
+
+    <button
+      type="button"
+      (click)="openAddModal()"
+      class="inline-flex items-center justify-center gap-2 rounded-xl
+             bg-blue-600 px-5 py-2.5 font-medium text-white
+             shadow-sm transition hover:bg-blue-700
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             focus:ring-offset-2">
+
+      <lucide-icon
+        [img]="Plus"
+        class="h-5 w-5">
+      </lucide-icon>
+
+      Add Area
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ===================================================== -->
+  <!-- SEARCH CARD -->
+  <!-- ===================================================== -->
+
+  <div class="mb-6 rounded-2xl bg-white p-5 shadow-sm">
+
+    <div class="mb-5 flex items-center gap-2">
+
+      <div
+        class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50">
+
+        <lucide-icon
+          [img]="Search"
+          class="h-5 w-5 text-blue-600">
+        </lucide-icon>
+
+      </div>
+
+      <div>
+
+        <h2 class="font-semibold text-gray-800">
+          Search Areas
+        </h2>
+
+        <p class="text-xs text-gray-500">
+          Filter areas by name or code
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+
+      <!-- AREA NAME -->
+
+   <div class="relative">
+
+  <lucide-icon
+    [img]="MapPin"
+    class="absolute left-3 top-1/2 h-4 w-4
+           -translate-y-1/2 text-gray-400">
+  </lucide-icon>
+
+  <input
+    type="text"
+    [(ngModel)]="searchAreaName"
+    (keyup.enter)="search()"
+    placeholder="Enter area name"
+    class="w-full rounded-xl border border-gray-300
+           bg-white py-2.5 pl-12 pr-3 text-sm
+           outline-none transition
+           focus:border-blue-500
+           focus:ring-2 focus:ring-blue-100">
+
+</div>
+
+
+      <!-- AREA CODE -->
+
+<div class="relative">
+
+  <lucide-icon
+    [img]="Building2"
+    class="absolute left-3 top-1/2 h-4 w-4
+           -translate-y-1/2 text-gray-400">
+  </lucide-icon>
+
+  <input
+    type="text"
+    [(ngModel)]="searchAreaCode"
+    (keyup.enter)="search()"
+    placeholder="Enter area code"
+    class="w-full rounded-xl border border-gray-300
+           bg-white py-2.5 pl-12 pr-3 text-sm
+           outline-none transition
+           focus:border-blue-500
+           focus:ring-2 focus:ring-blue-100">
+
+</div>
+
+
+      <!-- SEARCH -->
+
+      <div class="flex items-end">
+
+        <button
+          type="button"
+          (click)="search()"
+          class="flex w-full items-center justify-center gap-2
+                 rounded-xl bg-blue-600 px-4 py-2.5
+                 text-sm font-medium text-white
+                 transition hover:bg-blue-700">
+
+          <lucide-icon
+            [img]="Search"
+            class="h-4 w-4">
+          </lucide-icon>
+
+          Search
+
+        </button>
+
+      </div>
+
+
+      <!-- RESET -->
+
+      <div class="flex items-end">
+
+        <button
+          type="button"
+          (click)="resetFilters()"
+          class="flex w-full items-center justify-center gap-2
+                 rounded-xl border border-gray-300
+                 bg-white px-4 py-2.5
+                 text-sm font-medium text-gray-700
+                 transition hover:bg-gray-50">
+
+          <lucide-icon
+            [img]="RefreshCw"
+            class="h-4 w-4">
+          </lucide-icon>
+
+          Reset
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ===================================================== -->
+  <!-- AREA LIST -->
+  <!-- ===================================================== -->
+
+  <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
+
+    <!-- CARD HEADER -->
+
+    <div
+      class="flex flex-col gap-3 border-b border-gray-200
+             px-5 py-4 sm:flex-row sm:items-center
+             sm:justify-between">
+
+      <div class="flex items-center gap-3">
+
+        <div
+          class="flex h-10 w-10 items-center justify-center
+                 rounded-xl bg-blue-50">
+
+          <lucide-icon
+            [img]="Building2"
+            class="h-5 w-5 text-blue-600">
+          </lucide-icon>
+
+        </div>
+
+        <div>
+
+          <h2 class="font-semibold text-gray-800">
+            Area List
+          </h2>
+
+          <p class="text-xs text-gray-500">
+            All areas for your agency
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="rounded-lg bg-gray-100 px-3 py-1.5
+               text-sm text-gray-600">
+
+        Total:
+        <span class="font-semibold text-gray-800">
+          {{ areas.length }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- LOADING -->
+    <!-- ================================================= -->
+
+    <div
+      *ngIf="isLoading"
+      class="flex min-h-[300px] flex-col
+             items-center justify-center">
+
+      <svg
+        class="mb-3 h-8 w-8 animate-spin text-blue-600"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24">
+
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4">
+        </circle>
+
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+        </path>
+
+      </svg>
+
+      <p class="text-sm text-gray-500">
+        Loading areas...
+      </p>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- TABLE -->
+    <!-- ================================================= -->
+
+    <div
+      *ngIf="!isLoading"
+      class="overflow-x-auto">
+
+      <table class="min-w-full">
+
+        <!-- HEADER -->
+
+        <thead class="border-b bg-gray-50">
+
+          <tr>
+
+            <th
+              class="whitespace-nowrap px-5 py-3
+                     text-left text-xs font-semibold
+                     uppercase tracking-wide text-gray-500">
+
+              #
+
+            </th>
+
+            <th
+              class="whitespace-nowrap px-5 py-3
+                     text-left text-xs font-semibold
+                     uppercase tracking-wide text-gray-500">
+
+              Area
+
+            </th>
+
+            <th
+              class="whitespace-nowrap px-5 py-3
+                     text-left text-xs font-semibold
+                     uppercase tracking-wide text-gray-500">
+
+              Area Code
+
+            </th>
+
+            <th
+              class="whitespace-nowrap px-5 py-3
+                     text-left text-xs font-semibold
+                     uppercase tracking-wide text-gray-500">
+
+              Description
+
+            </th>
+
+            <th
+              class="whitespace-nowrap px-5 py-3
+                     text-center text-xs font-semibold
+                     uppercase tracking-wide text-gray-500">
+
+              Status
+
+            </th>
+
+            <th
+              class="whitespace-nowrap px-5 py-3
+                     text-center text-xs font-semibold
+                     uppercase tracking-wide text-gray-500">
+
+              Action
+
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+
+        <!-- BODY -->
+
+        <tbody class="divide-y divide-gray-100">
+
+          <tr
+            *ngFor="
+              let area of paginatedAreas;
+              let i = index;
+              trackBy: trackByAreaId
+            "
+            class="transition hover:bg-gray-50">
+
+
+            <!-- NUMBER -->
+
+            <td class="whitespace-nowrap px-5 py-4 text-sm text-gray-500">
+
+              {{
+                ((currentPage - 1) * pageSize) +
+                i +
+                1
+              }}
+
+            </td>
+
+
+            <!-- AREA -->
+
+            <td class="px-5 py-4">
+
+              <div class="flex items-center gap-3">
+
+                <div
+                  class="flex h-10 w-10 shrink-0
+                         items-center justify-center
+                         rounded-xl bg-blue-100">
+
+                  <lucide-icon
+                    [img]="MapPin"
+                    class="h-5 w-5 text-blue-600">
+                  </lucide-icon>
+
+                </div>
+
+                <div>
+
+                  <p class="font-semibold text-gray-800">
+
+                    {{ area.areaName }}
+
+                  </p>
+
+                  <p class="mt-0.5 text-xs text-gray-400">
+
+                    ID: {{ area.areaId }}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- CODE -->
+
+            <td class="whitespace-nowrap px-5 py-4">
+
+              <span
+                class="inline-flex items-center
+                       rounded-lg bg-gray-100
+                       px-3 py-1.5
+                       font-mono text-xs font-semibold
+                       text-gray-700">
+
+                {{ area.areaCode }}
+
+              </span>
+
+            </td>
+
+
+            <!-- DESCRIPTION -->
+
+            <td class="max-w-xs px-5 py-4">
+
+              <p
+                class="truncate text-sm text-gray-600"
+                [title]="area.description || ''">
+
+                {{ area.description || '-' }}
+
+              </p>
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td class="whitespace-nowrap px-5 py-4 text-center">
+
+              <span
+                *ngIf="area.isActive === true"
+                class="inline-flex items-center gap-1.5
+                       rounded-full bg-green-100
+                       px-3 py-1.5
+                       text-xs font-semibold text-green-700">
+
+                <lucide-icon
+                  [img]="CheckCircle"
+                  class="h-4 w-4">
+                </lucide-icon>
+
+                Active
+
+              </span>
+
+
+              <span
+                *ngIf="area.isActive !== true"
+                class="inline-flex items-center gap-1.5
+                       rounded-full bg-red-100
+                       px-3 py-1.5
+                       text-xs font-semibold text-red-700">
+
+                <lucide-icon
+                  [img]="XCircle"
+                  class="h-4 w-4">
+                </lucide-icon>
+
+                Inactive
+
+              </span>
+
+            </td>
+
+
+            <!-- ACTION -->
+
+            <td class="whitespace-nowrap px-5 py-4 text-center">
+
+              <button
+                type="button"
+                (click)="editArea(area)"
+                class="inline-flex items-center gap-2
+                       rounded-lg bg-blue-50
+                       px-3.5 py-2
+                       text-sm font-medium text-blue-600
+                       transition hover:bg-blue-100">
+
+                <lucide-icon
+                  [img]="Edit"
+                  class="h-4 w-4">
+                </lucide-icon>
+
+                Edit
+
+              </button>
+
+            </td>
+
+          </tr>
+
+
+
+          <!-- ================================================= -->
+          <!-- NO DATA -->
+          <!-- ================================================= -->
+
+          <tr
+            *ngIf="
+              !isLoading &&
+              areas.length === 0
+            ">
+
+            <td
+              colspan="6"
+              class="px-5 py-16 text-center">
+
+              <div
+                class="mx-auto flex max-w-sm
+                       flex-col items-center">
+
+                <div
+                  class="mb-4 flex h-16 w-16
+                         items-center justify-center
+                         rounded-full bg-gray-100">
+
+                  <lucide-icon
+                    [img]="MapPin"
+                    class="h-8 w-8 text-gray-400">
+                  </lucide-icon>
+
+                </div>
+
+                <h3
+                  class="text-base font-semibold text-gray-700">
+
+                  No Areas Found
+
+                </h3>
+
+                <p
+                  class="mt-1 text-sm text-gray-500">
+
+                  No areas match your current search.
+
+                </p>
+
+                <button
+                  type="button"
+                  (click)="openAddModal()"
+                  class="mt-5 inline-flex items-center gap-2
+                         rounded-xl bg-blue-600
+                         px-4 py-2.5
+                         text-sm font-medium text-white
+                         hover:bg-blue-700">
+
+                  <lucide-icon
+                    [img]="Plus"
+                    class="h-4 w-4">
+                  </lucide-icon>
+
+                  Add Area
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- PAGINATION -->
+    <!-- ================================================= -->
+
+    <div
+      *ngIf="
+        !isLoading &&
+        areas.length > 0
+      "
+      class="flex flex-col gap-3
+             border-t border-gray-200
+             px-5 py-4
+             sm:flex-row
+             sm:items-center
+             sm:justify-between">
+
+      <p class="text-sm text-gray-500">
+
+        Showing
+
+        <span class="font-medium text-gray-700">
+          {{ ((currentPage - 1) * pageSize) + 1 }}
+        </span>
+
+        to
+
+        <span class="font-medium text-gray-700">
+
+          {{
+            Math.min(
+              currentPage * pageSize,
+              areas.length
+            )
+          }}
+
+        </span>
+
+        of
+
+        <span class="font-medium text-gray-700">
+          {{ areas.length }}
+        </span>
+
+      </p>
+
+
+      <div class="flex items-center gap-2">
+
+        <button
+          type="button"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+          class="rounded-lg border border-gray-300
+                 bg-white px-4 py-2
+                 text-sm font-medium text-gray-600
+                 transition hover:bg-gray-50
+                 disabled:cursor-not-allowed
+                 disabled:opacity-40">
+
+          Previous
+
+        </button>
+
+
+        <span
+          class="rounded-lg bg-gray-100
+                 px-3 py-2
+                 text-sm font-medium text-gray-700">
+
+          {{ currentPage }} / {{ totalPages }}
+
+        </span>
+
+
+        <button
+          type="button"
+          (click)="nextPage()"
+          [disabled]="currentPage >= totalPages"
+          class="rounded-lg border border-gray-300
+                 bg-white px-4 py-2
+                 text-sm font-medium text-gray-600
+                 transition hover:bg-gray-50
+                 disabled:cursor-not-allowed
+                 disabled:opacity-40">
+
+          Next
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- ADD / EDIT MODAL -->
+<!-- ========================================================= -->
+
+<div
+  *ngIf="showModal"
+  class="fixed inset-0 z-50 flex items-center
+         justify-center bg-black/50 p-4">
+
+
+  <!-- MODAL -->
+
+  <div
+    class="w-full max-w-xl overflow-hidden
+           rounded-2xl bg-white shadow-2xl">
+
+
+    <!-- ===================================================== -->
+    <!-- MODAL HEADER -->
+    <!-- ===================================================== -->
+
+    <div
+      class="flex items-center justify-between
+             border-b border-gray-200
+             bg-white px-6 py-4">
+
+      <div class="flex items-center gap-3">
+
+        <div
+          class="flex h-11 w-11 items-center justify-center
+                 rounded-xl bg-blue-100">
+
+          <lucide-icon
+            [img]="isEditMode ? Edit : Plus"
+            class="h-5 w-5 text-blue-600">
+          </lucide-icon>
+
+        </div>
+
+        <div>
+
+          <h2 class="text-lg font-bold text-gray-800">
+
+            {{ isEditMode ? 'Edit Area' : 'Add Area' }}
+
+          </h2>
+
+          <p class="text-xs text-gray-500">
+
+            {{
+              isEditMode
+                ? 'Update the area information below'
+                : 'Enter the details to create a new area'
+            }}
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- CLOSE -->
+
+      <button
+        type="button"
+        (click)="closeModal()"
+        [disabled]="isSaving"
+        class="flex h-9 w-9 items-center justify-center
+               rounded-lg text-gray-400
+               transition hover:bg-gray-100
+               hover:text-gray-600
+               disabled:cursor-not-allowed
+               disabled:opacity-50">
+
+        <lucide-icon
+          [img]="X"
+          class="h-5 w-5">
+        </lucide-icon>
+
+      </button>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- FORM -->
+    <!-- ===================================================== -->
+
+    <form
+      [formGroup]="areaForm"
+      (ngSubmit)="saveArea()"
+      class="p-6">
+
+
+      <!-- ================================================= -->
+      <!-- AREA NAME -->
+      <!-- ================================================= -->
+
+      <div class="mb-5">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-gray-700">
+
+          Area Name
+
+          <span class="text-red-500">*</span>
+
+        </label>
+
+
+        <div class="relative">
+
+          <lucide-icon
+            [img]="MapPin"
+            class="absolute left-3 top-1/2
+                   h-5 w-5
+                   -translate-y-1/2
+                   text-gray-400">
+          </lucide-icon>
+
+
+          <input
+            type="text"
+            formControlName="areaName"
+            placeholder="Enter area name"
+            autocomplete="off"
+            class="w-full rounded-xl
+                   border border-gray-300
+                   bg-white
+                   py-3 pl-14 pr-3
+                   text-sm text-gray-800
+                   outline-none transition
+                   placeholder:text-gray-400
+                   focus:border-blue-500
+                   focus:ring-2
+                   focus:ring-blue-100">
+
+
+        </div>
+
+
+        <p
+          *ngIf="
+            submitted &&
+            f['areaName'].hasError('required')
+          "
+          class="mt-1.5 text-xs text-red-500">
+
+          Area name is required.
+
+        </p>
+
+
+        <p
+          *ngIf="
+            submitted &&
+            f['areaName'].hasError('minlength')
+          "
+          class="mt-1.5 text-xs text-red-500">
+
+          Minimum 2 characters required.
+
+        </p>
+
+
+        <p
+          *ngIf="
+            submitted &&
+            f['areaName'].hasError('maxlength')
+          "
+          class="mt-1.5 text-xs text-red-500">
+
+          Maximum 150 characters allowed.
+
+        </p>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- AREA CODE -->
+      <!-- ================================================= -->
+
+      <div class="mb-5">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-gray-700">
+
+          Area Code
+
+          <span class="text-red-500">*</span>
+
+        </label>
+
+
+        <div class="relative">
+
+          <lucide-icon
+            [img]="Building2"
+            class="absolute left-3 top-1/2
+                   h-5 w-5
+                   -translate-y-1/2
+                   text-gray-400">
+          </lucide-icon>
+
+
+          <input
+            type="text"
+            formControlName="areaCode"
+            placeholder="Enter area code"
+            autocomplete="off"
+            class="w-full rounded-xl
+                   border border-gray-300
+                   bg-white
+                   py-3 pl-14 pr-3
+                   text-sm text-gray-800
+                   outline-none transition
+                   placeholder:text-gray-400
+                   focus:border-blue-500
+                   focus:ring-2
+                   focus:ring-blue-100">
+
+
+        </div>
+
+
+        <p
+          *ngIf="
+            submitted &&
+            f['areaCode'].hasError('required')
+          "
+          class="mt-1.5 text-xs text-red-500">
+
+          Area code is required.
+
+        </p>
+
+
+        <p
+          *ngIf="
+            submitted &&
+            f['areaCode'].hasError('maxlength')
+          "
+          class="mt-1.5 text-xs text-red-500">
+
+          Maximum 50 characters allowed.
+
+        </p>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- DESCRIPTION -->
+      <!-- ================================================= -->
+
+      <div class="mb-5">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-gray-700">
+
+          Description
+
+        </label>
+
+
+        <textarea
+          rows="4"
+          formControlName="description"
+          placeholder="Enter area description"
+          class="w-full resize-none rounded-xl
+                 border border-gray-300
+                 bg-white px-3 py-3
+                 text-sm text-gray-800
+                 outline-none transition
+                 placeholder:text-gray-400
+                 focus:border-blue-500
+                 focus:ring-2
+                 focus:ring-blue-100">
+        </textarea>
+
+
+        <div class="mt-1 flex justify-between">
+
+          <p
+            *ngIf="
+              submitted &&
+              f['description'].hasError('maxlength')
+            "
+            class="text-xs text-red-500">
+
+            Maximum 500 characters allowed.
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- ACTIVE STATUS -->
+      <!-- ================================================= -->
+
+      <div
+        class="mb-6 flex items-center justify-between
+               rounded-xl border border-gray-200
+               bg-gray-50 p-4">
+
+        <div class="flex items-center gap-3">
+
+          <div
+            class="flex h-10 w-10 items-center justify-center
+                   rounded-lg bg-green-100">
+
+            <lucide-icon
+              [img]="CheckCircle"
+              class="h-5 w-5 text-green-600">
+            </lucide-icon>
+
+          </div>
+
+          <div>
+
+            <p class="text-sm font-semibold text-gray-800">
+              Active Area
+            </p>
+
+            <p class="text-xs text-gray-500">
+              Area will be available for use
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- TOGGLE -->
+
+        <label
+          class="relative inline-flex cursor-pointer items-center">
+
+          <input
+            type="checkbox"
+            formControlName="isActive"
+            class="peer sr-only">
+
+          <div
+            class="h-6 w-11 rounded-full
+                   bg-gray-300
+                   after:absolute
+                   after:left-[2px]
+                   after:top-[2px]
+                   after:h-5
+                   after:w-5
+                   after:rounded-full
+                   after:border
+                   after:border-gray-300
+                   after:bg-white
+                   after:transition-all
+                   peer-checked:bg-blue-600
+                   peer-checked:after:translate-x-full
+                   peer-checked:after:border-white
+                   peer-focus:outline-none
+                   peer-focus:ring-2
+                   peer-focus:ring-blue-300">
+          </div>
+
+        </label>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- BUTTONS -->
+      <!-- ================================================= -->
+
+      <div
+        class="flex flex-col-reverse gap-3
+               border-t border-gray-200
+               pt-5 sm:flex-row
+               sm:justify-end">
+
+
+        <!-- CANCEL -->
+
+        <button
+          type="button"
+          (click)="closeModal()"
+          [disabled]="isSaving"
+          class="inline-flex items-center
+                 justify-center gap-2
+                 rounded-xl border
+                 border-gray-300
+                 bg-white px-5 py-2.5
+                 text-sm font-medium
+                 text-gray-700
+                 transition hover:bg-gray-50
+                 disabled:cursor-not-allowed
+                 disabled:opacity-50">
+
+          <lucide-icon
+            [img]="X"
+            class="h-4 w-4">
+          </lucide-icon>
+
+          Cancel
+
+        </button>
+
+
+        <!-- SAVE / UPDATE -->
+
+        <button
+          type="submit"
+          [disabled]="isSaving"
+          class="inline-flex min-w-[150px]
+                 items-center justify-center
+                 gap-2 rounded-xl
+                 bg-blue-600 px-5 py-2.5
+                 text-sm font-medium text-white
+                 shadow-sm transition
+                 hover:bg-blue-700
+                 focus:outline-none
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:ring-offset-2
+                 disabled:cursor-not-allowed
+                 disabled:bg-blue-300">
+
+
+          <!-- LOADING -->
+
+          <ng-container
+            *ngIf="isSaving; else saveButton">
+
+            <svg
+              class="h-5 w-5 animate-spin"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24">
+
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4">
+              </circle>
+
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+              </path>
+
+            </svg>
+
+            {{ isEditMode ? 'Updating...' : 'Saving...' }}
+
+          </ng-container>
+
+
+          <!-- NORMAL -->
+
+          <ng-template #saveButton>
+
+            <lucide-icon
+              [img]="Save"
+              class="h-4 w-4">
+            </lucide-icon>
+
+            {{ isEditMode ? 'Update Area' : 'Save Area' }}
+
+          </ng-template>
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

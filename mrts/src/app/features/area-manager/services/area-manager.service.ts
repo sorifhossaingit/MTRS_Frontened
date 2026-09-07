@@ -38,4 +38,49 @@ export class AreaManagerService {
   }
 
 
+
+  // =========================================================
+  // AREA MANAGEMENT
+  // =========================================================
+
+  create_area(data: any) {
+
+    return this.http.post(
+      `${this.apiUrl}/admin/area-manager/create-area`,
+      data
+    );
+
+  }
+
+  get_all_area(params: any) {
+
+    return this.http.get(
+      `${this.apiUrl}/admin/area-manager/get-all-area`,
+      {
+        params: params
+      }
+    );
+
+  }
+
+  get_area_by_id(areaId: number) {
+
+    return this.http.get(
+      `${this.apiUrl}/admin/area-manager/get_area-id/${areaId}`
+    );
+
+  }
+
+  update_area(
+    areaId: number,
+    data: any
+  ) {
+
+    return this.http.put(
+      `${this.apiUrl}/admin/area-manager/update-area/${areaId}`,
+      data
+    );
+
+  }
+
 }
