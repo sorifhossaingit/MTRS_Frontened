@@ -12,7 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  KeyRound
+  KeyRound,
+  MapPin
 } from 'lucide-angular';
 
 import {
@@ -1048,5 +1049,185 @@ export class AreaManagerDashboardComponent implements OnInit {
     }
 
   }
+
+
+// =====================================================
+// AREA MULTI SELECT
+// =====================================================
+
+areaDropdownOpen = false;
+
+areaSearchText = '';
+
+selectedAreaIds: number[] = [];
+
+
+// -----------------------------------------------------
+// MAP PIN ICON
+// -----------------------------------------------------
+
+MapPin = MapPin;
+
+
+// -----------------------------------------------------
+// FILTERED AREAS
+// -----------------------------------------------------
+
+get filteredAreas(): any[] {
+
+  const search = this.areaSearchText
+    .trim()
+    .toLowerCase();
+
+  if (!search) {
+    return this.areas;
+  }
+
+  return this.areas.filter((area: any) =>
+    (area.areaName || '')
+      .toString()
+      .toLowerCase()
+      .includes(search)
+    ||
+    (area.areaCode || '')
+      .toString()
+      .toLowerCase()
+      .includes(search)
+  );
+}
+
+
+// -----------------------------------------------------
+// SELECTED AREA OBJECTS
+// -----------------------------------------------------
+
+get selectedAreaObjects(): any[] {
+
+  return this.areas.filter((area: any) =>
+    this.selectedAreaIds.includes(
+      Number(area.areaId)
+    )
+  );
+
+}
+
+
+// -----------------------------------------------------
+// CHECK SELECTED
+// -----------------------------------------------------
+
+isAreaSelected(areaId: any): boolean {
+
+  return this.selectedAreaIds.includes(
+    Number(areaId)
+  );
+
+}
+
+
+// -----------------------------------------------------
+// TOGGLE AREA
+// -----------------------------------------------------
+
+toggleArea(areaId: any): void {
+
+  const id = Number(areaId);
+
+  if (!id || id <= 0) {
+    return;
+  }
+
+  const index =
+    this.selectedAreaIds.indexOf(id);
+
+  if (index >= 0) {
+
+    this.selectedAreaIds.splice(index, 1);
+
+  } else {
+
+    this.selectedAreaIds.push(id);
+
+  }
+
+  // Keep Reactive Form synchronized
+  this.editForm.patchValue({
+    areaIds: [...this.selectedAreaIds]
+  });
+
+}
+
+
+// -----------------------------------------------------
+// REMOVE ONE AREA
+// -----------------------------------------------------
+
+removeArea(areaId: any): void {
+
+  const id = Number(areaId);
+
+  this.selectedAreaIds =
+    this.selectedAreaIds.filter(
+      x => x !== id
+    );
+
+  this.editForm.patchValue({
+    areaIds: [...this.selectedAreaIds]
+  });
+
+}
+
+
+// -----------------------------------------------------
+// SELECT ALL
+// -----------------------------------------------------
+
+selectAllAreas(): void {
+
+  this.selectedAreaIds =
+    this.areas
+      .map((area: any) =>
+        Number(area.areaId)
+      )
+      .filter((id: number) =>
+        id > 0
+      );
+
+  this.editForm.patchValue({
+    areaIds: [...this.selectedAreaIds]
+  });
+
+}
+
+
+// -----------------------------------------------------
+// CLEAR ALL
+// -----------------------------------------------------
+
+clearAllAreas(): void {
+
+  this.selectedAreaIds = [];
+
+  this.editForm.patchValue({
+    areaIds: []
+  });
+
+}
+
+
+// -----------------------------------------------------
+// CLOSE AREA DROPDOWN
+// -----------------------------------------------------
+
+closeAreaDropdown(): void {
+
+  this.areaDropdownOpen = false;
+
+  this.areaSearchText = '';
+
+}
+
+
+  
 
 }
