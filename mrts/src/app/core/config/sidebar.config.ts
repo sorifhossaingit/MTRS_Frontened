@@ -84,19 +84,19 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Doctor Master',
     icon: 'stethoscope',
     route: '/doctor-master',
-    roles: ['Admin'],
+    roles: [],
     children: [
       {
         label: 'Doctor Dashboard',
         icon: 'clipboard-list',
         route: '/doctor-master/doctor-master-dashboard',
-        roles: ['Admin']
+        roles: []
       },
       {
         label: 'Add Doctor',
         icon: 'UserPlus',
         route: '/doctor-master/add-doctor',
-        roles: ['Admin']
+        roles: []
       }
     ]
   },

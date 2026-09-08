@@ -1,19 +1,39 @@
+
 <div class="p-4 md:p-6 bg-gray-100 min-h-screen">
 
   <div class="max-w-7xl mx-auto">
 
-    <!-- 🔷 Header -->
-    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
+    <!-- ===================================================== -->
+    <!-- HEADER -->
+    <!-- ===================================================== -->
 
-      <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-        <lucide-icon [img]="Building2" class="text-blue-500"></lucide-icon>
+    <div
+      class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8"
+    >
+
+      <h1
+        class="text-2xl md:text-3xl font-bold flex items-center gap-3"
+      >
+
+        <lucide-icon
+          [img]="Building2"
+          class="text-blue-500"
+        ></lucide-icon>
+
         Add Stockist
+
       </h1>
 
-      <button routerLink="/stockist-master/stockist-master-dashboard"
-        class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2">
 
-        <lucide-icon [img]="ArrowLeft"></lucide-icon>
+      <button
+        type="button"
+        routerLink="/stockist-master/stockist-master-dashboard"
+        class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2"
+      >
+
+        <lucide-icon
+          [img]="ArrowLeft"
+        ></lucide-icon>
 
         Back
 
@@ -21,33 +41,71 @@
 
     </div>
 
-    <!-- 🔷 FORM -->
-    <form [formGroup]="stockistForm" (ngSubmit)="saveStockist()" class="space-y-8">
 
-      <!-- 🏢 Basic Info -->
-      <div class="bg-white p-6 rounded-2xl shadow">
+    <!-- ===================================================== -->
+    <!-- FORM -->
+    <!-- ===================================================== -->
 
-        <h2 class="text-lg font-semibold flex items-center gap-2">
+    <form
+      [formGroup]="stockistForm"
+      (ngSubmit)="saveStockist()"
+      class="space-y-8"
+    >
 
-          <lucide-icon [img]="Building2"></lucide-icon>
+
+      <!-- ================================================= -->
+      <!-- BASIC INFORMATION -->
+      <!-- ================================================= -->
+
+      <div
+        class="bg-white p-6 rounded-2xl shadow"
+      >
+
+        <h2
+          class="text-lg font-semibold flex items-center gap-2"
+        >
+
+          <lucide-icon
+            [img]="Building2"
+          ></lucide-icon>
 
           Basic Information
 
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
 
-          <!-- Name -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6"
+        >
+
+
+          <!-- STOCKIST NAME -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Stockist Name <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Stockist Name
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="name" placeholder="Enter stockist name"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['name'].errors" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="Enter stockist name"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['name'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Stockist name is required
 
@@ -55,53 +113,133 @@
 
           </div>
 
-<div>
-  <label class="block text-sm font-medium mb-2">
-    Firm Type <span class="text-red-500">*</span>
-  </label>
 
-  <select
-    formControlName="firmType"
-    class="w-full border rounded-xl px-4 h-12"
-  >
-    <option value="">Select firm type</option>
+          <!-- FIRM TYPE -->
 
-    <option value="Manufacturer">Manufacturer</option>
-    <option value="Marketing Company">Marketing Company</option>
-    <option value="Third Party Manufacturer">Third Party Manufacturer</option>
-    <option value="PCD Pharma Franchise">PCD Pharma Franchise</option>
-    <option value="C&F Agent">C&amp;F Agent</option>
-    <option value="Super Stockist">Super Stockist</option>
-    <option value="Stockist">Stockist</option>
-    <option value="Distributor">Distributor</option>
-    <option value="Retailer / Pharmacy">Retailer / Pharmacy</option>
-    <option value="Hospital / Institution">Hospital / Institution</option>
-    <option value="Importer">Importer</option>
-    <option value="Exporter">Exporter</option>
-    <option value="API Manufacturer">API Manufacturer</option>
-    <option value="Nutraceutical Company">Nutraceutical Company</option>
-    <option value="Other">Other</option>
-  </select>
-
-  <p
-    *ngIf="submitted && f['firmType'].errors"
-    class="text-red-500 text-sm mt-1"
-  >
-    Firm type is required
-  </p>
-</div>
-
-          <!-- Contact Person -->
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Contact Person <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Firm Type
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="contactPerson" placeholder="Enter contact person"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['contactPerson'].errors" class="text-red-500 text-sm mt-1">
+            <select
+              formControlName="firmType"
+              class="w-full border rounded-xl px-4 h-12"
+            >
+
+              <option value="">
+                Select firm type
+              </option>
+
+              <option value="Manufacturer">
+                Manufacturer
+              </option>
+
+              <option value="Marketing Company">
+                Marketing Company
+              </option>
+
+              <option value="Third Party Manufacturer">
+                Third Party Manufacturer
+              </option>
+
+              <option value="PCD Pharma Franchise">
+                PCD Pharma Franchise
+              </option>
+
+              <option value="C&F Agent">
+                C&amp;F Agent
+              </option>
+
+              <option value="Super Stockist">
+                Super Stockist
+              </option>
+
+              <option value="Stockist">
+                Stockist
+              </option>
+
+              <option value="Distributor">
+                Distributor
+              </option>
+
+              <option value="Retailer / Pharmacy">
+                Retailer / Pharmacy
+              </option>
+
+              <option value="Hospital / Institution">
+                Hospital / Institution
+              </option>
+
+              <option value="Importer">
+                Importer
+              </option>
+
+              <option value="Exporter">
+                Exporter
+              </option>
+
+              <option value="API Manufacturer">
+                API Manufacturer
+              </option>
+
+              <option value="Nutraceutical Company">
+                Nutraceutical Company
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+
+            <p
+              *ngIf="submitted && f['firmType'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
+
+              Firm type is required
+
+            </p>
+
+          </div>
+
+
+          <!-- CONTACT PERSON -->
+
+          <div>
+
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Contact Person
+
+              <span class="text-red-500">*</span>
+
+            </label>
+
+
+            <input
+              type="text"
+              formControlName="contactPerson"
+              placeholder="Enter contact person"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['contactPerson'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Contact person is required
 
@@ -113,36 +251,72 @@
 
       </div>
 
-      <!-- 📞 Contact -->
-      <div class="bg-white p-6 rounded-2xl shadow">
 
-        <h2 class="text-lg font-semibold flex items-center gap-2">
 
-          <lucide-icon [img]="Phone"></lucide-icon>
+      <!-- ================================================= -->
+      <!-- CONTACT DETAILS -->
+      <!-- ================================================= -->
+
+      <div
+        class="bg-white p-6 rounded-2xl shadow"
+      >
+
+        <h2
+          class="text-lg font-semibold flex items-center gap-2"
+        >
+
+          <lucide-icon
+            [img]="Phone"
+          ></lucide-icon>
 
           Contact Details
 
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
 
-          <!-- Mobile -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6"
+        >
+
+
+          <!-- MOBILE -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Mobile Number <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Mobile Number
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="mobile" placeholder="Enter mobile number"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['mobile'].errors?.['required']" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="mobile"
+              placeholder="Enter mobile number"
+              maxlength="10"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['mobile'].errors?.['required']"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Mobile number is required
 
             </p>
 
-            <p *ngIf="submitted && f['mobile'].errors?.['pattern']" class="text-red-500 text-sm mt-1">
+
+            <p
+              *ngIf="submitted && f['mobile'].errors?.['pattern']"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Enter valid 10 digit mobile number
 
@@ -150,23 +324,44 @@
 
           </div>
 
-          <!-- Email -->
+
+          <!-- EMAIL -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Email <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Email
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="email" formControlName="email" placeholder="Enter email"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['email'].errors?.['required']" class="text-red-500 text-sm mt-1">
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Enter email"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['email'].errors?.['required']"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Email is required
 
             </p>
 
-            <p *ngIf="submitted && f['email'].errors?.['email']" class="text-red-500 text-sm mt-1">
+
+            <p
+              *ngIf="submitted && f['email'].errors?.['email']"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Enter valid email
 
@@ -178,30 +373,63 @@
 
       </div>
 
-      <!-- 📍 Address -->
-      <div class="bg-white p-6 rounded-2xl shadow">
 
-        <h2 class="text-lg font-semibold flex items-center gap-2">
 
-          <lucide-icon [img]="MapPin"></lucide-icon>
+      <!-- ================================================= -->
+      <!-- ADDRESS DETAILS -->
+      <!-- ================================================= -->
+
+      <div
+        class="bg-white p-6 rounded-2xl shadow"
+      >
+
+        <h2
+          class="text-lg font-semibold flex items-center gap-2"
+        >
+
+          <lucide-icon
+            [img]="MapPin"
+          ></lucide-icon>
 
           Address Details
 
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
 
-          <!-- Address -->
-          <div class="xl:col-span-4">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-6"
+        >
 
-            <label class="block text-sm font-medium mb-2">
-              Address <span class="text-red-500">*</span>
+
+          <!-- ADDRESS -->
+
+          <div
+            class="xl:col-span-4"
+          >
+
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Address
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="address" placeholder="Enter full address"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['address'].errors" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="address"
+              placeholder="Enter full address"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['address'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Address is required
 
@@ -209,17 +437,34 @@
 
           </div>
 
-          <!-- City -->
+
+          <!-- CITY -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              City <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              City
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="city" placeholder="Enter city"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['city'].errors" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="city"
+              placeholder="Enter city"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['city'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               City is required
 
@@ -227,17 +472,34 @@
 
           </div>
 
-          <!-- State -->
+
+          <!-- STATE -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              State <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              State
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="state" placeholder="Enter state"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['state'].errors" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="state"
+              placeholder="Enter state"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['state'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               State is required
 
@@ -245,23 +507,45 @@
 
           </div>
 
-          <!-- Pincode -->
+
+          <!-- PINCODE -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Pincode <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Pincode
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="pincode" placeholder="Enter pincode"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['pincode'].errors?.['required']" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="pincode"
+              placeholder="Enter pincode"
+              maxlength="6"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['pincode'].errors?.['required']"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Pincode is required
 
             </p>
 
-            <p *ngIf="submitted && f['pincode'].errors?.['pattern']" class="text-red-500 text-sm mt-1">
+
+            <p
+              *ngIf="submitted && f['pincode'].errors?.['pattern']"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Enter valid 6 digit pincode
 
@@ -273,30 +557,61 @@
 
       </div>
 
-      <!-- 📜 License -->
-      <div class="bg-white p-6 rounded-2xl shadow">
 
-        <h2 class="text-lg font-semibold flex items-center gap-2">
 
-          <lucide-icon [img]="FileText"></lucide-icon>
+      <!-- ================================================= -->
+      <!-- LICENSING DETAILS -->
+      <!-- ================================================= -->
+
+      <div
+        class="bg-white p-6 rounded-2xl shadow"
+      >
+
+        <h2
+          class="text-lg font-semibold flex items-center gap-2"
+        >
+
+          <lucide-icon
+            [img]="FileText"
+          ></lucide-icon>
 
           Licensing Details
 
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6"
+        >
+
 
           <!-- GST -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              GST Number <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              GST Number
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="gstNo" placeholder="Enter GST number"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['gstNo'].errors" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="gstNo"
+              placeholder="Enter GST number"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['gstNo'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               GST number is required
 
@@ -304,17 +619,34 @@
 
           </div>
 
-          <!-- Drug License -->
+
+          <!-- DRUG LICENSE -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Drug License Number <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Drug License Number
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="drugLicenseNo" placeholder="Enter drug license number"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['drugLicenseNo'].errors" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="drugLicenseNo"
+              placeholder="Enter drug license number"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['drugLicenseNo'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Drug license number is required
 
@@ -326,30 +658,61 @@
 
       </div>
 
-      <!-- 🌍 Territory -->
-      <div class="bg-white p-6 rounded-2xl shadow">
 
-        <h2 class="text-lg font-semibold flex items-center gap-2">
 
-          <lucide-icon [img]="Map"></lucide-icon>
+      <!-- ================================================= -->
+      <!-- TERRITORY MAPPING -->
+      <!-- ================================================= -->
+
+      <div
+        class="bg-white p-6 rounded-2xl shadow"
+      >
+
+        <h2
+          class="text-lg font-semibold flex items-center gap-2"
+        >
+
+          <lucide-icon
+            [img]="Map"
+          ></lucide-icon>
 
           Territory Mapping
 
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
 
-          <!-- Region -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6"
+        >
+
+
+          <!-- REGION -->
+
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Region <span class="text-red-500">*</span>
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Region
+
+              <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text" formControlName="region" placeholder="Enter region"
-              class="w-full border rounded-xl px-4 h-12">
 
-            <p *ngIf="submitted && f['region'].errors" class="text-red-500 text-sm mt-1">
+            <input
+              type="text"
+              formControlName="region"
+              placeholder="Enter region"
+              class="w-full border rounded-xl px-4 h-12"
+            />
+
+
+            <p
+              *ngIf="submitted && f['region'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
               Region is required
 
@@ -357,51 +720,66 @@
 
           </div>
 
-         
-          <!-- AREA MANAGER -->
+
+
+          <!-- AREA -->
 
           <div>
 
-            <label class="block text-sm font-medium mb-2">
-              Assigned Area Manager
+            <label
+              class="block text-sm font-medium mb-2"
+            >
+
+              Area
+
               <span class="text-red-500">*</span>
+
             </label>
 
-            <select formControlName="assignedAreaManager" class="w-full border rounded-xl px-4 h-12">
+
+            <select
+              formControlName="areaId"
+              class="w-full border rounded-xl px-4 h-12"
+              [disabled]="isLoadingAreas"
+            >
 
               <option value="">
-                Select Area Manager
+
+                {{
+                  isLoadingAreas
+                    ? 'Loading areas...'
+                    : 'Select Area'
+                }}
+
               </option>
 
-              <option *ngFor="let manager of areaManagerList" [value]="manager.areaManagerId">
 
-                {{ manager.name }}
+              <option
+                *ngFor="let area of areas"
+                [value]="area.areaId"
+              >
+
+                {{ area.areaName }}
+
+                <ng-container
+                  *ngIf="area.areaCode"
+                >
+
+                  ({{ area.areaCode }})
+
+                </ng-container>
 
               </option>
 
             </select>
 
-            <p *ngIf="submitted && f['assignedAreaManager'].errors" class="text-red-500 text-sm mt-1">
 
-              Assigned area manager is required
+            <p
+              *ngIf="submitted && f['areaId'].errors"
+              class="text-red-500 text-sm mt-1"
+            >
 
-            </p>
-
-          </div>
-
-          <!-- Cover Area -->
-          <div>
-
-            <label class="block text-sm font-medium mb-2">
-              Cover Area <span class="text-red-500">*</span>
-            </label>
-
-            <input type="text" formControlName="coverArea" placeholder="Enter cover area"
-              class="w-full border rounded-xl px-4 h-12">
-
-            <p *ngIf="submitted && f['coverArea'].errors" class="text-red-500 text-sm mt-1">
-
-              Cover area is required
+              Area is required
 
             </p>
 
@@ -411,60 +789,95 @@
 
       </div>
 
-      <!-- 🔘 Actions -->
-      <div class="flex flex-col md:flex-row justify-end gap-4 pt-4">
 
-        <button type="button" routerLink="/stockist-master/stockist-master-dashboard"
-          class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2.5 rounded-xl">
+
+      <!-- ================================================= -->
+      <!-- ACTIONS -->
+      <!-- ================================================= -->
+
+      <div
+        class="flex flex-col md:flex-row justify-end gap-4 pt-4"
+      >
+
+
+        <!-- CANCEL -->
+
+        <button
+          type="button"
+          routerLink="/stockist-master/stockist-master-dashboard"
+          class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2.5 rounded-xl"
+        >
 
           Cancel
 
         </button>
 
-      <button
-  type="submit"
-  [disabled]="isSaving"
-  class="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 min-w-[170px]">
 
-  <!-- Loading -->
-  <ng-container *ngIf="isSaving; else saveButton">
 
-    <svg
-      class="animate-spin h-5 w-5 text-white"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24">
+        <!-- SAVE -->
 
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4">
-      </circle>
+        <button
+          type="submit"
+          [disabled]="isSaving"
+          class="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 min-w-[170px]"
+        >
 
-      <path
-        class="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
-      </path>
 
-    </svg>
+          <!-- LOADING -->
 
-    Saving...
+          <ng-container
+            *ngIf="isSaving; else saveButton"
+          >
 
-  </ng-container>
+            <svg
+              class="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
 
-  <!-- Normal -->
-  <ng-template #saveButton>
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              >
+              </circle>
 
-    <lucide-icon [img]="Save"></lucide-icon>
-    Save Stockist
 
-  </ng-template>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              >
+              </path>
 
-</button>
+            </svg>
+
+
+            Saving...
+
+          </ng-container>
+
+
+
+          <!-- NORMAL -->
+
+          <ng-template
+            #saveButton
+          >
+
+            <lucide-icon
+              [img]="Save"
+            ></lucide-icon>
+
+            Save Stockist
+
+          </ng-template>
+
+        </button>
 
       </div>
 
