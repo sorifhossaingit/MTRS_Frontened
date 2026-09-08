@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
 
@@ -54,19 +54,49 @@ export class AreaManagerService {
 
 get_all_area(params: {
   agencyId: number;
-  isActive: boolean;
+  areaName?: string;
+  areaCode?: string;
+  isActive?: boolean;
 }) {
+
+  let httpParams = new HttpParams()
+    .set('agencyId', params.agencyId.toString());
+
+  if (params.areaName !== undefined &&
+      params.areaName !== null &&
+      params.areaName.trim() !== '') {
+
+    httpParams = httpParams.set(
+      'areaName',
+      params.areaName.trim()
+    );
+  }
+
+  if (params.areaCode !== undefined &&
+      params.areaCode !== null &&
+      params.areaCode.trim() !== '') {
+
+    httpParams = httpParams.set(
+      'areaCode',
+      params.areaCode.trim()
+    );
+  }
+
+  if (params.isActive !== undefined &&
+      params.isActive !== null) {
+
+    httpParams = httpParams.set(
+      'isActive',
+      params.isActive.toString()
+    );
+  }
 
   return this.http.get(
     `${this.apiUrl}/admin/area-manager/get-all-area`,
     {
-      params: {
-        agencyId: params.agencyId.toString(),
-        isActive: params.isActive.toString()
-      }
+      params: httpParams
     }
   );
-
 }
 
   

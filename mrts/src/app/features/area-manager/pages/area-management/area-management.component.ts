@@ -135,10 +135,10 @@ export class AreaManagementComponent implements OnInit {
 
     this.agencyId = Number(aid);
 
-    console.log(
-      'Agency ID:',
-      this.agencyId
-    );
+    // console.log(
+    //   'Agency ID:',
+    //   this.agencyId
+    // );
 
   }
 
@@ -199,114 +199,66 @@ export class AreaManagementComponent implements OnInit {
   // GET ALL AREAS
   // =========================================================
 
-  getAreas(): void {
+getAreas(): void {
 
-    this.getAgencyId();
+  this.getAgencyId();
 
-
-    if (this.agencyId <= 0) {
-
-      console.error(
-        'Agency ID not found in localStorage.'
-      );
-
-      this.areas = [];
-
-      return;
-
-    }
-
-
-    this.isLoading = true;
-
-
-    const params: any = {
-
-      agencyId: this.agencyId
-
-    };
-
-
-    // Area name filter
-
-    if (this.searchAreaName.trim()) {
-
-      params.areaName =
-        this.searchAreaName.trim();
-
-    }
-
-
-    // Area code filter
-
-    if (this.searchAreaCode.trim()) {
-
-      params.areaCode =
-        this.searchAreaCode.trim();
-
-    }
-
-
-    console.log(
-      'GET AREA PARAMS:',
-      params
-    );
-
-
-    this.areaManagerService
-      .get_all_area(params)
-      .subscribe({
-
-        next: (response: any) => {
-
-          this.isLoading = false;
-
-
-          console.log(
-            'GET AREA RESPONSE:',
-            response
-          );
-
-
-          if (
-            response &&
-            response.success === true
-          ) {
-
-            this.areas =
-              Array.isArray(response.data)
-                ? response.data
-                : [];
-
-          }
-          else {
-
-            this.areas = [];
-
-          }
-
-
-          this.currentPage = 1;
-
-        },
-
-        error: (error: any) => {
-
-          this.isLoading = false;
-
-          this.areas = [];
-
-          console.error(
-            'GET AREA ERROR:',
-            error
-          );
-
-        }
-
-      });
-
+  if (this.agencyId <= 0) {
+    // console.error('Agency ID not found in localStorage.');
+    this.areas = [];
+    return;
   }
 
+  this.isLoading = true;
+
+  const params: {
+    agencyId: number;
+    areaName?: string;
+    areaCode?: string;
+    isActive?: boolean;
+  } = {
+    agencyId: this.agencyId
+  };
+
+  if (this.searchAreaName.trim()) {
+    params.areaName = this.searchAreaName.trim();
+  }
+
+  if (this.searchAreaCode.trim()) {
+    params.areaCode = this.searchAreaCode.trim();
+  }
+
+  // console.log('GET AREA PARAMS:', params);
+
+  this.areaManagerService
+    .get_all_area(params)
+    .subscribe({
+      next: (response: any) => {
+
+        this.isLoading = false;
+
+        // console.log('GET AREA RESPONSE:', response);
+
+        if (response && response.success === true) {
+          this.areas = Array.isArray(response.data)
+            ? response.data
+            : [];
+        } else {
+          this.areas = [];
+        }
+
+        this.currentPage = 1;
+      },
+
+      error: (error: any) => {
+
+        this.isLoading = false;
+        this.areas = [];
+
+        // console.error('GET AREA ERROR:', error);
+      }
+    });
+}
 
   // =========================================================
   // SEARCH
@@ -377,10 +329,10 @@ export class AreaManagementComponent implements OnInit {
 
   editArea(area: any): void {
 
-    console.log(
-      'EDIT AREA:',
-      area
-    );
+    // console.log(
+    //   'EDIT AREA:',
+    //   area
+    // );
 
 
     this.isEditMode = true;
@@ -415,10 +367,10 @@ export class AreaManagementComponent implements OnInit {
     });
 
 
-    console.log(
-      'EDIT FORM:',
-      this.areaForm.value
-    );
+    // console.log(
+    //   'EDIT FORM:',
+    //   this.areaForm.value
+    // );
 
 
     this.showModal = true;
@@ -490,9 +442,9 @@ export class AreaManagementComponent implements OnInit {
 
     if (this.agencyId <= 0) {
 
-      console.error(
-        'Agency ID not found.'
-      );
+      // console.error(
+      //   'Agency ID not found.'
+      // );
 
       return;
 
@@ -538,10 +490,10 @@ export class AreaManagementComponent implements OnInit {
     };
 
 
-    console.log(
-      'AREA PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'AREA PAYLOAD:',
+    //   payload
+    // );
 
 
     // =======================================================
@@ -558,20 +510,20 @@ export class AreaManagementComponent implements OnInit {
 
         this.isSaving = false;
 
-        console.error(
-          'Invalid area ID.'
-        );
+        // console.error(
+        //   'Invalid area ID.'
+        // );
 
         return;
 
       }
 
 
-      console.log(
-        'UPDATE AREA:',
-        areaId,
-        payload
-      );
+      // console.log(
+      //   'UPDATE AREA:',
+      //   areaId,
+      //   payload
+      // );
 
 
       this.areaManagerService
@@ -586,10 +538,10 @@ export class AreaManagementComponent implements OnInit {
             this.isSaving = false;
 
 
-            console.log(
-              'UPDATE RESPONSE:',
-              response
-            );
+            // console.log(
+            //   'UPDATE RESPONSE:',
+            //   response
+            // );
 
 
             if (
@@ -610,10 +562,10 @@ export class AreaManagementComponent implements OnInit {
             this.isSaving = false;
 
 
-            console.error(
-              'UPDATE AREA ERROR:',
-              error
-            );
+            // console.error(
+            //   'UPDATE AREA ERROR:',
+            //   error
+            // );
 
           }
 
@@ -629,10 +581,10 @@ export class AreaManagementComponent implements OnInit {
     // CREATE
     // =======================================================
 
-    console.log(
-      'CREATE AREA:',
-      payload
-    );
+    // console.log(
+    //   'CREATE AREA:',
+    //   payload
+    // );
 
 
     this.areaManagerService
@@ -644,10 +596,10 @@ export class AreaManagementComponent implements OnInit {
           this.isSaving = false;
 
 
-          console.log(
-            'CREATE RESPONSE:',
-            response
-          );
+          // console.log(
+          //   'CREATE RESPONSE:',
+          //   response
+          // );
 
 
           if (
@@ -668,10 +620,10 @@ export class AreaManagementComponent implements OnInit {
           this.isSaving = false;
 
 
-          console.error(
-            'CREATE AREA ERROR:',
-            error
-          );
+          // console.error(
+          //   'CREATE AREA ERROR:',
+          //   error
+          // );
 
         }
 
