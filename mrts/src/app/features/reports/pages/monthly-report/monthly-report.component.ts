@@ -291,7 +291,7 @@ export class MonthlyReportComponent
   // STATUS
   // =======================================================
 
-  selectedStatus = 'pending';
+  selectedStatus = '';
 
   statusOptions = [
     {
