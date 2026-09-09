@@ -1,45 +1,74 @@
 <div class="p-4 sm:p-6 bg-gray-100 min-h-screen">
 
+  <!-- ====================================================== -->
   <!-- HEADER -->
+  <!-- ====================================================== -->
 
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+  <div
+    class="flex flex-col sm:flex-row
+           justify-between
+           items-start sm:items-center
+           mb-6 gap-3">
 
     <h1 class="text-xl sm:text-2xl font-bold">
       Customer Dashboard
     </h1>
 
-    <div class="flex flex-wrap gap-2 w-full sm:w-auto">
 
-<button
-  *ngIf="isAddCustomerAllowed()"
-  routerLink="/medical-representative-master/add-customer"
-  class="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
+    <div
+      class="flex flex-wrap gap-2
+             w-full sm:w-auto">
 
-  <lucide-icon [img]="Plus"></lucide-icon>
+      <button
+        *ngIf="isAddCustomerAllowed()"
+        routerLink="/medical-representative-master/add-customer"
+        class="bg-blue-600
+               text-white
+               px-3 sm:px-4
+               py-2
+               rounded-lg
+               flex items-center
+               gap-2
+               w-full sm:w-auto
+               justify-center">
 
-  Add Customer
+        <lucide-icon [img]="Plus"></lucide-icon>
 
-</button>
-      <!-- <button
-        class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
+        Add Customer
 
-        <lucide-icon [img]="Upload"></lucide-icon>
-
-        Upload Excel
-
-      </button> -->
+      </button>
 
     </div>
 
   </div>
 
+
+  <!-- ====================================================== -->
   <!-- KPI -->
+  <!-- ====================================================== -->
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div
+    class="grid
+           grid-cols-1
+           sm:grid-cols-2
+           lg:grid-cols-4
+           gap-4 mb-6">
 
-    <div class="bg-white p-4 rounded-2xl shadow flex items-center gap-3">
 
-      <lucide-icon [img]="Users"></lucide-icon>
+    <!-- TOTAL -->
+
+    <div
+      class="bg-white
+             p-4
+             rounded-2xl
+             shadow
+             flex items-center
+             gap-3">
+
+      <lucide-icon
+        [img]="Users">
+      </lucide-icon>
+
 
       <div>
 
@@ -48,16 +77,28 @@
         </p>
 
         <h2 class="text-lg sm:text-xl font-bold">
-          {{totalCustomer}}
+          {{ totalCustomer }}
         </h2>
 
       </div>
 
     </div>
 
-    <div class="bg-white p-4 rounded-2xl shadow flex items-center gap-3">
 
-      <lucide-icon [img]="CheckCircle"></lucide-icon>
+    <!-- ACTIVE -->
+
+    <div
+      class="bg-white
+             p-4
+             rounded-2xl
+             shadow
+             flex items-center
+             gap-3">
+
+      <lucide-icon
+        [img]="CheckCircle">
+      </lucide-icon>
+
 
       <div>
 
@@ -65,17 +106,34 @@
           Active
         </p>
 
-        <h2 class="text-lg sm:text-xl font-bold text-green-600">
-          {{activeCustomer}}
+        <h2
+          class="text-lg sm:text-xl
+                 font-bold
+                 text-green-600">
+
+          {{ activeCustomer }}
+
         </h2>
 
       </div>
 
     </div>
 
-    <div class="bg-white p-4 rounded-2xl shadow flex items-center gap-3">
 
-      <lucide-icon [img]="XCircle"></lucide-icon>
+    <!-- INACTIVE -->
+
+    <div
+      class="bg-white
+             p-4
+             rounded-2xl
+             shadow
+             flex items-center
+             gap-3">
+
+      <lucide-icon
+        [img]="XCircle">
+      </lucide-icon>
+
 
       <div>
 
@@ -83,26 +141,47 @@
           Inactive
         </p>
 
-        <h2 class="text-lg sm:text-xl font-bold text-red-600">
-          {{inactiveCustomer}}
+        <h2
+          class="text-lg sm:text-xl
+                 font-bold
+                 text-red-600">
+
+          {{ inactiveCustomer }}
+
         </h2>
 
       </div>
 
     </div>
 
-    <div class="bg-white p-4 rounded-2xl shadow flex items-center gap-3">
 
-      <lucide-icon [img]="TrendingUp"></lucide-icon>
+    <!-- NEW -->
+
+    <div
+      class="bg-white
+             p-4
+             rounded-2xl
+             shadow
+             flex items-center
+             gap-3">
+
+      <lucide-icon
+        [img]="TrendingUp">
+      </lucide-icon>
+
 
       <div>
 
         <p class="text-gray-500 text-sm">
-          New Area Manager This Month
+          New Customers This Month
         </p>
 
-        <h2 class="text-lg sm:text-xl font-bold">
-          {{newCustomer}}
+        <h2
+          class="text-lg sm:text-xl
+                 font-bold">
+
+          {{ newCustomer }}
+
         </h2>
 
       </div>
@@ -111,20 +190,57 @@
 
   </div>
 
+
+  <!-- ====================================================== -->
   <!-- FILTER -->
+  <!-- ====================================================== -->
 
-  <div class="bg-white p-4 rounded-2xl shadow mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+  <div
+    class="bg-white
+           p-4
+           rounded-2xl
+           shadow
+           mb-6
+           grid
+           grid-cols-1
+           sm:grid-cols-2
+           lg:grid-cols-6
+           gap-3">
 
-    <!-- Search -->
-    <input type="text" [(ngModel)]="searchText" (keyup)="getCustomerDetails()" placeholder="Search name/mobile"
-      class="border p-2 rounded-lg sm:col-span-2" />
 
-    <!-- Customer Type -->
-    <select [(ngModel)]="typeFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
+    <!-- SEARCH -->
 
-      <option [ngValue]="null">Type</option>
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (keyup)="getCustomerDetails()"
+      placeholder="Search name/mobile"
+      class="border
+             p-2
+             rounded-lg
+             sm:col-span-2" />
 
-      <option *ngFor="let item of customerTypeList" [ngValue]="item.customerTypeId">
+
+    <!-- CUSTOMER TYPE -->
+
+    <select
+      [(ngModel)]="typeFilter"
+      (change)="getCustomerDetails()"
+      class="border
+             p-2
+             rounded-lg">
+
+      <option
+        [ngValue]="null">
+
+        Type
+
+      </option>
+
+
+      <option
+        *ngFor="let item of customerTypeList"
+        [ngValue]="item.customerTypeId">
 
         {{ item.customerType }}
 
@@ -132,12 +248,27 @@
 
     </select>
 
-    <!-- Route -->
-    <select [(ngModel)]="routeFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
 
-      <option [ngValue]="null">Route</option>
+    <!-- ROUTE -->
 
-      <option *ngFor="let item of routeList" [ngValue]="item.routeId">
+    <select
+      [(ngModel)]="routeFilter"
+      (change)="getCustomerDetails()"
+      class="border
+             p-2
+             rounded-lg">
+
+      <option
+        [ngValue]="null">
+
+        Route
+
+      </option>
+
+
+      <option
+        *ngFor="let item of filterRouteList"
+        [ngValue]="item.routeId">
 
         {{ item.routeName }}
 
@@ -145,22 +276,61 @@
 
     </select>
 
-    <!-- Status -->
-    <select [(ngModel)]="statusFilter" (change)="getCustomerDetails()" class="border p-2 rounded-lg">
 
-      <option [ngValue]="null">Status</option>
+    <!-- STATUS -->
 
-      <option [ngValue]="true">Active</option>
+    <select
+      [(ngModel)]="statusFilter"
+      (change)="getCustomerDetails()"
+      class="border
+             p-2
+             rounded-lg">
 
-      <option [ngValue]="false">Inactive</option>
+      <option
+        [ngValue]="null">
+
+        Status
+
+      </option>
+
+
+      <option
+        [ngValue]="true">
+
+        Active
+
+      </option>
+
+
+      <option
+        [ngValue]="false">
+
+        Inactive
+
+      </option>
 
     </select>
 
-    <!-- State -->
-    <input type="text" [(ngModel)]="stateFilter" (keyup)="getCustomerDetails()" placeholder="State"
-      class="border p-2 rounded-lg" />
 
-    <button (click)="resetFilter()" class="bg-gray-200 rounded-lg py-2">
+    <!-- STATE -->
+
+    <input
+      type="text"
+      [(ngModel)]="stateFilter"
+      (keyup)="getCustomerDetails()"
+      placeholder="State"
+      class="border
+             p-2
+             rounded-lg" />
+
+
+    <!-- RESET -->
+
+    <button
+      (click)="resetFilter()"
+      class="bg-gray-200
+             rounded-lg
+             py-2">
 
       Reset
 
@@ -168,162 +338,506 @@
 
   </div>
 
-  <!-- TABLE -->
 
-  <div class="bg-white rounded-2xl shadow overflow-hidden">
-    <div class="overflow-x-auto">
+  <!-- ====================================================== -->
+  <!-- CUSTOMER TABLE -->
+  <!-- ====================================================== -->
 
-      <table class="min-w-[900px] w-full text-sm">
+  <div
+    class="bg-white
+           rounded-2xl
+           shadow
+           overflow-hidden">
 
-        <thead class="bg-gray-100 text-left">
+    <div
+      class="overflow-x-auto">
+
+
+      <table
+        class="min-w-[1050px]
+               w-full
+               text-sm">
+
+
+        <!-- HEADER -->
+
+        <thead
+          class="bg-gray-100
+                 text-left">
+
           <tr>
-            <th class="px-6 py-4">Name</th>
-            <th class="px-6 py-4">Customer Type</th>
-            <th class="px-6 py-4">Contact</th>
-            <th class="px-6 py-4">Location</th>
-            <th class="px-6 py-4">Route</th>
-            <th class="px-6 py-4">Area Manager</th>
-            <th class="px-6 py-4">Is Active</th>
-            <th class="px-6 py-4">Status</th>
-            <th class="px-6 py-4 text-center">Actions</th>
+
+            <th class="px-6 py-4">
+              Name
+            </th>
+
+            <th class="px-6 py-4">
+              Customer Type
+            </th>
+
+            <th class="px-6 py-4">
+              Contact
+            </th>
+
+            <th class="px-6 py-4">
+              Location
+            </th>
+
+            <th class="px-6 py-4">
+              Area
+            </th>
+
+            <th class="px-6 py-4">
+              Route
+            </th>
+
+            <th class="px-6 py-4">
+              Is Active
+            </th>
+
+            <th class="px-6 py-4">
+              Status
+            </th>
+
+            <th class="px-6 py-4 text-center">
+              Actions
+            </th>
+
           </tr>
+
         </thead>
 
+
+        <!-- BODY -->
+
         <tbody>
-          <tr *ngFor="let item of customerList" class="border-t hover:bg-gray-50 h-20">
 
-            <!-- Name -->
-            <td class="px-6 py-4 font-medium">
+
+          <tr
+            *ngFor="let item of customerList"
+            class="border-t
+                   hover:bg-gray-50
+                   h-20">
+
+
+            <!-- NAME -->
+
+            <td
+              class="px-6 py-4
+                     font-medium">
+
               {{ item.name }}
+
             </td>
 
-            <!-- Customer Type -->
-            <td class="px-6 py-4">
-              {{ item.customerType || item.type || '-' }}
+
+            <!-- CUSTOMER TYPE -->
+
+            <td
+              class="px-6 py-4">
+
+              {{
+                item.customerType ||
+                item.type ||
+                '-'
+              }}
+
             </td>
 
-            <!-- Contact -->
-            <td class="px-6 py-4">
-              <div>{{ item.mobile }}</div>
-              <div class="text-gray-500 text-xs mt-1">
-                {{ item.email }}
+
+            <!-- CONTACT -->
+
+            <td
+              class="px-6 py-4">
+
+              <div>
+
+                {{ item.mobile }}
+
               </div>
+
+
+              <div
+                class="text-gray-500
+                       text-xs
+                       mt-1">
+
+                {{ item.email }}
+
+              </div>
+
             </td>
 
-            <!-- Location -->
-            <td class="px-6 py-4">
-              {{ item.city }}
+
+            <!-- LOCATION -->
+
+            <td
+              class="px-6 py-4">
+
+              {{ item.city || '-' }}
+
             </td>
 
-            <!-- Route -->
-            <td class="px-6 py-4">
-              {{ item.routeName || item.route || '-' }}
+
+            <!-- ================================================= -->
+            <!-- AREA -->
+            <!-- ================================================= -->
+
+            <td
+              class="px-6 py-4">
+
+              <div
+                class="font-medium">
+
+                {{
+                  item.areaName ||
+                  getAreaName(item.areaId) ||
+                  '-'
+                }}
+
+              </div>
+
+
+              <div
+                *ngIf="item.areaCode"
+                class="text-xs
+                       text-gray-500
+                       mt-1">
+
+                {{ item.areaCode }}
+
+              </div>
+
             </td>
 
-            <!-- Area Manager -->
-            <td class="px-6 py-4">
-              {{ item.assignedAreaManagerName }}
+
+            <!-- ================================================= -->
+            <!-- ROUTE -->
+            <!-- ================================================= -->
+
+            <td
+              class="px-6 py-4">
+
+              {{
+                item.routeName ||
+                item.route ||
+                '-'
+              }}
+
             </td>
 
-            <!-- Is Active (Boolean) -->
-            <td class="px-6 py-4">
-              <span class="px-3 py-1.5 rounded-full text-xs font-medium"
-                [ngClass]="item.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
-                {{ item.isActive ? 'Active' : 'Inactive' }}
+
+            <!-- ACTIVE -->
+
+            <td
+              class="px-6 py-4">
+
+              <span
+                class="px-3
+                       py-1.5
+                       rounded-full
+                       text-xs
+                       font-medium"
+                [ngClass]="
+                  item.isActive
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-red-100 text-red-700'
+                ">
+
+                {{
+                  item.isActive
+                    ? 'Active'
+                    : 'Inactive'
+                }}
+
               </span>
+
             </td>
 
-            <!-- Status (1 = Created by MR, 2 = Approved) -->
-            <td class="px-6 py-4">
-              <span class="px-3 py-1.5 rounded-full text-xs font-medium inline-block" [ngClass]="{
-                'bg-amber-100 text-amber-700': item.status === 1,
-                'bg-blue-100 text-blue-700': item.status === 2,
-                'bg-gray-100 text-gray-700': item.status !== 1 && item.status !== 2
-              }">
 
-                <ng-container [ngSwitch]="item.status">
-                  <span *ngSwitchCase="1">Created by MR/Admin</span>
-                  <span *ngSwitchCase="2">Approved by Admin</span>
-                  <span *ngSwitchCase="3">Reject by Admin</span>
-                  <span *ngSwitchDefault>-</span>
+            <!-- STATUS -->
+
+            <td
+              class="px-6 py-4">
+
+              <span
+                class="px-3
+                       py-1.5
+                       rounded-full
+                       text-xs
+                       font-medium
+                       inline-block"
+                [ngClass]="{
+
+                  'bg-amber-100 text-amber-700':
+                    item.status == 1,
+
+                  'bg-blue-100 text-blue-700':
+                    item.status == 2,
+
+                  'bg-red-100 text-red-700':
+                    item.status == 3,
+
+                  'bg-gray-100 text-gray-700':
+                    item.status != 1 &&
+                    item.status != 2 &&
+                    item.status != 3
+
+                }">
+
+
+                <ng-container
+                  [ngSwitch]="
+                    +item.status
+                  ">
+
+                  <span
+                    *ngSwitchCase="1">
+
+                    Created by MR/Admin
+
+                  </span>
+
+
+                  <span
+                    *ngSwitchCase="2">
+
+                    Approved by Admin
+
+                  </span>
+
+
+                  <span
+                    *ngSwitchCase="3">
+
+                    Reject by Admin
+
+                  </span>
+
+
+                  <span
+                    *ngSwitchDefault>
+
+                    -
+
+                  </span>
+
                 </ng-container>
 
+
               </span>
+
             </td>
 
-            <!-- Actions -->
-            <td class="px-6 py-4 text-center">
-              <div class="flex justify-center items-center gap-4">
 
-                <button (click)="editCustomer(item)" class="text-yellow-600 hover:scale-110 transition">
-                  <lucide-icon [img]="Pencil"></lucide-icon>
+            <!-- ACTIONS -->
+
+            <td
+              class="px-6 py-4
+                     text-center">
+
+              <div
+                class="flex
+                       justify-center
+                       items-center
+                       gap-4">
+
+
+                <!-- EDIT -->
+
+                <button
+                  (click)="editCustomer(item)"
+                  class="text-yellow-600
+                         hover:scale-110
+                         transition"
+                  title="Edit">
+
+                  <lucide-icon
+                    [img]="Pencil">
+                  </lucide-icon>
+
                 </button>
 
-                <div *ngIf="rid === 'a5fabfee-5506-4e12-bfec-c898fc5af3ae'" class="flex items-center gap-2">
 
-                  <!-- Approve -->
-                  <button (click)="updateCustomerStatus(item, 2)" class="text-green-600 hover:scale-110 transition"
+                <!-- APPROVE / REJECT -->
+
+                <div
+                  *ngIf="
+                    rid ===
+                    'a5fabfee-5506-4e12-bfec-c898fc5af3ae'
+                  "
+                  class="flex
+                         items-center
+                         gap-2">
+
+
+                  <!-- APPROVE -->
+
+                  <button
+                    (click)="
+                      updateCustomerStatus(
+                        item,
+                        2
+                      )
+                    "
+                    class="text-green-600
+                           hover:scale-110
+                           transition"
                     title="Approve">
-                    <lucide-icon [img]="Check"></lucide-icon>
+
+                    <lucide-icon
+                      [img]="Check">
+                    </lucide-icon>
+
                   </button>
 
-                  <!-- Reject -->
-                  <button (click)="updateCustomerStatus(item, 3)" class="text-red-600 hover:scale-110 transition"
+
+                  <!-- REJECT -->
+
+                  <button
+                    (click)="
+                      updateCustomerStatus(
+                        item,
+                        3
+                      )
+                    "
+                    class="text-red-600
+                           hover:scale-110
+                           transition"
                     title="Reject">
-                    <lucide-icon [img]="X"></lucide-icon>
+
+                    <lucide-icon
+                      [img]="X">
+                    </lucide-icon>
+
                   </button>
 
                 </div>
 
+
               </div>
+
+            </td>
+
+
+          </tr>
+
+
+          <!-- EMPTY -->
+
+          <tr
+            *ngIf="
+              customerList.length === 0
+            ">
+
+            <td
+              colspan="9"
+              class="text-center
+                     py-10
+                     text-gray-500">
+
+              No customers found.
+
             </td>
 
           </tr>
+
+
         </tbody>
 
       </table>
 
     </div>
+
   </div>
+
+
+  <!-- ====================================================== -->
   <!-- PAGINATION -->
+  <!-- ====================================================== -->
 
-  <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 p-4 bg-white rounded-2xl shadow">
+  <div
+    class="flex
+           flex-col
+           sm:flex-row
+           justify-between
+           items-center
+           gap-4
+           mt-4
+           p-4
+           bg-white
+           rounded-2xl
+           shadow">
 
-    <div class="text-sm text-gray-600">
+
+    <div
+      class="text-sm
+             text-gray-600">
 
       Showing Page
 
-      <span class="font-semibold">
-        {{pageNumber}}
+      <span
+        class="font-semibold">
+
+        {{ pageNumber }}
+
       </span>
 
       of
 
-      <span class="font-semibold">
-        {{totalPages}}
+      <span
+        class="font-semibold">
+
+        {{ totalPages }}
+
       </span>
 
       |
 
       Total Records:
 
-      <span class="font-semibold">
-        {{totalRecords}}
+      <span
+        class="font-semibold">
+
+        {{ totalRecords }}
+
       </span>
 
     </div>
 
-    <div class="flex items-center gap-2">
 
-      <button (click)="previousPage()" [disabled]="pageNumber === 1"
-        class="px-4 py-2 rounded-lg bg-gray-200 disabled:opacity-50">
+    <div
+      class="flex
+             items-center
+             gap-2">
+
+
+      <button
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
+        class="px-4
+               py-2
+               rounded-lg
+               bg-gray-200
+               disabled:opacity-50">
 
         Previous
 
       </button>
 
-      <button (click)="nextPage()" [disabled]="pageNumber === totalPages"
-        class="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-50">
+
+      <button
+        (click)="nextPage()"
+        [disabled]="
+          pageNumber === totalPages ||
+          totalPages === 0
+        "
+        class="px-4
+               py-2
+               rounded-lg
+               bg-blue-600
+               text-white
+               disabled:opacity-50">
 
         Next
 
@@ -331,13 +845,22 @@
 
     </div>
 
-    <div class="flex items-center gap-2">
+
+    <div
+      class="flex
+             items-center
+             gap-2">
 
       <span class="text-sm">
         Rows:
       </span>
 
-      <select (change)="changePageSize($event)" class="border rounded-lg p-2">
+
+      <select
+        (change)="changePageSize($event)"
+        class="border
+               rounded-lg
+               p-2">
 
         <option value="10">
           10
@@ -366,288 +889,1198 @@
 
 
 <!-- ====================================================== -->
-<!-- 🔷 EDIT CUSTOMER MODAL -->
+<!-- EDIT CUSTOMER MODAL -->
 <!-- ====================================================== -->
 
-<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
+<div
+  *ngIf="showEditModal"
+  class="fixed
+         inset-0
+         bg-black/50
+         flex
+         justify-center
+         items-center
+         z-50
+         p-4">
 
-  <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl">
 
-    <!-- HEADER -->
-    <div class="flex justify-between items-center border-b px-6 py-4 sticky top-0 bg-white z-10">
-      <h2 class="text-2xl font-bold text-gray-800">
+  <div
+    class="bg-white
+           rounded-2xl
+           w-full
+           max-w-5xl
+           max-h-[95vh]
+           overflow-y-auto
+           shadow-2xl">
+
+
+    <!-- ================================================= -->
+    <!-- MODAL HEADER -->
+    <!-- ================================================= -->
+
+    <div
+      class="flex
+             justify-between
+             items-center
+             border-b
+             px-6
+             py-4
+             sticky
+             top-0
+             bg-white
+             z-10">
+
+
+      <h2
+        class="text-2xl
+               font-bold
+               text-gray-800">
+
         Update Customer
+
       </h2>
-      <button (click)="closeModal()" class="text-gray-500 hover:text-red-500 transition-colors">
-        <lucide-icon [img]="X"></lucide-icon>
+
+
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="text-gray-500
+               hover:text-red-500
+               transition-colors">
+
+        <lucide-icon
+          [img]="X">
+        </lucide-icon>
+
       </button>
+
     </div>
 
+
+
+    <!-- ================================================= -->
     <!-- FORM -->
-    <form [formGroup]="customerForm" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- ================================================= -->
 
+    <form
+      [formGroup]="customerForm"
+      class="p-6
+             grid
+             grid-cols-1
+             md:grid-cols-2
+             lg:grid-cols-3
+             gap-5">
+
+
+      <!-- ================================================= -->
       <!-- CUSTOMER NAME -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Customer Name <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Customer Name
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="text" formControlName="name"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['name'].errors}">
-        <div *ngIf="submitted && f['name'].errors" class="text-red-500 text-xs mt-1">
+
+
+        <input
+          type="text"
+          formControlName="name"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['name'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['name'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
           Customer Name is required.
+
         </div>
+
       </div>
 
 
-      <!-- TYPE (DYNAMIC DROPDOWN) -->
+
+      <!-- ================================================= -->
+      <!-- CUSTOMER TYPE -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Customer Type <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Customer Type
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <select formControlName="type"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['type'].errors}">
-          <option [ngValue]="0">Select Type</option>
-          <!-- Send ID to backend, display name in dropdown -->
-          <option *ngFor="let type of customerTypeList" [ngValue]="type.customerTypeId">
+
+
+        <select
+          formControlName="type"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['type'].errors
+          }">
+
+
+          <option
+            [ngValue]="0">
+
+            Select Type
+
+          </option>
+
+
+          <option
+            *ngFor="
+              let type of customerTypeList
+            "
+            [ngValue]="
+              type.customerTypeId
+            ">
+
             {{ type.customerType }}
+
           </option>
+
         </select>
-        <div *ngIf="submitted && f['type'].errors" class="text-red-500 text-xs mt-1">
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['type'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
           Customer Type is required.
+
         </div>
+
       </div>
 
 
-      <!-- ROUTE (DYNAMIC DROPDOWN) -->
+
+      <!-- ================================================= -->
+      <!-- AREA -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Route
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Area
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <select formControlName="routeId"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <option [value]="0">Select Route</option>
-          <option *ngFor="let route of routeList" [value]="route.routeId">
-            {{ route.routeName }}
+
+
+        <select
+          formControlName="areaId"
+          (change)="
+            onAreaChange(
+              $any($event.target).value
+            )
+          "
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['areaId'].errors
+          }">
+
+
+          <option
+            [ngValue]="0">
+
+            Select Area
+
           </option>
+
+
+          <option
+            *ngIf="
+              isLoadingAreas
+            "
+            disabled>
+
+            Loading Areas...
+
+          </option>
+
+
+          <option
+            *ngFor="
+              let area of areas
+            "
+            [ngValue]="
+              area.areaId
+            ">
+
+            {{ area.areaName }}
+
+            <ng-container
+              *ngIf="
+                area.areaCode
+              ">
+
+              ({{ area.areaCode }})
+
+            </ng-container>
+
+          </option>
+
+
         </select>
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['areaId'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
+          Area is required.
+
+        </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
+      <!-- ROUTE -->
+      <!-- ================================================= -->
+
+      <div>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Route
+
+        </label>
+
+
+        <select
+          formControlName="routeId"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [disabled]="
+            !customerForm
+              .get('areaId')
+              ?.value
+          ">
+
+
+          <option
+            [ngValue]="0">
+
+            {{
+              !customerForm
+                .get('areaId')
+                ?.value
+                ? 'Select Area First'
+                : 'Select Route'
+            }}
+
+          </option>
+
+
+          <option
+            *ngIf="
+              isLoadingRoutes
+            "
+            disabled>
+
+            Loading Routes...
+
+          </option>
+
+
+          <option
+            *ngFor="
+              let route of routeList
+            "
+            [ngValue]="
+              route.routeId
+            ">
+
+            {{ route.routeName }}
+
+          </option>
+
+
+        </select>
+
+
+        <div
+          *ngIf="
+            customerForm
+              .get('areaId')
+              ?.value &&
+            !isLoadingRoutes &&
+            routeList.length === 0
+          "
+          class="text-gray-500
+                 text-xs
+                 mt-1">
+
+          No routes available for this area.
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
       <!-- CONTACT PERSON -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Contact Person <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Contact Person
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="text" formControlName="contactPerson"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['contactPerson'].errors}">
-        <div *ngIf="submitted && f['contactPerson'].errors" class="text-red-500 text-xs mt-1">
+
+
+        <input
+          type="text"
+          formControlName="contactPerson"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['contactPerson'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['contactPerson'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
           Contact Person is required.
+
         </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- MOBILE -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Mobile Number <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Mobile Number
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="text" formControlName="mobile"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['mobile'].errors}">
-        <div *ngIf="submitted && f['mobile'].errors" class="text-red-500 text-xs mt-1">
-          <span *ngIf="f['mobile'].errors['required']">Mobile number is required.</span>
-          <span *ngIf="f['mobile'].errors['pattern']">Enter a valid 10-digit mobile number.</span>
+
+
+        <input
+          type="text"
+          formControlName="mobile"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['mobile'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['mobile'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
+
+          <span
+            *ngIf="
+              f['mobile']
+                .errors?.['required']
+            ">
+
+            Mobile number is required.
+
+          </span>
+
+
+          <span
+            *ngIf="
+              f['mobile']
+                .errors?.['pattern']
+            ">
+
+            Enter a valid 10-digit mobile number.
+
+          </span>
+
         </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- EMAIL -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Email <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Email
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="email" formControlName="email"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['email'].errors}">
-        <div *ngIf="submitted && f['email'].errors" class="text-red-500 text-xs mt-1">
-          <span *ngIf="f['email'].errors['required']">Email address is required.</span>
-          <span *ngIf="f['email'].errors['email']">Enter a valid email address.</span>
+
+
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['email'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['email'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
+          <span
+            *ngIf="
+              f['email']
+                .errors?.['required']
+            ">
+
+            Email address is required.
+
+          </span>
+
+
+          <span
+            *ngIf="
+              f['email']
+                .errors?.['email']
+            ">
+
+            Enter a valid email address.
+
+          </span>
+
         </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- ADDRESS -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Address <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Address
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="text" formControlName="address"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['address'].errors}">
-        <div *ngIf="submitted && f['address'].errors" class="text-red-500 text-xs mt-1">
+
+
+        <input
+          type="text"
+          formControlName="address"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['address'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['address'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
           Address is required.
+
         </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- CITY -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          City <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          City
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="text" formControlName="city"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['city'].errors}">
-        <div *ngIf="submitted && f['city'].errors" class="text-red-500 text-xs mt-1">
+
+
+        <input
+          type="text"
+          formControlName="city"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['city'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['city'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
           City is required.
+
         </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- STATE -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          State <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          State
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="text" formControlName="state"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['state'].errors}">
-        <div *ngIf="submitted && f['state'].errors" class="text-red-500 text-xs mt-1">
+
+
+        <input
+          type="text"
+          formControlName="state"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['state'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['state'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
           State is required.
+
         </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- PINCODE -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
-          Pincode <span class="text-red-500">*</span>
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
+          Pincode
+
+          <span class="text-red-500">
+            *
+          </span>
+
         </label>
-        <input type="text" formControlName="pincode"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          [ngClass]="{'border-red-500': submitted && f['pincode'].errors}">
-        <div *ngIf="submitted && f['pincode'].errors" class="text-red-500 text-xs mt-1">
+
+
+        <input
+          type="text"
+          formControlName="pincode"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none"
+          [ngClass]="{
+            'border-red-500':
+              submitted &&
+              f['pincode'].errors
+          }" />
+
+
+        <div
+          *ngIf="
+            submitted &&
+            f['pincode'].errors
+          "
+          class="text-red-500
+                 text-xs
+                 mt-1">
+
           Pincode is required.
+
         </div>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- GST -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
           GST Number
+
         </label>
-        <input type="text" formControlName="gstNo"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+
+
+        <input
+          type="text"
+          formControlName="gstNo"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none">
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- DRUG LICENSE -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
           Drug License No
+
         </label>
-        <input type="text" formControlName="drugLicenseNo"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+
+
+        <input
+          type="text"
+          formControlName="drugLicenseNo"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none">
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- PAN -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
           PAN Number
+
         </label>
-        <input type="text" formControlName="panNo"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+
+
+        <input
+          type="text"
+          formControlName="panNo"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none">
+
       </div>
 
-      <!-- ASSIGNED AREA MANAGER -->
-      <div>
-<label class="block text-sm font-medium text-gray-700 mb-1">
-  Assigned Area Manager
-</label>
 
-<select
-  formControlName="assignedAreaManager"
-  class="input"
->
-  <option value="">Select Area Manager</option>
 
-  <option
-    *ngFor="let am of areaManagerList"
-    [value]="am.areaManagerId"
-    [disabled]="!isAreaManagerAllowed(am)"
-  >
-    {{ am.name }} ({{ am.assignedArea }})
-  </option>
-</select>
-        <div *ngIf="submitted && f['assignedAreaManager'].errors" class="text-red-500 text-xs mt-1">
-          Area Manager assignment is required.
-        </div>
-      </div>
-
+      <!-- ================================================= -->
       <!-- STATUS -->
-      <div *ngIf="rid === 'a5fabfee-5506-4e12-bfec-c898fc5af3ae'">
-        <label class="text-sm font-medium text-gray-700">
+      <!-- ================================================= -->
+
+      <div
+        *ngIf="
+          rid ===
+          'a5fabfee-5506-4e12-bfec-c898fc5af3ae'
+        ">
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
           Status
+
         </label>
-        <select formControlName="isActive"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <option [ngValue]="true">Active</option>
-          <option [ngValue]="false">Inactive</option>
+
+
+        <select
+          formControlName="isActive"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none">
+
+          <option
+            [ngValue]="true">
+
+            Active
+
+          </option>
+
+
+          <option
+            [ngValue]="false">
+
+            Inactive
+
+          </option>
+
         </select>
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- REGION -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
           Region
+
         </label>
-        <input type="text" formControlName="region"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+
+
+        <input
+          type="text"
+          formControlName="region"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none">
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- LANDLINE -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
           Landline
+
         </label>
-        <input type="text" formControlName="landline"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+
+
+        <input
+          type="text"
+          formControlName="landline"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none">
+
       </div>
 
+
+
+      <!-- ================================================= -->
       <!-- REGISTRATION -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="text-sm font-medium text-gray-700">
+
+        <label
+          class="text-sm
+                 font-medium
+                 text-gray-700">
+
           Registration Number
+
         </label>
-        <input type="text" formControlName="registrationNo"
-          class="w-full border rounded-xl p-3 mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+
+
+        <input
+          type="text"
+          formControlName="registrationNo"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 mt-1
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-500
+                 focus:outline-none">
+
       </div>
+
 
     </form>
 
+
+
+    <!-- ================================================= -->
     <!-- FOOTER -->
-    <div class="flex justify-end gap-3 border-t px-6 py-4 bg-gray-50 rounded-b-2xl">
-      <button type="button" (click)="closeModal()"
-        class="bg-gray-400 hover:bg-gray-500 text-white font-medium px-5 py-2.5 rounded-xl transition-colors">
+    <!-- ================================================= -->
+
+    <div
+      class="flex
+             justify-end
+             gap-3
+             border-t
+             px-6
+             py-4
+             bg-gray-50
+             rounded-b-2xl">
+
+
+      <!-- CANCEL -->
+
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="bg-gray-400
+               hover:bg-gray-500
+               text-white
+               font-medium
+               px-5
+               py-2.5
+               rounded-xl
+               transition-colors">
+
         Cancel
+
       </button>
-<button
-  type="button"
-  (click)="updateCustomer()"
-  [disabled]="isLoading"
-  class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors min-w-[170px] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
 
-  <ng-container *ngIf="isLoading; else updateCustomerText">
 
-    <span
-      class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin">
-    </span>
+      <!-- UPDATE -->
 
-    Updating...
+      <button
+        type="button"
+        (click)="updateCustomer()"
+        [disabled]="isLoading"
+        class="bg-blue-600
+               hover:bg-blue-700
+               text-white
+               font-medium
+               px-5
+               py-2.5
+               rounded-xl
+               transition-colors
+               min-w-[170px]
+               flex
+               items-center
+               justify-center
+               gap-2
+               disabled:opacity-60
+               disabled:cursor-not-allowed">
 
-  </ng-container>
 
-  <ng-template #updateCustomerText>
-    Update Customer
-  </ng-template>
+        <ng-container
+          *ngIf="
+            isLoading;
+            else updateCustomerText
+          ">
 
-</button>
+          <span
+            class="w-4 h-4
+                   border-2
+                   border-white
+                   border-t-transparent
+                   rounded-full
+                   animate-spin">
+          </span>
+
+
+          Updating...
+
+        </ng-container>
+
+
+        <ng-template
+          #updateCustomerText>
+
+          Update Customer
+
+        </ng-template>
+
+
+      </button>
+
+
     </div>
+
 
   </div>
 

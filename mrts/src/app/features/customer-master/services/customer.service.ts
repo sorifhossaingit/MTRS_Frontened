@@ -54,9 +54,27 @@ createCustomerType(payload: any) {
 }
 
 // -----------------------------------
-getRouteList(agencyId: any) {
+getRouteList(
+  agencyId: number,
+  areaId?: number
+) {
+  const params: any = {
+    agencyId: agencyId.toString()
+  };
+
+  if (
+    areaId !== undefined &&
+    areaId !== null &&
+    Number(areaId) > 0
+  ) {
+    params.areaId = areaId.toString();
+  }
+
   return this.http.get(
-    `${this.apiUrl}/admin/customer/get-route?agencyId=${agencyId}`
+    `${this.apiUrl}/admin/customer/get-route`,
+    {
+      params
+    }
   );
 }
 
