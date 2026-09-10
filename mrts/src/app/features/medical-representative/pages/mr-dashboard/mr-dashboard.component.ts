@@ -1,9 +1,27 @@
-import { Component, OnInit, HostListener, ElementRef, ViewChild, DestroyRef, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ElementRef,
+  ViewChild,
+  DestroyRef,
+  inject
+} from '@angular/core';
+
+import {
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { Subject } from 'rxjs';
+
 import { debounceTime } from 'rxjs/operators';
+
 import Swal from 'sweetalert2';
+
 import {
   Users,
   UserCheck,
@@ -15,8 +33,10 @@ import {
   CheckCircle,
   XCircle
 } from 'lucide-angular';
-import { MrService } from '../../services/mr.service';
 
+import { MrService } from '../../services/mr.service';
+import { AreaManagerService } from '../../../area-manager/services/area-manager.service';
+import { CustomerService } from '../../../customer-master/services/customer.service';
 @Component({
   selector: 'app-mr-dashboard',
   templateUrl: './mr-dashboard.component.html',
@@ -24,9 +44,14 @@ import { MrService } from '../../services/mr.service';
 })
 export class MrDashboardComponent implements OnInit {
 
-  @ViewChild('routeDropdownContainer') routeDropdownContainer!: ElementRef;
+  @ViewChild('routeDropdownContainer')
+  routeDropdownContainer!: ElementRef;
 
-  // Lucide Icons
+
+  // =========================================================
+  // LUCIDE ICONS
+  // =========================================================
+
   Users = Users;
   UserCheck = UserCheck;
   UserX = UserX;
@@ -36,443 +61,1525 @@ export class MrDashboardComponent implements OnInit {
   Plus = Plus;
   CheckCircle = CheckCircle;
   XCircle = XCircle;
-  // Data Arrays
+
+
+  // =========================================================
+  // DATA
+  // =========================================================
+
   mrList: any[] = [];
+
+  areas: any[] = [];
+
+  /**
+   * Currently selected area in the edit form.
+   * This is used by the template to display the selected
+   * area name/code without maintaining duplicate state.
+   */
+  get selectedArea(): any | null {
+    const areaId = Number(
+      this.updateForm?.get('area')?.value
+    );
+
+    if (!areaId || areaId <= 0) {
+      return null;
+    }
+
+    return this.areas.find(
+      area => Number(area.areaId) === areaId
+    ) || null;
+  }
+
   routeList: any[] = [];
+
   filteredRoutes: any[] = [];
-  stockistList: any[] = [];
 
-  // Multi-Select Searchable Dropdown State
+
+  // =========================================================
+  // ROUTE MULTI SELECT
+  // =========================================================
+
   selectedRouteIds: number[] = [];
-  showRouteDropdown = false;
-  routeSearch = '';
-  private routeSearch$ = new Subject<string>();
 
-  // Reactive Forms
+  showRouteDropdown = false;
+
+  routeSearch = '';
+
+  private routeSearch$ =
+    new Subject<string>();
+
+
+  // =========================================================
+  // FORMS
+  // =========================================================
+
   filterForm!: FormGroup;
+
   updateForm!: FormGroup;
 
-  // Pagination
+
+  // =========================================================
+  // PAGINATION
+  // =========================================================
+
   pageNumber = 1;
+
   pageSize = 10;
+
   totalRecords = 0;
 
-  // Modal Control
+
+  // =========================================================
+  // MODAL
+  // =========================================================
+
   showUpdateModal = false;
+
   isUpdating = false;
 
-  // Local Storage Data
-  agencyId = Number(localStorage.getItem('aid'));
-  managerId = Number(localStorage.getItem('mid'));
 
-    // KPI
+  // =========================================================
+  // AREA / ROUTE LOADING
+  // =========================================================
+
+  isLoadingAreas = false;
+
+  isLoadingRoutes = false;
+
+
+  // =========================================================
+  // LOCAL STORAGE
+  // =========================================================
+
+  agencyId =
+    Number(localStorage.getItem('aid')) || 0;
+
+  managerId =
+    Number(localStorage.getItem('mid')) || 0;
+
+
+  // =========================================================
+  // DASHBOARD KPI
+  // =========================================================
+
   totalMR = 0;
+
   activeMR = 0;
+
   presentCount = 0;
+
   absentCount = 0;
-  private destroyRef = inject(DestroyRef);
+
+
+  private destroyRef =
+    inject(DestroyRef);
+
+
+  // =========================================================
+  // CONSTRUCTOR
+  // =========================================================
 
   constructor(
     private fb: FormBuilder,
-    private mrService: MrService
-  ) { }
+    private mrService: MrService,
+    private areaManagerService: AreaManagerService,
+    private customerService: CustomerService
+    
+  ) {}
+
+
+  // =========================================================
+  // INIT
+  // =========================================================
 
   ngOnInit(): void {
+
     this.initializeForms();
+
     this.setupDebounceFilter();
+
+    this.loadAreas();
+
     this.getMrList();
-    this.getRouteList();
-    this.getStockistList();
+
     this.loadDashboard();
   }
 
-  // Close route dropdown when clicking anywhere outside the dropdown container
-  @HostListener('document:click', ['$event'])
+
+  // =========================================================
+  // CLICK OUTSIDE ROUTE DROPDOWN
+  // =========================================================
+
+  @HostListener(
+    'document:click',
+    ['$event']
+  )
   clickout(event: Event): void {
-    if (this.routeDropdownContainer && !this.routeDropdownContainer.nativeElement.contains(event.target)) {
+
+    if (
+      this.routeDropdownContainer &&
+      !this.routeDropdownContainer.nativeElement.contains(
+        event.target
+      )
+    ) {
+
       this.showRouteDropdown = false;
     }
   }
 
-  initializeForms(): void {
-    this.filterForm = this.fb.group({
-      name: [''],
-      email: [''],
-      mobile: [''],
-      isActive: [null]
-    });
 
-    this.updateForm = this.fb.group({
-      medicalRepresentativeId: [0],
-      name: ['', Validators.required],
-      contactPerson: [''],
-      mobile: [''],
-      email: [''],
-      address: [''],
-      city: [''],
-      state: [''],
-      pincode: [''],
-      region: [''],
-      stockistId: [0],
-      routeIds: [[]],
-      isActive: [true]
-    });
+  // =========================================================
+  // INITIALIZE FORMS
+  // =========================================================
+
+  initializeForms(): void {
+
+    this.filterForm =
+      this.fb.group({
+
+        name: [''],
+
+        email: [''],
+
+        mobile: [''],
+
+        isActive: [null]
+      });
+
+
+    this.updateForm =
+      this.fb.group({
+
+        medicalRepresentativeId: [0],
+
+        name: [
+          '',
+          Validators.required
+        ],
+
+        contactPerson: [''],
+
+        mobile: [''],
+
+        email: [''],
+
+        address: [''],
+
+        city: [''],
+
+        state: [''],
+
+        pincode: [''],
+
+        region: [''],
+
+        // =====================================================
+        // AREA
+        // =====================================================
+
+        area: [
+          null,
+          Validators.required
+        ],
+
+        // =====================================================
+        // ROUTES
+        // =====================================================
+
+        routeIds: [[]],
+
+        isActive: [true]
+      });
   }
 
+
+  // =========================================================
+  // FILTER DEBOUNCE
+  // =========================================================
+
   setupDebounceFilter(): void {
+
     this.routeSearch$
-      .pipe(debounceTime(200), takeUntilDestroyed(this.destroyRef))
-      .subscribe((search) => {
-        if (!search) {
-          this.filteredRoutes = [...this.routeList];
-        } else {
-          this.filteredRoutes = this.routeList.filter(r =>
-            r.routeName?.toLowerCase().includes(search)
+      .pipe(
+        debounceTime(200),
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(
+        (search) => {
+
+          if (!search) {
+
+            this.filteredRoutes =
+              [...this.routeList];
+
+          } else {
+
+            this.filteredRoutes =
+              this.routeList.filter(
+                r =>
+                  r.routeName
+                    ?.toLowerCase()
+                    .includes(search)
+              );
+          }
+        }
+      );
+  }
+
+
+  // =========================================================
+  // ROUTE SEARCH
+  // =========================================================
+
+  onRouteSearchChange(): void {
+
+    this.routeSearch$.next(
+      this.routeSearch
+        .toLowerCase()
+        .trim()
+    );
+  }
+
+
+  // =========================================================
+  // LOAD DASHBOARD
+  // =========================================================
+
+  loadDashboard(): void {
+
+    const payload = {
+
+      agencyId:
+        this.agencyId,
+
+      areaManagerId:
+        this.managerId
+    };
+
+
+    this.mrService
+      .get_attendance_dashboard_ar(payload)
+      .subscribe({
+
+        next: (res: any) => {
+
+          if (res?.success) {
+
+            this.totalMR =
+              res.data
+                ?.totalMedicalRepresentatives || 0;
+
+            this.activeMR =
+              res.data
+                ?.activeMedicalRepresentatives || 0;
+
+            this.presentCount =
+              res.data
+                ?.presentMedicalRepresentatives || 0;
+
+            this.absentCount =
+              res.data
+                ?.absentMedicalRepresentatives || 0;
+          }
+        },
+
+        error: (err) => {
+
+          console.error(
+            'Dashboard error:',
+            err
           );
         }
       });
   }
 
-  onRouteSearchChange(): void {
-    this.routeSearch$.next(this.routeSearch.toLowerCase().trim());
-  }
+
+  // =========================================================
+  // LOAD AREAS
+  // =========================================================
+
+  loadAreas(): void {
+
+    if (
+      !this.agencyId ||
+      this.agencyId <= 0
+    ) {
+
+      console.error(
+        'Invalid Agency ID:',
+        this.agencyId
+      );
+
+      return;
+    }
 
 
+    this.isLoadingAreas = true;
 
-    loadDashboard(): void {
 
-    const payload = {
-      agencyId: this.agencyId,
-      areaManagerId: this.managerId
-    };
+    this.areaManagerService
+      .get_all_area({
+        agencyId:
+          this.agencyId,
 
-    this.mrService
-      .get_attendance_dashboard_ar(payload)
+        isActive:
+          true
+      })
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
       .subscribe({
+
         next: (res: any) => {
 
-          if (res.success) {
+          console.log(
+            'Area API Response:',
+            res
+          );
 
-            this.totalMR =
-              res.data.totalMedicalRepresentatives || 0;
 
-            this.activeMR =
-              res.data.activeMedicalRepresentatives || 0;
+          this.areas =
+            Array.isArray(res?.data)
+              ? res.data
+              : Array.isArray(res)
+                ? res
+                : [];
 
-            this.presentCount =
-              res.data.presentMedicalRepresentatives || 0;
 
-            this.absentCount =
-              res.data.absentMedicalRepresentatives || 0;
-          }
+          console.log(
+            'Areas:',
+            this.areas
+          );
+
+
+          this.isLoadingAreas = false;
         },
-        error: (err) => {
-          console.error(err);
-        }
-      });
-  }
-  
 
-  getRouteList(): void {
-    this.mrService.getRouteList(this.agencyId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (res: any) => {
-          this.routeList = res.data || [];
-          this.filteredRoutes = [...this.routeList];
-        },
         error: (err: any) => {
-          console.error('Failed to fetch Route List:', err);
-        }
-      });
-  }
 
-getStockistList(): void {
+          console.error(
+            'Failed to load areas:',
+            err
+          );
 
-  this.mrService
-    .getStockiestList(this.agencyId, this.managerId)
-    .subscribe({
-      next: (res: any) => {
-        this.stockistList = res || [];
-        console.log('Stockist List:', this.stockistList);
-      },
-      error: (err: any) => {
-        console.error('Failed to fetch Stockist List:', err);
-      }
-    });
-}
+          this.areas = [];
 
-  getMrList(): void {
-    const payload = {
-      agencyId: this.agencyId,
-      assignedAreaManager: this.managerId,
-      name: this.filterForm?.value?.name || null,
-      email: this.filterForm?.value?.email || null,
-      mobile: this.filterForm?.value?.mobile || null,
-      isActive: this.filterForm?.value?.isActive ?? null,
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize
-    };
+          this.isLoadingAreas = false;
 
-    this.mrService.get_mr(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (res: any) => {
-          if (res?.success) {
-            this.mrList = res.data || [];
-            this.totalRecords = res.totalRecords || 0;
-          }
-        },
-        error: (err: any) => {
-          console.error(err);
+
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to load MR list'
+            text: 'Failed to load areas.'
           });
         }
       });
   }
 
-  // --- Multi-Select Searchable Dropdown Logic ---
 
-  toggleRouteDropdown(event?: Event): void {
-    if (event) event.stopPropagation();
-    this.showRouteDropdown = !this.showRouteDropdown;
-  }
+  // =========================================================
+  // AREA CHANGE
+  // =========================================================
 
-  isSelected(routeId: number): boolean {
-    return this.selectedRouteIds.includes(routeId);
-  }
+  onAreaChange(): void {
 
-  toggleRoute(item: any): void {
-    const index = this.selectedRouteIds.indexOf(item.routeId);
-    if (index > -1) {
-      this.selectedRouteIds.splice(index, 1);
-    } else {
-      this.selectedRouteIds.push(item.routeId);
+    const areaId =
+      Number(
+        this.updateForm
+          .get('area')
+          ?.value
+      );
+
+
+    console.log(
+      'Selected Area ID:',
+      areaId
+    );
+
+
+    // Clear old routes
+    this.selectedRouteIds = [];
+
+    this.updateForm.patchValue(
+      {
+        routeIds: []
+      },
+      {
+        emitEvent: false
+      }
+    );
+
+
+    this.routeList = [];
+
+    this.filteredRoutes = [];
+
+
+    // No area
+    if (
+      !areaId ||
+      areaId <= 0
+    ) {
+
+      return;
     }
-    this.updateForm.patchValue({ routeIds: [...this.selectedRouteIds] });
+
+
+    // Load routes for selected area
+    this.getRouteListByArea(
+      areaId
+    );
+  }
+
+
+  // =========================================================
+  // GET ROUTES BY AREA
+  // =========================================================
+
+  getRouteListByArea(
+    areaId: number
+  ): void {
+
+    const agencyId =
+      Number(this.agencyId);
+
+    const selectedAreaId =
+      Number(areaId);
+
+
+    if (
+      !agencyId ||
+      agencyId <= 0
+    ) {
+
+      console.error(
+        'Invalid Agency ID:',
+        agencyId
+      );
+
+      return;
+    }
+
+
+    if (
+      !selectedAreaId ||
+      selectedAreaId <= 0
+    ) {
+
+      this.routeList = [];
+
+      this.filteredRoutes = [];
+
+      return;
+    }
+
+
+    this.isLoadingRoutes = true;
+
+
+    console.log(
+      'Loading routes for area:',
+      {
+        agencyId,
+        areaId: selectedAreaId
+      }
+    );
+
+
+    this.customerService
+      .getRouteList(
+        agencyId,
+        selectedAreaId
+      )
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+
+        next: (res: any) => {
+
+          console.log(
+            'Route API Response:',
+            res
+          );
+
+
+          if (Array.isArray(res)) {
+
+            this.routeList =
+              res;
+
+          } else {
+
+            this.routeList =
+              Array.isArray(res?.data)
+                ? res.data
+                : [];
+          }
+
+
+          this.filteredRoutes =
+            [...this.routeList];
+
+
+          console.log(
+            'Routes for Area:',
+            this.routeList
+          );
+
+
+          this.isLoadingRoutes = false;
+        },
+
+        error: (err: any) => {
+
+          console.error(
+            'Failed to load routes:',
+            err
+          );
+
+          this.routeList = [];
+
+          this.filteredRoutes = [];
+
+          this.isLoadingRoutes = false;
+
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load routes.'
+          });
+        }
+      });
+  }
+
+
+  // =========================================================
+  // GET MR LIST
+  // =========================================================
+
+  getMrList(): void {
+
+    const payload = {
+
+      agencyId:
+        this.agencyId,
+
+      assignedAreaManager:
+        this.managerId,
+
+      name:
+        this.filterForm
+          ?.value?.name || null,
+
+      email:
+        this.filterForm
+          ?.value?.email || null,
+
+      mobile:
+        this.filterForm
+          ?.value?.mobile || null,
+
+      isActive:
+        this.filterForm
+          ?.value?.isActive ?? null,
+
+      pageNumber:
+        this.pageNumber,
+
+      pageSize:
+        this.pageSize
+    };
+
+
+    this.mrService
+      .get_mr(payload)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+
+        next: (res: any) => {
+
+          if (res?.success) {
+
+            this.mrList =
+              res.data || [];
+
+            this.totalRecords =
+              res.totalRecords || 0;
+          }
+        },
+
+        error: (err: any) => {
+
+          console.error(
+            err
+          );
+
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load MR list.'
+          });
+        }
+      });
+  }
+
+
+  // =========================================================
+  // ROUTE DROPDOWN
+  // =========================================================
+
+  toggleRouteDropdown(
+    event?: Event
+  ): void {
+
+    if (event) {
+
+      event.stopPropagation();
+    }
+
+
+    // Do not open without area
+    const areaId =
+      Number(
+        this.updateForm
+          .get('area')
+          ?.value
+      );
+
+
+    if (
+      !areaId ||
+      areaId <= 0
+    ) {
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Select Area',
+        text: 'Please select an Area first.'
+      });
+
+      return;
+    }
+
+
+    this.showRouteDropdown =
+      !this.showRouteDropdown;
+  }
+
+
+  // =========================================================
+  // CHECK ROUTE SELECTED
+  // =========================================================
+
+  isSelected(
+    routeId: number
+  ): boolean {
+
+    return this.selectedRouteIds
+      .includes(routeId);
+  }
+
+
+  // =========================================================
+  // TOGGLE ROUTE
+  // =========================================================
+
+  toggleRoute(
+    item: any
+  ): void {
+
+    const routeId =
+      Number(item.routeId);
+
+
+    const index =
+      this.selectedRouteIds
+        .indexOf(routeId);
+
+
+    if (index > -1) {
+
+      this.selectedRouteIds
+        .splice(index, 1);
+
+    } else {
+
+      this.selectedRouteIds
+        .push(routeId);
+    }
+
+
+    this.updateForm.patchValue({
+
+      routeIds:
+        [...this.selectedRouteIds]
+    });
+
+
     this.updateForm.markAsDirty();
   }
 
+
+  // =========================================================
+  // SELECTED ROUTE LABELS
+  // =========================================================
+
   get selectedRouteLabels(): string {
-    if (this.selectedRouteIds.length === 0) {
+
+    if (
+      this.selectedRouteIds.length === 0
+    ) {
+
       return 'Select Route(s)';
     }
-    const selectedNames = this.routeList
-      .filter(r => this.selectedRouteIds.includes(r.routeId))
-      .map(r => r.routeName);
+
+
+    const selectedNames =
+      this.routeList
+
+        .filter(
+          r =>
+            this.selectedRouteIds
+              .includes(
+                Number(r.routeId)
+              )
+        )
+
+        .map(
+          r =>
+            r.routeName
+        );
+
+
     return selectedNames.join(', ');
   }
 
-  // --- Form & Action Handlers ---
+
+  // =========================================================
+  // APPLY FILTER
+  // =========================================================
 
   applyFilter(): void {
+
     this.pageNumber = 1;
+
     this.getMrList();
   }
+
+
+  // =========================================================
+  // RESET FILTER
+  // =========================================================
 
   resetFilter(): void {
+
     this.filterForm.reset({
+
       name: '',
+
       email: '',
+
       mobile: '',
+
       isActive: null
     });
+
+
     this.pageNumber = 1;
+
     this.getMrList();
   }
 
-  changePage(page: number): void {
-    if (page < 1 || page > this.totalPages) {
+
+  // =========================================================
+  // CHANGE PAGE
+  // =========================================================
+
+  changePage(
+    page: number
+  ): void {
+
+    if (
+      page < 1 ||
+      page > this.totalPages
+    ) {
+
       return;
     }
+
+
     this.pageNumber = page;
+
     this.getMrList();
   }
 
+
+  // =========================================================
+  // TOTAL PAGES
+  // =========================================================
+
   get totalPages(): number {
-    return Math.ceil(this.totalRecords / this.pageSize) || 1;
+
+    return Math.ceil(
+      this.totalRecords /
+      this.pageSize
+    ) || 1;
   }
 
-  editMr(mr: any): void {
-    // Populate routeIds array or fallback to routeNames mapping
-    if (Array.isArray(mr.routeIds) && mr.routeIds.length > 0) {
-      this.selectedRouteIds = [...mr.routeIds];
-    } else if (mr.routeNames && this.routeList.length > 0) {
-      const names = mr.routeNames.split(',').map((n: string) => n.trim().toLowerCase());
-      this.selectedRouteIds = this.routeList
-        .filter(r => names.includes(r.routeName?.trim().toLowerCase()))
-        .map(r => r.routeId);
-    } else {
-      this.selectedRouteIds = mr.routeId ? [mr.routeId] : [];
-    }
 
-    // Reset dropdown search state
+  // =========================================================
+  // EDIT MR
+  // =========================================================
+
+  editMr(
+    mr: any
+  ): void {
+
+    console.log(
+      'Editing MR:',
+      mr
+    );
+
+
+    // =======================================================
+    // SET AREA FIRST
+    // =======================================================
+
+    const areaId =
+      mr.area
+        ? Number(mr.area)
+        : null;
+
+
+    // =======================================================
+    // RESET ROUTES
+    // =======================================================
+
+    this.selectedRouteIds = [];
+
+    this.routeList = [];
+
+    this.filteredRoutes = [];
+
     this.routeSearch = '';
-    this.filteredRoutes = [...this.routeList];
+
     this.showRouteDropdown = false;
 
-    // Patch Form Values
+
+    // =======================================================
+    // PATCH BASIC VALUES
+    // =======================================================
+
     this.updateForm.patchValue({
-      medicalRepresentativeId: mr.medicalRepresentativeId,
-      name: mr.name,
-      contactPerson: mr.contactPerson,
-      mobile: mr.mobile,
-      email: mr.email,
-      address: mr.address,
-      city: mr.city,
-      state: mr.state,
-      pincode: mr.pincode,
-      region: mr.region,
-      stockistId: mr.stockistId || 0,
-      routeIds: [...this.selectedRouteIds],
-      isActive: mr.isActive
+
+      medicalRepresentativeId:
+        mr.medicalRepresentativeId,
+
+      name:
+        mr.name,
+
+      contactPerson:
+        mr.contactPerson,
+
+      mobile:
+        mr.mobile,
+
+      email:
+        mr.email,
+
+      address:
+        mr.address,
+
+      city:
+        mr.city,
+
+      state:
+        mr.state,
+
+      pincode:
+        mr.pincode,
+
+      region:
+        mr.region,
+
+      // IMPORTANT
+      area:
+        areaId,
+
+      routeIds:
+        [],
+
+      isActive:
+        mr.isActive
     });
+
+
+    // =======================================================
+    // LOAD ROUTES FOR EXISTING AREA
+    // =======================================================
+
+    if (
+      areaId &&
+      areaId > 0
+    ) {
+
+      this.getRouteListByArea(
+        areaId
+      );
+    }
+
+
+    // =======================================================
+    // GET ROUTE IDS
+    // =======================================================
+
+    if (
+      Array.isArray(mr.routeIds) &&
+      mr.routeIds.length > 0
+    ) {
+
+      this.selectedRouteIds =
+        mr.routeIds.map(
+          (id: any) =>
+            Number(id)
+        );
+
+    } else if (
+      mr.routeNames &&
+      areaId
+    ) {
+
+      /*
+       * The GET API currently returns routeNames,
+       * not routeIds.
+       *
+       * We therefore resolve route IDs after
+       * loading routes for the selected Area.
+       */
+
+      setTimeout(() => {
+
+        const names =
+          mr.routeNames
+            .split(',')
+            .map(
+              (n: string) =>
+                n.trim()
+                  .toLowerCase()
+            );
+
+
+        this.selectedRouteIds =
+          this.routeList
+
+            .filter(
+              r =>
+                names.includes(
+                  r.routeName
+                    ?.trim()
+                    .toLowerCase()
+                )
+            )
+
+            .map(
+              r =>
+                Number(r.routeId)
+            );
+
+
+        this.updateForm.patchValue({
+
+          routeIds:
+            [...this.selectedRouteIds]
+
+        });
+
+      }, 300);
+
+    } else {
+
+      this.selectedRouteIds = [];
+    }
+
+
+    // =======================================================
+    // OPEN MODAL
+    // =======================================================
 
     this.showUpdateModal = true;
   }
 
+
+  // =========================================================
+  // CLOSE MODAL
+  // =========================================================
+
   closeModal(): void {
+
     this.showUpdateModal = false;
+
     this.showRouteDropdown = false;
-  }
-updateMr(): void {
-  if (this.updateForm.invalid || this.isUpdating) {
-    this.updateForm.markAllAsTouched();
-    return;
-  }
 
-  this.isUpdating = true;
+    this.selectedRouteIds = [];
 
-  const formValue = this.updateForm.value;
+    this.routeList = [];
 
-  const payload = {
-    medicalRepresentativeId: formValue.medicalRepresentativeId,
-    name: formValue.name,
-    contactPerson: formValue.contactPerson,
-    mobile: formValue.mobile,
-    email: formValue.email,
-    address: formValue.address,
-    city: formValue.city,
-    state: formValue.state,
-    pincode: formValue.pincode,
-    region: formValue.region,
-    assignedAreaManager: this.managerId,
-    stockistId: Number(formValue.stockistId) || 0,
-    routeIds: formValue.routeIds || [],
-    isActive: formValue.isActive,
-    updatedBy: this.managerId
-  };
+    this.filteredRoutes = [];
 
-  this.mrService.update_mr(payload)
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
-      next: (res: any) => {
+    this.routeSearch = '';
 
-        this.isUpdating = false;
+    this.updateForm.reset({
 
-        if (res?.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'MR updated successfully'
-          });
+      medicalRepresentativeId: 0,
 
-          this.showUpdateModal = false;
-          this.getMrList();
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: res?.message || 'Failed to update MR'
-          });
-        }
-      },
+      name: '',
 
-      error: (err: any) => {
+      contactPerson: '',
 
-        this.isUpdating = false;
+      mobile: '',
 
-        console.error(err);
+      email: '',
 
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: err?.error?.message || 'Failed to update MR'
-        });
-      }
+      address: '',
+
+      city: '',
+
+      state: '',
+
+      pincode: '',
+
+      region: '',
+
+      area: null,
+
+      routeIds: [],
+
+      isActive: true
     });
-}
+  }
 
-  deleteMr(mr: any): void {
-    Swal.fire({
-      title: 'Delete MR?',
-      text: 'This MR will be marked as inactive.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#dc2626',
-      confirmButtonText: 'Yes, Delete',
-      cancelButtonText: 'Cancel'
-    }).then((result) => {
-      if (!result.isConfirmed) return;
 
-      let currentRouteIds: number[] = [];
-      if (Array.isArray(mr.routeIds)) {
-        currentRouteIds = mr.routeIds;
-      } else if (mr.routeId) {
-        currentRouteIds = [mr.routeId];
-      }
+  // =========================================================
+  // UPDATE MR
+  // =========================================================
 
-      const payload = {
-        medicalRepresentativeId: mr.medicalRepresentativeId,
-        name: mr.name,
-        contactPerson: mr.contactPerson,
-        mobile: mr.mobile,
-        email: mr.email,
-        address: mr.address,
-        city: mr.city,
-        state: mr.state,
-        pincode: mr.pincode,
-        region: mr.region,
-        assignedAreaManager: this.managerId,
-        stockistId: Number(mr.stockistId) || 0,
-        routeIds: currentRouteIds,
-        isActive: false,
-        updatedBy: this.managerId
-      };
+  updateMr(): void {
 
-      this.mrService.update_mr(payload)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (res: any) => {
-            if (res?.success) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Deleted',
-                text: 'MR marked as inactive successfully.'
-              });
-              this.getMrList();
-            }
-          },
-          error: (err: any) => {
-            console.error(err);
+    if (
+      this.updateForm.invalid ||
+      this.isUpdating
+    ) {
+
+      this.updateForm.markAllAsTouched();
+
+      return;
+    }
+
+
+    const formValue =
+      this.updateForm.value;
+
+
+    // =======================================================
+    // AREA
+    // =======================================================
+
+    const areaId =
+      Number(formValue.area);
+
+
+    if (
+      !areaId ||
+      areaId <= 0
+    ) {
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation',
+        text: 'Please select an Area.'
+      });
+
+      return;
+    }
+
+
+    // =======================================================
+    // ROUTES
+    // =======================================================
+
+    const routeIds =
+      Array.isArray(
+        formValue.routeIds
+      )
+        ? formValue.routeIds.map(
+            (id: any) =>
+              Number(id)
+          )
+        : [];
+
+
+    // =======================================================
+    // PAYLOAD
+    // =======================================================
+
+    const payload = {
+
+      medicalRepresentativeId:
+        Number(
+          formValue.medicalRepresentativeId
+        ),
+
+      name:
+        formValue.name,
+
+      contactPerson:
+        formValue.contactPerson,
+
+      mobile:
+        formValue.mobile,
+
+      email:
+        formValue.email,
+
+      address:
+        formValue.address,
+
+      city:
+        formValue.city,
+
+      state:
+        formValue.state,
+
+      pincode:
+        formValue.pincode,
+
+      region:
+        formValue.region,
+
+      assignedAreaManager:
+        this.managerId,
+
+      // IMPORTANT
+      area:
+        areaId,
+
+      // IMPORTANT
+      routeIds:
+        routeIds,
+
+      isActive:
+        formValue.isActive,
+
+      updatedBy:
+        this.managerId
+    };
+
+
+    console.log(
+      'Update MR Payload:',
+      payload
+    );
+
+
+    this.isUpdating = true;
+
+
+    this.mrService
+      .update_mr(payload)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.isUpdating = false;
+
+
+          if (res?.success) {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text:
+                res?.message ||
+                'MR updated successfully.'
+            });
+
+
+            this.showUpdateModal =
+              false;
+
+
+            this.getMrList();
+
+          } else {
+
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Failed to delete MR.'
+              text:
+                res?.message ||
+                'Failed to update MR.'
             });
           }
-        });
-    });
+        },
+
+        error: (err: any) => {
+
+          this.isUpdating = false;
+
+
+          console.error(
+            'Update MR Error:',
+            err
+          );
+
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              err?.error?.message ||
+              'Failed to update MR.'
+          });
+        }
+      });
   }
+
+
+  // =========================================================
+  // DELETE / DEACTIVATE MR
+  // =========================================================
+
+  deleteMr(
+    mr: any
+  ): void {
+
+    Swal.fire({
+
+      title: 'Delete MR?',
+
+      text:
+        'This MR will be marked as inactive.',
+
+      icon: 'warning',
+
+      showCancelButton: true,
+
+      confirmButtonColor: '#dc2626',
+
+      confirmButtonText:
+        'Yes, Delete',
+
+      cancelButtonText:
+        'Cancel'
+
+    }).then(
+      (result) => {
+
+        if (
+          !result.isConfirmed
+        ) {
+
+          return;
+        }
+
+
+        // ===================================================
+        // AREA
+        // ===================================================
+
+        const areaId =
+          mr.area
+            ? Number(mr.area)
+            : null;
+
+
+        // ===================================================
+        // ROUTES
+        // ===================================================
+
+        let currentRouteIds:
+          number[] = [];
+
+
+        if (
+          Array.isArray(
+            mr.routeIds
+          )
+        ) {
+
+          currentRouteIds =
+            mr.routeIds.map(
+              (id: any) =>
+                Number(id)
+            );
+
+        } else if (
+          mr.routeId
+        ) {
+
+          currentRouteIds = [
+            Number(mr.routeId)
+          ];
+        }
+
+
+        // ===================================================
+        // PAYLOAD
+        // ===================================================
+
+        const payload = {
+
+          medicalRepresentativeId:
+            Number(
+              mr.medicalRepresentativeId
+            ),
+
+          name:
+            mr.name,
+
+          contactPerson:
+            mr.contactPerson,
+
+          mobile:
+            mr.mobile,
+
+          email:
+            mr.email,
+
+          address:
+            mr.address,
+
+          city:
+            mr.city,
+
+          state:
+            mr.state,
+
+          pincode:
+            mr.pincode,
+
+          region:
+            mr.region,
+
+          assignedAreaManager:
+            this.managerId,
+
+          // IMPORTANT
+          area:
+            areaId,
+
+          routeIds:
+            currentRouteIds,
+
+          isActive:
+            false,
+
+          updatedBy:
+            this.managerId
+        };
+
+
+        console.log(
+          'Delete MR Payload:',
+          payload
+        );
+
+
+        this.mrService
+          .update_mr(payload)
+          .pipe(
+            takeUntilDestroyed(
+              this.destroyRef
+            )
+          )
+          .subscribe({
+
+            next: (res: any) => {
+
+              if (
+                res?.success
+              ) {
+
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Deleted',
+                  text:
+                    'MR marked as inactive successfully.'
+                });
+
+
+                this.getMrList();
+
+              } else {
+
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text:
+                    res?.message ||
+                    'Failed to delete MR.'
+                });
+              }
+            },
+
+            error: (err: any) => {
+
+              console.error(
+                'Delete MR Error:',
+                err
+              );
+
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text:
+                  err?.error?.message ||
+                  'Failed to delete MR.'
+              });
+            }
+          });
+      }
+    );
+  }
+
+
+  // =========================================================
+  // COUNTS
+  // =========================================================
 
   get activeCount(): number {
-    return this.mrList.filter(x => x.isActive).length;
+
+    return this.mrList.filter(
+      x =>
+        x.isActive
+    ).length;
   }
 
+
   get inactiveCount(): number {
-    return this.mrList.filter(x => !x.isActive).length;
+
+    return this.mrList.filter(
+      x =>
+        !x.isActive
+    ).length;
   }
 }
