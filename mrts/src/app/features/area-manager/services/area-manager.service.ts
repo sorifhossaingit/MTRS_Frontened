@@ -121,4 +121,25 @@ get_all_area(params: {
 
   }
 
+  getActiveAreaManagers(agencyId: number) {
+  return this.http.get(
+    `${this.apiUrl}/admin/area-manager/dropdown/active-area-managers/${agencyId}`
+  );
+}
+
+getAreaForAreaManager(
+  agencyId: number,
+  areaManagerId: number
+) {
+  return this.http.get(
+    `${this.apiUrl}/areamanager/get-area-for-area-manager`,
+    {
+      params: {
+        agencyId: agencyId.toString(),
+        areaManagerId: areaManagerId.toString()
+      }
+    }
+  );
+}
+
 }

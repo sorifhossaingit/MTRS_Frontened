@@ -71,25 +71,6 @@ export class MrDashboardComponent implements OnInit {
 
   areas: any[] = [];
 
-  /**
-   * Currently selected area in the edit form.
-   * This is used by the template to display the selected
-   * area name/code without maintaining duplicate state.
-   */
-  get selectedArea(): any | null {
-    const areaId = Number(
-      this.updateForm?.get('area')?.value
-    );
-
-    if (!areaId || areaId <= 0) {
-      return null;
-    }
-
-    return this.areas.find(
-      area => Number(area.areaId) === areaId
-    ) || null;
-  }
-
   routeList: any[] = [];
 
   filteredRoutes: any[] = [];
@@ -156,6 +137,35 @@ export class MrDashboardComponent implements OnInit {
 
   managerId =
     Number(localStorage.getItem('mid')) || 0;
+
+  // =========================================================
+  // ROLE
+  // =========================================================
+
+  readonly adminRoleId =
+    'a5fabfee-5506-4e12-bfec-c898fc5af3ae';
+
+  readonly areaManagerRoleId =
+    '11714ca6-4cdb-46c5-bb12-d582ef179bc2';
+
+  roleId =
+    localStorage.getItem('rid') || '';
+
+  isAdmin =
+    this.roleId === this.adminRoleId;
+
+  isAreaManager =
+    this.roleId === this.areaManagerRoleId;
+
+  // =========================================================
+  // AREA MANAGERS
+  // =========================================================
+
+  areaManagers: any[] = [];
+
+  selectedAreaManagerId: number | null = null;
+
+  isLoadingAreaManagers = false;
 
 
   // =========================================================
@@ -402,84 +412,254 @@ export class MrDashboardComponent implements OnInit {
 
   loadAreas(): void {
 
-    if (
-      !this.agencyId ||
-      this.agencyId <= 0
-    ) {
-
-      console.error(
-        'Invalid Agency ID:',
-        this.agencyId
-      );
-
+    if (!this.agencyId || this.agencyId <= 0) {
+      console.error('Invalid Agency ID:', this.agencyId);
+      this.areas = [];
       return;
     }
 
+    // ADMIN: select an Area Manager first.
+    if (this.isAdmin) {
+      this.areas = [];
+      this.selectedAreaManagerId = null;
+      this.loadAreaManagers();
+      return;
+    }
 
-    this.isLoadingAreas = true;
+    // AREA MANAGER: use manager ID from localStorage.
+    if (this.isAreaManager) {
+      if (!this.managerId || this.managerId <= 0) {
+        console.error(
+          'Invalid Area Manager ID:',
+          this.managerId
+        );
+        this.areas = [];
+        return;
+      }
 
+      this.selectedAreaManagerId = this.managerId;
+      this.loadAreasForManager(this.managerId);
+      return;
+    }
+
+    console.error('Unknown Role ID:', this.roleId);
+    this.areas = [];
+  }
+
+  // =========================================================
+  // LOAD ACTIVE AREA MANAGERS - ADMIN ONLY
+  // =========================================================
+
+  loadAreaManagers(): void {
+
+    if (!this.isAdmin) {
+      return;
+    }
+
+    this.isLoadingAreaManagers = true;
 
     this.areaManagerService
-      .get_all_area({
-        agencyId:
-          this.agencyId,
-
-        isActive:
-          true
-      })
+      .getActiveAreaManagers(this.agencyId)
       .pipe(
-        takeUntilDestroyed(
-          this.destroyRef
-        )
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
 
         next: (res: any) => {
 
           console.log(
-            'Area API Response:',
+            'Area Manager Dropdown Response:',
             res
           );
 
-
-          this.areas =
+          this.areaManagers =
             Array.isArray(res?.data)
               ? res.data
               : Array.isArray(res)
                 ? res
                 : [];
 
-
-          console.log(
-            'Areas:',
-            this.areas
-          );
-
-
-          this.isLoadingAreas = false;
+          this.isLoadingAreaManagers = false;
         },
 
         error: (err: any) => {
 
           console.error(
-            'Failed to load areas:',
+            'Area Manager Dropdown Error:',
             err
           );
 
-          this.areas = [];
-
-          this.isLoadingAreas = false;
-
+          this.areaManagers = [];
+          this.isLoadingAreaManagers = false;
 
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to load areas.'
+            text: 'Failed to load Area Managers.'
           });
         }
       });
   }
 
+  // =========================================================
+  // LOAD AREAS FOR AREA MANAGER
+  // =========================================================
+
+  loadAreasForManager(
+    areaManagerId: number,
+    selectedAreaId: number | null = null
+  ): void {
+
+    if (
+      !this.agencyId ||
+      this.agencyId <= 0 ||
+      !areaManagerId ||
+      areaManagerId <= 0
+    ) {
+      this.areas = [];
+      return;
+    }
+
+    this.isLoadingAreas = true;
+
+    this.areaManagerService
+      .getAreaForAreaManager(
+        this.agencyId,
+        areaManagerId
+      )
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+
+        next: (res: any) => {
+
+          console.log(
+            'Areas For Area Manager:',
+            res
+          );
+
+          this.areas =
+            Array.isArray(res?.data)
+              ? res.data
+              : [];
+
+          this.isLoadingAreas = false;
+
+          // Edit mode: select the MR's existing area
+          // only after the manager's areas are loaded.
+          if (
+            selectedAreaId &&
+            selectedAreaId > 0 &&
+            this.areas.some(
+              area =>
+                Number(area.areaId) ===
+                Number(selectedAreaId)
+            )
+          ) {
+
+            this.updateForm.patchValue(
+              {
+                area: Number(selectedAreaId)
+              },
+              {
+                emitEvent: false
+              }
+            );
+
+            this.getRouteListByArea(
+              Number(selectedAreaId)
+            );
+          }
+        },
+
+        error: (err: any) => {
+
+          console.error(
+            'Areas For Manager Error:',
+            err
+          );
+
+          this.areas = [];
+          this.isLoadingAreas = false;
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load areas for Area Manager.'
+          });
+        }
+      });
+  }
+
+  // =========================================================
+  // ADMIN AREA MANAGER CHANGE
+  // =========================================================
+
+  onAreaManagerChange(
+    value: number | string | null
+  ): void {
+
+    const areaManagerId =
+      value === null ||
+      value === '' ||
+      value === undefined
+        ? null
+        : Number(value);
+
+    this.selectedAreaManagerId =
+      areaManagerId && areaManagerId > 0
+        ? areaManagerId
+        : null;
+
+    this.updateForm.patchValue(
+      {
+        area: null,
+        routeIds: []
+      },
+      {
+        emitEvent: false
+      }
+    );
+
+    this.selectedRouteIds = [];
+    this.routeList = [];
+    this.filteredRoutes = [];
+    this.routeSearch = '';
+    this.showRouteDropdown = false;
+
+    if (!this.selectedAreaManagerId) {
+      this.areas = [];
+      return;
+    }
+
+    this.loadAreasForManager(
+      this.selectedAreaManagerId
+    );
+  }
+
+  // =========================================================
+  // SELECTED AREA
+  // =========================================================
+
+  get selectedArea(): any | null {
+
+    const areaId =
+      Number(
+        this.updateForm
+          ?.get('area')
+          ?.value
+      );
+
+    if (!areaId || areaId <= 0) {
+      return null;
+    }
+
+    return this.areas.find(
+      area =>
+        Number(area.areaId) === areaId
+    ) || null;
+  }
 
   // =========================================================
   // AREA CHANGE
@@ -665,76 +845,147 @@ export class MrDashboardComponent implements OnInit {
   // GET MR LIST
   // =========================================================
 
-  getMrList(): void {
+getMrList(): void {
 
-    const payload = {
+  const filterValue = this.filterForm?.value;
 
-      agencyId:
-        this.agencyId,
+  // =========================================================
+  // BASE PAYLOAD
+  // =========================================================
 
-      assignedAreaManager:
-        this.managerId,
+  const payload: any = {
 
-      name:
-        this.filterForm
-          ?.value?.name || null,
+    agencyId:
+      Number(this.agencyId),
 
-      email:
-        this.filterForm
-          ?.value?.email || null,
+    name:
+      filterValue?.name?.trim() || null,
 
-      mobile:
-        this.filterForm
-          ?.value?.mobile || null,
+    email:
+      filterValue?.email?.trim() || null,
 
-      isActive:
-        this.filterForm
-          ?.value?.isActive ?? null,
+    mobile:
+      filterValue?.mobile?.trim() || null,
 
-      pageNumber:
-        this.pageNumber,
+    isActive:
+      filterValue?.isActive ?? null,
 
-      pageSize:
-        this.pageSize
-    };
+    pageNumber:
+      this.pageNumber,
 
-
-    this.mrService
-      .get_mr(payload)
-      .pipe(
-        takeUntilDestroyed(
-          this.destroyRef
-        )
-      )
-      .subscribe({
-
-        next: (res: any) => {
-
-          if (res?.success) {
-
-            this.mrList =
-              res.data || [];
-
-            this.totalRecords =
-              res.totalRecords || 0;
-          }
-        },
-
-        error: (err: any) => {
-
-          console.error(
-            err
-          );
+    pageSize:
+      this.pageSize
+  };
 
 
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to load MR list.'
-          });
-        }
-      });
+  // =========================================================
+  // AREA MANAGER ROLE ONLY
+  // =========================================================
+  // Admin:
+  // DO NOT SEND assignedAreaManager
+  //
+  // Area Manager:
+  // SEND assignedAreaManager = mid
+  // =========================================================
+
+  const roleId =
+    localStorage.getItem('rid') || '';
+
+  const ADMIN_ROLE_ID =
+    'a5fabfee-5506-4e12-bfec-c898fc5af3ae';
+
+  const AREA_MANAGER_ROLE_ID =
+    '11714ca6-4cdb-46c5-bb12-d582ef179bc2';
+
+
+  if (
+    roleId === AREA_MANAGER_ROLE_ID
+  ) {
+
+    const managerId =
+      Number(
+        localStorage.getItem('mid')
+      ) || 0;
+
+    if (managerId > 0) {
+
+      payload.assignedAreaManager =
+        managerId;
+
+    }
+
   }
+
+  // =========================================================
+  // ADMIN
+  // =========================================================
+  // Do absolutely nothing here.
+  // assignedAreaManager will NOT exist in payload.
+  // =========================================================
+
+
+  console.log(
+    'RID:',
+    roleId
+  );
+
+  console.log(
+    'MR List Payload:',
+    payload
+  );
+
+
+  // =========================================================
+  // API
+  // =========================================================
+
+  this.mrService
+    .get_mr(payload)
+    .pipe(
+      takeUntilDestroyed(
+        this.destroyRef
+      )
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        console.log(
+          'MR List Response:',
+          res
+        );
+
+        if (res?.success) {
+
+          this.mrList =
+            res.data || [];
+
+          this.totalRecords =
+            res.totalRecords || 0;
+
+        }
+
+      },
+
+      error: (err: any) => {
+
+        console.error(
+          'Get MR List Error:',
+          err
+        );
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text:
+            err?.error?.message ||
+            'Failed to load MR list.'
+        });
+
+      }
+
+    });
+}
 
 
   // =========================================================
@@ -948,40 +1199,23 @@ export class MrDashboardComponent implements OnInit {
     mr: any
   ): void {
 
-    console.log(
-      'Editing MR:',
-      mr
-    );
-
-
-    // =======================================================
-    // SET AREA FIRST
-    // =======================================================
+    console.log('Editing MR:', mr);
 
     const areaId =
       mr.area
         ? Number(mr.area)
         : null;
 
-
-    // =======================================================
-    // RESET ROUTES
-    // =======================================================
+    const mrAreaManagerId =
+      mr.assignedAreaManager
+        ? Number(mr.assignedAreaManager)
+        : null;
 
     this.selectedRouteIds = [];
-
     this.routeList = [];
-
     this.filteredRoutes = [];
-
     this.routeSearch = '';
-
     this.showRouteDropdown = false;
-
-
-    // =======================================================
-    // PATCH BASIC VALUES
-    // =======================================================
 
     this.updateForm.patchValue({
 
@@ -1015,9 +1249,8 @@ export class MrDashboardComponent implements OnInit {
       region:
         mr.region,
 
-      // IMPORTANT
       area:
-        areaId,
+        null,
 
       routeIds:
         [],
@@ -1026,24 +1259,50 @@ export class MrDashboardComponent implements OnInit {
         mr.isActive
     });
 
-
     // =======================================================
-    // LOAD ROUTES FOR EXISTING AREA
+    // ADMIN
     // =======================================================
 
-    if (
-      areaId &&
-      areaId > 0
-    ) {
+    if (this.isAdmin) {
 
-      this.getRouteListByArea(
-        areaId
-      );
+      this.selectedAreaManagerId =
+        mrAreaManagerId;
+
+      if (mrAreaManagerId) {
+
+        this.loadAreasForManager(
+          mrAreaManagerId,
+          areaId
+        );
+      }
     }
 
+    // =======================================================
+    // AREA MANAGER
+    // =======================================================
+
+    else if (this.isAreaManager) {
+
+      this.selectedAreaManagerId =
+        this.managerId;
+
+      if (areaId) {
+
+        this.updateForm.patchValue(
+          {
+            area: areaId
+          },
+          {
+            emitEvent: false
+          }
+        );
+
+        this.getRouteListByArea(areaId);
+      }
+    }
 
     // =======================================================
-    // GET ROUTE IDS
+    // EXISTING ROUTES
     // =======================================================
 
     if (
@@ -1053,22 +1312,23 @@ export class MrDashboardComponent implements OnInit {
 
       this.selectedRouteIds =
         mr.routeIds.map(
-          (id: any) =>
-            Number(id)
+          (id: any) => Number(id)
         );
+
+      this.updateForm.patchValue(
+        {
+          routeIds:
+            [...this.selectedRouteIds]
+        },
+        {
+          emitEvent: false
+        }
+      );
 
     } else if (
       mr.routeNames &&
       areaId
     ) {
-
-      /*
-       * The GET API currently returns routeNames,
-       * not routeIds.
-       *
-       * We therefore resolve route IDs after
-       * loading routes for the selected Area.
-       */
 
       setTimeout(() => {
 
@@ -1077,14 +1337,11 @@ export class MrDashboardComponent implements OnInit {
             .split(',')
             .map(
               (n: string) =>
-                n.trim()
-                  .toLowerCase()
+                n.trim().toLowerCase()
             );
-
 
         this.selectedRouteIds =
           this.routeList
-
             .filter(
               r =>
                 names.includes(
@@ -1093,35 +1350,26 @@ export class MrDashboardComponent implements OnInit {
                     .toLowerCase()
                 )
             )
-
             .map(
               r =>
                 Number(r.routeId)
             );
 
+        this.updateForm.patchValue(
+          {
+            routeIds:
+              [...this.selectedRouteIds]
+          },
+          {
+            emitEvent: false
+          }
+        );
 
-        this.updateForm.patchValue({
-
-          routeIds:
-            [...this.selectedRouteIds]
-
-        });
-
-      }, 300);
-
-    } else {
-
-      this.selectedRouteIds = [];
+      }, 500);
     }
-
-
-    // =======================================================
-    // OPEN MODAL
-    // =======================================================
 
     this.showUpdateModal = true;
   }
-
 
   // =========================================================
   // CLOSE MODAL
@@ -1270,6 +1518,7 @@ export class MrDashboardComponent implements OnInit {
         formValue.region,
 
       assignedAreaManager:
+        this.selectedAreaManagerId ||
         this.managerId,
 
       // IMPORTANT

@@ -180,7 +180,7 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Representative Master',
     icon: 'Users', // group of representatives
     route: '/medical-representative-master',
-    roles: ['MR', 'Manager'],
+    roles: ['MR', 'Manager', 'Admin'],
     children: [
       {
         label: 'Representative Master Dashboard',
@@ -192,7 +192,7 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Medical Representative Dashboard',
         icon: 'BarChart3', // dashboard analytics
         route: '/medical-representative-master/medical-representative-dashboard',
-        roles: ['Manager']
+        roles: ['Manager', 'Admin']
       },
       {
         label: 'Add Representative',
