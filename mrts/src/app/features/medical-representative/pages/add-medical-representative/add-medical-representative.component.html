@@ -1,331 +1,1548 @@
+
 <div class="p-4 md:p-6 bg-gray-100 min-h-screen">
+
   <div class="max-w-7xl mx-auto">
 
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
-      <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3 text-gray-800">
-        <lucide-icon [img]="UserPlus" class="text-blue-600"></lucide-icon>
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
+    <div
+      class="flex flex-col md:flex-row
+             justify-between
+             md:items-center
+             gap-4 mb-8">
+
+      <h1
+        class="text-2xl md:text-3xl
+               font-bold
+               flex items-center
+               gap-3
+               text-gray-800">
+
+        <lucide-icon
+          [img]="UserPlus"
+          class="text-blue-600">
+        </lucide-icon>
+
         Add Medical Representative
+
       </h1>
 
-      <button type="button" routerLink="/medical-representative-master/medical-representative-dashboard"
-        class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 w-full md:w-auto justify-center transition">
-        <lucide-icon [img]="ArrowLeft"></lucide-icon>
+      <button
+        type="button"
+        routerLink="/medical-representative-master/medical-representative-dashboard"
+        class="bg-gray-500
+               hover:bg-gray-600
+               text-white
+               px-5 py-2.5
+               rounded-xl
+               flex items-center
+               gap-2
+               w-full md:w-auto
+               justify-center
+               transition">
+
+        <lucide-icon
+          [img]="ArrowLeft">
+        </lucide-icon>
+
         Back
+
       </button>
+
     </div>
 
-    <form [formGroup]="mrForm" class="space-y-8">
 
-      <!-- Basic Information -->
-      <div class="bg-white rounded-2xl shadow p-6 md:p-8">
-        <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-700 border-b pb-3">
-          <lucide-icon [img]="User"></lucide-icon>
+    <!-- ================================================= -->
+    <!-- FORM -->
+    <!-- ================================================= -->
+
+    <form
+      [formGroup]="mrForm"
+      class="space-y-8">
+
+      <!-- ================================================= -->
+      <!-- BASIC INFORMATION -->
+      <!-- ================================================= -->
+
+      <div
+        class="bg-white
+               rounded-2xl
+               shadow
+               p-6 md:p-8">
+
+        <h2
+          class="flex items-center
+                 gap-2
+                 text-lg
+                 font-semibold
+                 text-gray-700
+                 border-b
+                 pb-3">
+
+          <lucide-icon
+            [img]="User">
+          </lucide-icon>
+
           Medical Representative Information
+
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
 
-          <!-- Representative Name -->
+        <div
+          class="grid grid-cols-1
+                 md:grid-cols-2
+                 xl:grid-cols-3
+                 gap-6
+                 mt-6">
+
+
+          <!-- ================================================= -->
+          <!-- REPRESENTATIVE NAME -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Representative Name <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Representative Name
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="User" class="text-gray-400"></lucide-icon>
-              <input formControlName="name" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter Representative Name">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="User"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                formControlName="name"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter Representative Name">
+
             </div>
-            <small *ngIf="submitted && f['name'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['name'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Representative Name is required
+
             </small>
+
           </div>
 
-          <!-- Contact Person -->
+
+          <!-- ================================================= -->
+          <!-- CONTACT PERSON -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Contact Person <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Contact Person
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="User" class="text-gray-400"></lucide-icon>
-              <input formControlName="contactPerson" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter Contact Person">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="User"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                formControlName="contactPerson"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter Contact Person">
+
             </div>
-            <small *ngIf="submitted && f['contactPerson'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['contactPerson'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Contact Person is required
+
             </small>
+
           </div>
 
-          <!-- Mobile -->
+
+          <!-- ================================================= -->
+          <!-- MOBILE -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Mobile Number <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Mobile Number
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="Phone" class="text-gray-400"></lucide-icon>
-              <input formControlName="mobile" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter Mobile Number">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="Phone"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                type="text"
+                formControlName="mobile"
+                maxlength="10"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter Mobile Number">
+
             </div>
-            <small *ngIf="submitted && f['mobile'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['mobile'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Mobile Number is required
+
             </small>
-            <small *ngIf="submitted && f['mobile'].errors?.['pattern']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['mobile'].errors?.['pattern']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Enter valid 10 digit mobile number
+
             </small>
+
           </div>
 
-          <!-- Email -->
+
+          <!-- ================================================= -->
+          <!-- EMAIL -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Email <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Email
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="Mail" class="text-gray-400"></lucide-icon>
-              <input formControlName="email" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter Email">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="Mail"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                type="email"
+                formControlName="email"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter Email">
+
             </div>
-            <small *ngIf="submitted && f['email'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['email'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Email is required
+
             </small>
-            <small *ngIf="submitted && f['email'].errors?.['email']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['email'].errors?.['email']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Enter valid email address
+
             </small>
+
           </div>
 
-          <!-- Address -->
+
+          <!-- ================================================= -->
+          <!-- ADDRESS -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Address <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Address
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="MapPin" class="text-gray-400"></lucide-icon>
-              <input formControlName="address" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter Address">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="MapPin"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                formControlName="address"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter Address">
+
             </div>
-            <small *ngIf="submitted && f['address'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['address'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Address is required
+
             </small>
+
           </div>
 
-          <!-- City -->
+
+          <!-- ================================================= -->
+          <!-- CITY -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              City <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              City
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="Building2" class="text-gray-400"></lucide-icon>
-              <input formControlName="city" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter City">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="Building2"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                formControlName="city"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter City">
+
             </div>
-            <small *ngIf="submitted && f['city'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['city'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               City is required
+
             </small>
+
           </div>
 
-          <!-- State -->
+
+          <!-- ================================================= -->
+          <!-- STATE -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              State <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              State
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="Map" class="text-gray-400"></lucide-icon>
-              <input formControlName="state" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter State">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="Map"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                formControlName="state"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter State">
+
             </div>
-            <small *ngIf="submitted && f['state'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['state'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               State is required
+
             </small>
+
           </div>
 
-          <!-- Pincode -->
+
+          <!-- ================================================= -->
+          <!-- PINCODE -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Pincode <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Pincode
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="Hash" class="text-gray-400"></lucide-icon>
-              <input formControlName="pincode" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter Pincode">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="Hash"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                type="text"
+                formControlName="pincode"
+                maxlength="6"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter Pincode">
+
             </div>
-            <small *ngIf="submitted && f['pincode'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['pincode'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Pincode is required
+
             </small>
-            <small *ngIf="submitted && f['pincode'].errors?.['pattern']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['pincode'].errors?.['pattern']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Enter valid 6 digit pincode
+
             </small>
+
           </div>
 
-          <!-- Region -->
+
+          <!-- ================================================= -->
+          <!-- REGION -->
+          <!-- ================================================= -->
+
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Region <span class="text-red-500">*</span>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Region
+
+              <span class="text-red-500">*</span>
+
             </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="Route" class="text-gray-400"></lucide-icon>
-              <input formControlName="region" class="w-full h-12 bg-transparent outline-none text-sm" placeholder="Enter Region">
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="Route"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <input
+                formControlName="region"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm"
+                placeholder="Enter Region">
+
             </div>
-            <small *ngIf="submitted && f['region'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <small
+              *ngIf="
+                submitted &&
+                f['region'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Region is required
+
             </small>
+
           </div>
 
-          <!-- Route Selection (Multiple) -->
-          <div class="relative route-dropdown-container">
-            <div class="flex items-center justify-between mb-2">
-              <label class="block text-sm font-medium text-gray-700">
-                Routes <span class="text-red-500">*</span>
+
+          <!-- ================================================= -->
+          <!-- AREA -->
+          <!-- ================================================= -->
+
+          <div>
+
+            <label
+              class="block
+                     text-sm
+                     font-medium
+                     text-gray-700
+                     mb-2">
+
+              Area
+
+              <span class="text-red-500">*</span>
+
+            </label>
+
+            <div
+              class="flex items-center
+                     gap-3
+                     border
+                     rounded-xl
+                     px-4
+                     bg-gray-50
+                     focus-within:ring-2
+                     focus-within:ring-blue-400">
+
+              <lucide-icon
+                [img]="MapPin"
+                class="text-gray-400">
+              </lucide-icon>
+
+              <select
+                formControlName="area"
+                class="w-full
+                       h-12
+                       bg-transparent
+                       outline-none
+                       text-sm">
+
+                <option
+                  [ngValue]="null"
+                  disabled>
+                  Select Area
+                </option>
+
+                <option
+                  *ngIf="isLoadingAreas"
+                  disabled>
+                  Loading Areas...
+                </option>
+
+                <option
+                  *ngFor="let area of areas"
+                  [ngValue]="area.areaId">
+
+                  {{ area.areaName }}
+
+                  <ng-container
+                    *ngIf="area.areaCode">
+                    ({{ area.areaCode }})
+                  </ng-container>
+
+                </option>
+
+              </select>
+
+            </div>
+
+            <small
+              *ngIf="
+                submitted &&
+                f['area'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
+              Area is required
+
+            </small>
+
+            <small
+              *ngIf="
+                !isLoadingAreas &&
+                areas.length === 0
+              "
+              class="text-gray-500
+                     text-xs
+                     mt-1
+                     block">
+
+              No active areas available.
+
+            </small>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- ROUTES -->
+          <!-- ================================================= -->
+
+          <div
+            class="relative
+                   route-dropdown-container">
+
+            <div
+              class="flex
+                     items-center
+                     justify-between
+                     mb-2">
+
+              <label
+                class="block
+                       text-sm
+                       font-medium
+                       text-gray-700">
+
+                Routes
+
+                <span class="text-red-500">*</span>
+
               </label>
-              <button 
-                type="button" 
+
+
+              <!-- ================================================= -->
+              <!-- ADD ROUTE BUTTON - OPENS MODAL -->
+              <!-- ================================================= -->
+
+              <button
+                type="button"
                 (click)="openRouteModal()"
-                class="text-xs font-semibold text-blue-600 hover:text-blue-800 transition flex items-center gap-1">
+                [disabled]="!mrForm.get('area')?.value"
+                class="px-4
+                       py-2
+                       text-xs
+                       font-semibold
+                       text-blue-600
+                       bg-blue-50
+                       hover:bg-blue-100
+                       border
+                       border-blue-200
+                       rounded-xl
+                       transition
+                       disabled:opacity-50
+                       disabled:cursor-not-allowed">
+
                 + Add Route
+
               </button>
+
             </div>
 
-            <!-- Selected Tags Container -->
-            <div (click)="showRouteDropdown = !showRouteDropdown"
-              class="min-h-[48px] border rounded-xl px-3 py-2 bg-white cursor-pointer flex flex-wrap items-center gap-2 focus-within:ring-2 focus-within:ring-blue-400 transition-all">
-              <ng-container *ngIf="selectedRoutes.length; else placeholder">
-                <span *ngFor="let route of selectedRoutes"
-                  class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 shadow-sm">
+
+            <!-- ================================================= -->
+            <!-- SELECTED ROUTES -->
+            <!-- ================================================= -->
+
+            <div
+              (click)="
+                mrForm.get('area')?.value &&
+                (showRouteDropdown =
+                  !showRouteDropdown)
+              "
+              class="min-h-[48px]
+                     border
+                     rounded-xl
+                     px-3
+                     py-2
+                     bg-white
+                     cursor-pointer
+                     flex
+                     flex-wrap
+                     items-center
+                     gap-2
+                     focus-within:ring-2
+                     focus-within:ring-blue-400
+                     transition-all">
+
+              <ng-container
+                *ngIf="
+                  selectedRoutes.length;
+                  else placeholder
+                ">
+
+                <span
+                  *ngFor="
+                    let route of selectedRoutes
+                  "
+                  class="bg-blue-50
+                         text-blue-700
+                         border
+                         border-blue-200
+                         px-2.5
+                         py-1
+                         rounded-lg
+                         text-xs
+                         font-medium
+                         flex
+                         items-center
+                         gap-1.5
+                         shadow-sm">
+
                   {{ route.routeName }}
-                  <button type="button" (click)="removeRoute(route.routeId); $event.stopPropagation()"
-                    class="hover:text-blue-900 font-bold transition">
+
+                  <button
+                    type="button"
+                    (click)="
+                      removeRoute(route.routeId);
+                      $event.stopPropagation()
+                    "
+                    class="hover:text-blue-900
+                           font-bold
+                           transition">
+
                     ×
+
                   </button>
+
                 </span>
+
               </ng-container>
+
+
               <ng-template #placeholder>
-                <span class="text-gray-400 text-sm">Select Routes...</span>
+
+                <span
+                  class="text-gray-400
+                         text-sm">
+
+                  {{
+                    !mrForm.get('area')?.value
+                      ? 'Select Area First'
+                      : 'Select Routes...'
+                  }}
+
+                </span>
+
               </ng-template>
+
             </div>
 
-            <!-- Searchable Dropdown Overlay -->
-            <div *ngIf="showRouteDropdown"
-              class="absolute w-full bg-white border rounded-xl shadow-xl mt-1 z-50 overflow-hidden">
-              <div class="p-2 border-b bg-gray-50">
-                <input type="text" [(ngModel)]="routeSearch" (input)="filterRoutes()"
-                  [ngModelOptions]="{standalone: true}" placeholder="Search route..."
-                  class="w-full bg-white border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400">
+
+            <!-- ================================================= -->
+            <!-- ROUTE DROPDOWN -->
+            <!-- ================================================= -->
+
+            <div
+              *ngIf="
+                showRouteDropdown &&
+                mrForm.get('area')?.value
+              "
+              class="absolute
+                     w-full
+                     bg-white
+                     border
+                     rounded-xl
+                     shadow-xl
+                     mt-1
+                     z-50
+                     overflow-hidden">
+
+
+              <!-- SEARCH -->
+
+              <div
+                class="p-2
+                       border-b
+                       bg-gray-50">
+
+                <input
+                  type="text"
+                  [(ngModel)]="routeSearch"
+                  (input)="filterRoutes()"
+                  [ngModelOptions]="{
+                    standalone: true
+                  }"
+                  placeholder="Search route..."
+                  class="w-full
+                         bg-white
+                         border
+                         rounded-lg
+                         px-3
+                         py-2
+                         text-sm
+                         outline-none
+                         focus:ring-2
+                         focus:ring-blue-400">
+
               </div>
 
-              <div class="max-h-56 overflow-y-auto p-1 space-y-0.5 custom-scrollbar">
-                <label *ngFor="let item of filteredRoutes"
-                  class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer text-sm text-gray-700 transition">
-                  <input type="checkbox" [checked]="isSelected(item.routeId)" (change)="toggleRoute(item)"
-                    class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer">
-                  <span>{{ item.routeName }}</span>
+
+              <!-- ROUTE LIST -->
+
+              <div
+                class="max-h-56
+                       overflow-y-auto
+                       p-1
+                       space-y-0.5
+                       custom-scrollbar">
+
+                <label
+                  *ngFor="
+                    let item of filteredRoutes
+                  "
+                  class="flex
+                         items-center
+                         gap-3
+                         px-3
+                         py-2
+                         rounded-lg
+                         hover:bg-gray-100
+                         cursor-pointer
+                         text-sm
+                         text-gray-700
+                         transition">
+
+                  <input
+                    type="checkbox"
+                    [checked]="
+                      isSelected(item.routeId)
+                    "
+                    (change)="
+                      toggleRoute(item)
+                    "
+                    class="w-4 h-4
+                           text-blue-600
+                           rounded
+                           border-gray-300
+                           focus:ring-blue-500
+                           cursor-pointer">
+
+                  <span>
+                    {{ item.routeName }}
+                  </span>
+
                 </label>
 
-                <div *ngIf="filteredRoutes.length === 0" class="text-xs text-gray-400 p-4 text-center">
-                  No routes found matching "{{ routeSearch }}"
+
+                <!-- NO ROUTES -->
+
+                <div
+                  *ngIf="
+                    !isLoadingRoutes &&
+                    filteredRoutes.length === 0
+                  "
+                  class="text-xs
+                         text-gray-400
+                         p-4
+                         text-center">
+
+                  {{
+                    routeSearch
+                      ? 'No routes found matching "' +
+                        routeSearch +
+                        '"'
+                      : 'No routes available for this area.'
+                  }}
+
                 </div>
+
+
+                <!-- LOADING -->
+
+                <div
+                  *ngIf="isLoadingRoutes"
+                  class="text-xs
+                         text-gray-400
+                         p-4
+                         text-center">
+
+                  Loading Routes...
+
+                </div>
+
               </div>
+
             </div>
 
-            <small *ngIf="submitted && f['routeIds'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
+
+            <!-- ================================================= -->
+            <!-- ROUTE VALIDATION -->
+            <!-- ================================================= -->
+
+            <small
+              *ngIf="
+                submitted &&
+                f['routeIds'].errors?.['required']
+              "
+              class="text-red-500
+                     text-xs
+                     mt-1
+                     block">
+
               Select at least one route.
-            </small>
-          </div>
 
-          <!-- Stockist Selection -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Stockist <span class="text-red-500">*</span>
-            </label>
-            <div class="flex items-center gap-3 border rounded-xl px-4 bg-gray-50 focus-within:ring-2 focus-within:ring-blue-400">
-              <lucide-icon [img]="Building2" class="text-gray-400"></lucide-icon>
-              <select formControlName="stockistId" class="w-full h-12 bg-transparent outline-none text-sm">
-                <option [ngValue]="null" disabled>Select Stockist</option>
-                <option *ngFor="let item of stockietList" [ngValue]="item.stockistId">
-                  {{ item.name }} - {{ item.city }} - {{ item.firmType }}
-                </option>
-              </select>
-            </div>
-            <small *ngIf="submitted && f['stockistId'].errors?.['required']" class="text-red-500 text-xs mt-1 block">
-              Stockist is required
             </small>
+
+
+            <!-- ================================================= -->
+            <!-- NO ROUTES -->
+            <!-- ================================================= -->
+
+            <small
+              *ngIf="
+                mrForm.get('area')?.value &&
+                !isLoadingRoutes &&
+                routeList.length === 0
+              "
+              class="text-gray-500
+                     text-xs
+                     mt-1
+                     block">
+
+              No routes available
+              for this area.
+
+            </small>
+
           </div>
 
         </div>
+
       </div>
 
-      <!-- Actions -->
-      <div class="flex flex-col md:flex-row justify-end gap-4">
-        <button type="button" (click)="resetForm()"
-          class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl transition">
+
+      <!-- ================================================= -->
+      <!-- ACTIONS -->
+      <!-- ================================================= -->
+
+      <div
+        class="flex
+               flex-col
+               md:flex-row
+               justify-end
+               gap-4">
+
+        <button
+          type="button"
+          (click)="resetForm()"
+          [disabled]="isSaving"
+          class="bg-gray-500
+                 hover:bg-gray-600
+                 text-white
+                 px-6
+                 py-3
+                 rounded-xl
+                 transition
+                 disabled:opacity-60">
+
           Reset
+
         </button>
 
-        <button type="button" (click)="saveMr()" [disabled]="isSaving"
-          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 min-w-[210px] disabled:opacity-60 disabled:cursor-not-allowed">
-          <ng-container *ngIf="isSaving; else saveText">
-            <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+
+        <button
+          type="button"
+          (click)="saveMr()"
+          [disabled]="isSaving"
+          class="bg-blue-600
+                 hover:bg-blue-700
+                 text-white
+                 font-semibold
+                 px-6
+                 py-3
+                 rounded-xl
+                 transition-all
+                 flex
+                 items-center
+                 justify-center
+                 gap-2
+                 min-w-[210px]
+                 disabled:opacity-60
+                 disabled:cursor-not-allowed">
+
+          <ng-container
+            *ngIf="
+              isSaving;
+              else saveText
+            ">
+
+            <span
+              class="w-5 h-5
+                     border-2
+                     border-white
+                     border-t-transparent
+                     rounded-full
+                     animate-spin">
+            </span>
+
             Saving...
+
           </ng-container>
+
+
           <ng-template #saveText>
-            <lucide-icon [img]="Save" class="w-5 h-5"></lucide-icon>
+
+            <lucide-icon
+              [img]="Save"
+              class="w-5 h-5">
+            </lucide-icon>
+
             Save Representative
+
           </ng-template>
+
         </button>
+
       </div>
 
     </form>
+
   </div>
+
 </div>
 
-<!-- Add New Route Modal -->
-<div *ngIf="showRouteModal" 
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
-  
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
-    
-    <!-- Modal Header -->
-    <div class="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
-      <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-        <lucide-icon [img]="Route" class="text-blue-600 w-5 h-5"></lucide-icon>
+
+<!-- ===================================================== -->
+<!-- ADD NEW ROUTE MODAL -->
+<!-- ===================================================== -->
+
+<div
+  *ngIf="showRouteModal"
+  class="fixed
+         inset-0
+         z-50
+         flex
+         items-center
+         justify-center
+         bg-black
+         bg-opacity-50
+         backdrop-blur-sm
+         p-4">
+
+  <div
+    class="bg-white
+           rounded-2xl
+           shadow-2xl
+           w-full
+           max-w-md
+           overflow-hidden
+           transform
+           transition-all">
+
+
+    <!-- ================================================= -->
+    <!-- MODAL HEADER -->
+    <!-- ================================================= -->
+
+    <div
+      class="flex
+             items-center
+             justify-between
+             px-6
+             py-4
+             border-b
+             bg-gray-50">
+
+      <h3
+        class="text-lg
+               font-semibold
+               text-gray-800
+               flex
+               items-center
+               gap-2">
+
+        <lucide-icon
+          [img]="Route"
+          class="text-blue-600
+                 w-5
+                 h-5">
+        </lucide-icon>
+
         Add New Route
+
       </h3>
-      <button type="button" (click)="closeRouteModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">
+
+
+      <button
+        type="button"
+        (click)="closeRouteModal()"
+        [disabled]="isAddingRoute"
+        class="text-gray-400
+               hover:text-gray-600
+               disabled:opacity-50
+               text-xl
+               font-bold">
+
         ×
+
       </button>
+
     </div>
 
-    <!-- Modal Body -->
-    <div class="p-6 space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Route Name <span class="text-red-500">*</span>
-        </label>
-        <input 
-          type="text" 
-          [(ngModel)]="newRouteName" 
-          [ngModelOptions]="{standalone: true}"
-          placeholder="Enter route name" 
-          class="w-full h-11 border rounded-xl px-4 outline-none text-sm focus:ring-2 focus:ring-blue-400 bg-gray-50">
+
+    <!-- ================================================= -->
+    <!-- MODAL BODY -->
+    <!-- ================================================= -->
+
+    <div
+      class="p-6
+             space-y-4">
+
+
+      <!-- ================================================= -->
+      <!-- SELECTED AREA -->
+      <!-- ================================================= -->
+
+      <div
+        *ngIf="selectedArea"
+        class="rounded-xl
+               bg-blue-50
+               border
+               border-blue-100
+               p-3">
+
+        <div
+          class="text-xs
+                 text-gray-500
+                 mb-1">
+
+          Selected Area
+
+        </div>
+
+        <div
+          class="font-semibold
+                 text-gray-800">
+
+          {{ selectedArea.areaName }}
+
+          <span
+            *ngIf="selectedArea.areaCode"
+            class="text-sm
+                   text-gray-500
+                   font-normal">
+
+            ({{ selectedArea.areaCode }})
+
+          </span>
+
+        </div>
+
+
+        <!-- AREA ID -->
+
+        <div
+          class="text-xs
+                 text-gray-400
+                 mt-1">
+
+          Area ID:
+          {{ mrForm.get('area')?.value }}
+
+        </div>
+
       </div>
 
+
+      <!-- ================================================= -->
+      <!-- ROUTE NAME -->
+      <!-- ================================================= -->
+
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
+
+        <label
+          class="block
+                 text-sm
+                 font-medium
+                 text-gray-700
+                 mb-1">
+
+          Route Name
+
+          <span class="text-red-500">*</span>
+
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="newRouteName"
+          [ngModelOptions]="{
+            standalone: true
+          }"
+          [disabled]="isAddingRoute"
+          placeholder="Enter route name"
+          class="w-full
+                 h-11
+                 border
+                 rounded-xl
+                 px-4
+                 outline-none
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-400
+                 bg-gray-50
+                 disabled:opacity-60">
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- DESCRIPTION -->
+      <!-- ================================================= -->
+
+      <div>
+
+        <label
+          class="block
+                 text-sm
+                 font-medium
+                 text-gray-700
+                 mb-1">
+
           Description
+
         </label>
-        <textarea 
-          [(ngModel)]="newRouteDescription" 
-          [ngModelOptions]="{standalone: true}"
-          rows="3" 
-          placeholder="Enter route description (optional)" 
-          class="w-full border rounded-xl p-3 outline-none text-sm focus:ring-2 focus:ring-blue-400 bg-gray-50 resize-none"></textarea>
+
+        <textarea
+          [(ngModel)]="newRouteDescription"
+          [ngModelOptions]="{
+            standalone: true
+          }"
+          [disabled]="isAddingRoute"
+          rows="3"
+          placeholder="Enter route description (optional)"
+          class="w-full
+                 border
+                 rounded-xl
+                 p-3
+                 outline-none
+                 text-sm
+                 focus:ring-2
+                 focus:ring-blue-400
+                 bg-gray-50
+                 resize-none
+                 disabled:opacity-60">
+        </textarea>
+
       </div>
+
     </div>
 
-    <!-- Modal Footer -->
-    <div class="flex justify-end gap-3 px-6 py-4 bg-gray-50 border-t">
-      <button 
-        type="button" 
-        (click)="closeRouteModal()" 
-        class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-xl transition">
+
+    <!-- ================================================= -->
+    <!-- MODAL FOOTER -->
+    <!-- ================================================= -->
+
+    <div
+      class="flex
+             justify-end
+             gap-3
+             px-6
+             py-4
+             bg-gray-50
+             border-t">
+
+      <button
+        type="button"
+        (click)="closeRouteModal()"
+        [disabled]="isAddingRoute"
+        class="px-4
+               py-2
+               text-sm
+               font-medium
+               text-gray-600
+               bg-gray-200
+               hover:bg-gray-300
+               rounded-xl
+               transition
+               disabled:opacity-50">
+
         Cancel
+
       </button>
-      <button 
-        type="button" 
-        (click)="addRoute()" 
-        class="px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shadow">
-        Add Route
+
+
+      <!-- ================================================= -->
+      <!-- ACTUAL CREATE ROUTE BUTTON -->
+      <!-- ================================================= -->
+
+      <button
+        type="button"
+        (click)="addRoute()"
+        [disabled]="
+          isAddingRoute ||
+          !mrForm.get('area')?.value ||
+          !newRouteName.trim()
+        "
+        class="px-5
+               py-2
+               text-sm
+               font-semibold
+               text-white
+               bg-blue-600
+               hover:bg-blue-700
+               rounded-xl
+               transition
+               shadow
+               disabled:opacity-60
+               disabled:cursor-not-allowed
+               flex
+               items-center
+               gap-2">
+
+        <ng-container
+          *ngIf="
+            isAddingRoute;
+            else addRouteText
+          ">
+
+          <span
+            class="w-4 h-4
+                   border-2
+                   border-white
+                   border-t-transparent
+                   rounded-full
+                   animate-spin">
+          </span>
+
+          Adding...
+
+        </ng-container>
+
+
+        <ng-template #addRouteText>
+
+          + Add Route
+
+        </ng-template>
+
       </button>
+
     </div>
 
   </div>
+
 </div>
+
