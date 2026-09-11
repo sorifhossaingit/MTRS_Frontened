@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -31,12 +31,72 @@ export class MrService {
 
 
   //MR OWN APIs 
+get_inventory_for_order(params: {
+  AgencyId: number;
+  MrId: number;
+  Search?: string;
+  Category?: string;
+  MinPrice?: number;
+  MaxPrice?: number;
+  PageNumber: number;
+  PageSize: number;
+}) {
 
-  get_inventory_for_order(params: any) {
-    return this.http.get(
-      `${this.apiUrl}/medicalpresentativeown/nearest-stockist-inventory`, { params });
+  let httpParams = new HttpParams()
+    .set('AgencyId', params.AgencyId.toString())
+    .set('MrId', params.MrId.toString())
+    .set('PageNumber', params.PageNumber.toString())
+    .set('PageSize', params.PageSize.toString());
+
+  if (
+    params.Search !== undefined &&
+    params.Search !== null &&
+    params.Search.trim() !== ''
+  ) {
+    httpParams = httpParams.set(
+      'Search',
+      params.Search.trim()
+    );
   }
 
+  if (
+    params.Category !== undefined &&
+    params.Category !== null &&
+    params.Category.trim() !== ''
+  ) {
+    httpParams = httpParams.set(
+      'Category',
+      params.Category.trim()
+    );
+  }
+
+  if (
+    params.MinPrice !== undefined &&
+    params.MinPrice !== null
+  ) {
+    httpParams = httpParams.set(
+      'MinPrice',
+      params.MinPrice.toString()
+    );
+  }
+
+  if (
+    params.MaxPrice !== undefined &&
+    params.MaxPrice !== null
+  ) {
+    httpParams = httpParams.set(
+      'MaxPrice',
+      params.MaxPrice.toString()
+    );
+  }
+
+  return this.http.get(
+    `${this.apiUrl}/medicalpresentativeown/nearest-stockist-inventory`,
+    {
+      params: httpParams
+    }
+  );
+}
   mr_create_order(data: any) {
     return this.http.post(`${this.apiUrl}/medicalpresentativeown/create-order`, data);
   }

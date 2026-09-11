@@ -272,54 +272,74 @@ onRouteChange(): void {
     });
   }
 
-  loadInventory(): void {
-    this.loading = true;
+loadInventory(): void {
+  this.loading = true;
 
-    const params = {
-      AgencyId: this.agencyId,
-      AssignedAreaManager: this.areaManagerId,
-      Search: this.searchText?.trim(),
-      Category: this.selectedCategory,
-      PageNumber: this.pageNumber,
-      PageSize: this.pageSize
-    };
+  // Get MR ID from localStorage
+  const mrId = Number(localStorage.getItem('mid')) || 0;
 
-    this.mrService.get_inventory_for_order(params).subscribe({
-      next: (res: any) => {
-        this.loading = false;
+  const params = {
+    AgencyId: this.agencyId,
+    MrId: mrId,
+    Search: this.searchText?.trim(),
+    Category: this.selectedCategory,
+    PageNumber: this.pageNumber,
+    PageSize: this.pageSize
+  };
 
-        if (!res.success) {
-          this.products = [];
-          this.totalRecords = 0;
-          this.totalPages = 0;
-          return;
-        }
+  console.log('Inventory API Params:', params);
 
-        const result = res.data;
+  this.mrService.get_inventory_for_order(params).subscribe({
+    next: (res: any) => {
+      this.loading = false;
 
-        this.products = (result.data || []).map((item: any) => ({
-          ...item,
-          orderQty: 1
-        }));
-
-        this.totalRecords = result.totalRecords;
-        this.pageNumber = result.pageNumber;
-        this.pageSize = result.pageSize;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-
-        this.prepareCategories();
-      },
-      error: () => {
-        this.loading = false;
+      if (!res?.success) {
         this.products = [];
-        Swal.fire({
-          icon: 'error',
-          title: 'Inventory',
-          text: 'Unable to load inventory.'
-        });
+        this.totalRecords = 0;
+        this.totalPages = 0;
+        return;
       }
-    });
-  }
+
+      const result = res.data;
+
+      this.products = (result?.data || []).map((item: any) => ({
+        ...item,
+        orderQty: 1
+      }));
+
+      this.totalRecords = result?.totalRecords || 0;
+      this.pageNumber = result?.pageNumber || this.pageNumber;
+      this.pageSize = result?.pageSize || this.pageSize;
+
+      this.totalPages = Math.ceil(
+        this.totalRecords / this.pageSize
+      );
+
+      this.prepareCategories();
+    },
+
+    error: (err: any) => {
+      this.loading = false;
+
+      this.products = [];
+      this.totalRecords = 0;
+      this.totalPages = 0;
+
+      console.error(
+        'Inventory API Error:',
+        err
+      );
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Inventory',
+        text:
+          err?.error?.message ||
+          'Unable to load inventory.'
+      });
+    }
+  });
+}
 
   prepareCategories(): void {
     const categorySet = new Set<string>();
