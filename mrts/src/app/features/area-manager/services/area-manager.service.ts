@@ -54,42 +54,103 @@ export class AreaManagerService {
 
 get_all_area(params: {
   agencyId: number;
+  mrId?: number;
   areaName?: string;
   areaCode?: string;
   isActive?: boolean;
 }) {
 
   let httpParams = new HttpParams()
-    .set('agencyId', params.agencyId.toString());
-
-  if (params.areaName !== undefined &&
-      params.areaName !== null &&
-      params.areaName.trim() !== '') {
-
-    httpParams = httpParams.set(
-      'areaName',
-      params.areaName.trim()
+    .set(
+      'agencyId',
+      params.agencyId.toString()
     );
+
+  // ============================================
+  // CHECK ROLE
+  // ============================================
+
+  const rid =
+    localStorage.getItem('rid');
+
+  const MR_ROLE_ID =
+    'fd1c87b5-524a-49e5-b60c-5d7b82ddeb43';
+
+  // ============================================
+  // SEND MR ID ONLY FOR MR ROLE
+  // ============================================
+
+  if (rid === MR_ROLE_ID) {
+
+    const mrId =
+      Number(
+        localStorage.getItem('mid')
+      );
+
+    if (mrId > 0) {
+
+      httpParams =
+        httpParams.set(
+          'mrId',
+          mrId.toString()
+        );
+    }
   }
 
-  if (params.areaCode !== undefined &&
-      params.areaCode !== null &&
-      params.areaCode.trim() !== '') {
+  // ============================================
+  // AREA NAME
+  // ============================================
 
-    httpParams = httpParams.set(
-      'areaCode',
-      params.areaCode.trim()
-    );
+  if (
+    params.areaName !== undefined &&
+    params.areaName !== null &&
+    params.areaName.trim() !== ''
+  ) {
+
+    httpParams =
+      httpParams.set(
+        'areaName',
+        params.areaName.trim()
+      );
   }
 
-  if (params.isActive !== undefined &&
-      params.isActive !== null) {
+  // ============================================
+  // AREA CODE
+  // ============================================
 
-    httpParams = httpParams.set(
-      'isActive',
-      params.isActive.toString()
-    );
+  if (
+    params.areaCode !== undefined &&
+    params.areaCode !== null &&
+    params.areaCode.trim() !== ''
+  ) {
+
+    httpParams =
+      httpParams.set(
+        'areaCode',
+        params.areaCode.trim()
+      );
   }
+
+  // ============================================
+  // ACTIVE FILTER
+  // ============================================
+
+  if (
+    params.isActive !== undefined &&
+    params.isActive !== null
+  ) {
+
+    httpParams =
+      httpParams.set(
+        'isActive',
+        params.isActive.toString()
+      );
+  }
+
+  console.log(
+    'Get All Area Params:',
+    httpParams.toString()
+  );
 
   return this.http.get(
     `${this.apiUrl}/admin/area-manager/get-all-area`,
@@ -98,7 +159,6 @@ get_all_area(params: {
     }
   );
 }
-
   
 
   get_area_by_id(areaId: number) {
