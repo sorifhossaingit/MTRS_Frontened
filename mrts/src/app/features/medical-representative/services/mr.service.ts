@@ -159,7 +159,7 @@ get_inventory_for_order(params: {
 
   get_customers(params: any) {
     return this.http.get(
-      `${this.apiUrl}/mrvisit/ar-dropown-customers`, { params });
+      `${this.apiUrl}/mrvisit//dashboard/get-customers`, { params });
   }
 
   get_active_session(visitPlanId: number) {
