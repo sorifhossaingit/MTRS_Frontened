@@ -4,8 +4,7 @@
   <!-- HEADER -->
   <!-- ====================================================== -->
 
-  <div
-    class="flex flex-col sm:flex-row
+  <div class="flex flex-col sm:flex-row
            justify-between
            items-start sm:items-center
            mb-6 gap-3">
@@ -15,14 +14,10 @@
     </h1>
 
 
-    <div
-      class="flex flex-wrap gap-2
+    <div class="flex flex-wrap gap-2
              w-full sm:w-auto">
 
-      <button
-        *ngIf="isAddCustomerAllowed()"
-        routerLink="/medical-representative-master/add-customer"
-        class="bg-blue-600
+      <button *ngIf="isAddCustomerAllowed()" routerLink="/medical-representative-master/add-customer" class="bg-blue-600
                text-white
                px-3 sm:px-4
                py-2
@@ -47,8 +42,7 @@
   <!-- KPI -->
   <!-- ====================================================== -->
 
-  <div
-    class="grid
+  <div class="grid
            grid-cols-1
            sm:grid-cols-2
            lg:grid-cols-4
@@ -57,16 +51,14 @@
 
     <!-- TOTAL -->
 
-    <div
-      class="bg-white
+    <div class="bg-white
              p-4
              rounded-2xl
              shadow
              flex items-center
              gap-3">
 
-      <lucide-icon
-        [img]="Users">
+      <lucide-icon [img]="Users">
       </lucide-icon>
 
 
@@ -87,16 +79,14 @@
 
     <!-- ACTIVE -->
 
-    <div
-      class="bg-white
+    <div class="bg-white
              p-4
              rounded-2xl
              shadow
              flex items-center
              gap-3">
 
-      <lucide-icon
-        [img]="CheckCircle">
+      <lucide-icon [img]="CheckCircle">
       </lucide-icon>
 
 
@@ -106,8 +96,7 @@
           Active
         </p>
 
-        <h2
-          class="text-lg sm:text-xl
+        <h2 class="text-lg sm:text-xl
                  font-bold
                  text-green-600">
 
@@ -122,16 +111,14 @@
 
     <!-- INACTIVE -->
 
-    <div
-      class="bg-white
+    <div class="bg-white
              p-4
              rounded-2xl
              shadow
              flex items-center
              gap-3">
 
-      <lucide-icon
-        [img]="XCircle">
+      <lucide-icon [img]="XCircle">
       </lucide-icon>
 
 
@@ -141,8 +128,7 @@
           Inactive
         </p>
 
-        <h2
-          class="text-lg sm:text-xl
+        <h2 class="text-lg sm:text-xl
                  font-bold
                  text-red-600">
 
@@ -157,16 +143,14 @@
 
     <!-- NEW -->
 
-    <div
-      class="bg-white
+    <div class="bg-white
              p-4
              rounded-2xl
              shadow
              flex items-center
              gap-3">
 
-      <lucide-icon
-        [img]="TrendingUp">
+      <lucide-icon [img]="TrendingUp">
       </lucide-icon>
 
 
@@ -176,8 +160,7 @@
           New Customers This Month
         </p>
 
-        <h2
-          class="text-lg sm:text-xl
+        <h2 class="text-lg sm:text-xl
                  font-bold">
 
           {{ newCustomer }}
@@ -195,8 +178,7 @@
   <!-- FILTER -->
   <!-- ====================================================== -->
 
-  <div
-    class="bg-white
+  <div class="bg-white
            p-4
            rounded-2xl
            shadow
@@ -210,12 +192,7 @@
 
     <!-- SEARCH -->
 
-    <input
-      type="text"
-      [(ngModel)]="searchText"
-      (keyup)="getCustomerDetails()"
-      placeholder="Search name/mobile"
-      class="border
+    <input type="text" [(ngModel)]="searchText" (keyup)="getCustomerDetails()" placeholder="Search name/mobile" class="border
              p-2
              rounded-lg
              sm:col-span-2" />
@@ -223,24 +200,18 @@
 
     <!-- CUSTOMER TYPE -->
 
-    <select
-      [(ngModel)]="typeFilter"
-      (change)="getCustomerDetails()"
-      class="border
+    <select [(ngModel)]="typeFilter" (change)="getCustomerDetails()" class="border
              p-2
              rounded-lg">
 
-      <option
-        [ngValue]="null">
+      <option [ngValue]="null">
 
         Type
 
       </option>
 
 
-      <option
-        *ngFor="let item of customerTypeList"
-        [ngValue]="item.customerTypeId">
+      <option *ngFor="let item of customerTypeList" [ngValue]="item.customerTypeId">
 
         {{ item.customerType }}
 
@@ -251,24 +222,18 @@
 
     <!-- ROUTE -->
 
-    <select
-      [(ngModel)]="routeFilter"
-      (change)="getCustomerDetails()"
-      class="border
+    <select [(ngModel)]="routeFilter" (change)="getCustomerDetails()" class="border
              p-2
              rounded-lg">
 
-      <option
-        [ngValue]="null">
+      <option [ngValue]="null">
 
         Route
 
       </option>
 
 
-      <option
-        *ngFor="let item of filterRouteList"
-        [ngValue]="item.routeId">
+      <option *ngFor="let item of filterRouteList" [ngValue]="item.routeId">
 
         {{ item.routeName }}
 
@@ -279,31 +244,25 @@
 
     <!-- STATUS -->
 
-    <select
-      [(ngModel)]="statusFilter"
-      (change)="getCustomerDetails()"
-      class="border
+    <select [(ngModel)]="statusFilter" (change)="getCustomerDetails()" class="border
              p-2
              rounded-lg">
 
-      <option
-        [ngValue]="null">
+      <option [ngValue]="null">
 
         Status
 
       </option>
 
 
-      <option
-        [ngValue]="true">
+      <option [ngValue]="true">
 
         Active
 
       </option>
 
 
-      <option
-        [ngValue]="false">
+      <option [ngValue]="false">
 
         Inactive
 
@@ -314,21 +273,14 @@
 
     <!-- STATE -->
 
-    <input
-      type="text"
-      [(ngModel)]="stateFilter"
-      (keyup)="getCustomerDetails()"
-      placeholder="State"
-      class="border
+    <input type="text" [(ngModel)]="stateFilter" (keyup)="getCustomerDetails()" placeholder="State" class="border
              p-2
              rounded-lg" />
 
 
     <!-- RESET -->
 
-    <button
-      (click)="resetFilter()"
-      class="bg-gray-200
+    <button (click)="resetFilter()" class="bg-gray-200
              rounded-lg
              py-2">
 
@@ -343,26 +295,22 @@
   <!-- CUSTOMER TABLE -->
   <!-- ====================================================== -->
 
-  <div
-    class="bg-white
+  <div class="bg-white
            rounded-2xl
            shadow
            overflow-hidden">
 
-    <div
-      class="overflow-x-auto">
+    <div class="overflow-x-auto">
 
 
-      <table
-        class="min-w-[1050px]
+      <table class="min-w-[1050px]
                w-full
                text-sm">
 
 
         <!-- HEADER -->
 
-        <thead
-          class="bg-gray-100
+        <thead class="bg-gray-100
                  text-left">
 
           <tr>
@@ -413,17 +361,14 @@
         <tbody>
 
 
-          <tr
-            *ngFor="let item of customerList"
-            class="border-t
+          <tr *ngFor="let item of customerList" class="border-t
                    hover:bg-gray-50
                    h-20">
 
 
             <!-- NAME -->
 
-            <td
-              class="px-6 py-4
+            <td class="px-6 py-4
                      font-medium">
 
               {{ item.name }}
@@ -433,13 +378,12 @@
 
             <!-- CUSTOMER TYPE -->
 
-            <td
-              class="px-6 py-4">
+            <td class="px-6 py-4">
 
               {{
-                item.customerType ||
-                item.type ||
-                '-'
+              item.customerType ||
+              item.type ||
+              '-'
               }}
 
             </td>
@@ -447,8 +391,7 @@
 
             <!-- CONTACT -->
 
-            <td
-              class="px-6 py-4">
+            <td class="px-6 py-4">
 
               <div>
 
@@ -457,8 +400,7 @@
               </div>
 
 
-              <div
-                class="text-gray-500
+              <div class="text-gray-500
                        text-xs
                        mt-1">
 
@@ -471,8 +413,7 @@
 
             <!-- LOCATION -->
 
-            <td
-              class="px-6 py-4">
+            <td class="px-6 py-4">
 
               {{ item.city || '-' }}
 
@@ -483,24 +424,20 @@
             <!-- AREA -->
             <!-- ================================================= -->
 
-            <td
-              class="px-6 py-4">
+            <td class="px-6 py-4">
 
-              <div
-                class="font-medium">
+              <div class="font-medium">
 
                 {{
-                  item.areaName ||
-                  getAreaName(item.areaId) ||
-                  '-'
+                item.areaName ||
+                getAreaName(item.areaId) ||
+                '-'
                 }}
 
               </div>
 
 
-              <div
-                *ngIf="item.areaCode"
-                class="text-xs
+              <div *ngIf="item.areaCode" class="text-xs
                        text-gray-500
                        mt-1">
 
@@ -515,13 +452,12 @@
             <!-- ROUTE -->
             <!-- ================================================= -->
 
-            <td
-              class="px-6 py-4">
+            <td class="px-6 py-4">
 
               {{
-                item.routeName ||
-                item.route ||
-                '-'
+              item.routeName ||
+              item.route ||
+              '-'
               }}
 
             </td>
@@ -529,25 +465,22 @@
 
             <!-- ACTIVE -->
 
-            <td
-              class="px-6 py-4">
+            <td class="px-6 py-4">
 
-              <span
-                class="px-3
+              <span class="px-3
                        py-1.5
                        rounded-full
                        text-xs
-                       font-medium"
-                [ngClass]="
+                       font-medium" [ngClass]="
                   item.isActive
                     ? 'bg-green-100 text-green-700'
                     : 'bg-red-100 text-red-700'
                 ">
 
                 {{
-                  item.isActive
-                    ? 'Active'
-                    : 'Inactive'
+                item.isActive
+                ? 'Active'
+                : 'Inactive'
                 }}
 
               </span>
@@ -557,17 +490,14 @@
 
             <!-- STATUS -->
 
-            <td
-              class="px-6 py-4">
+            <td class="px-6 py-4">
 
-              <span
-                class="px-3
+              <span class="px-3
                        py-1.5
                        rounded-full
                        text-xs
                        font-medium
-                       inline-block"
-                [ngClass]="{
+                       inline-block" [ngClass]="{
 
                   'bg-amber-100 text-amber-700':
                     item.status == 1,
@@ -586,37 +516,32 @@
                 }">
 
 
-                <ng-container
-                  [ngSwitch]="
+                <ng-container [ngSwitch]="
                     +item.status
                   ">
 
-                  <span
-                    *ngSwitchCase="1">
+                  <span *ngSwitchCase="1">
 
                     Created by MR/Admin
 
                   </span>
 
 
-                  <span
-                    *ngSwitchCase="2">
+                  <span *ngSwitchCase="2">
 
                     Approved by Admin
 
                   </span>
 
 
-                  <span
-                    *ngSwitchCase="3">
+                  <span *ngSwitchCase="3">
 
                     Reject by Admin
 
                   </span>
 
 
-                  <span
-                    *ngSwitchDefault>
+                  <span *ngSwitchDefault>
 
                     -
 
@@ -632,12 +557,10 @@
 
             <!-- ACTIONS -->
 
-            <td
-              class="px-6 py-4
+            <td class="px-6 py-4
                      text-center">
 
-              <div
-                class="flex
+              <div class="flex
                        justify-center
                        items-center
                        gap-4">
@@ -645,15 +568,11 @@
 
                 <!-- EDIT -->
 
-                <button
-                  (click)="editCustomer(item)"
-                  class="text-yellow-600
+                <button (click)="editCustomer(item)" class="text-yellow-600
                          hover:scale-110
-                         transition"
-                  title="Edit">
+                         transition" title="Edit">
 
-                  <lucide-icon
-                    [img]="Pencil">
+                  <lucide-icon [img]="Pencil">
                   </lucide-icon>
 
                 </button>
@@ -661,32 +580,26 @@
 
                 <!-- APPROVE / REJECT -->
 
-                <div
-                  *ngIf="
+                <div *ngIf="
                     rid ===
                     'a5fabfee-5506-4e12-bfec-c898fc5af3ae'
-                  "
-                  class="flex
+                  " class="flex
                          items-center
                          gap-2">
 
 
                   <!-- APPROVE -->
 
-                  <button
-                    (click)="
+                  <button (click)="
                       updateCustomerStatus(
                         item,
                         2
                       )
-                    "
-                    class="text-green-600
+                    " class="text-green-600
                            hover:scale-110
-                           transition"
-                    title="Approve">
+                           transition" title="Approve">
 
-                    <lucide-icon
-                      [img]="Check">
+                    <lucide-icon [img]="Check">
                     </lucide-icon>
 
                   </button>
@@ -694,20 +607,16 @@
 
                   <!-- REJECT -->
 
-                  <button
-                    (click)="
+                  <button (click)="
                       updateCustomerStatus(
                         item,
                         3
                       )
-                    "
-                    class="text-red-600
+                    " class="text-red-600
                            hover:scale-110
-                           transition"
-                    title="Reject">
+                           transition" title="Reject">
 
-                    <lucide-icon
-                      [img]="X">
+                    <lucide-icon [img]="X">
                     </lucide-icon>
 
                   </button>
@@ -725,14 +634,11 @@
 
           <!-- EMPTY -->
 
-          <tr
-            *ngIf="
+          <tr *ngIf="
               customerList.length === 0
             ">
 
-            <td
-              colspan="9"
-              class="text-center
+            <td colspan="9" class="text-center
                      py-10
                      text-gray-500">
 
@@ -756,8 +662,7 @@
   <!-- PAGINATION -->
   <!-- ====================================================== -->
 
-  <div
-    class="flex
+  <div class="flex
            flex-col
            sm:flex-row
            justify-between
@@ -770,14 +675,12 @@
            shadow">
 
 
-    <div
-      class="text-sm
+    <div class="text-sm
              text-gray-600">
 
       Showing Page
 
-      <span
-        class="font-semibold">
+      <span class="font-semibold">
 
         {{ pageNumber }}
 
@@ -785,8 +688,7 @@
 
       of
 
-      <span
-        class="font-semibold">
+      <span class="font-semibold">
 
         {{ totalPages }}
 
@@ -796,8 +698,7 @@
 
       Total Records:
 
-      <span
-        class="font-semibold">
+      <span class="font-semibold">
 
         {{ totalRecords }}
 
@@ -806,16 +707,12 @@
     </div>
 
 
-    <div
-      class="flex
+    <div class="flex
              items-center
              gap-2">
 
 
-      <button
-        (click)="previousPage()"
-        [disabled]="pageNumber === 1"
-        class="px-4
+      <button (click)="previousPage()" [disabled]="pageNumber === 1" class="px-4
                py-2
                rounded-lg
                bg-gray-200
@@ -826,13 +723,10 @@
       </button>
 
 
-      <button
-        (click)="nextPage()"
-        [disabled]="
+      <button (click)="nextPage()" [disabled]="
           pageNumber === totalPages ||
           totalPages === 0
-        "
-        class="px-4
+        " class="px-4
                py-2
                rounded-lg
                bg-blue-600
@@ -846,8 +740,7 @@
     </div>
 
 
-    <div
-      class="flex
+    <div class="flex
              items-center
              gap-2">
 
@@ -856,9 +749,7 @@
       </span>
 
 
-      <select
-        (change)="changePageSize($event)"
-        class="border
+      <select (change)="changePageSize($event)" class="border
                rounded-lg
                p-2">
 
@@ -892,9 +783,7 @@
 <!-- EDIT CUSTOMER MODAL -->
 <!-- ====================================================== -->
 
-<div
-  *ngIf="showEditModal"
-  class="fixed
+<div *ngIf="showEditModal" class="fixed
          inset-0
          bg-black/50
          flex
@@ -904,8 +793,7 @@
          p-4">
 
 
-  <div
-    class="bg-white
+  <div class="bg-white
            rounded-2xl
            w-full
            max-w-5xl
@@ -918,8 +806,7 @@
     <!-- MODAL HEADER -->
     <!-- ================================================= -->
 
-    <div
-      class="flex
+    <div class="flex
              justify-between
              items-center
              border-b
@@ -931,8 +818,7 @@
              z-10">
 
 
-      <h2
-        class="text-2xl
+      <h2 class="text-2xl
                font-bold
                text-gray-800">
 
@@ -941,15 +827,11 @@
       </h2>
 
 
-      <button
-        type="button"
-        (click)="closeModal()"
-        class="text-gray-500
+      <button type="button" (click)="closeModal()" class="text-gray-500
                hover:text-red-500
                transition-colors">
 
-        <lucide-icon
-          [img]="X">
+        <lucide-icon [img]="X">
         </lucide-icon>
 
       </button>
@@ -962,9 +844,7 @@
     <!-- FORM -->
     <!-- ================================================= -->
 
-    <form
-      [formGroup]="customerForm"
-      class="p-6
+    <form [formGroup]="customerForm" class="p-6
              grid
              grid-cols-1
              md:grid-cols-2
@@ -978,8 +858,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -992,10 +871,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="name"
-          class="w-full
+        <input type="text" formControlName="name" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1003,20 +879,17 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['name'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['name'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1034,8 +907,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1048,9 +920,7 @@
         </label>
 
 
-        <select
-          formControlName="type"
-          class="w-full
+        <select formControlName="type" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1058,27 +928,23 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['type'].errors
           }">
 
 
-          <option
-            [ngValue]="0">
+          <option [ngValue]="0">
 
             Select Type
 
           </option>
 
 
-          <option
-            *ngFor="
+          <option *ngFor="
               let type of customerTypeList
-            "
-            [ngValue]="
+            " [ngValue]="
               type.customerTypeId
             ">
 
@@ -1089,12 +955,10 @@
         </select>
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['type'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1112,8 +976,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1126,14 +989,11 @@
         </label>
 
 
-        <select
-          formControlName="areaId"
-          (change)="
+        <select formControlName="areaId" (change)="
             onAreaChange(
               $any($event.target).value
             )
-          "
-          class="w-full
+          " class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1141,45 +1001,38 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['areaId'].errors
           }">
 
 
-          <option
-            [ngValue]="0">
+          <option [ngValue]="0">
 
             Select Area
 
           </option>
 
 
-          <option
-            *ngIf="
+          <option *ngIf="
               isLoadingAreas
-            "
-            disabled>
+            " disabled>
 
             Loading Areas...
 
           </option>
 
 
-          <option
-            *ngFor="
+          <option *ngFor="
               let area of areas
-            "
-            [ngValue]="
+            " [ngValue]="
               area.areaId
             ">
 
             {{ area.areaName }}
 
-            <ng-container
-              *ngIf="
+            <ng-container *ngIf="
                 area.areaCode
               ">
 
@@ -1193,12 +1046,10 @@
         </select>
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['areaId'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1216,8 +1067,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1226,9 +1076,7 @@
         </label>
 
 
-        <select
-          formControlName="routeId"
-          class="w-full
+        <select formControlName="routeId" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1236,44 +1084,38 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [disabled]="
+                 focus:outline-none" [disabled]="
             !customerForm
               .get('areaId')
               ?.value
           ">
 
 
-          <option
-            [ngValue]="0">
+          <option [ngValue]="0">
 
             {{
-              !customerForm
-                .get('areaId')
-                ?.value
-                ? 'Select Area First'
-                : 'Select Route'
+            !customerForm
+            .get('areaId')
+            ?.value
+            ? 'Select Area First'
+            : 'Select Route'
             }}
 
           </option>
 
 
-          <option
-            *ngIf="
+          <option *ngIf="
               isLoadingRoutes
-            "
-            disabled>
+            " disabled>
 
             Loading Routes...
 
           </option>
 
 
-          <option
-            *ngFor="
+          <option *ngFor="
               let route of routeList
-            "
-            [ngValue]="
+            " [ngValue]="
               route.routeId
             ">
 
@@ -1285,15 +1127,13 @@
         </select>
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             customerForm
               .get('areaId')
               ?.value &&
             !isLoadingRoutes &&
             routeList.length === 0
-          "
-          class="text-gray-500
+          " class="text-gray-500
                  text-xs
                  mt-1">
 
@@ -1311,8 +1151,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1325,10 +1164,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="contactPerson"
-          class="w-full
+        <input type="text" formControlName="contactPerson" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1336,20 +1172,17 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['contactPerson'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['contactPerson'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1367,8 +1200,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1381,10 +1213,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="mobile"
-          class="w-full
+        <input type="text" formControlName="mobile" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1392,26 +1221,22 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['mobile'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['mobile'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
 
-          <span
-            *ngIf="
+          <span *ngIf="
               f['mobile']
                 .errors?.['required']
             ">
@@ -1421,8 +1246,7 @@
           </span>
 
 
-          <span
-            *ngIf="
+          <span *ngIf="
               f['mobile']
                 .errors?.['pattern']
             ">
@@ -1443,8 +1267,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1457,10 +1280,7 @@
         </label>
 
 
-        <input
-          type="email"
-          formControlName="email"
-          class="w-full
+        <input type="email" formControlName="email" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1468,25 +1288,21 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['email'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['email'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
-          <span
-            *ngIf="
+          <span *ngIf="
               f['email']
                 .errors?.['required']
             ">
@@ -1496,8 +1312,7 @@
           </span>
 
 
-          <span
-            *ngIf="
+          <span *ngIf="
               f['email']
                 .errors?.['email']
             ">
@@ -1518,8 +1333,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1532,10 +1346,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="address"
-          class="w-full
+        <input type="text" formControlName="address" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1543,20 +1354,17 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['address'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['address'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1574,8 +1382,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1588,10 +1395,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="city"
-          class="w-full
+        <input type="text" formControlName="city" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1599,20 +1403,17 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['city'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['city'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1630,8 +1431,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1644,10 +1444,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="state"
-          class="w-full
+        <input type="text" formControlName="state" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1655,20 +1452,17 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['state'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['state'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1686,8 +1480,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1700,10 +1493,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="pincode"
-          class="w-full
+        <input type="text" formControlName="pincode" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1711,20 +1501,17 @@
                  text-sm
                  focus:ring-2
                  focus:ring-blue-500
-                 focus:outline-none"
-          [ngClass]="{
+                 focus:outline-none" [ngClass]="{
             'border-red-500':
               submitted &&
               f['pincode'].errors
           }" />
 
 
-        <div
-          *ngIf="
+        <div *ngIf="
             submitted &&
             f['pincode'].errors
-          "
-          class="text-red-500
+          " class="text-red-500
                  text-xs
                  mt-1">
 
@@ -1742,8 +1529,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1752,10 +1538,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="gstNo"
-          class="w-full
+        <input type="text" formControlName="gstNo" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1775,8 +1558,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1785,10 +1567,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="drugLicenseNo"
-          class="w-full
+        <input type="text" formControlName="drugLicenseNo" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1808,8 +1587,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1818,10 +1596,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="panNo"
-          class="w-full
+        <input type="text" formControlName="panNo" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1839,14 +1614,12 @@
       <!-- STATUS -->
       <!-- ================================================= -->
 
-      <div
-        *ngIf="
+      <div *ngIf="
           rid ===
           'a5fabfee-5506-4e12-bfec-c898fc5af3ae'
         ">
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1855,9 +1628,7 @@
         </label>
 
 
-        <select
-          formControlName="isActive"
-          class="w-full
+        <select formControlName="isActive" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1867,16 +1638,14 @@
                  focus:ring-blue-500
                  focus:outline-none">
 
-          <option
-            [ngValue]="true">
+          <option [ngValue]="true">
 
             Active
 
           </option>
 
 
-          <option
-            [ngValue]="false">
+          <option [ngValue]="false">
 
             Inactive
 
@@ -1894,8 +1663,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1904,10 +1672,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="region"
-          class="w-full
+        <input type="text" formControlName="region" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1927,8 +1692,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1937,10 +1701,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="landline"
-          class="w-full
+        <input type="text" formControlName="landline" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1960,8 +1721,7 @@
 
       <div>
 
-        <label
-          class="text-sm
+        <label class="text-sm
                  font-medium
                  text-gray-700">
 
@@ -1970,10 +1730,7 @@
         </label>
 
 
-        <input
-          type="text"
-          formControlName="registrationNo"
-          class="w-full
+        <input type="text" formControlName="registrationNo" class="w-full
                  border
                  rounded-xl
                  p-3
@@ -1994,8 +1751,7 @@
     <!-- FOOTER -->
     <!-- ================================================= -->
 
-    <div
-      class="flex
+    <div class="flex
              justify-end
              gap-3
              border-t
@@ -2007,10 +1763,7 @@
 
       <!-- CANCEL -->
 
-      <button
-        type="button"
-        (click)="closeModal()"
-        class="bg-gray-400
+      <button type="button" (click)="closeModal()" class="bg-gray-400
                hover:bg-gray-500
                text-white
                font-medium
@@ -2026,11 +1779,7 @@
 
       <!-- UPDATE -->
 
-      <button
-        type="button"
-        (click)="updateCustomer()"
-        [disabled]="isLoading"
-        class="bg-blue-600
+      <button type="button" (click)="updateCustomer()" [disabled]="isLoading" class="bg-blue-600
                hover:bg-blue-700
                text-white
                font-medium
@@ -2047,14 +1796,12 @@
                disabled:cursor-not-allowed">
 
 
-        <ng-container
-          *ngIf="
+        <ng-container *ngIf="
             isLoading;
             else updateCustomerText
           ">
 
-          <span
-            class="w-4 h-4
+          <span class="w-4 h-4
                    border-2
                    border-white
                    border-t-transparent
@@ -2068,8 +1815,7 @@
         </ng-container>
 
 
-        <ng-template
-          #updateCustomerText>
+        <ng-template #updateCustomerText>
 
           Update Customer
 

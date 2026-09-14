@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import {
   Package,
   Plus,
@@ -95,6 +95,225 @@ export class ProductMasterDashboardComponent implements OnInit {
   // 🔷 INIT
   // =========================================================
 
+categoryDropdownOpen: boolean = false;
+
+categories: string[] = [
+  'Analgesic',
+  'Antipyretic',
+  'Antibiotic',
+  'Antiviral',
+  'Antifungal',
+  'Antiprotozoal',
+  'Anthelmintic',
+  'Antimalarial',
+
+  'Antacid',
+  'Antiulcer',
+  'Gastrointestinal',
+  'Antiemetic',
+  'Laxative',
+  'Antidiarrheal',
+
+  'Antihistamine',
+  'Antiallergic',
+  'Cough & Cold',
+  'Expectorant',
+  'Antitussive',
+  'Decongestant',
+
+  'Cardiovascular',
+  'Antihypertensive',
+  'Antianginal',
+  'Antiarrhythmic',
+  'Anticoagulant',
+  'Antiplatelet',
+  'Lipid Lowering',
+
+  'Antidiabetic',
+  'Insulin',
+  'Endocrine',
+  'Thyroid',
+
+  'CNS',
+  'Antidepressant',
+  'Antipsychotic',
+  'Antiepileptic',
+  'Anxiolytic',
+  'Sedative',
+  'Hypnotic',
+
+  'Respiratory',
+  'Bronchodilator',
+  'Asthma',
+  'COPD',
+
+  'Dermatological',
+  'Antiseptic',
+  'Disinfectant',
+  'Topical',
+
+  'Ophthalmic',
+  'Otic',
+  'Nasal',
+
+  'Gynecological',
+  'Obstetric',
+
+  'Urological',
+  'Renal',
+
+  'Musculoskeletal',
+  'Anti-inflammatory',
+  'Antirheumatic',
+  'Muscle Relaxant',
+
+  'Vitamins',
+  'Minerals',
+  'Nutritional Supplement',
+  'Protein Supplement',
+
+  'Hematology',
+  'Hematinic',
+
+  'Immunological',
+  'Immunosuppressant',
+
+  'Oncology',
+  'Anticancer',
+
+  'Anesthetic',
+  'Local Anesthetic',
+
+  'Dental',
+  'Oral Care',
+
+  'Pediatric',
+  'Veterinary',
+
+  'Herbal',
+  'Ayurvedic',
+  'Homeopathic',
+
+  'Other'
+];
+
+dosageFormDropdownOpen: boolean = false;
+
+dosageForms: string[] = [
+  'Tablet',
+  'Chewable Tablet',
+  'Effervescent Tablet',
+  'Dispersible Tablet',
+  'Soluble Tablet',
+  'Sublingual Tablet',
+  'Buccal Tablet',
+  'Modified Release Tablet',
+  'Extended Release Tablet',
+  'Enteric Coated Tablet',
+
+  'Capsule',
+  'Hard Gelatin Capsule',
+  'Soft Gelatin Capsule',
+  'Modified Release Capsule',
+  'Enteric Coated Capsule',
+
+  'Powder',
+  'Granules',
+  'Effervescent Granules',
+  'Sachet',
+
+  'Syrup',
+  'Dry Syrup',
+  'Suspension',
+  'Dry Suspension',
+  'Oral Solution',
+  'Oral Drops',
+  'Oral Emulsion',
+  'Oral Gel',
+  'Elixir',
+
+  'Injection',
+  'Injectable Solution',
+  'Injectable Suspension',
+  'Infusion',
+  'IV Injection',
+  'IM Injection',
+  'SC Injection',
+  'Intravenous Infusion',
+
+  'Cream',
+  'Ointment',
+  'Gel',
+  'Lotion',
+  'Liniment',
+  'Paste',
+  'Topical Solution',
+  'Topical Suspension',
+  'Topical Powder',
+  'Medicated Shampoo',
+
+  'Emulsion',
+  'Foam',
+  'Mousse',
+  'Medicated Soap',
+
+  'Eye Drops',
+  'Eye Solution',
+  'Eye Suspension',
+  'Eye Gel',
+  'Eye Ointment',
+  'Ophthalmic Insert',
+
+  'Ear Drops',
+  'Ear Solution',
+  'Ear Suspension',
+
+  'Nasal Drops',
+  'Nasal Spray',
+  'Nasal Solution',
+  'Nasal Gel',
+  'Nasal Powder',
+
+  'Inhaler',
+  'Metered Dose Inhaler',
+  'Dry Powder Inhaler',
+  'Nebulizer Solution',
+  'Respiratory Solution',
+
+  'Suppository',
+  'Rectal Cream',
+  'Rectal Ointment',
+  'Rectal Gel',
+  'Rectal Solution',
+  'Enema',
+
+  'Vaginal Tablet',
+  'Vaginal Capsule',
+  'Vaginal Cream',
+  'Vaginal Gel',
+  'Vaginal Suppository',
+  'Vaginal Pessary',
+
+  'Transdermal Patch',
+  'Medicated Patch',
+
+  'Lozenge',
+  'Troche',
+  'Pastille',
+
+  'Mouthwash',
+  'Gargle',
+  'Dental Gel',
+  'Dental Paste',
+  'Mouth Gel',
+
+  'Medicated Dressing',
+  'Implant',
+  'Implantable Tablet',
+  'Kit',
+  'Other'
+];
+
   ngOnInit(): void {
     this.getUserIdFromToken();
     this.initializeForm();
@@ -103,33 +322,92 @@ export class ProductMasterDashboardComponent implements OnInit {
   }
 
   initializeForm() {
-    this.productForm = this.fb.group({
-      productId: [0],
-      agencyId: [this.agencyId],
-      name: ['', Validators.required],
-      brandName: ['', Validators.required],
-      genericName: ['', Validators.required],
-      category: ['', Validators.required],
-      dosageForm: ['', Validators.required],
-      strength: ['', Validators.required],
-      mrp: [0, [Validators.required, Validators.min(0)]],
-      ptr: [0, [Validators.required, Validators.min(0)]],
-      pts: [0, [Validators.required, Validators.min(0)]],
-      taxPercent: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      discountPercent: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      packSize: ['', Validators.required],
-      unitsPerBox: [0, [Validators.required, Validators.min(0)]],
-      quantity: [0, Validators.min(0)],
-      launchDate: ['', Validators.required],
-      division: ['', Validators.required],
-      manufacturingLicenseNumber: ['', Validators.required],
-      approvalDate: ['', Validators.required],
-      promotionPriority: [1],
-      isActive: [true],
-      updatedBy: [0],
-      imageUrl: [''],
-      imageFile: [null]
-    });
+ this.productForm = this.fb.group({
+  productId: [0],
+  agencyId: [this.agencyId],
+
+  name: ['', Validators.required],
+  brandName: ['', Validators.required],
+  genericName: ['', Validators.required],
+  category: ['', Validators.required],
+  dosageForm: ['', Validators.required],
+  strength: ['', Validators.required],
+
+  mrp: [
+    0,
+    [Validators.required, Validators.min(0)]
+  ],
+
+  ptr: [
+    0,
+    [Validators.required, Validators.min(0)]
+  ],
+
+  pts: [
+    0,
+    [Validators.required, Validators.min(0)]
+  ],
+
+  taxPercent: [
+    0,
+    [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(100)
+    ]
+  ],
+
+  discountPercent: [
+    0,
+    [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(100)
+    ]
+  ],
+
+  packSize: ['', Validators.required],
+
+  unitsPerBox: [
+    0,
+    [Validators.required, Validators.min(0)]
+  ],
+
+  quantity: [
+    0,
+    Validators.min(0)
+  ],
+
+  // OPTIONAL - NO Validators.required
+  launchDate: [''],
+
+  division: [
+    '',
+    Validators.required
+  ],
+
+  manufacturingLicenseNumber: [
+    '',
+    Validators.required
+  ],
+
+  // REQUIRED
+  approvalDate: [
+    '',
+    Validators.required
+  ],
+
+  // OPTIONAL - NO Validators.required
+  promotionPriority: [null],
+
+  isActive: [true],
+
+  updatedBy: [0],
+
+  imageUrl: [''],
+
+  imageFile: [null]
+});
   }
 
   getUserIdFromToken() {
@@ -353,77 +631,285 @@ export class ProductMasterDashboardComponent implements OnInit {
       });
   }
 
-  deleteProduct(item: any) {
+
+deleteProduct(item: any): void {
+
+  Swal.fire({
+    title: 'Delete Product?',
+    text: `Are you sure you want to delete ${item?.name || 'this product'}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#dc2626',
+    cancelButtonColor: '#6b7280'
+  }).then((result) => {
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    const formData = new FormData();
+
+    // =====================================================
+    // REQUIRED FIELDS
+    // =====================================================
+
+    formData.append(
+      'ProductId',
+      String(item?.productId ?? 0)
+    );
+
+    formData.append(
+      'AgencyId',
+      String(this.agencyId ?? 0)
+    );
+
+    formData.append(
+      'Name',
+      String(item?.name ?? '')
+    );
+
+    formData.append(
+      'BrandName',
+      String(item?.brandName ?? '')
+    );
+
+    formData.append(
+      'GenericName',
+      String(item?.genericName ?? '')
+    );
+
+    formData.append(
+      'Category',
+      String(item?.category ?? '')
+    );
+
+    formData.append(
+      'DosageForm',
+      String(item?.dosageForm ?? '')
+    );
+
+    formData.append(
+      'Strength',
+      String(item?.strength ?? '')
+    );
+
+    formData.append(
+      'Mrp',
+      String(item?.mrp ?? 0)
+    );
+
+    formData.append(
+      'Ptr',
+      String(item?.ptr ?? 0)
+    );
+
+    formData.append(
+      'Pts',
+      String(item?.pts ?? 0)
+    );
+
+    formData.append(
+      'TaxPercent',
+      String(
+        item?.taxPercent ??
+        item?.tax ??
+        0
+      )
+    );
+
+    formData.append(
+      'DiscountPercent',
+      String(
+        item?.discountPercent ??
+        item?.discount ??
+        0
+      )
+    );
+
+    formData.append(
+      'PackSize',
+      String(item?.packSize ?? '')
+    );
+
+    formData.append(
+      'UnitsPerBox',
+      String(item?.unitsPerBox ?? 0)
+    );
+
+    // =====================================================
+    // OPTIONAL LAUNCH DATE
+    // =====================================================
+    // DO NOT send "null"
+    //
+    // If LaunchDate is null/empty, simply don't append it.
+    // C# DateTime? will remain null.
+    // =====================================================
+
+    if (
+      item?.launchDate !== null &&
+      item?.launchDate !== undefined &&
+      item?.launchDate !== ''
+    ) {
+
+      const launchDate =
+        this.formatDate(item.launchDate);
+
+      if (launchDate) {
+        formData.append(
+          'LaunchDate',
+          launchDate
+        );
+      }
+    }
+
+    // =====================================================
+    // REQUIRED FIELDS
+    // =====================================================
+
+    formData.append(
+      'Division',
+      String(item?.division ?? '')
+    );
+
+    formData.append(
+      'ManufacturingLicenseNumber',
+      String(
+        item?.manufacturingLicenseNumber ?? ''
+      )
+    );
+
+    // =====================================================
+    // REQUIRED APPROVAL DATE
+    // =====================================================
+
+    if (
+      item?.approvalDate !== null &&
+      item?.approvalDate !== undefined &&
+      item?.approvalDate !== ''
+    ) {
+
+      const approvalDate =
+        this.formatDate(item.approvalDate);
+
+      if (approvalDate) {
+        formData.append(
+          'ApprovalDate',
+          approvalDate
+        );
+      }
+    }
+
+    // =====================================================
+    // OPTIONAL PROMOTION PRIORITY
+    // =====================================================
+    // Don't default to 1.
+    // If null, don't send it.
+    // =====================================================
+
+    if (
+      item?.promotionPriority !== null &&
+      item?.promotionPriority !== undefined &&
+      item?.promotionPriority !== ''
+    ) {
+
+      formData.append(
+        'PromotionPriority',
+        String(item.promotionPriority)
+      );
+    }
+
+    // =====================================================
+    // DEACTIVATE PRODUCT
+    // =====================================================
+
+    formData.append(
+      'IsActive',
+      'false'
+    );
+
+    formData.append(
+      'UpdatedBy',
+      String(this.updatedBy ?? 0)
+    );
+
+    // =====================================================
+    // OPTIONAL IMAGE URL
+    // =====================================================
+
+    if (
+      item?.imageUrl !== null &&
+      item?.imageUrl !== undefined &&
+      item?.imageUrl !== ''
+    ) {
+
+      formData.append(
+        'ImageUrl',
+        String(item.imageUrl)
+      );
+    }
+
+    // =====================================================
+    // DELETE CONFIRMATION LOADER
+    // =====================================================
+
     Swal.fire({
-      title: 'Delete Product?',
-      text: `Are you sure you want to delete ${item.name}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, Delete',
-      cancelButtonText: 'Cancel',
-      confirmButtonColor: '#dc2626',
-      cancelButtonColor: '#6b7280'
-    }).then((result) => {
-      if (!result.isConfirmed) return;
+      title: 'Deleting Product...',
+      text: 'Please wait',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
 
-      const formData = new FormData();
-      formData.append('ProductId', item.productId);
-      formData.append('AgencyId', this.agencyId);
-      formData.append('Name', item.name || '');
-      formData.append('BrandName', item.brandName || '');
-      formData.append('GenericName', item.genericName || '');
-      formData.append('Category', item.category || '');
-      formData.append('DosageForm', item.dosageForm || '');
-      formData.append('Strength', item.strength || '');
-      formData.append('Mrp', item.mrp || 0);
-      formData.append('Ptr', item.ptr || 0);
-      formData.append('Pts', item.pts || 0);
-      formData.append('TaxPercent', item?.taxPercent ?? item?.tax ?? 0);
-      formData.append('DiscountPercent', item?.discountPercent ?? item?.discount ?? 0);
-      formData.append('PackSize', item.packSize || '');
-      formData.append('UnitsPerBox', item.unitsPerBox || 0);
-      formData.append('LaunchDate', item.launchDate);
-      formData.append('Division', item.division || '');
-      formData.append('ManufacturingLicenseNumber', item.manufacturingLicenseNumber || '');
-      formData.append('ApprovalDate', item.approvalDate);
-      formData.append('PromotionPriority', item.promotionPriority || 1);
-      formData.append('IsActive', 'false');
-      formData.append('UpdatedBy', this.updatedBy);
-      formData.append('ImageUrl', item.imageUrl || '');
+    // =====================================================
+    // API CALL
+    // =====================================================
 
-      Swal.fire({
-        title: 'Deleting Product...',
-        text: 'Please wait',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => Swal.showLoading()
+    this.productService
+      .updateproductdetails(formData)
+      .subscribe({
+
+        next: () => {
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted',
+            text: 'Product Deleted Successfully',
+            confirmButtonColor: '#16a34a'
+          });
+
+          this.loadProductDashboardSummary();
+
+          this.getProductDetails();
+        },
+
+        error: (err: any) => {
+
+          console.error(
+            'Delete Product Error:',
+            err
+          );
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Delete Failed',
+            text:
+              err?.error?.message ||
+              'Something went wrong while deleting the product.',
+            confirmButtonColor: '#dc2626'
+          });
+        }
+
       });
 
-      this.productService
-        .updateproductdetails(formData)
-        .subscribe({
-          next: () => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Deleted',
-              text: 'Product Deleted Successfully',
-              confirmButtonColor: '#16a34a'
-            });
-            this.loadProductDashboardSummary();
-            this.getProductDetails();
-          },
-          error: (err: any) => {
-            console.error(err);
-            Swal.fire({
-              icon: 'error',
-              title: 'Delete Failed',
-              text: err?.error?.message || 'Something went wrong while deleting the product.',
-              confirmButtonColor: '#dc2626'
-            });
-          }
-        });
-    });
-  }
+  });
+}
+
+
 
   closeEditModal() {
     this.showEditModal = false;
@@ -450,4 +936,62 @@ export class ProductMasterDashboardComponent implements OnInit {
   get f() {
     return this.productForm.controls;
   }
+
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+
+  if (!target.closest('.searchable-dropdown')) {
+    this.categoryDropdownOpen = false;
+    this.dosageFormDropdownOpen = false;
+  }
+}
+
+
+  filteredCategories: string[] = [...this.categories];
+
+filterCategories(): void {
+  const search = this.category.trim().toLowerCase();
+
+  if (!search) {
+    this.filteredCategories = [...this.categories];
+    return;
+  }
+
+  this.filteredCategories = this.categories.filter(item =>
+    item.toLowerCase().includes(search)
+  );
+}
+
+selectCategory(category: string): void {
+  this.category = category;
+  this.categoryDropdownOpen = false;
+
+  // Apply your product filter
+  this.applyFilter();
+}
+
+filteredDosageForms: string[] = [...this.dosageForms];
+
+filterDosageForms(): void {
+  const search = this.dosageForm.trim().toLowerCase();
+
+  if (!search) {
+    this.filteredDosageForms = [...this.dosageForms];
+  } else {
+    this.filteredDosageForms = this.dosageForms.filter(item =>
+      item.toLowerCase().includes(search)
+    );
+  }
+}
+
+selectDosageForm(value: string): void {
+  this.dosageForm = value;
+  this.dosageFormDropdownOpen = false;
+
+  // Existing product filtering
+  this.applyFilter();
+}
+
 }
