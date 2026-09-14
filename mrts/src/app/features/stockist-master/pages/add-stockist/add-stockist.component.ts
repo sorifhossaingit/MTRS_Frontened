@@ -276,16 +276,11 @@ export class AddStockistComponent implements OnInit {
         // Licensing
         // -----------------------------------------
 
-        gstNo: [
-          '',
-          Validators.required
-        ],
+  // OPTIONAL
+gstNo: [''],
 
-        drugLicenseNo: [
-          '',
-          Validators.required
-        ],
-
+// OPTIONAL
+drugLicenseNo: [''],
 
         // -----------------------------------------
         // Territory

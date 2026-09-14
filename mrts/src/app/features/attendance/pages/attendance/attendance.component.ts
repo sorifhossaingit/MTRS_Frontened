@@ -66,99 +66,116 @@ date: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(
   // Dashboard KPI
   // =========================
 
-  loadDashboard(): void {
+loadDashboard(): void {
 
-    const payload = {
-      agencyId: this.agencyId,
-      areaManagerId: this.areaManagerId
-    };
+  const rid = localStorage.getItem('rid');
 
-    this.attendanceService
-      .get_attendance_dashboard(payload)
-      .subscribe({
-        next: (res: any) => {
+  const payload: any = {
+    agencyId: this.agencyId
+  };
 
-          if (res.success) {
-
-            this.totalMR =
-              res.data.totalMedicalRepresentatives || 0;
-
-            this.activeMR =
-              res.data.activeMedicalRepresentatives || 0;
-
-            this.presentCount =
-              res.data.presentMedicalRepresentatives || 0;
-
-            this.absentCount =
-              res.data.absentMedicalRepresentatives || 0;
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
+  // Only send areaManagerId for Area Manager role
+  if (
+    rid === '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
+  ) {
+    payload.areaManagerId = this.areaManagerId;
   }
+
+  this.attendanceService
+    .get_attendance_dashboard(payload)
+    .subscribe({
+
+      next: (res: any) => {
+
+        if (res?.success) {
+
+          this.totalMR =
+            res.data?.totalMedicalRepresentatives || 0;
+
+          this.activeMR =
+            res.data?.activeMedicalRepresentatives || 0;
+
+          this.presentCount =
+            res.data?.presentMedicalRepresentatives || 0;
+
+          this.absentCount =
+            res.data?.absentMedicalRepresentatives || 0;
+        }
+      },
+
+      error: (err) => {
+        console.error(
+          'Dashboard error:',
+          err
+        );
+      }
+    });
+}
 
   // =========================
   // Attendance List
   // =========================
 
-  loadAttendanceList(): void {
+loadAttendanceList(): void {
 
-    // const payload = {
-    //   agencyId: this.agencyId,
-    //   areaManagerId: this.areaManagerId,
-    //   date: this.filter.date
-    //     ? new Date(this.filter.date).toISOString()
-    //     : null,
-    //   status: this.filter.status || null,
-    //   name: this.filter.name || null,
-    //   mobile: this.filter.mobile || null,
-    //   email: this.filter.email || null,
-    //   pageNumber: this.pageNumber,
-    //   pageSize: this.pageSize
-    // };
+  const rid = localStorage.getItem('rid');
 
-    const payload = {
-  agencyId: this.agencyId,
-  areaManagerId: this.areaManagerId,
-  date: this.filter.date || null,
-  status: this.filter.status || null,
-  name: this.filter.name || null,
-  mobile: this.filter.mobile || null,
-  email: this.filter.email || null,
-  pageNumber: this.pageNumber,
-  pageSize: this.pageSize
-};
+  const payload: any = {
+    agencyId: this.agencyId,
 
-    this.attendanceService
-      .get_attendance_list(payload)
-      .subscribe({
-        next: (res: any) => {
+    date: this.filter.date || null,
+    status: this.filter.status || null,
+    name: this.filter.name || null,
+    mobile: this.filter.mobile || null,
+    email: this.filter.email || null,
 
-          if (res.success) {
+    pageNumber: this.pageNumber,
+    pageSize: this.pageSize
+  };
 
-            this.attendanceList = res.data || [];
-
-            this.totalRecords =
-              res.totalRecords || 0;
-
-            this.pageNumber =
-              res.pageNumber || 1;
-
-            this.pageSize =
-              res.pageSize || 10;
-
-            this.totalPages = Math.ceil(
-              this.totalRecords / this.pageSize
-            );
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
+  // Send areaManagerId only for Area Manager role
+  if (
+    rid === '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
+  ) {
+    payload.areaManagerId = this.areaManagerId;
   }
+
+  this.attendanceService
+    .get_attendance_list(payload)
+    .subscribe({
+
+      next: (res: any) => {
+
+        if (res?.success) {
+
+          this.attendanceList =
+            res.data || [];
+
+          this.totalRecords =
+            res.totalRecords || 0;
+
+          this.pageNumber =
+            res.pageNumber || 1;
+
+          this.pageSize =
+            res.pageSize || 10;
+
+          this.totalPages =
+            Math.ceil(
+              this.totalRecords /
+              this.pageSize
+            );
+        }
+      },
+
+      error: (err) => {
+        console.error(
+          'Attendance list error:',
+          err
+        );
+      }
+    });
+}
 
   // =========================
   // Filters

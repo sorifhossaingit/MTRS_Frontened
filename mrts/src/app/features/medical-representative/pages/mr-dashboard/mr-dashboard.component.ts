@@ -357,53 +357,52 @@ export class MrDashboardComponent implements OnInit {
   // LOAD DASHBOARD
   // =========================================================
 
-  loadDashboard(): void {
+loadDashboard(): void {
 
-    const payload = {
+  const rid = localStorage.getItem('rid');
 
-      agencyId:
-        this.agencyId,
+  const payload: any = {
+    agencyId: this.agencyId
+  };
 
-      areaManagerId:
-        this.managerId
-    };
-
-
-    this.mrService
-      .get_attendance_dashboard_ar(payload)
-      .subscribe({
-
-        next: (res: any) => {
-
-          if (res?.success) {
-
-            this.totalMR =
-              res.data
-                ?.totalMedicalRepresentatives || 0;
-
-            this.activeMR =
-              res.data
-                ?.activeMedicalRepresentatives || 0;
-
-            this.presentCount =
-              res.data
-                ?.presentMedicalRepresentatives || 0;
-
-            this.absentCount =
-              res.data
-                ?.absentMedicalRepresentatives || 0;
-          }
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Dashboard error:',
-            err
-          );
-        }
-      });
+  // Send areaManagerId only for this specific RID
+  if (
+    rid === '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
+  ) {
+    payload.areaManagerId = this.managerId;
   }
+
+  this.mrService
+    .get_attendance_dashboard_ar(payload)
+    .subscribe({
+
+      next: (res: any) => {
+
+        if (res?.success) {
+
+          this.totalMR =
+            res.data?.totalMedicalRepresentatives || 0;
+
+          this.activeMR =
+            res.data?.activeMedicalRepresentatives || 0;
+
+          this.presentCount =
+            res.data?.presentMedicalRepresentatives || 0;
+
+          this.absentCount =
+            res.data?.absentMedicalRepresentatives || 0;
+        }
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Dashboard error:',
+          err
+        );
+      }
+    });
+}
 
 
   // =========================================================

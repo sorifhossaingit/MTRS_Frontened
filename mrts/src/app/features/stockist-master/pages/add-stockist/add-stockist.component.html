@@ -585,74 +585,37 @@
         >
 
 
-          <!-- GST -->
 
-          <div>
+<!-- GST NUMBER - OPTIONAL -->
+<div>
+  <label class="mb-1 block text-sm font-medium text-gray-600">
+    GST Number
+  </label>
 
-            <label
-              class="block text-sm font-medium mb-2"
-            >
-
-              GST Number
-
-              <span class="text-red-500">*</span>
-
-            </label>
-
-
-            <input
-              type="text"
-              formControlName="gstNo"
-              placeholder="Enter GST number"
-              class="w-full border rounded-xl px-4 h-12"
-            />
+  <input
+    type="text"
+    formControlName="gstNo"
+    placeholder="Enter GST Number"
+    class="input w-full rounded-lg border p-2 text-sm"
+  >
+</div>
 
 
-            <p
-              *ngIf="submitted && f['gstNo'].errors"
-              class="text-red-500 text-sm mt-1"
-            >
+<!-- DRUG LICENSE NUMBER - OPTIONAL -->
+<div>
+  <label class="mb-1 block text-sm font-medium text-gray-600">
+    Drug License Number
+  </label>
 
-              GST number is required
-
-            </p>
-
-          </div>
-
-
-          <!-- DRUG LICENSE -->
-
-          <div>
-
-            <label
-              class="block text-sm font-medium mb-2"
-            >
-
-              Drug License Number
-
-              <span class="text-red-500">*</span>
-
-            </label>
+  <input
+    type="text"
+    formControlName="drugLicenseNo"
+    placeholder="Enter Drug License Number"
+    class="input w-full rounded-lg border p-2 text-sm"
+  >
+</div>
 
 
-            <input
-              type="text"
-              formControlName="drugLicenseNo"
-              placeholder="Enter drug license number"
-              class="w-full border rounded-xl px-4 h-12"
-            />
-
-
-            <p
-              *ngIf="submitted && f['drugLicenseNo'].errors"
-              class="text-red-500 text-sm mt-1"
-            >
-
-              Drug license number is required
-
-            </p>
-
-          </div>
 
         </div>
 
