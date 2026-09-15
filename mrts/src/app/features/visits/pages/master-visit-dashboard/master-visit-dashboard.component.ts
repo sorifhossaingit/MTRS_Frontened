@@ -782,7 +782,7 @@ loadCustomersByRoute(routeId: number): void {
       );
 
     return (
-      customer?.name ||
+      customer?.customerName ||
       'Unknown Customer'
     );
 
@@ -1220,137 +1220,204 @@ loadCustomersByRoute(routeId: number): void {
   // UPDATE VISIT
   // =========================
 
-  updateVisit(): void {
 
-    if (!this.editVisit.mrId) {
+updateVisit(): void {
 
-      Swal.fire(
-        'Validation',
-        'Select MR',
-        'warning'
-      );
+  // =========================================================
+  // VALIDATION
+  // =========================================================
 
-      return;
+  if (!this.editVisit.mrId) {
 
-    }
-
-    if (
-      !this.editVisit.visitDate
-    ) {
-
-      Swal.fire(
-        'Validation',
-        'Select Visit Date',
-        'warning'
-      );
-
-      return;
-
-    }
-
-    const payload = {
-
-      visitPlanId:
-        this.editVisit
-          .visitPlanId,
-
-      mrId:
-        this.editVisit
-          .mrId,
-
-      visitDate:
-        this.editVisit
-          .visitDate,
-
-      remarks:
-        this.editVisit
-          .remarks,
-
-      updatedBy:
-        Number(
-          localStorage.getItem('mid')
-        ),
-
-      places:
-        this.editVisit.places.map(
-          (place: any) => ({
-
-            customerId:
-              place.customerId,
-
-            doctorId:
-              null,
-
-            plannedTime:
-              place.plannedTime,
-
-            sequenceNo:
-              Number(
-                place.sequenceNo
-              ),
-
-            remarks:
-              place.remarks,
-
-            productIds:
-              place.productIds
-
-          })
-        )
-
-    };
-
-    console.log(
-      'Update Visit Payload:',
-      payload
+    Swal.fire(
+      'Validation',
+      'Select MR',
+      'warning'
     );
 
-    this.visitService
-      .update_visit(payload)
-      .subscribe({
-
-        next: () => {
-
-          Swal.fire({
-
-            icon: 'success',
-
-            title:
-              'Success',
-
-            text:
-              'Visit Updated Successfully'
-
-          });
-
-          this.closeEditModal();
-
-          this.loadVisits();
-
-        },
-
-        error: (err: any) => {
-
-          console.error(err);
-
-          Swal.fire({
-
-            icon: 'error',
-
-            title:
-              'Error',
-
-            text:
-              err?.error?.message ||
-              'Failed to update visit'
-
-          });
-
-        }
-
-      });
-
+    return;
   }
+
+  if (!this.editVisit.visitDate) {
+
+    Swal.fire(
+      'Validation',
+      'Select Visit Date',
+      'warning'
+    );
+
+    return;
+  }
+
+
+  // =========================================================
+  // CREATE PAYLOAD
+  // =========================================================
+
+  const payload = {
+
+    visitPlanId:
+      this.editVisit.visitPlanId,
+
+    mrId:
+      this.editVisit.mrId,
+
+    visitDate:
+      this.editVisit.visitDate,
+
+    remarks:
+      this.editVisit.remarks ?? '',
+
+    updatedBy:
+      Number(
+        localStorage.getItem('mid')
+      ),
+
+    places:
+      this.editVisit.places.map(
+        (place: any, index: number) => ({
+
+          // ===============================================
+          // CUSTOMER
+          // ===============================================
+
+          customerId:
+            Number(place.customerId),
+
+
+          // ===============================================
+          // DOCTOR
+          // ===============================================
+
+          doctorId:
+            place.doctorId ?? null,
+
+
+          // ===============================================
+          // PLANNED TIME
+          // OPTIONAL
+          //
+          // "" -> null
+          // null -> null
+          // undefined -> null
+          // "03:14:00" -> "03:14:00"
+          // ===============================================
+
+          plannedTime:
+            place.plannedTime &&
+            String(place.plannedTime).trim() !== ''
+              ? String(place.plannedTime).trim()
+              : null,
+
+
+          // ===============================================
+          // SEQUENCE
+          // ===============================================
+
+          sequenceNo:
+            Number(
+              place.sequenceNo ??
+              index + 1
+            ),
+
+
+          // ===============================================
+          // REMARKS
+          // ===============================================
+
+          remarks:
+            place.remarks ?? '',
+
+
+          // ===============================================
+          // PRODUCTS
+          // ===============================================
+
+          productIds:
+            Array.isArray(place.productIds)
+              ? place.productIds.map(
+                  (id: any) => Number(id)
+                )
+              : []
+
+        })
+      )
+  };
+
+
+  // =========================================================
+  // DEBUG
+  // =========================================================
+
+  console.log(
+    'Update Visit Payload:',
+    JSON.stringify(
+      payload,
+      null,
+      2
+    )
+  );
+
+
+  // =========================================================
+  // API CALL
+  // =========================================================
+
+  this.visitService
+    .update_visit(payload)
+    .subscribe({
+
+      // ===============================================
+      // SUCCESS
+      // ===============================================
+
+      next: () => {
+
+        Swal.fire({
+
+          icon: 'success',
+
+          title: 'Success',
+
+          text:
+            'Visit Updated Successfully'
+
+        });
+
+        this.closeEditModal();
+
+        this.loadVisits();
+      },
+
+
+      // ===============================================
+      // ERROR
+      // ===============================================
+
+      error: (err: any) => {
+
+        console.error(
+          'Update Visit Error:',
+          err
+        );
+
+        Swal.fire({
+
+          icon: 'error',
+
+          title: 'Error',
+
+          text:
+            err?.error?.message ||
+            'Failed to update visit'
+
+        });
+      }
+
+    });
+}
+
+
 
   // =========================
   // CANCEL VISIT

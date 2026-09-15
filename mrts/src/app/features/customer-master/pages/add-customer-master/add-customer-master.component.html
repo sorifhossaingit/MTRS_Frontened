@@ -142,17 +142,27 @@
 
         <div>
 
-          <input type="text" placeholder="Registration Number" formControlName="registrationNo" class="input w-full">
 
 
-          <p *ngIf="
+  <input
+    type="text"
+    placeholder="Registration Number"
+    formControlName="registrationNo"
+    class="input w-full"
+  >
+
+
+
+
+
+          <!-- <p *ngIf="
               f['registrationNo'].touched &&
               f['registrationNo'].errors?.['required']
             " class="text-red-500 text-sm mt-1">
 
             Registration Number is required
 
-          </p>
+          </p> -->
 
         </div>
 

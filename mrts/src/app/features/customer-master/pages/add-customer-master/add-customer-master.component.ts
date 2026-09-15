@@ -163,7 +163,7 @@ selectedArea: any = null;
 
     this.getCustomerTypeList();
 
-    this.getAreaManagerForUpdateCustomer();
+    // this.getAreaManagerForUpdateCustomer();
 
     this.loadAreas();
 
@@ -193,10 +193,7 @@ selectedArea: any = null;
         Validators.required
       ],
 
-      registrationNo: [
-        '',
-        Validators.required
-      ],
+      registrationNo:  [''],
 
       contactPerson: [
         '',

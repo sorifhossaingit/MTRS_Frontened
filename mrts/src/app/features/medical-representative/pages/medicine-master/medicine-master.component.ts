@@ -115,9 +115,9 @@ export class MedicineMasterComponent implements OnInit {
     this.agencyId = Number(localStorage.getItem('aid'));
     this.medicalRepresentativeId = Number(localStorage.getItem('mid'));
 
-    this.getAssignedAreaManager();
+    // this.getAssignedAreaManager();
     this.loadRoutes();
-    this.getAreaManagerForUpdateCustomer();
+    // this.getAreaManagerForUpdateCustomer();
   }
 
   // --- API CALL 1: Fetch Routes for Medical Representative ---
