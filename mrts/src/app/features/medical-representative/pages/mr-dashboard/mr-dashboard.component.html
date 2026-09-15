@@ -8,76 +8,76 @@
         </div>
     </div>
 
-  <!-- 🔷 KPI CARDS -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <!-- 🔷 KPI CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="Users"></lucide-icon>
-      <div>
-        <p class="text-sm text-gray-500">Total MR</p>
-        <h2 class="text-xl font-bold">{{ totalMR }}</h2>
-      </div>
+        <div class="card flex items-center gap-3">
+            <lucide-icon [img]="Users"></lucide-icon>
+            <div>
+                <p class="text-sm text-gray-500">Total MR</p>
+                <h2 class="text-xl font-bold">{{ totalMR }}</h2>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-3">
+            <lucide-icon [img]="UserCheck"></lucide-icon>
+            <div>
+                <p class="text-sm text-gray-500">Active MR</p>
+                <h2 class="text-xl font-bold text-blue-600">
+                    {{ activeMR }}
+                </h2>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-3">
+            <lucide-icon [img]="CheckCircle"></lucide-icon>
+            <div>
+                <p class="text-sm text-gray-500">Present</p>
+                <h2 class="text-xl font-bold text-green-600">
+                    {{ presentCount }}
+                </h2>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-3">
+            <lucide-icon [img]="XCircle"></lucide-icon>
+            <div>
+                <p class="text-sm text-gray-500">Absent</p>
+                <h2 class="text-xl font-bold text-red-600">
+                    {{ absentCount }}
+                </h2>
+            </div>
+        </div>
+
     </div>
-
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="UserCheck"></lucide-icon>
-      <div>
-        <p class="text-sm text-gray-500">Active MR</p>
-        <h2 class="text-xl font-bold text-blue-600">
-          {{ activeMR }}
-        </h2>
-      </div>
-    </div>
-
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="CheckCircle"></lucide-icon>
-      <div>
-        <p class="text-sm text-gray-500">Present</p>
-        <h2 class="text-xl font-bold text-green-600">
-          {{ presentCount }}
-        </h2>
-      </div>
-    </div>
-
-    <div class="card flex items-center gap-3">
-      <lucide-icon [img]="XCircle"></lucide-icon>
-      <div>
-        <p class="text-sm text-gray-500">Absent</p>
-        <h2 class="text-xl font-bold text-red-600">
-          {{ absentCount }}
-        </h2>
-      </div>
-    </div>
-
-  </div>
 
     <!-- FILTER BAR -->
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 mb-8">
         <form [formGroup]="filterForm" class="space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
+
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Name</label>
-                    <input type="text" formControlName="name" placeholder="Search by name..." 
-                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    <input type="text" formControlName="name" placeholder="Search by name..."
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
-                    <input type="text" formControlName="email" placeholder="Search by email..." 
-                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    <input type="text" formControlName="email" placeholder="Search by email..."
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Mobile</label>
-                    <input type="text" formControlName="mobile" placeholder="Search by mobile..." 
-                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    <input type="text" formControlName="mobile" placeholder="Search by mobile..."
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
-                    <select formControlName="isActive" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    <select formControlName="isActive"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                         <option [ngValue]="null">All Statuses</option>
                         <option [ngValue]="true">Active</option>
                         <option [ngValue]="false">Inactive</option>
@@ -87,12 +87,12 @@
             </div>
 
             <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
-                <button type="button" (click)="resetFilter()" 
-                        class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all active:scale-[0.98]">
+                <button type="button" (click)="resetFilter()"
+                    class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all active:scale-[0.98]">
                     Reset Filters
                 </button>
-                <button type="button" (click)="applyFilter()" 
-                        class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 rounded-xl transition-all active:scale-[0.98]">
+                <button type="button" (click)="applyFilter()"
+                    class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 rounded-xl transition-all active:scale-[0.98]">
                     Apply Search
                 </button>
             </div>
@@ -101,7 +101,7 @@
 
     <!-- TABLE CONTAINER -->
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-        
+
         <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
             <h2 class="text-base font-bold text-slate-900">Medical Representatives</h2>
             <span class="text-xs font-medium text-slate-400">Page {{ pageNumber }} of {{ totalPages }}</span>
@@ -109,8 +109,9 @@
 
         <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200">
             <table class="w-full min-w-[1200px] text-left text-sm text-slate-600">
-                
-                <thead class="bg-slate-50/70 border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400">
+
+                <thead
+                    class="bg-slate-50/70 border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400">
                     <tr>
                         <th class="px-6 py-3.5">Name</th>
                         <th class="px-4 py-3.5">Contact Person</th>
@@ -126,7 +127,7 @@
 
                 <tbody class="divide-y divide-slate-100">
                     <tr *ngFor="let mr of mrList" class="hover:bg-slate-50/80 transition-colors">
-                        
+
                         <!-- Name -->
                         <td class="px-6 py-4 font-semibold text-slate-900 whitespace-nowrap">
                             {{ mr.name }}
@@ -153,41 +154,39 @@
                             <span *ngIf="mr.state" class="text-xs text-slate-400 block">{{ mr.state }}</span>
                         </td>
 
-<!-- Area -->
-<td class="px-4 py-4 whitespace-nowrap">
-    <div class="flex flex-col">
+                        <!-- Area -->
+                        <td class="px-4 py-4 whitespace-nowrap">
+                            <div class="flex flex-col">
 
-        <span
-            class="inline-flex w-fit items-center rounded-md
+                                <span class="inline-flex w-fit items-center rounded-md
                    bg-slate-100 px-2 py-1
-                   text-xs font-medium text-slate-700"
-        >
-            {{ mr.areaName || 'N/A' }}
-        </span>
+                   text-xs font-medium text-slate-700">
+                                    {{ mr.areaName || 'N/A' }}
+                                </span>
 
-        <span
-            *ngIf="mr.areaCode"
-            class="text-xs text-gray-500 mt-1"
-        >
-            {{ mr.areaCode }}
-        </span>
+                                <span *ngIf="mr.areaCode" class="text-xs text-gray-500 mt-1">
+                                    {{ mr.areaCode }}
+                                </span>
 
-    </div>
-</td>
+                            </div>
+                        </td>
 
                         <!-- Routes -->
-                        <td class="px-4 py-4 max-w-[200px] truncate text-xs text-slate-500" [title]="mr.routeNames || '-'">
+                        <td class="px-4 py-4 max-w-[200px] truncate text-xs text-slate-500"
+                            [title]="mr.routeNames || '-'">
                             {{ mr.routeNames || '-' }}
                         </td>
 
                         <!-- Status -->
                         <td class="px-4 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
-                                  [ngClass]="{
+                            <span
+                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+                                [ngClass]="{
                                     'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20': mr.isActive,
                                     'bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/20': !mr.isActive
                                   }">
-                                <span class="h-1.5 w-1.5 rounded-full" [ngClass]="mr.isActive ? 'bg-emerald-500' : 'bg-rose-500'"></span>
+                                <span class="h-1.5 w-1.5 rounded-full"
+                                    [ngClass]="mr.isActive ? 'bg-emerald-500' : 'bg-rose-500'"></span>
                                 {{ mr.isActive ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
@@ -195,14 +194,14 @@
                         <!-- Actions -->
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center justify-center gap-1.5">
-                                <button (click)="editMr(mr)" 
-                                        class="p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all" 
-                                        title="Edit MR">
+                                <button (click)="editMr(mr)"
+                                    class="p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                                    title="Edit MR">
                                     <lucide-icon [img]="Pencil" class="w-4 h-4"></lucide-icon>
                                 </button>
-                                <button (click)="deleteMr(mr)" 
-                                        class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all" 
-                                        title="Delete MR">
+                                <button (click)="deleteMr(mr)"
+                                    class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all"
+                                    title="Delete MR">
                                     <lucide-icon [img]="Trash2" class="w-4 h-4"></lucide-icon>
                                 </button>
                             </div>
@@ -214,7 +213,8 @@
                     <tr *ngIf="mrList.length === 0">
                         <td colspan="9" class="text-center py-12 text-slate-400">
                             <div class="flex flex-col items-center justify-center">
-                                <div class="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
+                                <div
+                                    class="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
                                     <lucide-icon [img]="UserX" class="w-6 h-6"></lucide-icon>
                                 </div>
                                 <p class="text-sm font-medium text-slate-600">No Medical Representatives found</p>
@@ -227,15 +227,15 @@
         </div>
 
         <!-- FOOTER PAGINATION -->
-        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-600">
+        <div
+            class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-600">
             <div>
                 Total Records: <strong class="text-slate-900 font-semibold">{{ totalRecords }}</strong>
             </div>
 
             <div class="flex items-center gap-2">
-                <button (click)="changePage(pageNumber - 1)" 
-                        [disabled]="pageNumber === 1"
-                        class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                <button (click)="changePage(pageNumber - 1)" [disabled]="pageNumber === 1"
+                    class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
                     Previous
                 </button>
 
@@ -243,9 +243,8 @@
                     {{ pageNumber }} / {{ totalPages }}
                 </span>
 
-                <button (click)="changePage(pageNumber + 1)" 
-                        [disabled]="pageNumber === totalPages"
-                        class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                <button (click)="changePage(pageNumber + 1)" [disabled]="pageNumber === totalPages"
+                    class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
                     Next
                 </button>
             </div>
@@ -254,151 +253,116 @@
     </div>
 
 
-<!-- =========================================================
+    <!-- =========================================================
      UPDATE MEDICAL REPRESENTATIVE MODAL
 ========================================================= -->
 
-<div
-    *ngIf="showUpdateModal"
-    class="fixed inset-0 z-50
+    <div *ngIf="showUpdateModal" class="fixed inset-0 z-50
            bg-slate-900/40 backdrop-blur-sm
            flex justify-center items-center
-           p-4 animate-in fade-in duration-200"
->
+           p-4 animate-in fade-in duration-200">
 
-    <div
-        class="bg-white w-full max-w-4xl
+        <div class="bg-white w-full max-w-4xl
                rounded-3xl shadow-2xl
                border border-slate-100
                overflow-hidden
                max-h-[92vh]
-               flex flex-col"
-    >
+               flex flex-col">
 
-        <!-- =================================================
+            <!-- =================================================
              HEADER
         ================================================== -->
 
-        <div
-            class="px-6 py-5
+            <div class="px-6 py-5
                    border-b border-slate-100
                    flex justify-between items-center
-                   bg-slate-50/70"
-        >
+                   bg-slate-50/70">
 
-            <div>
+                <div>
 
-                <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2">
 
-                    <div
-                        class="h-9 w-9 rounded-xl
+                        <div class="h-9 w-9 rounded-xl
                                bg-blue-50
-                               flex items-center justify-center"
-                    >
-                        <lucide-icon
-                            [img]="Users"
-                            class="w-5 h-5 text-blue-600"
-                        >
-                        </lucide-icon>
-                    </div>
+                               flex items-center justify-center">
+                            <lucide-icon [img]="Users" class="w-5 h-5 text-blue-600">
+                            </lucide-icon>
+                        </div>
 
-                    <div>
+                        <div>
 
-                        <h2
-                            class="text-lg font-bold
-                                   text-slate-900"
-                        >
-                            Update Medical Representative
-                        </h2>
+                            <h2 class="text-lg font-bold
+                                   text-slate-900">
+                                Update Medical Representative
+                            </h2>
 
-                        <p
-                            class="text-xs
-                                   text-slate-400 mt-0.5"
-                        >
-                            Update profile and route mapping
-                        </p>
+                            <p class="text-xs
+                                   text-slate-400 mt-0.5">
+                                Update profile and route mapping
+                            </p>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
 
-
-            <button
-                type="button"
-                (click)="closeModal()"
-                class="h-9 w-9 rounded-xl
+                <button type="button" (click)="closeModal()" class="h-9 w-9 rounded-xl
                        flex items-center justify-center
                        text-slate-400
                        hover:text-slate-700
                        hover:bg-slate-200
-                       transition-all"
-            >
-                ✕
-            </button>
+                       transition-all">
+                    ✕
+                </button>
 
-        </div>
+            </div>
 
 
-        <!-- =================================================
+            <!-- =================================================
              FORM BODY
         ================================================== -->
 
-        <form
-            [formGroup]="updateForm"
-            class="p-6 overflow-y-auto
-                   space-y-6 custom-scrollbar"
-        >
+            <form [formGroup]="updateForm" class="p-6 overflow-y-auto
+                   space-y-6 custom-scrollbar">
 
-            <!-- =================================================
+                <!-- =================================================
                  PERSONAL INFORMATION
             ================================================== -->
 
-            <div>
+                <div>
 
-                <div class="mb-4">
+                    <div class="mb-4">
 
-                    <h3
-                        class="text-sm font-bold
-                               text-slate-800"
-                    >
-                        Personal Information
-                    </h3>
+                        <h3 class="text-sm font-bold
+                               text-slate-800">
+                            Personal Information
+                        </h3>
 
-                    <p
-                        class="text-xs text-slate-400 mt-1"
-                    >
-                        Basic details of the Medical Representative
-                    </p>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Basic details of the Medical Representative
+                        </p>
 
-                </div>
+                    </div>
 
 
-                <div
-                    class="grid grid-cols-1
+                    <div class="grid grid-cols-1
                            md:grid-cols-2
-                           gap-4"
-                >
+                           gap-4">
 
-                    <!-- NAME -->
+                        <!-- NAME -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            Full Name
-                            <span class="text-red-500">*</span>
-                        </label>
+                                   text-slate-700 mb-1">
+                                Full Name
+                                <span class="text-red-500">*</span>
+                            </label>
 
-                        <input
-                            type="text"
-                            formControlName="name"
-                            placeholder="Enter name"
-                            class="w-full
+                            <input type="text" formControlName="name" placeholder="Enter name" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -409,29 +373,22 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        />
+                                   transition-all" />
 
-                    </div>
+                        </div>
 
 
-                    <!-- CONTACT PERSON -->
+                        <!-- CONTACT PERSON -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            Contact Person
-                        </label>
+                                   text-slate-700 mb-1">
+                                Contact Person
+                            </label>
 
-                        <input
-                            type="text"
-                            formControlName="contactPerson"
-                            placeholder="Enter contact person"
-                            class="w-full
+                            <input type="text" formControlName="contactPerson" placeholder="Enter contact person" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -442,29 +399,22 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        />
+                                   transition-all" />
 
-                    </div>
+                        </div>
 
 
-                    <!-- MOBILE -->
+                        <!-- MOBILE -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            Mobile Number
-                        </label>
+                                   text-slate-700 mb-1">
+                                Mobile Number
+                            </label>
 
-                        <input
-                            type="text"
-                            formControlName="mobile"
-                            placeholder="Enter mobile number"
-                            class="w-full
+                            <input type="text" formControlName="mobile" placeholder="Enter mobile number" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -475,29 +425,22 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        />
+                                   transition-all" />
 
-                    </div>
+                        </div>
 
 
-                    <!-- EMAIL -->
+                        <!-- EMAIL -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            Email Address
-                        </label>
+                                   text-slate-700 mb-1">
+                                Email Address
+                            </label>
 
-                        <input
-                            type="email"
-                            formControlName="email"
-                            placeholder="Enter email address"
-                            class="w-full
+                            <input type="email" formControlName="email" placeholder="Enter email address" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -508,29 +451,22 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        />
+                                   transition-all" />
 
-                    </div>
+                        </div>
 
 
-                    <!-- ADDRESS -->
+                        <!-- ADDRESS -->
 
-                    <div class="md:col-span-2">
+                        <div class="md:col-span-2">
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            Street Address
-                        </label>
+                                   text-slate-700 mb-1">
+                                Street Address
+                            </label>
 
-                        <textarea
-                            formControlName="address"
-                            rows="2"
-                            placeholder="Enter full street address"
-                            class="w-full
+                            <textarea formControlName="address" rows="2" placeholder="Enter full street address" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -542,29 +478,22 @@
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
                                    transition-all
-                                   resize-none"
-                        ></textarea>
+                                   resize-none"></textarea>
 
-                    </div>
+                        </div>
 
 
-                    <!-- CITY -->
+                        <!-- CITY -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            City
-                        </label>
+                                   text-slate-700 mb-1">
+                                City
+                            </label>
 
-                        <input
-                            type="text"
-                            formControlName="city"
-                            placeholder="Enter city"
-                            class="w-full
+                            <input type="text" formControlName="city" placeholder="Enter city" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -575,29 +504,22 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        />
+                                   transition-all" />
 
-                    </div>
+                        </div>
 
 
-                    <!-- STATE -->
+                        <!-- STATE -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            State
-                        </label>
+                                   text-slate-700 mb-1">
+                                State
+                            </label>
 
-                        <input
-                            type="text"
-                            formControlName="state"
-                            placeholder="Enter state"
-                            class="w-full
+                            <input type="text" formControlName="state" placeholder="Enter state" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -608,29 +530,22 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        />
+                                   transition-all" />
 
-                    </div>
+                        </div>
 
 
-                    <!-- PINCODE -->
+                        <!-- PINCODE -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1"
-                        >
-                            Pincode
-                        </label>
+                                   text-slate-700 mb-1">
+                                Pincode
+                            </label>
 
-                        <input
-                            type="text"
-                            formControlName="pincode"
-                            placeholder="Enter pincode"
-                            class="w-full
+                            <input type="text" formControlName="pincode" placeholder="Enter pincode" class="w-full
                                    bg-slate-50
                                    border border-slate-200
                                    rounded-xl
@@ -641,100 +556,79 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        />
+                                   transition-all" />
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
 
-
-            <!-- =================================================
+                <!-- =================================================
                  AREA & ROUTE MAPPING
             ================================================== -->
 
-            <div
-                class="rounded-2xl
+                <div class="rounded-2xl
                        border border-blue-100
                        bg-blue-50/40
-                       p-5"
-            >
+                       p-5">
 
-                <!-- SECTION HEADER -->
+                    <!-- SECTION HEADER -->
 
-                <div
-                    class="flex items-start
+                    <div class="flex items-start
                            justify-between
-                           mb-5"
-                >
+                           mb-5">
 
-                    <div>
+                        <div>
 
-                        <h3
-                            class="text-sm font-bold
-                                   text-slate-800"
-                        >
-                            Area & Route Mapping
-                        </h3>
+                            <h3 class="text-sm font-bold
+                                   text-slate-800">
+                                Area & Route Mapping
+                            </h3>
 
-                        <p
-                            class="text-xs
-                                   text-slate-400 mt-1"
-                        >
-                            Select an area first, then assign routes
-                            belonging to that area.
-                        </p>
+                            <p class="text-xs
+                                   text-slate-400 mt-1">
+                                Select an area first, then assign routes
+                                belonging to that area.
+                            </p>
 
-                    </div>
+                        </div>
 
-                    <div
-                        class="px-2.5 py-1
+                        <div class="px-2.5 py-1
                                rounded-lg
                                bg-blue-100
                                text-blue-700
                                text-[10px]
-                               font-bold"
-                    >
-                        MAPPING
+                               font-bold">
+                            MAPPING
+                        </div>
+
                     </div>
 
-                </div>
 
-
-                <div
-                    class="grid grid-cols-1
+                    <div class="grid grid-cols-1
                            md:grid-cols-2
-                           gap-5"
-                >
+                           gap-5">
 
-                    <!-- =================================================
+                        <!-- =================================================
                          ADMIN AREA MANAGER DROPDOWN
                     ================================================== -->
 
-                    <div
-                        *ngIf="isAdmin"
-                        class="md:col-span-2"
-                    >
+                        <div *ngIf="isAdmin" class="md:col-span-2">
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1.5"
-                        >
-                            Area Manager
-                            <span class="text-red-500">*</span>
-                        </label>
+                                   text-slate-700 mb-1.5">
+                                Area Manager
+                                <span class="text-red-500">*</span>
+                            </label>
 
-                        <select
-                            [value]="selectedAreaManagerId ?? ''"
-                            (change)="
+                            <select [value]="selectedAreaManagerId ?? ''" (change)="
                                 onAreaManagerChange(
                                     $any($event.target).value
                                 )
-                            "
-                            class="w-full
+                            " class="w-full
                                    bg-white
                                    border border-slate-200
                                    rounded-xl
@@ -744,73 +638,60 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        >
+                                   transition-all">
 
-                            <option value="">
-                                {{
+                                <option value="">
+                                    {{
                                     isLoadingAreaManagers
-                                        ? 'Loading Area Managers...'
-                                        : 'Select Area Manager'
-                                }}
-                            </option>
+                                    ? 'Loading Area Managers...'
+                                    : 'Select Area Manager'
+                                    }}
+                                </option>
 
-                            <option
-                                *ngFor="
-                                    let manager of areaManagers
-                                "
-                                [value]="
-                                    manager.areaManagerId
-                                    ?? manager.id
-                                    ?? manager.managerId
-                                "
-                            >
-                                {{
+                                <option *ngFor="let manager of areaManagers" [value]="
+    manager.areaManagerId
+    ?? manager.id
+    ?? manager.managerId
+  ">
+                                    {{
                                     manager.name
                                     ?? manager.areaManagerName
                                     ?? manager.managerName
-                                }}
-                            </option>
+                                    }}
+                                    - {{ manager.assignedArea }}
+                                </option>
 
-                        </select>
+                            </select>
 
-                    </div>
+                        </div>
 
 
-                    <!-- =================================================
+                        <!-- =================================================
                          AREA
                     ================================================== -->
 
-                    <div>
+                        <div>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1.5"
-                        >
+                                   text-slate-700 mb-1.5">
 
-                            Area
+                                Area
 
-                            <span
-                                class="text-red-500"
-                            >
-                                *
-                            </span>
+                                <span class="text-red-500">
+                                    *
+                                </span>
 
-                        </label>
+                            </label>
 
 
-                        <select
-                            formControlName="area"
-                            (change)="onAreaChange()"
-                            [disabled]="
+                            <select formControlName="area" (change)="onAreaChange()" [disabled]="
                                 isLoadingAreas ||
                                 (
                                     isAdmin &&
                                     !selectedAreaManagerId
                                 )
-                            "
-                            class="w-full
+                            " class="w-full
                                    bg-white
                                    border border-slate-200
                                    rounded-xl
@@ -820,92 +701,66 @@
                                    focus:ring-2
                                    focus:ring-blue-500/20
                                    focus:border-blue-500
-                                   transition-all"
-                        >
+                                   transition-all">
 
-                            <option
-                                [ngValue]="null"
-                                disabled
-                            >
-                                Select Area
-                            </option>
+                                <option [ngValue]="null" disabled>
+                                    Select Area
+                                </option>
 
 
-                            <option
-                                *ngIf="isLoadingAreas"
-                                disabled
-                            >
-                                Loading Areas...
-                            </option>
+                                <option *ngIf="isLoadingAreas" disabled>
+                                    Loading Areas...
+                                </option>
 
 
-                            <option
-                                *ngFor="let area of areas"
-                                [ngValue]="area.areaId"
-                            >
+                                <option *ngFor="let area of areas" [ngValue]="area.areaId">
 
-                                {{ area.areaName }}
+                                    {{ area.areaName }}
 
-                                <ng-container
-                                    *ngIf="area.areaCode"
-                                >
-                                    ({{ area.areaCode }})
-                                </ng-container>
+                                    <ng-container *ngIf="area.areaCode">
+                                        ({{ area.areaCode }})
+                                    </ng-container>
 
-                            </option>
+                                </option>
 
-                        </select>
+                            </select>
 
 
-                        <p
-                            *ngIf="
+                            <p *ngIf="
                                 !isLoadingAreas &&
                                 areas.length === 0
-                            "
-                            class="text-xs
-                                   text-slate-400 mt-1.5"
-                        >
-                            No active areas available.
-                        </p>
+                            " class="text-xs
+                                   text-slate-400 mt-1.5">
+                                No active areas available.
+                            </p>
 
-                    </div>
+                        </div>
 
 
-                    <!-- =================================================
+                        <!-- =================================================
                          ROUTES
                     ================================================== -->
 
-                    <div
-                        class="relative"
-                        #routeDropdownContainer
-                    >
+                        <div class="relative" #routeDropdownContainer>
 
-                        <label
-                            class="block text-xs
+                            <label class="block text-xs
                                    font-semibold
-                                   text-slate-700 mb-1.5"
-                        >
+                                   text-slate-700 mb-1.5">
 
-                            Assigned Routes
+                                Assigned Routes
 
-                            <span
-                                class="text-red-500"
-                            >
-                                *
-                            </span>
+                                <span class="text-red-500">
+                                    *
+                                </span>
 
-                        </label>
+                            </label>
 
 
-                        <!-- ROUTE SELECTOR -->
+                            <!-- ROUTE SELECTOR -->
 
-                        <button
-                            type="button"
-                            [disabled]="
+                            <button type="button" [disabled]="
                                 !updateForm.get('area')?.value
-                            "
-                            (click)="toggleRouteDropdown($event)"
-                            class="w-full
+                            " (click)="toggleRouteDropdown($event)" class="w-full
                                    bg-white
                                    border border-slate-200
                                    rounded-xl
@@ -920,45 +775,37 @@
                                    disabled:cursor-not-allowed
                                    hover:border-blue-300
                                    focus:outline-none
-                                   transition-all"
-                        >
+                                   transition-all">
 
-                            <span
-                                class="truncate"
-                                [class.text-slate-400]="
+                                <span class="truncate" [class.text-slate-400]="
                                     selectedRouteIds.length === 0
-                                "
-                            >
+                                ">
 
-                                {{
+                                    {{
                                     selectedRouteLabels ||
                                     (
-                                        updateForm.get('area')?.value
-                                            ? 'Select route(s)'
-                                            : 'Select area first'
+                                    updateForm.get('area')?.value
+                                    ? 'Select route(s)'
+                                    : 'Select area first'
                                     )
-                                }}
+                                    }}
 
-                            </span>
-
-
-                            <span
-                                class="text-[10px]
-                                       text-slate-400 ml-2"
-                            >
-                                ▼
-                            </span>
-
-                        </button>
+                                </span>
 
 
-                        <!-- =================================================
+                                <span class="text-[10px]
+                                       text-slate-400 ml-2">
+                                    ▼
+                                </span>
+
+                            </button>
+
+
+                            <!-- =================================================
                              ROUTE DROPDOWN
                         ================================================== -->
 
-                        <div
-                            *ngIf="showRouteDropdown"
-                            class="absolute
+                            <div *ngIf="showRouteDropdown" class="absolute
                                    left-0 right-0
                                    bg-white
                                    border border-slate-200
@@ -966,27 +813,18 @@
                                    shadow-2xl
                                    mt-1
                                    z-[100]
-                                   overflow-hidden"
-                        >
+                                   overflow-hidden">
 
-                            <!-- SEARCH -->
+                                <!-- SEARCH -->
 
-                            <div
-                                class="p-3
+                                <div class="p-3
                                        border-b
                                        border-slate-100
-                                       bg-slate-50"
-                            >
+                                       bg-slate-50">
 
-                                <input
-                                    type="text"
-                                    [(ngModel)]="routeSearch"
-                                    [ngModelOptions]="{
+                                    <input type="text" [(ngModel)]="routeSearch" [ngModelOptions]="{
                                         standalone: true
-                                    }"
-                                    (input)="onRouteSearchChange()"
-                                    placeholder="Search routes..."
-                                    class="w-full
+                                    }" (input)="onRouteSearchChange()" placeholder="Search routes..." class="w-full
                                            bg-white
                                            border border-slate-200
                                            rounded-xl
@@ -994,145 +832,172 @@
                                            text-xs
                                            outline-none
                                            focus:border-blue-500
-                                           transition-all"
-                                />
+                                           transition-all" />
 
-                            </div>
+                                </div>
 
 
-                            <!-- LOADING -->
+                                <!-- LOADING -->
 
-                            <div
-                                *ngIf="isLoadingRoutes"
-                                class="py-8
+                                <div *ngIf="isLoadingRoutes" class="py-8
                                        text-center
                                        text-xs
-                                       text-slate-400"
-                            >
+                                       text-slate-400">
 
-                                Loading routes...
+                                    Loading routes...
 
-                            </div>
+                                </div>
 
 
-                            <!-- ROUTES -->
+                                <!-- ROUTES -->
 
-                            <div
-                                *ngIf="
+                                <div *ngIf="
                                     !isLoadingRoutes &&
                                     filteredRoutes.length > 0
-                                "
-                                class="max-h-56
+                                " class="max-h-56
                                        overflow-y-auto
                                        p-2
-                                       custom-scrollbar"
-                            >
+                                       custom-scrollbar">
 
-                                <label
-                                    *ngFor="
+                                    <label *ngFor="
                                         let item of filteredRoutes
-                                    "
-                                    class="flex items-center
+                                    " class="flex items-center
                                            gap-3
                                            px-3 py-2.5
                                            rounded-xl
                                            hover:bg-blue-50
                                            cursor-pointer
-                                           transition-colors"
-                                >
+                                           transition-colors">
 
-                                    <input
-                                        type="checkbox"
-                                        [checked]="
+                                        <input type="checkbox" [checked]="
                                             isSelected(
                                                 item.routeId
                                             )
-                                        "
-                                        (change)="
+                                        " (change)="
                                             toggleRoute(item)
-                                        "
-                                        class="w-4 h-4
+                                        " class="w-4 h-4
                                                text-blue-600
                                                rounded
                                                border-slate-300
                                                focus:ring-blue-500
-                                               cursor-pointer"
-                                    />
+                                               cursor-pointer" />
 
 
-                                    <div
-                                        class="min-w-0 flex-1"
-                                    >
+                                        <div class="min-w-0 flex-1">
 
-                                        <div
-                                            class="text-xs
+                                            <div class="text-xs
                                                    font-semibold
                                                    text-slate-700
-                                                   truncate"
-                                        >
-                                            {{ item.routeName }}
-                                        </div>
+                                                   truncate">
+                                                {{ item.routeName }}
+                                            </div>
 
 
-                                        <div
-                                            *ngIf="
+                                            <div *ngIf="
                                                 item.description
-                                            "
-                                            class="text-[10px]
+                                            " class="text-[10px]
                                                    text-slate-400
-                                                   truncate"
-                                        >
-                                            {{ item.description }}
+                                                   truncate">
+                                                {{ item.description }}
+                                            </div>
+
                                         </div>
 
-                                    </div>
+                                    </label>
 
-                                </label>
-
-                            </div>
+                                </div>
 
 
-                            <!-- EMPTY -->
+                                <!-- EMPTY -->
 
-                            <div
-                                *ngIf="
+                                <div *ngIf="
                                     !isLoadingRoutes &&
                                     filteredRoutes.length === 0
-                                "
-                                class="py-8
+                                " class="py-8
                                        text-center
                                        text-xs
-                                       text-slate-400"
-                            >
+                                       text-slate-400">
 
-                                {{
+                                    {{
                                     routeSearch
-                                        ? 'No routes found.'
-                                        : 'No routes available for this area.'
-                                }}
+                                    ? 'No routes found.'
+                                    : 'No routes available for this area.'
+                                    }}
 
-                            </div>
+                                </div>
 
 
-                            <!-- SELECTED COUNT -->
+                                <!-- SELECTED COUNT -->
 
-                            <div
-                                *ngIf="
+                                <div *ngIf="
                                     selectedRouteIds.length > 0
-                                "
-                                class="px-3 py-2
+                                " class="px-3 py-2
                                        border-t
                                        border-slate-100
                                        bg-slate-50
                                        text-[11px]
                                        font-semibold
-                                       text-blue-600"
-                            >
+                                       text-blue-600">
 
-                                {{ selectedRouteIds.length }}
-                                route(s) selected
+                                    {{ selectedRouteIds.length }}
+                                    route(s) selected
+
+                                </div>
 
                             </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SELECTED AREA INFO -->
+
+                    <div *ngIf="selectedArea" class="mt-4
+                           flex items-center
+                           gap-3
+                           rounded-xl
+                           bg-white
+                           border border-slate-200
+                           px-4 py-3">
+
+                        <div class="h-8 w-8
+                               rounded-lg
+                               bg-blue-50
+                               flex items-center
+                               justify-center">
+
+                            <span class="text-blue-600
+                                   text-sm font-bold">
+                                A
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <p class="text-[10px]
+                                   uppercase
+                                   tracking-wider
+                                   font-bold
+                                   text-slate-400">
+                                Selected Area
+                            </p>
+
+                            <p class="text-sm
+                                   font-semibold
+                                   text-slate-800">
+
+                                {{ selectedArea.areaName }}
+
+                                <span *ngIf="selectedArea.areaCode" class="text-xs
+                                       font-normal
+                                       text-slate-400">
+                                    · {{ selectedArea.areaCode }}
+                                </span>
+
+                            </p>
 
                         </div>
 
@@ -1141,115 +1006,36 @@
                 </div>
 
 
-                <!-- SELECTED AREA INFO -->
-
-                <div
-                    *ngIf="selectedArea"
-                    class="mt-4
-                           flex items-center
-                           gap-3
-                           rounded-xl
-                           bg-white
-                           border border-slate-200
-                           px-4 py-3"
-                >
-
-                    <div
-                        class="h-8 w-8
-                               rounded-lg
-                               bg-blue-50
-                               flex items-center
-                               justify-center"
-                    >
-
-                        <span
-                            class="text-blue-600
-                                   text-sm font-bold"
-                        >
-                            A
-                        </span>
-
-                    </div>
-
-
-                    <div>
-
-                        <p
-                            class="text-[10px]
-                                   uppercase
-                                   tracking-wider
-                                   font-bold
-                                   text-slate-400"
-                        >
-                            Selected Area
-                        </p>
-
-                        <p
-                            class="text-sm
-                                   font-semibold
-                                   text-slate-800"
-                        >
-
-                            {{ selectedArea.areaName }}
-
-                            <span
-                                *ngIf="selectedArea.areaCode"
-                                class="text-xs
-                                       font-normal
-                                       text-slate-400"
-                            >
-                                · {{ selectedArea.areaCode }}
-                            </span>
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
+                <!-- =================================================
                  STATUS
             ================================================== -->
 
-            <div
-                class="rounded-2xl
+                <div class="rounded-2xl
                        border border-slate-200
                        bg-slate-50
-                       p-4"
-            >
+                       p-4">
 
-                <div
-                    class="flex items-center
-                           justify-between"
-                >
+                    <div class="flex items-center
+                           justify-between">
 
-                    <div>
+                        <div>
 
-                        <p
-                            class="text-sm
+                            <p class="text-sm
                                    font-semibold
-                                   text-slate-800"
-                        >
-                            Account Status
-                        </p>
+                                   text-slate-800">
+                                Account Status
+                            </p>
 
-                        <p
-                            class="text-xs
-                                   text-slate-400 mt-0.5"
-                        >
-                            Enable or disable this
-                            Medical Representative
-                        </p>
+                            <p class="text-xs
+                                   text-slate-400 mt-0.5">
+                                Enable or disable this
+                                Medical Representative
+                            </p>
 
-                    </div>
+                        </div>
 
 
-                    <select
-                        formControlName="isActive"
-                        class="bg-white
+                        <select formControlName="isActive" class="bg-white
                                border border-slate-200
                                rounded-xl
                                px-4 py-2
@@ -1259,47 +1045,40 @@
                                focus:outline-none
                                focus:ring-2
                                focus:ring-blue-500/20
-                               focus:border-blue-500"
-                    >
+                               focus:border-blue-500">
 
-                        <option [ngValue]="true">
-                            Active
-                        </option>
+                            <option [ngValue]="true">
+                                Active
+                            </option>
 
-                        <option [ngValue]="false">
-                            Inactive
-                        </option>
+                            <option [ngValue]="false">
+                                Inactive
+                            </option>
 
-                    </select>
+                        </select>
+
+                    </div>
 
                 </div>
 
-            </div>
-
-        </form>
+            </form>
 
 
-        <!-- =================================================
+            <!-- =================================================
              FOOTER
         ================================================== -->
 
-        <div
-            class="px-6 py-4
+            <div class="px-6 py-4
                    border-t border-slate-100
                    bg-slate-50/70
                    flex flex-col-reverse
                    sm:flex-row
                    justify-end
-                   gap-3"
-        >
+                   gap-3">
 
-            <!-- CANCEL -->
+                <!-- CANCEL -->
 
-            <button
-                type="button"
-                (click)="closeModal()"
-                [disabled]="isUpdating"
-                class="px-5 py-2.5
+                <button type="button" (click)="closeModal()" [disabled]="isUpdating" class="px-5 py-2.5
                        text-xs font-semibold
                        text-slate-600
                        bg-white
@@ -1307,24 +1086,19 @@
                        hover:bg-slate-50
                        rounded-xl
                        transition-all
-                       disabled:opacity-50"
-            >
+                       disabled:opacity-50">
 
-                Cancel
+                    Cancel
 
-            </button>
+                </button>
 
 
-            <!-- UPDATE -->
+                <!-- UPDATE -->
 
-            <button
-                type="button"
-                (click)="updateMr()"
-                [disabled]="
+                <button type="button" (click)="updateMr()" [disabled]="
                     isUpdating ||
                     updateForm.invalid
-                "
-                class="px-6 py-2.5
+                " class="px-6 py-2.5
                        text-xs font-semibold
                        text-white
                        bg-blue-600
@@ -1338,44 +1112,39 @@
                        gap-2
                        min-w-[190px]
                        disabled:opacity-60
-                       disabled:cursor-not-allowed"
-            >
+                       disabled:cursor-not-allowed">
 
-                <ng-container
-                    *ngIf="
+                    <ng-container *ngIf="
                         isUpdating;
                         else updateText
-                    "
-                >
+                    ">
 
-                    <span
-                        class="w-4 h-4
+                        <span class="w-4 h-4
                                border-2
                                border-white
                                border-t-transparent
                                rounded-full
-                               animate-spin"
-                    >
-                    </span>
+                               animate-spin">
+                        </span>
 
-                    Updating...
+                        Updating...
 
-                </ng-container>
+                    </ng-container>
 
 
-                <ng-template #updateText>
+                    <ng-template #updateText>
 
-                    Update Representative
+                        Update Representative
 
-                </ng-template>
+                    </ng-template>
 
-            </button>
+                </button>
+
+            </div>
 
         </div>
 
     </div>
-
-</div>
 
 
 

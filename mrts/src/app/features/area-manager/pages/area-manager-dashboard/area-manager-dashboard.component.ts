@@ -145,48 +145,51 @@ export class AreaManagerDashboardComponent implements OnInit {
 
   initializeForm() {
 
-    this.editForm = this.fb.group({
+this.editForm = this.fb.group({
 
-      name: ['', Validators.required],
+  name: ['', Validators.required],
 
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
+  email: [
+    '',
+    [
+      Validators.required,
+      Validators.email
+    ]
+  ],
 
-      gender: ['', Validators.required],
+  gender: ['', Validators.required],
 
-      dateOfBirth: ['', Validators.required],
+  dateOfBirth: ['', Validators.required],
 
-      joiningDate: ['', Validators.required],
+  joiningDate: ['', Validators.required],
 
-      mobile: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]{10}$')
-        ]
-      ],
+  mobile: [
+    '',
+    [
+      Validators.required,
+      Validators.pattern('^[0-9]{10}$')
+    ]
+  ],
 
-      region: ['', Validators.required],
+  region: ['', Validators.required],
 
-      assignedArea: ['', Validators.required],
+  assignedArea: ['', Validators.required],
 
-      // NEW
-      areaIds: [[]],
+  // REQUIRED - AT LEAST ONE AREA
+  areaIds: [
+    [],
+    [this.areaIdsValidator]
+  ],
 
-      address: ['', Validators.required],
+  address: ['', Validators.required],
 
-      city: ['', Validators.required],
+  city: ['', Validators.required],
 
-      state: ['', Validators.required],
+  state: ['', Validators.required],
 
-      isActive: [true]
+  isActive: [true]
 
-    });
+});
 
   }
 
@@ -1227,7 +1230,13 @@ closeAreaDropdown(): void {
 
 }
 
+areaIdsValidator(control: any) {
+  const value = control.value;
 
+  return Array.isArray(value) && value.length > 0
+    ? null
+    : { areaRequired: true };
+}
   
 
 }

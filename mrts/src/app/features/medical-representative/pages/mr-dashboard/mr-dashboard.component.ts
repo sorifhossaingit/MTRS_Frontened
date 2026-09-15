@@ -194,8 +194,8 @@ export class MrDashboardComponent implements OnInit {
     private mrService: MrService,
     private areaManagerService: AreaManagerService,
     private customerService: CustomerService
-    
-  ) {}
+
+  ) { }
 
 
   // =========================================================
@@ -296,7 +296,10 @@ export class MrDashboardComponent implements OnInit {
         // ROUTES
         // =====================================================
 
-        routeIds: [[]],
+        routeIds: [
+          [],
+          [this.routeIdsValidator]
+        ],
 
         isActive: [true]
       });
@@ -357,52 +360,52 @@ export class MrDashboardComponent implements OnInit {
   // LOAD DASHBOARD
   // =========================================================
 
-loadDashboard(): void {
+  loadDashboard(): void {
 
-  const rid = localStorage.getItem('rid');
+    const rid = localStorage.getItem('rid');
 
-  const payload: any = {
-    agencyId: this.agencyId
-  };
+    const payload: any = {
+      agencyId: this.agencyId
+    };
 
-  // Send areaManagerId only for this specific RID
-  if (
-    rid === '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
-  ) {
-    payload.areaManagerId = this.managerId;
-  }
+    // Send areaManagerId only for this specific RID
+    if (
+      rid === '11714ca6-4cdb-46c5-bb12-d582ef179bc2'
+    ) {
+      payload.areaManagerId = this.managerId;
+    }
 
-  this.mrService
-    .get_attendance_dashboard_ar(payload)
-    .subscribe({
+    this.mrService
+      .get_attendance_dashboard_ar(payload)
+      .subscribe({
 
-      next: (res: any) => {
+        next: (res: any) => {
 
-        if (res?.success) {
+          if (res?.success) {
 
-          this.totalMR =
-            res.data?.totalMedicalRepresentatives || 0;
+            this.totalMR =
+              res.data?.totalMedicalRepresentatives || 0;
 
-          this.activeMR =
-            res.data?.activeMedicalRepresentatives || 0;
+            this.activeMR =
+              res.data?.activeMedicalRepresentatives || 0;
 
-          this.presentCount =
-            res.data?.presentMedicalRepresentatives || 0;
+            this.presentCount =
+              res.data?.presentMedicalRepresentatives || 0;
 
-          this.absentCount =
-            res.data?.absentMedicalRepresentatives || 0;
+            this.absentCount =
+              res.data?.absentMedicalRepresentatives || 0;
+          }
+        },
+
+        error: (err) => {
+
+          console.error(
+            'Dashboard error:',
+            err
+          );
         }
-      },
-
-      error: (err) => {
-
-        console.error(
-          'Dashboard error:',
-          err
-        );
-      }
-    });
-}
+      });
+  }
 
 
   // =========================================================
@@ -601,8 +604,8 @@ loadDashboard(): void {
 
     const areaManagerId =
       value === null ||
-      value === '' ||
-      value === undefined
+        value === '' ||
+        value === undefined
         ? null
         : Number(value);
 
@@ -844,147 +847,147 @@ loadDashboard(): void {
   // GET MR LIST
   // =========================================================
 
-getMrList(): void {
+  getMrList(): void {
 
-  const filterValue = this.filterForm?.value;
+    const filterValue = this.filterForm?.value;
 
-  // =========================================================
-  // BASE PAYLOAD
-  // =========================================================
+    // =========================================================
+    // BASE PAYLOAD
+    // =========================================================
 
-  const payload: any = {
+    const payload: any = {
 
-    agencyId:
-      Number(this.agencyId),
+      agencyId:
+        Number(this.agencyId),
 
-    name:
-      filterValue?.name?.trim() || null,
+      name:
+        filterValue?.name?.trim() || null,
 
-    email:
-      filterValue?.email?.trim() || null,
+      email:
+        filterValue?.email?.trim() || null,
 
-    mobile:
-      filterValue?.mobile?.trim() || null,
+      mobile:
+        filterValue?.mobile?.trim() || null,
 
-    isActive:
-      filterValue?.isActive ?? null,
+      isActive:
+        filterValue?.isActive ?? null,
 
-    pageNumber:
-      this.pageNumber,
+      pageNumber:
+        this.pageNumber,
 
-    pageSize:
-      this.pageSize
-  };
-
-
-  // =========================================================
-  // AREA MANAGER ROLE ONLY
-  // =========================================================
-  // Admin:
-  // DO NOT SEND assignedAreaManager
-  //
-  // Area Manager:
-  // SEND assignedAreaManager = mid
-  // =========================================================
-
-  const roleId =
-    localStorage.getItem('rid') || '';
-
-  const ADMIN_ROLE_ID =
-    'a5fabfee-5506-4e12-bfec-c898fc5af3ae';
-
-  const AREA_MANAGER_ROLE_ID =
-    '11714ca6-4cdb-46c5-bb12-d582ef179bc2';
+      pageSize:
+        this.pageSize
+    };
 
 
-  if (
-    roleId === AREA_MANAGER_ROLE_ID
-  ) {
+    // =========================================================
+    // AREA MANAGER ROLE ONLY
+    // =========================================================
+    // Admin:
+    // DO NOT SEND assignedAreaManager
+    //
+    // Area Manager:
+    // SEND assignedAreaManager = mid
+    // =========================================================
 
-    const managerId =
-      Number(
-        localStorage.getItem('mid')
-      ) || 0;
+    const roleId =
+      localStorage.getItem('rid') || '';
 
-    if (managerId > 0) {
+    const ADMIN_ROLE_ID =
+      'a5fabfee-5506-4e12-bfec-c898fc5af3ae';
 
-      payload.assignedAreaManager =
-        managerId;
-
-    }
-
-  }
-
-  // =========================================================
-  // ADMIN
-  // =========================================================
-  // Do absolutely nothing here.
-  // assignedAreaManager will NOT exist in payload.
-  // =========================================================
+    const AREA_MANAGER_ROLE_ID =
+      '11714ca6-4cdb-46c5-bb12-d582ef179bc2';
 
 
-  console.log(
-    'RID:',
-    roleId
-  );
+    if (
+      roleId === AREA_MANAGER_ROLE_ID
+    ) {
 
-  console.log(
-    'MR List Payload:',
-    payload
-  );
+      const managerId =
+        Number(
+          localStorage.getItem('mid')
+        ) || 0;
 
+      if (managerId > 0) {
 
-  // =========================================================
-  // API
-  // =========================================================
-
-  this.mrService
-    .get_mr(payload)
-    .pipe(
-      takeUntilDestroyed(
-        this.destroyRef
-      )
-    )
-    .subscribe({
-
-      next: (res: any) => {
-
-        console.log(
-          'MR List Response:',
-          res
-        );
-
-        if (res?.success) {
-
-          this.mrList =
-            res.data || [];
-
-          this.totalRecords =
-            res.totalRecords || 0;
-
-        }
-
-      },
-
-      error: (err: any) => {
-
-        console.error(
-          'Get MR List Error:',
-          err
-        );
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text:
-            err?.error?.message ||
-            'Failed to load MR list.'
-        });
+        payload.assignedAreaManager =
+          managerId;
 
       }
 
-    });
-}
+    }
+
+    // =========================================================
+    // ADMIN
+    // =========================================================
+    // Do absolutely nothing here.
+    // assignedAreaManager will NOT exist in payload.
+    // =========================================================
+
+
+    console.log(
+      'RID:',
+      roleId
+    );
+
+    console.log(
+      'MR List Payload:',
+      payload
+    );
+
+
+    // =========================================================
+    // API
+    // =========================================================
+
+    this.mrService
+      .get_mr(payload)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+
+        next: (res: any) => {
+
+          console.log(
+            'MR List Response:',
+            res
+          );
+
+          if (res?.success) {
+
+            this.mrList =
+              res.data || [];
+
+            this.totalRecords =
+              res.totalRecords || 0;
+
+          }
+
+        },
+
+        error: (err: any) => {
+
+          console.error(
+            'Get MR List Error:',
+            err
+          );
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              err?.error?.message ||
+              'Failed to load MR list.'
+          });
+
+        }
+
+      });
+  }
 
 
   // =========================================================
@@ -1472,9 +1475,9 @@ getMrList(): void {
         formValue.routeIds
       )
         ? formValue.routeIds.map(
-            (id: any) =>
-              Number(id)
-          )
+          (id: any) =>
+            Number(id)
+        )
         : [];
 
 
@@ -1830,4 +1833,14 @@ getMrList(): void {
         !x.isActive
     ).length;
   }
+
+  routeIdsValidator(control: any) {
+  const value = control.value;
+
+  if (!Array.isArray(value) || value.length === 0) {
+    return { routeRequired: true };
+  }
+
+  return null;
+}
 }

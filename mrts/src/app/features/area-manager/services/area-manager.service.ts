@@ -55,6 +55,7 @@ export class AreaManagerService {
 get_all_area(params: {
   agencyId: number;
   mrId?: number;
+  areaManagerId?: number;
   areaName?: string;
   areaCode?: string;
   isActive?: boolean;
@@ -95,6 +96,23 @@ get_all_area(params: {
           mrId.toString()
         );
     }
+  }
+
+  // ============================================
+  // AREA MANAGER FILTER
+  // ============================================
+
+  if (
+    params.areaManagerId !== undefined &&
+    params.areaManagerId !== null &&
+    params.areaManagerId > 0
+  ) {
+
+    httpParams =
+      httpParams.set(
+        'areaManagerId',
+        params.areaManagerId.toString()
+      );
   }
 
   // ============================================

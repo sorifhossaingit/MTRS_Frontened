@@ -414,10 +414,7 @@ onRouteChange(routeId: number): void {
       return;
     }
 
-    if (!this.currentPlace.plannedTime) {
-      Swal.fire('Validation', 'Please select a planned time', 'warning');
-      return;
-    }
+
 
     // Optional Products Guard: Ensure product arrays are initialized even if no products were selected
     this.currentPlace.productIds = this.currentPlace.productIds || [];
@@ -467,22 +464,28 @@ onRouteChange(routeId: number): void {
       return;
     }
 
-    const payload = {
-      agencyId: Number(localStorage.getItem('aid')),
-      mrId: this.assignVisit.mrId,
-      assignedBy: Number(localStorage.getItem('mid')),
-      visitDate: this.assignVisit.visitDate,
-      routeId: this.assignVisit.routeId,   // <-- Add this
-      remarks: this.assignVisit.remarks,
-      places: this.assignVisit.places.map((place: any) => ({
-        customerId: place.customerId,
-        doctorId: null,
-        plannedTime: place.plannedTime,
-        sequenceNo: Number(place.sequenceNo),
-        remarks: place.remarks || '',
-        productIds: place.productIds || [] // Defaults to empty array [] when no products are picked
-      }))
-    };
+const payload = {
+  agencyId: Number(localStorage.getItem('aid')),
+  mrId: this.assignVisit.mrId,
+  assignedBy: Number(localStorage.getItem('mid')),
+  visitDate: this.assignVisit.visitDate,
+  routeId: this.assignVisit.routeId,
+  remarks: this.assignVisit.remarks,
+
+  places: this.assignVisit.places.map((place: any) => ({
+    customerId: place.customerId,
+    doctorId: null,
+
+    // OPTIONAL
+    plannedTime: place.plannedTime
+      ? `${place.plannedTime}:00`
+      : null,
+
+    sequenceNo: Number(place.sequenceNo),
+    remarks: place.remarks || '',
+    productIds: place.productIds || []
+  }))
+};
 
     this.isSubmitting = true;
 

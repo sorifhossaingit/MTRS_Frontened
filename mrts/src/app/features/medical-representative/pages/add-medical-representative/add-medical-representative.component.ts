@@ -348,6 +348,7 @@ export class AddMedicalRepresentativeComponent
     this.areaManagerService
       .get_all_area({
         agencyId: agencyId,
+        areaManagerId: this.managerId,
         isActive: true
       })
       .subscribe({
