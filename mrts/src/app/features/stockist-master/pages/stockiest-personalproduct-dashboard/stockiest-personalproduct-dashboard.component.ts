@@ -63,6 +63,243 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
   totalRecords = 0;
   totalPages = 0;
 
+
+    dosageFormSearch: string = '';
+  dosageFormDropdownOpen: boolean = false;
+
+  dosageForms: string[] = [
+    // Solid Oral
+    'Tablet',
+    'Chewable Tablet',
+    'Effervescent Tablet',
+    'Dispersible Tablet',
+    'Soluble Tablet',
+    'Sublingual Tablet',
+    'Buccal Tablet',
+    'Modified Release Tablet',
+    'Extended Release Tablet',
+    'Enteric Coated Tablet',
+
+    'Capsule',
+    'Hard Gelatin Capsule',
+    'Soft Gelatin Capsule',
+    'Modified Release Capsule',
+    'Enteric Coated Capsule',
+
+    'Powder',
+    'Granules',
+    'Effervescent Granules',
+    'Sachet',
+
+    // Liquid Oral
+    'Syrup',
+    'Dry Syrup',
+    'Suspension',
+    'Dry Suspension',
+    'Oral Solution',
+    'Oral Drops',
+    'Oral Emulsion',
+    'Oral Gel',
+    'Elixir',
+
+    // Injectable
+    'Injection',
+    'Injectable Solution',
+    'Injectable Suspension',
+    'Infusion',
+    'IV Injection',
+    'IM Injection',
+    'SC Injection',
+    'Intravenous Infusion',
+
+    // Topical
+    'Cream',
+    'Ointment',
+    'Gel',
+    'Lotion',
+    'Liniment',
+    'Paste',
+    'Topical Solution',
+    'Topical Suspension',
+    'Topical Powder',
+    'Medicated Shampoo',
+
+    // Dermatological
+    'Emulsion',
+    'Foam',
+    'Mousse',
+    'Medicated Soap',
+
+    // Eye
+    'Eye Drops',
+    'Eye Solution',
+    'Eye Suspension',
+    'Eye Gel',
+    'Eye Ointment',
+    'Ophthalmic Insert',
+
+    // Ear
+    'Ear Drops',
+    'Ear Solution',
+    'Ear Suspension',
+
+    // Nasal
+    'Nasal Drops',
+    'Nasal Spray',
+    'Nasal Solution',
+    'Nasal Gel',
+    'Nasal Powder',
+
+    // Respiratory
+    'Inhaler',
+    'Metered Dose Inhaler',
+    'Dry Powder Inhaler',
+    'Nebulizer Solution',
+    'Respiratory Solution',
+
+    // Rectal
+    'Suppository',
+    'Rectal Cream',
+    'Rectal Ointment',
+    'Rectal Gel',
+    'Rectal Solution',
+    'Enema',
+
+    // Vaginal
+    'Vaginal Tablet',
+    'Vaginal Capsule',
+    'Vaginal Cream',
+    'Vaginal Gel',
+    'Vaginal Suppository',
+    'Vaginal Pessary',
+
+    // Transdermal
+    'Transdermal Patch',
+    'Medicated Patch',
+
+    // Lozenges
+    'Lozenge',
+    'Troche',
+    'Pastille',
+
+    // Other
+    'Mouthwash',
+    'Gargle',
+    'Dental Gel',
+    'Dental Paste',
+    'Mouth Gel',
+    'Medicated Dressing',
+    'Implant',
+    'Implantable Tablet',
+    'Kit',
+    'Other'
+  ];
+
+
+  categorySearch: string = '';
+  categoryDropdownOpen: boolean = false;
+
+  categories: string[] = [
+    'Analgesic',
+    'Antipyretic',
+    'Antibiotic',
+    'Antiviral',
+    'Antifungal',
+    'Antiprotozoal',
+    'Anthelmintic',
+    'Antimalarial',
+
+    'Antacid',
+    'Antiulcer',
+    'Gastrointestinal',
+    'Antiemetic',
+    'Laxative',
+    'Antidiarrheal',
+
+    'Antihistamine',
+    'Antiallergic',
+    'Cough & Cold',
+    'Expectorant',
+    'Antitussive',
+    'Decongestant',
+
+    'Cardiovascular',
+    'Antihypertensive',
+    'Antianginal',
+    'Antiarrhythmic',
+    'Anticoagulant',
+    'Antiplatelet',
+    'Lipid Lowering',
+
+    'Antidiabetic',
+    'Insulin',
+    'Endocrine',
+    'Thyroid',
+
+    'CNS',
+    'Antidepressant',
+    'Antipsychotic',
+    'Antiepileptic',
+    'Anxiolytic',
+    'Sedative',
+    'Hypnotic',
+
+    'Respiratory',
+    'Bronchodilator',
+    'Asthma',
+    'COPD',
+
+    'Dermatological',
+    'Antiseptic',
+    'Disinfectant',
+    'Topical',
+
+    'Ophthalmic',
+    'Otic',
+    'Nasal',
+
+    'Gynecological',
+    'Obstetric',
+
+    'Urological',
+    'Renal',
+
+    'Musculoskeletal',
+    'Anti-inflammatory',
+    'Antirheumatic',
+    'Muscle Relaxant',
+
+    'Vitamins',
+    'Minerals',
+    'Nutritional Supplement',
+    'Protein Supplement',
+
+    'Hematology',
+    'Hematininic',
+
+    'Immunological',
+    'Immunosuppressant',
+
+    'Oncology',
+    'Anticancer',
+
+    'Antiseptic',
+    'Anesthetic',
+    'Local Anesthetic',
+
+    'Dental',
+    'Oral Care',
+
+    'Pediatric',
+    'Veterinary',
+
+    'Herbal',
+    'Ayurvedic',
+    'Homeopathic',
+
+    'Other'
+  ];
+
   constructor(
     private fb: FormBuilder,
     private stockistService: StockistService,
@@ -346,5 +583,53 @@ export class StockiestPersonalproductDashboardComponent implements OnInit {
         });
       }
     });
+  }
+
+  filteredCategories: string[] = [...this.categories];
+
+filterCategories(): void {
+  const search = this.categorySearch.trim().toLowerCase();
+
+  if (!search) {
+    this.filteredCategories = [...this.categories];
+    return;
+  }
+
+  this.filteredCategories = this.categories.filter(
+    category => category.toLowerCase().includes(search)
+  );
+}
+
+selectCategory(category: string): void {
+  this.productForm.patchValue({
+    category: category
+  });
+
+  this.categorySearch = category;
+  this.categoryDropdownOpen = false;
+}
+
+ filteredDosageForms: string[] = [...this.dosageForms];
+
+  filterDosageForms(): void {
+    const search = this.dosageFormSearch.trim().toLowerCase();
+
+    if (!search) {
+      this.filteredDosageForms = [...this.dosageForms];
+      return;
+    }
+
+    this.filteredDosageForms = this.dosageForms.filter(
+      dosage => dosage.toLowerCase().includes(search)
+    );
+  }
+
+  selectDosageForm(dosage: string): void {
+    this.productForm.patchValue({
+      dosageForm: dosage
+    });
+
+    this.dosageFormSearch = dosage;
+    this.dosageFormDropdownOpen = false;
   }
 }
