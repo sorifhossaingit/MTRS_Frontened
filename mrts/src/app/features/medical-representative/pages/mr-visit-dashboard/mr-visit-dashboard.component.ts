@@ -24,6 +24,7 @@ import {
 import { Subject, firstValueFrom } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MrService } from '../../services/mr.service';
+import { CustomerService } from '../../../customer-master/services/customer.service';
 
 // Fix default marker icon issues in Leaflet when bundled with Webpack/Angular CLI
 const DefaultIcon = L.icon({
@@ -121,20 +122,22 @@ filters = {
 
   constructor(
     private mrService: MrService,
+    private CustomerService: CustomerService,
     private http: HttpClient
   ) { }
 
-  ngOnInit(): void {
-    this.loadInitialData();
-    this.checkTodayStartedVisit();
-    this.filters.visitDate = this.getTodayDate();
-    this.autoRestartActiveSession();
-  }
+ngOnInit(): void {
+  this.loadInitialData();
+  this.checkTodayStartedVisit();
+  this.filters.visitDate = this.getTodayDate();
+  this.autoRestartActiveSession();
+}
 
-  loadInitialData(): void {
-    this.loading = true;
-    this.getAssignedAreaManager();
-  }
+loadInitialData(): void {
+  this.loading = true;
+  this.loadCustomers();
+}
+
 
 private getTodayDate(): string {
   const today = new Date();
@@ -171,76 +174,100 @@ private getTodayDate(): string {
       });
   }
 
-  getAssignedAreaManager(): void {
-    const params = { medicalRepresentativeId: this.mrId };
+  
+  // getAssignedAreaManager(): void {
+  //   const params = { medicalRepresentativeId: this.mrId };
 
-    this.mrService.get_assigned_area_manager(params)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: any) => {
-          if (!res.success) {
-            this.loading = false;
-            Swal.fire('Error', 'Area Manager not assigned.', 'error');
-            return;
-          }
+  //   this.mrService.get_assigned_area_manager(params)
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         if (!res.success) {
+  //           this.loading = false;
+  //           Swal.fire('Error', 'Area Manager not assigned.', 'error');
+  //           return;
+  //         }
 
-          this.areaManagerId = res.data.areaManagerId;
-          this.loadCustomers();
-        },
-        error: () => {
+  //         this.areaManagerId = res.data.areaManagerId;
+  //         this.loadCustomers();
+  //       },
+  //       error: () => {
+  //         this.loading = false;
+  //         Swal.fire('Error', 'Unable to fetch Area Manager.', 'error');
+  //       }
+  //     });
+  // }
+
+loadCustomers(): void {
+  const params = {
+    agencyId: this.agencyId,
+    mrId: this.mrId
+  };
+
+  this.CustomerService.getcustomerdetails(params)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (res: any) => {
+        console.log('Customer API Response:', res);
+
+        // API response does NOT contain success
+        if (!res || !Array.isArray(res.data)) {
           this.loading = false;
-          Swal.fire('Error', 'Unable to fetch Area Manager.', 'error');
+
+          Swal.fire(
+            'Error',
+            'Unable to fetch customers.',
+            'error'
+          );
+
+          return;
         }
-      });
-  }
 
-  loadCustomers(): void {
-    const params = {
-      agencyId: this.agencyId,
-      assignedAreaManager: this.areaManagerId
-    };
+        // Customer data
+        this.customers = res.data || [];
 
-    this.mrService.get_customers(params)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: any) => {
-          if (!res.success) {
-            this.loading = false;
-            Swal.fire('Error', 'Unable to fetch customers.', 'error');
-            return;
-          }
+        // Build customer map
+        this.customerMap = {};
 
-          this.customers = res.data || [];
-          this.customerMap = {};
+        this.customers.forEach((customer: any) => {
+          this.customerMap[Number(customer.customerId)] = customer;
+        });
 
-          this.customers.forEach((customer: any) => {
-            this.customerMap[customer.customerId] = customer;
-          });
+        console.log('Customers loaded:', this.customers);
+        console.log('Customer Map:', this.customerMap);
 
-          this.loadVisits();
-        },
-        error: () => {
-          this.loading = false;
-          Swal.fire('Error', 'Unable to fetch customers.', 'error');
-        }
-      });
-  }
+        // Continue loading visits
+        this.loadVisits();
+      },
+
+      error: (err) => {
+        this.loading = false;
+
+        console.error('Customer API Error:', err);
+
+        Swal.fire(
+          'Error',
+          err?.error?.message || 'Unable to fetch customers.',
+          'error'
+        );
+      }
+    });
+}
 
   loadVisits(): void {
     this.loading = true;
 
-    const payload = {
-      agencyId: this.agencyId,
-      mrId: this.mrId,
-      areaManagerId: this.areaManagerId,
-      mrName: null,
-      mobile: null,
-      email: null,
-      visitDate: this.filters.visitDate === '' ? null : this.filters.visitDate,
-      status: this.filters.status === '' ? null : this.filters.status,
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize
-    };
+const payload = {
+  agencyId: this.agencyId,
+  mrId: this.mrId,
+  mrName: null,
+  mobile: null,
+  email: null,
+  visitDate: this.filters.visitDate === '' ? null : this.filters.visitDate,
+  status: this.filters.status === '' ? null : this.filters.status,
+  pageNumber: this.pageNumber,
+  pageSize: this.pageSize
+};
 
     this.mrService.get_visit_plan(payload)
       .pipe(takeUntil(this.destroy$))

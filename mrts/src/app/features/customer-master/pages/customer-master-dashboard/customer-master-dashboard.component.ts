@@ -59,7 +59,8 @@ export class CustomerMasterDashboardComponent implements OnInit {
   agencyId: string | null =
     localStorage.getItem('aid');
 
-  updatedBy = 0;
+  updatedBy : string | null =
+    localStorage.getItem('mid');;
 
   rid: string | null =
     localStorage.getItem('rid');
@@ -170,8 +171,7 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getUserIdFromToken();
-
+    // this.getUserIdFromToken();
     this.initializeForm();
 
     this.getDashboardDetails();
@@ -310,39 +310,39 @@ export class CustomerMasterDashboardComponent implements OnInit {
   // TOKEN
   // =========================================================
 
-  getUserIdFromToken(): void {
+  // getUserIdFromToken(): void {
 
-    const token =
-      localStorage.getItem('token');
+  //   const token =
+  //     localStorage.getItem('token');
 
-    if (!token) {
+  //   if (!token) {
 
-      return;
-    }
+  //     return;
+  //   }
 
-    try {
+  //   try {
 
-      const decodedToken: any =
-        jwtDecode(token);
+  //     const decodedToken: any =
+  //       jwtDecode(token);
 
-      this.updatedBy =
-        Number(
-          decodedToken?.userId ||
-          decodedToken?.UserId ||
-          decodedToken?.id ||
-          0
-        );
+  //     this.updatedBy =
+  //       Number(
+  //         decodedToken?.userId ||
+  //         decodedToken?.UserId ||
+  //         decodedToken?.id ||
+  //         0
+  //       );
 
-    } catch (err) {
+  //   } catch (err) {
 
-      console.error(
-        'Invalid or corrupted JWT token:',
-        err
-      );
+  //     console.error(
+  //       'Invalid or corrupted JWT token:',
+  //       err
+  //     );
 
-    }
+  //   }
 
-  }
+  // }
 
 
   // =========================================================
