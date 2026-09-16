@@ -218,8 +218,7 @@ get_inventory_for_order(params: {
 
 get_customers_by_route_mr(
   routeId: number,
-  agencyId: number,
-  areaManagerId: number
+  agencyId: number
 ): Observable<any> {
 
   return this.http.get(
@@ -228,7 +227,6 @@ get_customers_by_route_mr(
       params: {
         routeId: routeId.toString(),
         agencyId: agencyId.toString(),
-        areaManagerId: areaManagerId.toString()
       }
     }
   );
