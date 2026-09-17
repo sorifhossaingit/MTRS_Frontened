@@ -1045,12 +1045,15 @@ private setRateForSelectedPeriod(): void {
     search: string = ''
   ) {
 
-    let params =
-      new HttpParams()
-        .set(
-          'agencyId',
-          String(this.agencyId)
-        );
+let params = new HttpParams()
+  .set('agencyId', String(this.agencyId));
+
+const rid = localStorage.getItem('rid');
+const mid = localStorage.getItem('mid');
+
+if (rid === '11714ca6-4cdb-46c5-bb12-d582ef179bc2' && mid) {
+  params = params.set('assignedAreaManager', mid);
+}
 
 
     if (
