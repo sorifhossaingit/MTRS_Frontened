@@ -20,7 +20,9 @@ import {
   LogOut,
   ChevronDown,
   X,
-  Info
+  Info,
+  BookOpen
+
 } from 'lucide-angular';
 
 export interface ProfileDetails {
@@ -58,6 +60,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ChevronDown = ChevronDown;
   X = X;
   Info = Info;
+  BookOpen = BookOpen;
 
   private destroy$ = new Subject<void>();
 
@@ -73,6 +76,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   // Password Model
   currentPassword = '';
   newPassword = '';
+
+
+  
+
+showUserManual = false;
+userManualUrl = 'assets/user-manual.pdf';
 
   // User Identification
   userId = 0;
@@ -358,4 +367,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     return deviceId;
   }
+
+
+downloadUserManual(): void {
+  const link = document.createElement('a');
+
+  link.href = this.userManualUrl;
+  link.download = 'user-manual.pdf';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 }
