@@ -393,10 +393,10 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Area API Response:',
-            res
-          );
+          // console.log(
+          //   'Area API Response:',
+          //   res
+          // );
 
 
           this.areas =
@@ -612,10 +612,10 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Route API Response:',
-            res
-          );
+          // console.log(
+          //   'Route API Response:',
+          //   res
+          // );
 
 
           this.routeList =
@@ -679,10 +679,10 @@ export class CustomerMasterDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Agency Route Filter API Response:',
-            res
-          );
+          // console.log(
+          //   'Agency Route Filter API Response:',
+          //   res
+          // );
 
           this.filterRouteList =
             Array.isArray(res)
@@ -953,10 +953,10 @@ export class CustomerMasterDashboardComponent implements OnInit {
     data: any
   ): void {
 
-    console.log(
-      'Editing Customer:',
-      data
-    );
+    // console.log(
+    //   'Editing Customer:',
+    //   data
+    // );
 
 
     this.showEditModal = true;
@@ -1276,10 +1276,10 @@ export class CustomerMasterDashboardComponent implements OnInit {
     };
 
 
-    console.log(
-      'UPDATE CUSTOMER PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'UPDATE CUSTOMER PAYLOAD:',
+    //   payload
+    // );
 
 
     this.customerService

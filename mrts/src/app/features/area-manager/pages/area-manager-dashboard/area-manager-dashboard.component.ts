@@ -246,7 +246,7 @@ this.editForm = this.fb.group({
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
         }
 
@@ -285,10 +285,10 @@ this.editForm = this.fb.group({
 
         next: (res: any) => {
 
-          console.log(
-            'Area API Response:',
-            res
-          );
+          // console.log(
+          //   'Area API Response:',
+          //   res
+          // );
 
           this.areas =
             Array.isArray(res?.data)
@@ -364,10 +364,10 @@ this.editForm = this.fb.group({
 
           this.loading = false;
 
-          console.log(
-            'Area Manager List Response:',
-            res
-          );
+          // console.log(
+          //   'Area Manager List Response:',
+          //   res
+          // );
 
           // -----------------------------------------
           // LIST
@@ -517,15 +517,15 @@ this.editForm = this.fb.group({
             )
         : [];
 
-    console.log(
-      'Selected Manager:',
-      manager
-    );
+    // console.log(
+    //   'Selected Manager:',
+    //   manager
+    // );
 
-    console.log(
-      'Selected Area IDs:',
-      areaIds
-    );
+    // console.log(
+    //   'Selected Area IDs:',
+    //   areaIds
+    // );
 
     // -----------------------------------------
     // PATCH FORM
@@ -718,10 +718,10 @@ this.editForm = this.fb.group({
 
     };
 
-    console.log(
-      'Update Area Manager Payload:',
-      payload
-    );
+    // console.log(
+    //   'Update Area Manager Payload:',
+    //   payload
+    // );
 
     // -----------------------------------------
     // API CALL

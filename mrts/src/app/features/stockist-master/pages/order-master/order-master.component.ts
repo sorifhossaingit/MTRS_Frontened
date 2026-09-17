@@ -153,7 +153,7 @@ export class OrderMasterComponent implements OnInit {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
           this.loading = false;
 
@@ -253,7 +253,7 @@ export class OrderMasterComponent implements OnInit {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
           this.previewLoading = false;
 
@@ -327,7 +327,7 @@ export class OrderMasterComponent implements OnInit {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
           Swal.fire({
             icon: 'error',

@@ -469,10 +469,10 @@ export class MrDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Area Manager Dropdown Response:',
-            res
-          );
+          // console.log(
+          //   'Area Manager Dropdown Response:',
+          //   res
+          // );
 
           this.areaManagers =
             Array.isArray(res?.data)
@@ -536,10 +536,10 @@ export class MrDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Areas For Area Manager:',
-            res
-          );
+          // console.log(
+          //   'Areas For Area Manager:',
+          //   res
+          // );
 
           this.areas =
             Array.isArray(res?.data)
@@ -677,10 +677,10 @@ export class MrDashboardComponent implements OnInit {
       );
 
 
-    console.log(
-      'Selected Area ID:',
-      areaId
-    );
+    // console.log(
+    //   'Selected Area ID:',
+    //   areaId
+    // );
 
 
     // Clear old routes
@@ -763,13 +763,13 @@ export class MrDashboardComponent implements OnInit {
     this.isLoadingRoutes = true;
 
 
-    console.log(
-      'Loading routes for area:',
-      {
-        agencyId,
-        areaId: selectedAreaId
-      }
-    );
+    // console.log(
+    //   'Loading routes for area:',
+    //   {
+    //     agencyId,
+    //     areaId: selectedAreaId
+    //   }
+    // );
 
 
     this.customerService
@@ -786,10 +786,10 @@ export class MrDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Route API Response:',
-            res
-          );
+          // console.log(
+          //   'Route API Response:',
+          //   res
+          // );
 
 
           if (Array.isArray(res)) {
@@ -810,10 +810,10 @@ export class MrDashboardComponent implements OnInit {
             [...this.routeList];
 
 
-          console.log(
-            'Routes for Area:',
-            this.routeList
-          );
+          // console.log(
+          //   'Routes for Area:',
+          //   this.routeList
+          // );
 
 
           this.isLoadingRoutes = false;
@@ -926,15 +926,15 @@ export class MrDashboardComponent implements OnInit {
     // =========================================================
 
 
-    console.log(
-      'RID:',
-      roleId
-    );
+    // console.log(
+    //   'RID:',
+    //   roleId
+    // );
 
-    console.log(
-      'MR List Payload:',
-      payload
-    );
+    // console.log(
+    //   'MR List Payload:',
+    //   payload
+    // );
 
 
     // =========================================================
@@ -952,10 +952,10 @@ export class MrDashboardComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'MR List Response:',
-            res
-          );
+          // console.log(
+          //   'MR List Response:',
+          //   res
+          // );
 
           if (res?.success) {
 
@@ -1201,7 +1201,7 @@ export class MrDashboardComponent implements OnInit {
     mr: any
   ): void {
 
-    console.log('Editing MR:', mr);
+    // console.log('Editing MR:', mr);
 
     const areaId =
       mr.area
@@ -1539,10 +1539,10 @@ export class MrDashboardComponent implements OnInit {
     };
 
 
-    console.log(
-      'Update MR Payload:',
-      payload
-    );
+    // console.log(
+    //   'Update MR Payload:',
+    //   payload
+    // );
 
 
     this.isUpdating = true;
@@ -1748,10 +1748,10 @@ export class MrDashboardComponent implements OnInit {
         };
 
 
-        console.log(
-          'Delete MR Payload:',
-          payload
-        );
+        // console.log(
+        //   'Delete MR Payload:',
+        //   payload
+        // );
 
 
         this.mrService

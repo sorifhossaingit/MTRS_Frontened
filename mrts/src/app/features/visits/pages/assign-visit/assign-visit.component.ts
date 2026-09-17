@@ -205,10 +205,10 @@ medicalRepresentativeId: number | null = null;
           this.loggedInAreaManagerId =
             Number(res.areaManagerId);
 
-          console.log(
-            'Logged-in MR Area Manager ID:',
-            this.loggedInAreaManagerId
-          );
+          // console.log(
+          //   'Logged-in MR Area Manager ID:',
+          //   this.loggedInAreaManagerId
+          // );
         }
 
       },

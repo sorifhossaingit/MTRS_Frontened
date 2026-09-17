@@ -191,12 +191,12 @@ export class MedicineMasterComponent implements OnInit {
       Number(localStorage.getItem('mid')) || 0;
 
 
-    console.log('Agency ID:', this.agencyId);
+    // console.log('Agency ID:', this.agencyId);
 
-    console.log(
-      'Medical Representative ID:',
-      this.medicalRepresentativeId
-    );
+    // console.log(
+    //   'Medical Representative ID:',
+    //   this.medicalRepresentativeId
+    // );
 
 
     if (!this.agencyId) {
@@ -249,10 +249,10 @@ export class MedicineMasterComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Routes API Response:',
-            res
-          );
+          // console.log(
+          //   'Routes API Response:',
+          //   res
+          // );
 
 
           if (res?.success) {
@@ -323,20 +323,20 @@ export class MedicineMasterComponent implements OnInit {
       Number(localStorage.getItem('mid')) || 0;
 
 
-    console.log(
-      'Selected Route:',
-      this.selectedRouteId
-    );
+    // console.log(
+    //   'Selected Route:',
+    //   this.selectedRouteId
+    // );
 
-    console.log(
-      'Agency ID:',
-      agencyId
-    );
+    // console.log(
+    //   'Agency ID:',
+    //   agencyId
+    // );
 
-    console.log(
-      'MR ID:',
-      mrId
-    );
+    // console.log(
+    //   'MR ID:',
+    //   mrId
+    // );
 
 
     // Validate Agency
@@ -388,10 +388,10 @@ export class MedicineMasterComponent implements OnInit {
           this.loadingCustomers = false;
 
 
-          console.log(
-            'Customers API Response:',
-            res
-          );
+          // console.log(
+          //   'Customers API Response:',
+          //   res
+          // );
 
 
           /*
@@ -424,10 +424,10 @@ export class MedicineMasterComponent implements OnInit {
           }
 
 
-          console.log(
-            'Loaded Customers:',
-            this.customers
-          );
+          // console.log(
+          //   'Loaded Customers:',
+          //   this.customers
+          // );
 
 
           if (this.customers.length === 0) {
@@ -511,10 +511,10 @@ export class MedicineMasterComponent implements OnInit {
     };
 
 
-    console.log(
-      'Inventory API Params:',
-      params
-    );
+    // console.log(
+    //   'Inventory API Params:',
+    //   params
+    // );
 
 
     this.mrService
@@ -526,10 +526,10 @@ export class MedicineMasterComponent implements OnInit {
           this.loading = false;
 
 
-          console.log(
-            'Inventory API Response:',
-            res
-          );
+          // console.log(
+          //   'Inventory API Response:',
+          //   res
+          // );
 
 
           if (!res?.success) {
@@ -1390,10 +1390,10 @@ export class MedicineMasterComponent implements OnInit {
     };
 
 
-    console.log(
-      'Create Order Payload:',
-      payload
-    );
+    // console.log(
+    //   'Create Order Payload:',
+    //   payload
+    // );
 
 
     this.mrService
@@ -1405,10 +1405,10 @@ export class MedicineMasterComponent implements OnInit {
           this.placingOrder = false;
 
 
-          console.log(
-            'Create Order Response:',
-            res
-          );
+          // console.log(
+          //   'Create Order Response:',
+          //   res
+          // );
 
 
           if (res?.success) {

@@ -474,10 +474,10 @@ export class AddAreaManagerComponent
         );
 
 
-      console.log(
-        'Current User ID:',
-        this.userId
-      );
+      // console.log(
+      //   'Current User ID:',
+      //   this.userId
+      // );
 
     }
 
@@ -580,10 +580,10 @@ loadAreas(): void {
       // -------------------------------------------
       next: (res: any) => {
 
-        console.log(
-          'Area API Response:',
-          res
-        );
+        // console.log(
+        //   'Area API Response:',
+        //   res
+        // );
 
         this.areas =
           Array.isArray(res?.data)
@@ -1128,10 +1128,10 @@ loadAreas(): void {
     // DEBUG
     // =================================================
 
-    console.log(
-      'Create Area Manager Payload:',
-      payload
-    );
+    // console.log(
+    //   'Create Area Manager Payload:',
+    //   payload
+    // );
 
 
 
@@ -1152,10 +1152,10 @@ loadAreas(): void {
           this.isSaving = false;
 
 
-          console.log(
-            'Create Area Manager Response:',
-            res
-          );
+          // console.log(
+          //   'Create Area Manager Response:',
+          //   res
+          // );
 
 
           Swal.fire({

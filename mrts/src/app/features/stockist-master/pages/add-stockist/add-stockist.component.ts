@@ -173,10 +173,10 @@ export class AddStockistComponent implements OnInit {
           0
         );
 
-      console.log(
-        'Created By:',
-        this.createdBy
-      );
+      // console.log(
+      //   'Created By:',
+      //   this.createdBy
+      // );
 
     } catch (error) {
 
@@ -351,10 +351,10 @@ drugLicenseNo: [''],
 
         next: (res: any) => {
 
-          console.log(
-            'Area API Response:',
-            res
-          );
+          // console.log(
+          //   'Area API Response:',
+          //   res
+          // );
 
 
           this.areas =
@@ -363,10 +363,10 @@ drugLicenseNo: [''],
               : [];
 
 
-          console.log(
-            'Areas:',
-            this.areas
-          );
+          // console.log(
+          //   'Areas:',
+          //   this.areas
+          // );
 
 
           this.isLoadingAreas = false;
@@ -556,10 +556,10 @@ drugLicenseNo: [''],
     };
 
 
-    console.log(
-      'Create Stockist Payload:',
-      payload
-    );
+    // console.log(
+    //   'Create Stockist Payload:',
+    //   payload
+    // );
 
 
     // ==========================================
@@ -576,10 +576,10 @@ drugLicenseNo: [''],
 
         next: (res: any) => {
 
-          console.log(
-            'Create Stockist Response:',
-            res
-          );
+          // console.log(
+          //   'Create Stockist Response:',
+          //   res
+          // );
 
 
           this.isSaving = false;

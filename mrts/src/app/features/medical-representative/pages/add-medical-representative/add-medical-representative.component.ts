@@ -355,10 +355,10 @@ export class AddMedicalRepresentativeComponent
 
         next: (res: any) => {
 
-          console.log(
-            'Area API Response:',
-            res
-          );
+          // console.log(
+          //   'Area API Response:',
+          //   res
+          // );
 
 
           this.areas =
@@ -367,10 +367,10 @@ export class AddMedicalRepresentativeComponent
               : [];
 
 
-          console.log(
-            'Areas:',
-            this.areas
-          );
+          // console.log(
+          //   'Areas:',
+          //   this.areas
+          // );
 
 
           this.isLoadingAreas = false;
@@ -420,10 +420,10 @@ export class AddMedicalRepresentativeComponent
           areaId: number | null
         ) => {
 
-          console.log(
-            'Selected Area ID:',
-            areaId
-          );
+          // console.log(
+          //   'Selected Area ID:',
+          //   areaId
+          // );
 
 
           // ===============================================
@@ -438,10 +438,10 @@ export class AddMedicalRepresentativeComponent
             ) || null;
 
 
-          console.log(
-            'Selected Area:',
-            this.selectedArea
-          );
+          // console.log(
+          //   'Selected Area:',
+          //   this.selectedArea
+          // );
 
 
           // ===============================================
@@ -525,9 +525,9 @@ export class AddMedicalRepresentativeComponent
       selectedAreaId <= 0
     ) {
 
-      console.log(
-        'No valid Area ID selected.'
-      );
+      // console.log(
+      //   'No valid Area ID selected.'
+      // );
 
       this.routeList = [];
 
@@ -540,16 +540,16 @@ export class AddMedicalRepresentativeComponent
     this.isLoadingRoutes = true;
 
 
-    console.log(
-      'Loading routes:',
-      {
-        agencyId:
-          agencyId,
+    // console.log(
+    //   'Loading routes:',
+    //   {
+    //     agencyId:
+    //       agencyId,
 
-        areaId:
-          selectedAreaId
-      }
-    );
+    //     areaId:
+    //       selectedAreaId
+    //   }
+    // );
 
 
     this.customerService
@@ -561,10 +561,10 @@ export class AddMedicalRepresentativeComponent
 
         next: (res: any) => {
 
-          console.log(
-            'Route API Response:',
-            res
-          );
+          // console.log(
+          //   'Route API Response:',
+          //   res
+          // );
 
 
           if (
@@ -591,10 +591,10 @@ export class AddMedicalRepresentativeComponent
             ];
 
 
-          console.log(
-            'Route List:',
-            this.routeList
-          );
+          // console.log(
+          //   'Route List:',
+          //   this.routeList
+          // );
 
 
           this.isLoadingRoutes =
@@ -1000,10 +1000,10 @@ addRoute(): void {
     createdby: Number(this.createdBy)
   };
 
-  console.log(
-    'Create Route Payload:',
-    payload
-  );
+  // console.log(
+  //   'Create Route Payload:',
+  //   payload
+  // );
 
   // ============================================
   // START LOADING
@@ -1023,10 +1023,10 @@ addRoute(): void {
 
         this.isAddingRoute = false;
 
-        console.log(
-          'Create Route Response:',
-          res
-        );
+        // console.log(
+        //   'Create Route Response:',
+        //   res
+        // );
 
         // ======================================
         // GET NEW ROUTE ID
@@ -1324,10 +1324,10 @@ addRoute(): void {
     };
 
 
-    console.log(
-      'Create Medical Representative Payload:',
-      payload
-    );
+    // console.log(
+    //   'Create Medical Representative Payload:',
+    //   payload
+    // );
 
 
     // =====================================================

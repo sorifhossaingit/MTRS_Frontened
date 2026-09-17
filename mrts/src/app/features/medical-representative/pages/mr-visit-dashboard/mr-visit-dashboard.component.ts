@@ -170,7 +170,7 @@ private getTodayDate(): string {
             this.startTracking();
           }
         },
-        error: (err) => console.log('No active session found on initialization:', err)
+        // error: (err) => console.log('No active session found on initialization:', err)
       });
   }
 
@@ -208,7 +208,7 @@ loadCustomers(): void {
     .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (res: any) => {
-        console.log('Customer API Response:', res);
+        // console.log('Customer API Response:', res);
 
         // API response does NOT contain success
         if (!res || !Array.isArray(res.data)) {
@@ -233,8 +233,8 @@ loadCustomers(): void {
           this.customerMap[Number(customer.customerId)] = customer;
         });
 
-        console.log('Customers loaded:', this.customers);
-        console.log('Customer Map:', this.customerMap);
+        // console.log('Customers loaded:', this.customers);
+        // console.log('Customer Map:', this.customerMap);
 
         // Continue loading visits
         this.loadVisits();
@@ -675,7 +675,7 @@ resetFilters(): void {
           error: () => console.log('Location Ping Failed')
         });
     } catch {
-      console.log('Unable to retrieve GPS coordinates for ping');
+      // console.log('Unable to retrieve GPS coordinates for ping');
     }
   }
 
@@ -840,7 +840,7 @@ async executeCompleteVisit(remarks: string): Promise<void> {
       shownProductIds: shownProductIds
     };
 
-    console.log('Complete Customer Visit Payload:', payload);
+    // console.log('Complete Customer Visit Payload:', payload);
 
     this.mrService.complete_visit(payload)
       .pipe(takeUntil(this.destroy$))
@@ -1083,11 +1083,11 @@ async executeCompleteVisit(remarks: string): Promise<void> {
 
 private autoRestartActiveSession(): void {
   if (!this.agencyId || !this.mrId) {
-    console.log('Agency ID or MR ID is missing.');
+    // console.log('Agency ID or MR ID is missing.');
     return;
   }
 
-  console.log('Checking for active visit session...');
+  // console.log('Checking for active visit session...');
 
   this.mrService
     .get_today_started_visit(this.agencyId, this.mrId)
@@ -1095,14 +1095,14 @@ private autoRestartActiveSession(): void {
     .subscribe({
       next: (res: any) => {
 
-        console.log('Today started visits response:', res);
+        // console.log('Today started visits response:', res);
 
         const startedVisits = Array.isArray(res?.data)
           ? res.data
           : [];
 
         if (startedVisits.length === 0) {
-          console.log('No active visit session found.');
+          // console.log('No active visit session found.');
           return;
         }
 
@@ -1121,7 +1121,7 @@ private autoRestartActiveSession(): void {
         });
 
         if (!activeVisit) {
-          console.log('No active tracking session found.');
+          // console.log('No active tracking session found.');
           return;
         }
 
@@ -1134,10 +1134,10 @@ private autoRestartActiveSession(): void {
         );
 
         if (sessionId <= 0 || visitPlanId <= 0) {
-          console.log(
-            'Invalid active session:',
-            activeVisit
-          );
+          // console.log(
+          //   'Invalid active session:',
+          //   activeVisit
+          // );
           return;
         }
 
@@ -1151,9 +1151,9 @@ private autoRestartActiveSession(): void {
           sessionId.toString()
         );
 
-        console.log(
-          `Active session found. Session ID: ${sessionId}, Visit Plan ID: ${visitPlanId}`
-        );
+        // console.log(
+        //   `Active session found. Session ID: ${sessionId}, Visit Plan ID: ${visitPlanId}`
+        // );
 
         // Automatically restart GPS tracking
         this.startTracking();

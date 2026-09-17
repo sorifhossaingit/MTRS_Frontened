@@ -616,10 +616,10 @@ export class MedicalRepresentativeMasterDashboardComponent
 
         next: (response: any) => {
 
-          console.log(
-            'MR Dashboard:',
-            response
-          );
+          // console.log(
+          //   'MR Dashboard:',
+          //   response
+          // );
 
 
           if (
@@ -741,10 +741,10 @@ export class MedicalRepresentativeMasterDashboardComponent
 
         next: (response: any) => {
 
-          console.log(
-            'Today Visits:',
-            response
-          );
+          // console.log(
+          //   'Today Visits:',
+          //   response
+          // );
 
 
           if (
@@ -800,10 +800,10 @@ export class MedicalRepresentativeMasterDashboardComponent
 
         next: (response: any) => {
 
-          console.log(
-            'Today Visit Products:',
-            response
-          );
+          // console.log(
+          //   'Today Visit Products:',
+          //   response
+          // );
 
 
           if (

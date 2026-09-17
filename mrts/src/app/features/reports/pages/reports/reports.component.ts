@@ -755,10 +755,10 @@ addKmRate(): void {
   // DEBUG
   // ==========================================================
 
-  console.log(
-    'POST KM RATE BODY:',
-    body
-  );
+  // console.log(
+  //   'POST KM RATE BODY:',
+  //   body
+  // );
 
 
   // ==========================================================
@@ -978,10 +978,10 @@ updateKmRate(rate: KmRate): void {
   };
 
 
-  console.log(
-    'PUT KM RATE BODY:',
-    body
-  );
+  // console.log(
+  //   'PUT KM RATE BODY:',
+  //   body
+  // );
 
 
   // ==========================================================
@@ -1720,25 +1720,25 @@ generateVisitReportPdf(): void {
   // DEBUG
   // ========================================================
 
-  console.log(
-    'GENERATE VISIT REPORT PDF:',
-    {
-      MrId:
-        this.selectedMrId,
+  // console.log(
+  //   'GENERATE VISIT REPORT PDF:',
+  //   {
+  //     MrId:
+  //       this.selectedMrId,
 
-      RatePerKm:
-        ratePerKm,
+  //     RatePerKm:
+  //       ratePerKm,
 
-      FoodExpensePerDay:
-        foodExpensePerDay,
+  //     FoodExpensePerDay:
+  //       foodExpensePerDay,
 
-      FromDate:
-        this.fromDate,
+  //     FromDate:
+  //       this.fromDate,
 
-      ToDate:
-        this.toDate
-    }
-  );
+  //     ToDate:
+  //       this.toDate
+  //   }
+  // );
 
 
   // ========================================================

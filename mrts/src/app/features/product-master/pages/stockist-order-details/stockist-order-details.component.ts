@@ -930,10 +930,10 @@ export class StockistOrderDetailsComponent implements OnInit {
 
     };
 
-    console.log(
-      'UPDATE ORDER PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'UPDATE ORDER PAYLOAD:',
+    //   payload
+    // );
 
     // -------------------------------------------------
     // STEP 1
@@ -949,10 +949,10 @@ export class StockistOrderDetailsComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'ORDER UPDATE SUCCESS:',
-            res
-          );
+          // console.log(
+          //   'ORDER UPDATE SUCCESS:',
+          //   res
+          // );
 
           // -------------------------------------------------
           // STEP 2
@@ -1022,10 +1022,10 @@ export class StockistOrderDetailsComponent implements OnInit {
 
     };
 
-    console.log(
-      'UPDATE STATUS PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'UPDATE STATUS PAYLOAD:',
+    //   payload
+    // );
 
     this.productService
       .updateorderstatus(payload)
@@ -1033,10 +1033,10 @@ export class StockistOrderDetailsComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'STATUS UPDATE SUCCESS:',
-            res
-          );
+          // console.log(
+          //   'STATUS UPDATE SUCCESS:',
+          //   res
+          // );
 
           this.savingOrder = false;
 
@@ -1186,10 +1186,10 @@ export class StockistOrderDetailsComponent implements OnInit {
 
     };
 
-    console.log(
-      'STATUS PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'STATUS PAYLOAD:',
+    //   payload
+    // );
 
     this.loading = true;
 
@@ -1199,10 +1199,10 @@ export class StockistOrderDetailsComponent implements OnInit {
 
         next: (res: any) => {
 
-          console.log(
-            'Status updated:',
-            res
-          );
+          // console.log(
+          //   'Status updated:',
+          //   res
+          // );
 
           this.loading = false;
 

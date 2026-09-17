@@ -165,10 +165,10 @@ get_all_area(params: {
       );
   }
 
-  console.log(
-    'Get All Area Params:',
-    httpParams.toString()
-  );
+  // console.log(
+  //   'Get All Area Params:',
+  //   httpParams.toString()
+  // );
 
   return this.http.get(
     `${this.apiUrl}/admin/area-manager/get-all-area`,

@@ -302,14 +302,14 @@ selectedArea: any = null;
 
 next: (res: any) => {
 
-  console.log('Area API Response:', res);
+  // console.log('Area API Response:', res);
 
   this.areas =
     Array.isArray(res?.data)
       ? res.data
       : [];
 
-  console.log('Areas:', this.areas);
+  // console.log('Areas:', this.areas);
 
   // Set selected area object if area is already selected
   const selectedAreaId =
@@ -359,7 +359,7 @@ setupAreaRouteListener(): void {
     ?.valueChanges
     .subscribe((areaId: number | null) => {
 
-      console.log('Selected Area ID:', areaId);
+      // console.log('Selected Area ID:', areaId);
 
       // Find selected area object
       this.selectedArea =
@@ -368,7 +368,7 @@ setupAreaRouteListener(): void {
             Number(area.areaId) === Number(areaId)
         ) || null;
 
-      console.log('Selected Area:', this.selectedArea);
+      // console.log('Selected Area:', this.selectedArea);
 
       // Clear previous selected route
       this.customerForm.patchValue(
@@ -426,9 +426,9 @@ setupAreaRouteListener(): void {
       selectedAreaId <= 0
     ) {
 
-      console.log(
-        'No valid Area ID selected.'
-      );
+      // console.log(
+      //   'No valid Area ID selected.'
+      // );
 
       this.routeList = [];
 
@@ -437,13 +437,13 @@ setupAreaRouteListener(): void {
 
     this.isLoadingRoutes = true;
 
-    console.log(
-      'Loading routes:',
-      {
-        agencyId: agencyId,
-        areaId: selectedAreaId
-      }
-    );
+    // console.log(
+    //   'Loading routes:',
+    //   {
+    //     agencyId: agencyId,
+    //     areaId: selectedAreaId
+    //   }
+    // );
 
     this.customerService
       .getRouteList(
@@ -454,10 +454,10 @@ setupAreaRouteListener(): void {
 
         next: (res: any) => {
 
-          console.log(
-            'Route API Response:',
-            res
-          );
+          // console.log(
+          //   'Route API Response:',
+          //   res
+          // );
 
           /*
            * Supports:
@@ -481,10 +481,10 @@ setupAreaRouteListener(): void {
                 : [];
           }
 
-          console.log(
-            'Route List:',
-            this.routeList
-          );
+          // console.log(
+          //   'Route List:',
+          //   this.routeList
+          // );
 
           this.isLoadingRoutes = false;
         },
@@ -937,10 +937,10 @@ setupAreaRouteListener(): void {
                 res.areaManagerId
               );
 
-            console.log(
-              'Logged-in MR Area Manager ID:',
-              this.loggedInAreaManagerId
-            );
+            // console.log(
+            //   'Logged-in MR Area Manager ID:',
+            //   this.loggedInAreaManagerId
+            // );
           }
         },
 
@@ -1120,10 +1120,10 @@ setupAreaRouteListener(): void {
     };
 
 
-    console.log(
-      'Customer Payload:',
-      payload
-    );
+    // console.log(
+    //   'Customer Payload:',
+    //   payload
+    // );
 
 
     this.customerService
@@ -1327,10 +1327,10 @@ setupAreaRouteListener(): void {
     };
 
 
-    console.log(
-      'Customer Type Payload:',
-      payload
-    );
+    // console.log(
+    //   'Customer Type Payload:',
+    //   payload
+    // );
 
 
     this.isAddingCustomerType =
@@ -1554,10 +1554,10 @@ setupAreaRouteListener(): void {
     };
 
 
-    console.log(
-      'Create Route Payload:',
-      payload
-    );
+    // console.log(
+    //   'Create Route Payload:',
+    //   payload
+    // );
 
 
     this.isAddingRoute = true;

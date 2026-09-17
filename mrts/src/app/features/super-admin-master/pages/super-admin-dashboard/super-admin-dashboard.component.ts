@@ -167,7 +167,7 @@ export class SuperAdminDashboardComponent implements OnInit {
 
         error: (err) => {
 
-          console.log(err);
+          // console.log(err);
         }
       });
   }
@@ -217,7 +217,7 @@ export class SuperAdminDashboardComponent implements OnInit {
 
           this.loading = false;
 
-          console.log(err);
+          // console.log(err);
 
           Swal.fire({
             icon: 'error',
@@ -328,7 +328,7 @@ export class SuperAdminDashboardComponent implements OnInit {
       return;
     }
 
-    console.log('Update button clicked');
+    // console.log('Update button clicked');
 
     let updatedBy = 0;
 
@@ -404,7 +404,7 @@ export class SuperAdminDashboardComponent implements OnInit {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
           Swal.fire({
             icon: 'error',

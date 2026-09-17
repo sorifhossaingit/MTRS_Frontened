@@ -601,10 +601,10 @@ createRequest: CreateMonthlyReportRequest = {
     }
 
 
-    console.log(
-      'Agency ID:',
-      this.agencyId
-    );
+    // console.log(
+    //   'Agency ID:',
+    //   this.agencyId
+    // );
   }
 
 
@@ -672,15 +672,15 @@ createRequest: CreateMonthlyReportRequest = {
     }
 
 
-    console.log(
-      'Role ID:',
-      this.roleId
-    );
+    // console.log(
+    //   'Role ID:',
+    //   this.roleId
+    // );
 
-    console.log(
-      'MR ID:',
-      this.mrIdFromStorage
-    );
+    // console.log(
+    //   'MR ID:',
+    //   this.mrIdFromStorage
+    // );
   }
 
 
@@ -816,10 +816,10 @@ createRequest: CreateMonthlyReportRequest = {
                 response.data as KmRate[];
 
 
-              console.log(
-                'KM Rates:',
-                this.kmRates
-              );
+              // console.log(
+              //   'KM Rates:',
+              //   this.kmRates
+              // );
 
 
               this.setRateForSelectedPeriod();
@@ -928,16 +928,16 @@ private setRateForSelectedPeriod(): void {
     // DEBUG
     // ---------------------------------------------------
 
-    console.log(
-      `Rate for ${month}/${year}:`,
-      {
-        ratePerKm:
-          this.createRequest.ratePerKm,
+    // console.log(
+    //   `Rate for ${month}/${year}:`,
+    //   {
+    //     ratePerKm:
+    //       this.createRequest.ratePerKm,
 
-        foodExpense:
-          this.createRequest.foodExpense
-      }
-    );
+    //     foodExpense:
+    //       this.createRequest.foodExpense
+    //   }
+    // );
 
   }
 
@@ -1356,30 +1356,30 @@ loadReports(): void {
   // DEBUG
   // =====================================================
 
-  console.log(
-    'ADMIN REPORT REQUEST:',
-    {
-      roleId: this.roleId,
+  // console.log(
+  //   'ADMIN REPORT REQUEST:',
+  //   {
+  //     roleId: this.roleId,
 
-      agencyId:
-        params.get('agencyId'),
+  //     agencyId:
+  //       params.get('agencyId'),
 
-      assignedAreaManager:
-        params.get('assignedAreaManager'),
+  //     assignedAreaManager:
+  //       params.get('assignedAreaManager'),
 
-      mrId:
-        params.get('mrId'),
+  //     mrId:
+  //       params.get('mrId'),
 
-      month:
-        params.get('month'),
+  //     month:
+  //       params.get('month'),
 
-      year:
-        params.get('year'),
+  //     year:
+  //       params.get('year'),
 
-      status:
-        params.get('status')
-    }
-  );
+  //     status:
+  //       params.get('status')
+  //   }
+  // );
 
 
   // =====================================================
@@ -1704,10 +1704,10 @@ const payload = {
 
 
 
-    console.log(
-      'CREATE REPORT PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'CREATE REPORT PAYLOAD:',
+    //   payload
+    // );
 
 
     this.creatingReport =
@@ -2386,10 +2386,10 @@ approveReport(): void {
         this.approveRemarks?.trim() || ''
     };
 
-    console.log(
-      'APPROVE REPORT PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'APPROVE REPORT PAYLOAD:',
+    //   payload
+    // );
 
     // ===================================================
     // API CALL
@@ -2570,10 +2570,10 @@ rejectReport(): void {
 
     };
 
-    console.log(
-      'REJECT REPORT PAYLOAD:',
-      payload
-    );
+    // console.log(
+    //   'REJECT REPORT PAYLOAD:',
+    //   payload
+    // );
 
     // ===================================================
     // API CALL

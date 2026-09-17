@@ -657,10 +657,10 @@ loadCustomersByRoute(routeId: number): void {
 
       next: (res: any) => {
 
-        console.log(
-          'Customers by Route API Response:',
-          res
-        );
+        // console.log(
+        //   'Customers by Route API Response:',
+        //   res
+        // );
 
         // API returns array directly
         if (Array.isArray(res)) {
@@ -680,10 +680,10 @@ loadCustomersByRoute(routeId: number): void {
 
         }
 
-        console.log(
-          'Route Customer List:',
-          this.customerList
-        );
+        // console.log(
+        //   'Route Customer List:',
+        //   this.customerList
+        // );
 
         this.loadingRouteCustomers = false;
 
@@ -1349,14 +1349,14 @@ updateVisit(): void {
   // DEBUG
   // =========================================================
 
-  console.log(
-    'Update Visit Payload:',
-    JSON.stringify(
-      payload,
-      null,
-      2
-    )
-  );
+  // console.log(
+  //   'Update Visit Payload:',
+  //   JSON.stringify(
+  //     payload,
+  //     null,
+  //     2
+  //   )
+  // );
 
 
   // =========================================================

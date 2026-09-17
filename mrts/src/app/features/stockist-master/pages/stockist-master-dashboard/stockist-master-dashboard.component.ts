@@ -357,10 +357,10 @@ isUpdating: boolean = false;
 
         next: (res: any) => {
 
-          console.log(
-            'Area API Response:',
-            res
-          );
+          // console.log(
+          //   'Area API Response:',
+          //   res
+          // );
 
 
           this.areas =
@@ -369,10 +369,10 @@ isUpdating: boolean = false;
               : [];
 
 
-          console.log(
-            'Areas:',
-            this.areas
-          );
+          // console.log(
+          //   'Areas:',
+          //   this.areas
+          // );
 
 
           this.isLoadingAreas = false;
@@ -688,15 +688,15 @@ isUpdating: boolean = false;
     });
 
 
-    console.log(
-      'Editing Stockist:',
-      stockist
-    );
+    // console.log(
+    //   'Editing Stockist:',
+    //   stockist
+    // );
 
-    console.log(
-      'Selected Area ID:',
-      stockist.areaId
-    );
+    // console.log(
+    //   'Selected Area ID:',
+    //   stockist.areaId
+    // );
   }
 
 
@@ -726,7 +726,7 @@ isUpdating: boolean = false;
 
 updateStockist(): void {
 
-  console.log('UPDATE BUTTON CLICKED');
+  // console.log('UPDATE BUTTON CLICKED');
 
   // Start loader immediately
   this.isUpdating = true;
@@ -739,10 +739,10 @@ updateStockist(): void {
 
   if (this.stockistForm.invalid) {
 
-    console.log(
-      'FORM INVALID',
-      this.stockistForm.value
-    );
+    // console.log(
+    //   'FORM INVALID',
+    //   this.stockistForm.value
+    // );
 
     this.stockistForm.markAllAsTouched();
 
@@ -766,10 +766,10 @@ updateStockist(): void {
   const selectedAreaId =
     Number(this.stockistForm.value.areaId);
 
-  console.log(
-    'Selected Area ID:',
-    selectedAreaId
-  );
+  // console.log(
+  //   'Selected Area ID:',
+  //   selectedAreaId
+  // );
 
 
   if (!selectedAreaId || selectedAreaId <= 0) {
@@ -851,10 +851,10 @@ updateStockist(): void {
   };
 
 
-  console.log(
-    'UPDATE PAYLOAD:',
-    payload
-  );
+  // console.log(
+  //   'UPDATE PAYLOAD:',
+  //   payload
+  // );
 
 
   // -----------------------------------------
@@ -867,10 +867,10 @@ updateStockist(): void {
 
       next: (res: any) => {
 
-        console.log(
-          'UPDATE SUCCESS:',
-          res
-        );
+        // console.log(
+        //   'UPDATE SUCCESS:',
+        //   res
+        // );
 
         // Stop loader
         this.isUpdating = false;

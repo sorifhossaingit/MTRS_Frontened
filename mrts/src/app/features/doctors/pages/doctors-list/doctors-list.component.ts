@@ -125,7 +125,7 @@ export class DoctorsListComponent implements OnInit {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
         }
 
@@ -295,7 +295,7 @@ export class DoctorsListComponent implements OnInit {
 
     };
 
-    console.log(payload);
+    // console.log(payload);
 
     // 🔷 API CALL
     this.doctorService
@@ -323,7 +323,7 @@ export class DoctorsListComponent implements OnInit {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
           Swal.fire({
             icon: 'error',

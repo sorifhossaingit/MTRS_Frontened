@@ -142,7 +142,7 @@ getAreaManagerList() {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
         }
 
@@ -236,7 +236,7 @@ getAreaManagerList() {
 
       const decodedToken: any = jwtDecode(token);
 
-      console.log(decodedToken);
+      // console.log(decodedToken);
 
       this.userId =
         decodedToken?.userId ||
@@ -275,7 +275,7 @@ getAreaManagerList() {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
         }
 
@@ -323,7 +323,7 @@ getAreaManagerList() {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
         }
 
@@ -561,7 +561,7 @@ getAreaManagerList() {
 
         error: (err: any) => {
 
-          console.log(err);
+          // console.log(err);
 
           Swal.fire({
             icon: 'error',
@@ -689,7 +689,7 @@ getAreaManagerList() {
 
           error: (err: any) => {
 
-            console.log(err);
+            // console.log(err);
 
             Swal.fire({
               icon: 'error',
