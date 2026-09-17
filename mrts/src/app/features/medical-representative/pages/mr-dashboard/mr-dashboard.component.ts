@@ -31,7 +31,8 @@ import {
   Trash2,
   Plus,
   CheckCircle,
-  XCircle
+  XCircle,
+  KeyRound
 } from 'lucide-angular';
 
 import { MrService } from '../../services/mr.service';
@@ -61,6 +62,7 @@ export class MrDashboardComponent implements OnInit {
   Plus = Plus;
   CheckCircle = CheckCircle;
   XCircle = XCircle;
+  KeyRound = KeyRound;
 
 
   // =========================================================
@@ -137,7 +139,9 @@ export class MrDashboardComponent implements OnInit {
 
   managerId =
     Number(localStorage.getItem('mid')) || 0;
-
+  
+    adminId =
+    Number(localStorage.getItem('mid')) || 0;  
   // =========================================================
   // ROLE
   // =========================================================
@@ -1843,4 +1847,82 @@ export class MrDashboardComponent implements OnInit {
 
   return null;
 }
+
+  reset_password(data: any): void {
+
+    Swal.fire({
+
+      title: 'Reset Password?',
+
+      text:
+        `Are you sure you want to reset the password for ${data.name}?`,
+
+      icon: 'warning',
+
+      showCancelButton: true,
+
+      confirmButtonText: 'Yes, Reset',
+
+      cancelButtonText: 'Cancel',
+
+      confirmButtonColor: '#2563eb'
+
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        const payload = {
+
+          userId:
+            data.userId,
+
+          updatedBy:
+            this.adminId
+
+        };
+
+        this.areaManagerService
+          .reset_password(payload)
+          .subscribe({
+
+            next: (res: any) => {
+
+              Swal.fire({
+
+                icon: 'success',
+
+                title: 'Success',
+
+                text:
+                  res?.message ||
+                  'Password reset successfully.'
+
+              });
+
+            },
+
+            error: (err: any) => {
+
+              Swal.fire({
+
+                icon: 'error',
+
+                title: 'Failed',
+
+                text:
+                  err?.error?.message ||
+                  'Unable to reset password. Please try again.'
+
+              });
+
+            }
+
+          });
+
+      }
+
+    });
+
+  }
+
 }
