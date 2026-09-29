@@ -62,6 +62,7 @@ interface KmRate {
   rateYear: number;
   rateMonth: number;
   ratePerKm: number;
+  foodExpense: number;
   isActive: boolean;
   createdAt?: string;
   updatedAt?: string | null;
@@ -192,8 +193,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   editRatePerKm: number | null = null;
 
+  editFoodExpense: number | null = null;
+
   newRatePerKm: number | null = null;
 
+  newFoodExpense: number | null = null;
   // ==========================================================
   // PDF
   // ==========================================================
@@ -225,6 +229,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
   pendingFilename = '';
 
   previewTitle = '';
+
+  
 
   // ==========================================================
   // CONSTRUCTOR
@@ -588,283 +594,457 @@ export class ReportsComponent implements OnInit, OnDestroy {
   // ADD KM RATE
   // ==========================================================
 
-  addKmRate(): void {
+addKmRate(): void {
 
-    if (!this.isKmRateAdmin()) {
+  // ==========================================================
+  // AUTHORIZATION
+  // ==========================================================
 
-      this.showError(
-        'You are not authorized to manage KM rates.'
-      );
+  if (!this.isKmRateAdmin()) {
 
-      return;
-    }
-
-    if (
-      this.newRatePerKm === null ||
-      this.newRatePerKm === undefined ||
-      Number.isNaN(Number(this.newRatePerKm)) ||
-      Number(this.newRatePerKm) < 0
-    ) {
-
-      this.showWarning(
-        'Please enter a valid Rate Per KM.'
-      );
-
-      return;
-    }
-
-    if (!this.fromDate) {
-
-      this.showWarning(
-        'Please select a From Date.'
-      );
-
-      return;
-    }
-
-    const parts =
-      this.fromDate.split('-');
-
-    if (parts.length !== 3) {
-
-      this.showWarning(
-        'Please select a valid From Date.'
-      );
-
-      return;
-    }
-
-    const rateYear =
-      Number(parts[0]);
-
-    const rateMonth =
-      Number(parts[1]);
-
-    const alreadyExists =
-      this.kmRateList.some(rate =>
-        Number(rate.agencyId) === this.agencyId &&
-        Number(rate.rateYear) === rateYear &&
-        Number(rate.rateMonth) === rateMonth
-      );
-
-    if (alreadyExists) {
-
-      this.showWarning(
-        `KM Rate already exists for ${this.getMonthName(rateMonth)} ${rateYear}. Please use Edit instead.`
-      );
-
-      return;
-    }
-
-    const body = {
-
-      agencyId:
-        this.agencyId,
-
-      rateYear:
-        rateYear,
-
-      rateMonth:
-        rateMonth,
-
-      ratePerKm:
-        Number(this.newRatePerKm)
-
-    };
-
-    console.log(
-      'POST KM RATE BODY:',
-      body
+    this.showError(
+      'You are not authorized to manage KM rates.'
     );
 
-    this.savingKmRate = true;
-
-    this.http.post<
-      ApiResponse<any>
-    >(
-      `${this.apiUrl}/VisitReport/post-km-rate`,
-      body
-    )
-    .subscribe({
-
-      next: response => {
-
-        this.savingKmRate = false;
-
-        if (!response.success) {
-
-          this.showError(
-            response.message ||
-            'Failed to add KM Rate.'
-          );
-
-          return;
-        }
-
-        this.showSuccess(
-          'KM Rate added successfully.'
-        );
-
-        this.newRatePerKm = null;
-
-        this.loadKmRates();
-      },
-
-      error: err => {
-
-        this.savingKmRate = false;
-
-        console.error(
-          'POST KM rate error:',
-          err
-        );
-
-        this.showError(
-          err?.error?.message ||
-          'Failed to add KM Rate.'
-        );
-      }
-    });
+    return;
   }
 
+
+  // ==========================================================
+  // VALIDATE RATE PER KM
+  // ==========================================================
+
+  if (
+    this.newRatePerKm === null ||
+    this.newRatePerKm === undefined ||
+    Number.isNaN(Number(this.newRatePerKm)) ||
+    Number(this.newRatePerKm) < 0
+  ) {
+
+    this.showWarning(
+      'Please enter a valid Rate Per KM.'
+    );
+
+    return;
+  }
+
+
+  // ==========================================================
+  // VALIDATE FOOD EXPENSE
+  // ==========================================================
+
+  if (
+    this.newFoodExpense === null ||
+    this.newFoodExpense === undefined ||
+    Number.isNaN(Number(this.newFoodExpense)) ||
+    Number(this.newFoodExpense) < 0
+  ) {
+
+    this.showWarning(
+      'Please enter a valid Food Expense.'
+    );
+
+    return;
+  }
+
+
+  // ==========================================================
+  // VALIDATE FROM DATE
+  // ==========================================================
+
+  if (!this.fromDate) {
+
+    this.showWarning(
+      'Please select a From Date.'
+    );
+
+    return;
+  }
+
+
+  // ==========================================================
+  // PARSE YEAR / MONTH
+  // ==========================================================
+
+  const parts =
+    this.fromDate.split('-');
+
+  if (parts.length !== 3) {
+
+    this.showWarning(
+      'Please select a valid From Date.'
+    );
+
+    return;
+  }
+
+
+  const rateYear =
+    Number(parts[0]);
+
+  const rateMonth =
+    Number(parts[1]);
+
+
+  // ==========================================================
+  // CHECK DUPLICATE
+  // ==========================================================
+
+  const alreadyExists =
+    this.kmRateList.some(rate =>
+      Number(rate.agencyId) === this.agencyId &&
+      Number(rate.rateYear) === rateYear &&
+      Number(rate.rateMonth) === rateMonth
+    );
+
+  if (alreadyExists) {
+
+    this.showWarning(
+      `KM Rate already exists for ${this.getMonthName(rateMonth)} ${rateYear}. Please use Edit instead.`
+    );
+
+    return;
+  }
+
+
+  // ==========================================================
+  // REQUEST BODY
+  // ==========================================================
+
+  const body = {
+
+    agencyId:
+      this.agencyId,
+
+    rateYear:
+      rateYear,
+
+    rateMonth:
+      rateMonth,
+
+    ratePerKm:
+      Number(this.newRatePerKm),
+
+    foodExpense:
+      Number(this.newFoodExpense)
+
+  };
+
+
+  // ==========================================================
+  // DEBUG
+  // ==========================================================
+
+  console.log(
+    'POST KM RATE BODY:',
+    body
+  );
+
+
+  // ==========================================================
+  // API CALL
+  // ==========================================================
+
+  this.savingKmRate = true;
+
+  this.http.post<
+    ApiResponse<any>
+  >(
+    `${this.apiUrl}/VisitReport/post-km-rate`,
+    body
+  )
+  .subscribe({
+
+    // ========================================================
+    // SUCCESS
+    // ========================================================
+
+    next: response => {
+
+      this.savingKmRate = false;
+
+
+      if (!response.success) {
+
+        this.showError(
+          response.message ||
+          'Failed to add KM Rate.'
+        );
+
+        return;
+      }
+
+
+      // ======================================================
+      // SUCCESS MESSAGE
+      // ======================================================
+
+      this.showSuccess(
+        'KM Rate and Food Expense added successfully.'
+      );
+
+
+      // ======================================================
+      // RESET FORM
+      // ======================================================
+
+      this.newRatePerKm = null;
+
+      this.newFoodExpense = null;
+
+
+      // ======================================================
+      // RELOAD RATES
+      // ======================================================
+
+      this.loadKmRates();
+
+    },
+
+
+    // ========================================================
+    // ERROR
+    // ========================================================
+
+    error: err => {
+
+      this.savingKmRate = false;
+
+      console.error(
+        'POST KM rate error:',
+        err
+      );
+
+      this.showError(
+        err?.error?.message ||
+        'Failed to add KM Rate and Food Expense.'
+      );
+
+    }
+
+  });
+}
   // ==========================================================
   // START EDIT
   // ==========================================================
 
-  startEditKmRate(rate: KmRate): void {
+startEditKmRate(rate: KmRate): void {
 
-    if (!this.isKmRateAdmin()) {
+  if (!this.isKmRateAdmin()) {
 
-      this.showError(
-        'You are not authorized to edit KM rates.'
-      );
+    this.showError(
+      'You are not authorized to edit KM rates.'
+    );
 
-      return;
-    }
-
-    if (!this.canUpdateKmRate(rate)) {
-
-      this.showWarning(
-        'KM Rate can be updated only for the current month during the last 10 days of the month.'
-      );
-
-      return;
-    }
-
-    this.editingKmRateId =
-      rate.id;
-
-    this.editRatePerKm =
-      Number(rate.ratePerKm);
+    return;
   }
+
+  if (!this.canUpdateKmRate(rate)) {
+
+    this.showWarning(
+      'KM Rate can be updated only for the current month during the last 10 days of the month.'
+    );
+
+    return;
+  }
+
+  this.editingKmRateId =
+    rate.id;
+
+  this.editRatePerKm =
+    Number(rate.ratePerKm);
+
+  // LOAD FOOD EXPENSE FOR EDIT
+  this.editFoodExpense =
+    Number(rate.foodExpense ?? 0);
+}
 
   // ==========================================================
   // CANCEL EDIT
   // ==========================================================
 
-  cancelEditKmRate(): void {
+cancelEditKmRate(): void {
 
-    this.editingKmRateId = null;
+  this.editingKmRateId = null;
 
-    this.editRatePerKm = null;
-  }
+  this.editRatePerKm = null;
 
+  this.editFoodExpense = null;
+}
   // ==========================================================
   // UPDATE KM RATE
   // ==========================================================
 
-  updateKmRate(rate: KmRate): void {
+updateKmRate(rate: KmRate): void {
 
-    if (!this.isKmRateAdmin()) {
+  // ==========================================================
+  // AUTHORIZATION
+  // ==========================================================
 
-      this.showError(
-        'You are not authorized to update KM rates.'
-      );
+  if (!this.isKmRateAdmin()) {
 
-      return;
-    }
+    this.showError(
+      'You are not authorized to update KM rates.'
+    );
 
-    if (
-      this.editRatePerKm === null ||
-      this.editRatePerKm === undefined ||
-      Number.isNaN(Number(this.editRatePerKm)) ||
-      Number(this.editRatePerKm) < 0
-    ) {
+    return;
+  }
 
-      this.showWarning(
-        'Please enter a valid Rate Per KM.'
-      );
 
-      return;
-    }
+  // ==========================================================
+  // VALIDATE RATE PER KM
+  // ==========================================================
 
-    if (!this.canUpdateKmRate(rate)) {
+  if (
+    this.editRatePerKm === null ||
+    this.editRatePerKm === undefined ||
+    Number.isNaN(Number(this.editRatePerKm)) ||
+    Number(this.editRatePerKm) < 0
+  ) {
 
-      this.showWarning(
-        'KM Rate can be updated only for the current month during the last 10 days of the month.'
-      );
+    this.showWarning(
+      'Please enter a valid Rate Per KM.'
+    );
 
-      return;
-    }
+    return;
+  }
 
-    this.updatingKmRate = true;
 
-    const body = {
+  // ==========================================================
+  // VALIDATE FOOD EXPENSE
+  // ==========================================================
 
-      ratePerKm:
-        Number(this.editRatePerKm)
+  if (
+    this.editFoodExpense === null ||
+    this.editFoodExpense === undefined ||
+    Number.isNaN(Number(this.editFoodExpense)) ||
+    Number(this.editFoodExpense) < 0
+  ) {
 
-    };
+    this.showWarning(
+      'Please enter a valid Food Expense.'
+    );
 
-    this.http.put<
-      ApiResponse<any>
-    >(
-      `${this.apiUrl}/VisitReport/update-km-rate/${rate.id}`,
-      body
-    )
-    .subscribe({
+    return;
+  }
 
-      next: response => {
 
-        this.updatingKmRate = false;
+  // ==========================================================
+  // CHECK UPDATE PERMISSION
+  // ==========================================================
 
-        if (!response.success) {
+  if (!this.canUpdateKmRate(rate)) {
 
-          this.showError(
-            response.message ||
-            'Failed to update KM Rate.'
-          );
+    this.showWarning(
+      'KM Rate can be updated only for the current month during the last 10 days of the month.'
+    );
 
-          return;
-        }
+    return;
+  }
 
-        this.showSuccess(
-          'KM Rate updated successfully.'
-        );
 
-        this.editingKmRateId = null;
+  // ==========================================================
+  // REQUEST BODY
+  // ==========================================================
 
-        this.editRatePerKm = null;
+  const body = {
 
-        this.loadKmRates();
-      },
+    ratePerKm:
+      Number(this.editRatePerKm),
 
-      error: err => {
+    foodExpense:
+      Number(this.editFoodExpense)
 
-        this.updatingKmRate = false;
+  };
 
-        console.error(
-          'PUT KM rate error:',
-          err
-        );
+
+  console.log(
+    'PUT KM RATE BODY:',
+    body
+  );
+
+
+  // ==========================================================
+  // API CALL
+  // ==========================================================
+
+  this.updatingKmRate = true;
+
+  this.http.put<
+    ApiResponse<any>
+  >(
+    `${this.apiUrl}/VisitReport/update-km-rate/${rate.id}`,
+    body
+  )
+  .subscribe({
+
+    // ========================================================
+    // SUCCESS
+    // ========================================================
+
+    next: response => {
+
+      this.updatingKmRate = false;
+
+
+      if (!response.success) {
 
         this.showError(
-          err?.error?.message ||
-          'Failed to update KM Rate.'
+          response.message ||
+          'Failed to update KM Rate and Food Expense.'
         );
+
+        return;
       }
-    });
-  }
+
+
+      this.showSuccess(
+        'KM Rate and Food Expense updated successfully.'
+      );
+
+
+      // ======================================================
+      // RESET EDIT
+      // ======================================================
+
+      this.editingKmRateId = null;
+
+      this.editRatePerKm = null;
+
+      this.editFoodExpense = null;
+
+
+      // ======================================================
+      // RELOAD
+      // ======================================================
+
+      this.loadKmRates();
+
+    },
+
+
+    // ========================================================
+    // ERROR
+    // ========================================================
+
+    error: err => {
+
+      this.updatingKmRate = false;
+
+      console.error(
+        'PUT KM rate error:',
+        err
+      );
+
+      this.showError(
+        err?.error?.message ||
+        'Failed to update KM Rate and Food Expense.'
+      );
+
+    }
+
+  });
+}
 
   // ==========================================================
   // CHECK UPDATE ALLOWED
